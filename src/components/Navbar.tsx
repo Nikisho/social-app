@@ -22,7 +22,7 @@ const Navbar = () => {
   ];
 
   return (
-    <View className=' absolute inset-x-0 bottom-0 h-16 flex justify-between flex-row'>
+    <View className=' absolute bg-amber-300 inset-x-0 bottom-0 h-16 flex justify-between flex-row'>
 
       {
         menuItems.map((item) => (
