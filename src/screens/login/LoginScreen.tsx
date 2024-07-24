@@ -2,16 +2,23 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import styles from '../../utils/styles/shadow';
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
+import HomeScreen from '../home/HomeScreen';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import { useDispatch } from 'react-redux';
+import { setCurrentUser } from '../../context/navSlice';
 
 GoogleSignin.configure();
 
 const LoginScreen = () => {
-    const [user, setUser] = useState<any>();
+    const dispatch = useDispatch();
+
     const handleSignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            setUser({ userInfo, error: undefined });
+            dispatch(setCurrentUser({ userInfo }))
+
         } catch (error) {
             if (isErrorWithCode(error)) {
                 switch (error.code) {
@@ -32,7 +39,7 @@ const LoginScreen = () => {
             }
         }
     };
-    console.log(user)
+
     return (
         <View className='flex items-center space-y-5 h-3/4 justify-center'>
             <Text className='p-2 text-3xl font-bold'>
@@ -51,16 +58,13 @@ const LoginScreen = () => {
                         Continue with Google
                     </Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.shadow} className='p-3 bg-yellow-300 rounded-2xl w-80 flex items-center'>
-                    <Text className='text-lg font-bold'>
-                        Continue with phone number
-                    </Text>
-                </TouchableOpacity> */}
             </View>
 
         </View>
     )
 }
+
+
 
 export default LoginScreen;
 

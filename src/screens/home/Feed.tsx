@@ -21,7 +21,7 @@ const Feed = () => {
 
 
   return (
-    <View className='py-2 '>
+    <View >
       {testData?.map((card) => (
         <FeedCard 
           name={card.userName}

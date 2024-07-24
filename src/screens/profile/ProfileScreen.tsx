@@ -1,17 +1,29 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
-import { FontAwesome } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../context/navSlice';
 
 const ProfileScreen = () => {
+  const currentUser = useSelector(selectCurrentUser);
   return (
     <View className='flex '>
-      {/* <Text>ProfileScreen</Text> */}
-      <View className=' flex items-center'>
+      <View className=' flex items-center space-y-3 h-1/3 justify-end bg-blue-200'>
 
-        <FontAwesome name="user-circle" size={70} color="black" />
-        <Text className='text-xl'>Name</Text>
+        <Image
+          className='w-20 h-20 rounded-full'
+          source={{
+            uri: `${currentUser.userInfo.user.photo}`,
+          }}
+        />
+        <Text className='text-xl font-bold'>
+          {currentUser.userInfo.user.name}
+        </Text>
+
       </View>
 
+      <View className='h-2/3 bg-red-200'>
+        <Text>Posts</Text>
+      </View>
     </View>
   )
 }

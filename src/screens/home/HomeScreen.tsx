@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import EventInput from './EventInput'
 import Feed from './Feed'
+import Header from './Header'
 
 const HomeScreen = () => {
   return (
     <View>
-        <EventInput/>
+        <Header />
         <Feed />
     </View>
   )
