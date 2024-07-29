@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
+import styles from '../../utils/styles/shadow';
 interface FeedCardProps {
     name: string;
     title: string;
@@ -9,7 +10,7 @@ interface FeedCardProps {
 
 const FeedCard: React.FC<FeedCardProps> = ({ name, title, description }) => {
     return (
-        <TouchableOpacity className='rounded-lg bg-amber-300 p-2 mb-3 space-y-1'>
+        <TouchableOpacity style={styles.shadow} className='rounded-lg bg-amber-300 p-2 mb-3 space-y-1'>
             <View className='flex flex-row space-x-3 items-center'>
                 <FontAwesome name="user-circle" size={24} color="black" />
                 <Text>

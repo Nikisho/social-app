@@ -6,11 +6,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
-import LoginScreen from './src/screens/login/LoginScreen';
-import { Provider,  useSelector } from 'react-redux';
-import { selectCurrentUser  } from './src/context/navSlice';
+import { Provider, useSelector } from 'react-redux';
+import { selectCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
 import SubmitScreen from './src/screens/submit/SubmitScreen';
+import SignUpScreen from './src/screens/authentication/SignUpScreen';
+import SignInScreen from './src/screens/authentication/SignInScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -22,8 +23,8 @@ const mainTheme = {
 };
 export default function AppWrapper() {
   return (
-    <Provider store={store}> 
-      <App /> 
+    <Provider store={store}>
+      <App />
     </Provider>
   )
 }
@@ -31,30 +32,34 @@ export default function AppWrapper() {
 function App() {
   const currentUser = useSelector(selectCurrentUser);
   return (
-      <SafeAreaProvider className=''>
-        <SafeAreaView className='flex h-full p-2 bg-yellow-200'>
-          <NavigationContainer theme={mainTheme} >
-            <Stack.Navigator screenOptions={{
-              headerShown: false
-            }} >
-              {currentUser === null ?
-                (
-                  <Stack.Screen name="signin" component={LoginScreen} />
-                ) : (
-                  <>
-                    <Stack.Screen name="home" component={HomeScreen} />
-                    <Stack.Screen name="profile" component={ProfileScreen} />
-                    <Stack.Screen name="submit" component={SubmitScreen} />
-                  </>
-                )
-              }
-            </Stack.Navigator>
-            {
-              currentUser &&
-              <Navbar />
+    <SafeAreaProvider className=''>
+      <SafeAreaView className='flex h-full  bg-yellow-200'>
+        <NavigationContainer theme={mainTheme} >
+          <Stack.Navigator screenOptions={{
+            headerShown: false
+          }} >
+            {currentUser.id === null ?
+              (
+                <>
+                  <Stack.Screen name="signup" component={SignUpScreen} />
+                  <Stack.Screen name="signin" component={SignInScreen} />
+                </>
+
+              ) : (
+                <>
+                  <Stack.Screen name="home" component={HomeScreen} />
+                  <Stack.Screen name="profile" component={ProfileScreen} />
+                  <Stack.Screen name="submit" component={SubmitScreen} />
+                </>
+              )
             }
-          </NavigationContainer>
-        </SafeAreaView>
-      </SafeAreaProvider>
+          </Stack.Navigator>
+          {
+            currentUser.id &&
+            <Navbar />
+          }
+        </NavigationContainer>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

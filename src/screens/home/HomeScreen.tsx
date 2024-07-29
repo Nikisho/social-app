@@ -5,7 +5,7 @@ import Header from './Header'
 
 const HomeScreen = () => {
   return (
-    <View>
+    <View className='m-2'>
         <Header />
         <Feed />
     </View>

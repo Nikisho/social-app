@@ -1,23 +1,43 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import React from 'react'
 import styles from '../../utils/styles/shadow';
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
-import HomeScreen from '../home/HomeScreen';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../context/navSlice';
+import { supabase } from '../../../supabase';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 GoogleSignin.configure();
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
     const dispatch = useDispatch();
-
-    const handleSignIn = async () => {
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+        const handleSignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            dispatch(setCurrentUser({ userInfo }))
+
+            const { error, data } = await supabase
+            .from('users')
+            .insert({
+                name: userInfo.user.name,
+                email: userInfo.user.email,
+                photo: userInfo.user.photo
+            })
+            .select('id')
+            if (error) {console.error(error.message);}
+            if (error?.code === '23505') {
+                Alert.alert('You already have an account, just sign in!')
+            }
+            if (data) {
+                dispatch(setCurrentUser({ 
+                    name: userInfo.user.name ,
+                    email: userInfo.user.email,
+                    photo: userInfo.user.photo,
+                    id: data[0].id
+                 }))
+            }
 
         } catch (error) {
             if (isErrorWithCode(error)) {
@@ -43,7 +63,7 @@ const LoginScreen = () => {
     return (
         <View className='flex items-center space-y-5 h-3/4 justify-center'>
             <Text className='p-2 text-3xl font-bold'>
-                Sign up for JustMeet.
+                Sign up for Friendzy.
             </Text>
 
             <View className='w-full flex items-center space-y-3'>
@@ -58,6 +78,10 @@ const LoginScreen = () => {
                         Continue with Google
                     </Text>
                 </TouchableOpacity>
+                <View className='flex flex-row space-x-2 '>
+                    <Text className=' font-semibold p-3'>Already have an acccount?</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('signin')} className='bg-yellow-400 py-3 px-4 rounded-full'><Text className='font-semibold'>Sign in</Text></TouchableOpacity>
+                </View>
             </View>
 
         </View>
@@ -66,7 +90,7 @@ const LoginScreen = () => {
 
 
 
-export default LoginScreen;
+export default SignUpScreen;
 
 
 

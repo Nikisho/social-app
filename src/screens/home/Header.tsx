@@ -15,7 +15,12 @@ const Header = () => {
     const signOut = async () => {
         try {
             await GoogleSignin.signOut();
-            dispatch(setCurrentUser(null)) // Remember to remove the user from your app's state as well
+            dispatch(setCurrentUser({
+                name: null,
+                email: null,
+                photo:null,
+                id: null
+            })) // Remember to remove the user from your app's state as well
         } catch (error) {
             console.error(error);
         }
@@ -30,7 +35,7 @@ const Header = () => {
                 <Image
                     className='w-8 rounded-full'
                     source={{
-                        uri: currentUser?.userInfo.user.photo,
+                        uri: currentUser?.photo,
                     }}
                 />
                 <TouchableOpacity className='rounded-2xl px-3 py-1 bg-orange-400' onPress={signOut}>

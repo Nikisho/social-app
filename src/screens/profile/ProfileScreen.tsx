@@ -8,19 +8,16 @@ const ProfileScreen = () => {
   return (
     <View className='flex '>
       <View className=' flex items-center space-y-3 h-1/3 justify-end bg-blue-200'>
-
         <Image
           className='w-20 h-20 rounded-full'
           source={{
-            uri: `${currentUser.userInfo.user.photo}`,
+            uri: `${currentUser.photo}`,
           }}
         />
         <Text className='text-xl font-bold'>
-          {currentUser.userInfo.user.name}
+          {currentUser.name}
         </Text>
-
       </View>
-
       <View className='h-2/3 bg-red-200'>
         <Text>Posts</Text>
       </View>

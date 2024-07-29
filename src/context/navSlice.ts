@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    currentUser: null
+    currentUser: {
+        name: null,
+        email: null,
+        photo:null,
+        id: null
+    }
 }
 
 export const navSlice = createSlice({
