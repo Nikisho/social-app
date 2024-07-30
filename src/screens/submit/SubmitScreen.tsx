@@ -6,6 +6,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
+import formatDate from '../../utils/functions/formatDate';
+import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 
 interface eventDetailsProps {
     title: string;
@@ -19,6 +21,7 @@ const SubmitScreen = () => {
         title: '',
         description: ''
     });
+    console.log(extractTimeFromDate(eventDetails.date))
     const [open, setOpen] = useState(false)
     const handleChange = (name: string, value: string) => {
         setEventDetails((prevData: any | null) => ({
@@ -37,8 +40,9 @@ const SubmitScreen = () => {
             .insert({
                 user_id: currentUser.id,
                 event_date: eventDetails.date,
-                event_title:eventDetails.title,
-                event_description: eventDetails.description
+                event_title: eventDetails.title,
+                event_description: eventDetails.description,
+                event_time: extractTimeFromDate(eventDetails.date)
             });
         setEventDetails({
             date: new Date(),
@@ -64,8 +68,21 @@ const SubmitScreen = () => {
                     onChangeText={value => handleChange('description', value)}
                 />
             </View>
-            <TouchableOpacity onPress={() => setOpen(true)}>
-                <AntDesign name="calendar" size={34} color="black" />
+            <TouchableOpacity onPress={() => setOpen(true)} className='justify-between flex items-center space-x-2 flex-row bg-teal-400 opacity-90 p-2 rounded-xl'>
+                <View className='flex flex-row space-x-2 items-center'>
+
+                    <AntDesign name="calendar" size={34} color="black" />
+                    <Text className='text-lg'>
+                        {formatDate(eventDetails.date)}
+                    </Text>
+                </View>
+                <View className='flex flex-row space-x-2 items-center'>
+
+                    <AntDesign name="clockcircle" size={24} color="black" />
+                    <Text className='text-lg'>
+                        {extractTimeFromDate(eventDetails.date)}
+                    </Text>
+                </View>
             </TouchableOpacity>
             <DatePicker
                 modal
@@ -81,10 +98,10 @@ const SubmitScreen = () => {
             />
             <View className='flex-grow justify-end flex items-center'>
 
-            <TouchableOpacity className='bg-sky-600 py-2 px-3 rounded-full w-1/4 ' 
-                onPress={handleSubmit}>
-                <Text className='text-white font-bold text-lg text-center'>Submit</Text>
-            </TouchableOpacity>
+                <TouchableOpacity className='bg-sky-600 py-2 px-3 rounded-full w-1/4 '
+                    onPress={handleSubmit}>
+                    <Text className='text-white font-bold text-lg text-center'>Submit</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )

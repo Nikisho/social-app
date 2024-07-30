@@ -18,7 +18,7 @@ const mainTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#FEF08A'
+    background: '#a7f3d0'
   },
 };
 export default function AppWrapper() {
@@ -33,7 +33,7 @@ function App() {
   const currentUser = useSelector(selectCurrentUser);
   return (
     <SafeAreaProvider className=''>
-      <SafeAreaView className='flex h-full  bg-yellow-200'>
+      <SafeAreaView className='flex h-full  bg-emerald-200'>
         <NavigationContainer theme={mainTheme} >
           <Stack.Navigator screenOptions={{
             headerShown: false
