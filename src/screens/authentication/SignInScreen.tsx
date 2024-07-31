@@ -17,22 +17,31 @@ const SignInScreen = () => {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
 
+            // if (userInfo.idToken) {
+            //     const { data, error } = await supabase.auth.signInWithIdToken({
+            //         provider: 'google',
+            //         token: userInfo.idToken,
+            //     })
+            //     console.log(error, data)
+            // } else {
+            //     throw new Error('no ID token present!')
+            // }
             const { error, data } = await supabase
-            .from('users')
-            .select()
-            .eq('email', userInfo.user.email)
+                .from('users')
+                .select()
+                .eq('email', userInfo.user.email)
 
             if (data) {
-                dispatch(setCurrentUser({ 
-                    name: data[0].name ,
+                dispatch(setCurrentUser({
+                    name: data[0].name,
                     email: data[0].email,
                     photo: data[0].photo,
                     id: data[0].id
-                 }))
+                }))
             }
-            if ( error) console.error(error.message)
+            if (error) console.error(error.message)
         } catch (error) {
-                        if (isErrorWithCode(error)) {
+            if (isErrorWithCode(error)) {
                 switch (error.code) {
                     case statusCodes.SIGN_IN_CANCELLED:
                         // user cancelled the login flow
