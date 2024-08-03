@@ -9,6 +9,11 @@ import { supabase } from '../../../supabase'
 import { setCurrentUser } from '../../context/navSlice'
 import { useDispatch } from 'react-redux'
 
+GoogleSignin.configure(
+    // {
+    //     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
+    // }
+)
 const SignInScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>()
     const dispatch = useDispatch();
@@ -16,6 +21,7 @@ const SignInScreen = () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
+            console.log(userInfo.idToken)
 
             // if (userInfo.idToken) {
             //     const { data, error } = await supabase.auth.signInWithIdToken({
@@ -29,7 +35,7 @@ const SignInScreen = () => {
             const { error, data } = await supabase
                 .from('users')
                 .select()
-                .eq('email', userInfo.user.email)
+                .eq('email', userInfo?.user.email)
 
             if (data) {
                 dispatch(setCurrentUser({

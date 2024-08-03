@@ -8,7 +8,11 @@ import { supabase } from '../../../supabase';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
-GoogleSignin.configure();
+GoogleSignin.configure(
+    // {
+    //     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
+    // }
+)
 
 const SignUpScreen = () => {
     const dispatch = useDispatch();
