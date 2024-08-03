@@ -24,7 +24,7 @@
     },
     "android": {
       "ndkVersion": "26.1.10909125",
-      "package": "com.yourcompany.yourappname",
+      "package": "com.yourcompany.friendzy",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

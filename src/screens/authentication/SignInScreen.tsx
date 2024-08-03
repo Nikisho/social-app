@@ -9,23 +9,22 @@ import { supabase } from '../../../supabase'
 import { setCurrentUser } from '../../context/navSlice'
 import { useDispatch } from 'react-redux'
 
+
+// GoogleSignin.configure({
+//     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+// })
+
 const SignInScreen = () => {
+
     const navigation = useNavigation<NativeStackNavigationProp<any>>()
     const dispatch = useDispatch();
     const handleSignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
+            console.log('TEST 1')
             const userInfo = await GoogleSignin.signIn();
-
-            // if (userInfo.idToken) {
-            //     const { data, error } = await supabase.auth.signInWithIdToken({
-            //         provider: 'google',
-            //         token: userInfo.idToken,
-            //     })
-            //     console.log(error, data)
-            // } else {
-            //     throw new Error('no ID token present!')
-            // }
+            console.log('TEST 2')
+            console.log(userInfo)
             const { error, data } = await supabase
                 .from('users')
                 .select()
@@ -41,16 +40,19 @@ const SignInScreen = () => {
             }
             if (error) console.error(error.message)
         } catch (error) {
+            console.log(error)
             if (isErrorWithCode(error)) {
                 switch (error.code) {
                     case statusCodes.SIGN_IN_CANCELLED:
-                        // user cancelled the login flow
+                        console.log(error.message)
                         break;
                     case statusCodes.IN_PROGRESS:
                         // operation (eg. sign in) already in progress
                         break;
                     case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
                         // play services not available or outdated
+                        console.log(error.message)
+
                         break;
                     default:
                     // some other error happened

@@ -1,4 +1,4 @@
-import { View, Text, Button, TouchableOpacity, Alert } from 'react-native'
+import { View, Text,  TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import DatePicker from 'react-native-date-picker';
@@ -21,7 +21,6 @@ const SubmitScreen = () => {
         title: '',
         description: ''
     });
-    console.log(extractTimeFromDate(eventDetails.date))
     const [open, setOpen] = useState(false)
     const handleChange = (name: string, value: string) => {
         setEventDetails((prevData: any | null) => ({

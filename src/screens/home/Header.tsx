@@ -38,7 +38,7 @@ const Header = () => {
                         uri: currentUser?.photo,
                     }}
                 />
-                <TouchableOpacity className='rounded-2xl px-3 py-1 bg-orange-400' onPress={signOut}>
+                <TouchableOpacity className='rounded-2xl px-3 py-1 bg-teal-500' onPress={signOut}>
                     <MaterialIcons name="logout" size={24} color="black" />
                 </TouchableOpacity>
             </View>
