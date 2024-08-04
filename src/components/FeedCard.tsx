@@ -2,22 +2,35 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import styles from '../../utils/styles/shadow';
-import convertDateFormat from '../../utils/functions/convertDateFormat';
+import convertDateFormat from '../utils/functions/convertDateFormat';
+import styles from '../utils/styles/shadow';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+
 interface FeedCardProps {
     name: string;
     photo: string;
     title: string;
     description: string;
     date: string;
-    time: string
+    time: string;
+    id: number;
 }
 
-const FeedCard: React.FC<FeedCardProps> = ({ name, title, description, date, photo, time }) => {
+const FeedCard: React.FC<FeedCardProps> = ({ name, title, description, date, photo, time, id }) => {
     const formattedDate = convertDateFormat(date);
-    const timeSliced = time.slice(0, -3)
+    const timeSliced = time.slice(0, -3);
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
     return (
-        <TouchableOpacity style={styles.shadow} className='rounded-lg bg-teal-400 p-2 mb-3 space-y-1'>
+        <TouchableOpacity
+            onPress={() => {
+                /* 1. Navigate to the Details route with params */
+                navigation.navigate('event', {
+                    event_id: id,
+                });
+            }}
+            style={styles.shadow} className='rounded-lg bg-teal-400 p-2 mb-3 space-y-1'>
             <View className='flex flex-row space-x-3 items-center'>
 
                 {
