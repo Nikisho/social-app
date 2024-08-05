@@ -13,13 +13,15 @@ import SubmitScreen from './src/screens/submit/SubmitScreen';
 import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
+import colours from './src/utils/styles/colours';
+import { View } from 'react-native';
 
 const Stack = createStackNavigator();
 const mainTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#a7f3d0'
+    background: colours.primaryColour
   },
 };
 export default function AppWrapper() {
@@ -33,8 +35,8 @@ export default function AppWrapper() {
 function App() {
   const currentUser = useSelector(selectCurrentUser);
   return (
-    <SafeAreaProvider className=''>
-      <SafeAreaView className='flex h-full  bg-emerald-200 p-2'>
+    // <SafeAreaProvider className=''>
+      <View className='flex h-full px-2' style={{backgroundColor: colours.primaryColour}}>
         <NavigationContainer theme={mainTheme} >
           <Stack.Navigator screenOptions={{
             headerShown: false
@@ -61,7 +63,7 @@ function App() {
             <Navbar />
           }
         </NavigationContainer>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </View>
+    // </SafeAreaProvider>
   );
 }

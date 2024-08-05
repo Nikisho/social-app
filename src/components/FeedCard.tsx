@@ -30,7 +30,7 @@ const FeedCard: React.FC<FeedCardProps> = ({ name, title, description, date, pho
                     event_id: id,
                 });
             }}
-            style={styles.shadow} className='rounded-lg bg-teal-400 p-2 mb-3 space-y-1'>
+            style={styles.shadow} className='rounded-lg bg-white p-2 mb-3 space-y-1'>
             <View className='flex flex-row space-x-3 items-center'>
 
                 {

@@ -31,7 +31,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
         if (data) { setEventData(data[0]) }
         if (error) console.error(error.message)
     }
-
+    
     useEffect(() => {
         fetchData();
     }, []);
@@ -48,6 +48,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
                         event_date={eventData.event_date}
                         event_title={eventData.event_title}
                         event_description={eventData.event_description}
+                        isUsersOwnPost={eventData.user_id === currentUser.id}
                     />
                 )
             }

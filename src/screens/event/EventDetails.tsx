@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -8,13 +8,15 @@ interface evenDetailsProps {
     event_title: string
     event_date: string
     user_photo: string
+    isUsersOwnPost: boolean;
 }
 const EventDetails: React.FC<evenDetailsProps> = ({
     user_photo,
     user_name,
     event_date,
     event_title,
-    event_description
+    event_description,
+    isUsersOwnPost
 }) => {
     return (
         <View className='p-2'>
@@ -42,6 +44,14 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                         {event_date}
                     </Text>
                 </View>
+                {
+                    isUsersOwnPost && (
+                        <TouchableOpacity className='flex flex-row justify-end grow'>
+                            <FontAwesome name="edit" size={24} color="black" />
+                        </TouchableOpacity>
+                    )
+                }
+
             </View>
             <View className='mt-1'>
                 <Text className='text-lg font-semibold'>

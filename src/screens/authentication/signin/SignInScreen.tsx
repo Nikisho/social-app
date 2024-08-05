@@ -4,11 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import styles from '../../../utils/styles/shadow'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types'
-import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
-import { supabase } from '../../../../supabase'
-import { selectCurrentUser, setCurrentUser } from '../../../context/navSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import GoogleSignIn from './GoogleSignIn'
 
 GoogleSignin.configure(
@@ -26,7 +22,7 @@ const SignInScreen = () => {
 
             <View className='w-full flex space-y-3'>
 
-                <TouchableOpacity style={styles.shadow} className='p-3 self-center bg-teal-400  w-5/6 flex items-center'>
+                <TouchableOpacity style={styles.shadowButtonStyle} className='p-3 self-center  w-5/6 flex items-center'>
                     <Text className='text-md font-bold'>
                         Use email and password
                     </Text>
@@ -36,7 +32,10 @@ const SignInScreen = () => {
 
                 <View className='flex flex-row space-x-2 self-center' >
                     <Text className=' font-semibold p-3'>Don't have an account?</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('signup')} className='bg-teal-400 py-3 px-4 rounded-full'><Text className='font-semibold'>Sign up</Text></TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('signup')}
+                        style={styles.shadowButtonStyle}
+                        className=' py-3 px-4 rounded-full'><Text className='font-semibold'>Sign up</Text></TouchableOpacity>
                 </View>
             </View>
 

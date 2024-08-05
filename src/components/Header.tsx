@@ -8,6 +8,7 @@ import { selectCurrentUser, setCurrentUser } from '../context/navSlice';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { FontAwesome } from '@expo/vector-icons';
+import styles from '../utils/styles/shadow';
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -49,7 +50,9 @@ const Header = () => {
 
                 }
 
-                <TouchableOpacity className='rounded-2xl px-3 py-1 bg-sky-500' onPress={signOut}>
+                <TouchableOpacity 
+                    style={styles.shadowButtonStyle}
+                    className='rounded-2xl px-3 py-1' onPress={signOut}>
                     <MaterialIcons name="logout" size={24} color="black" />
                 </TouchableOpacity>
             </View>

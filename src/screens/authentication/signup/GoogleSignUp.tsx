@@ -16,7 +16,8 @@ const GoogleSignUp = () => {
                 .insert({
                     name: userInfo.user.name,
                     email: userInfo.user.email,
-                    photo: userInfo.user.photo
+                    photo: userInfo.user.photo,
+                    auth_provider: 'google'
                 })
                 .select('id')
             if (error) { console.error(error.message); }

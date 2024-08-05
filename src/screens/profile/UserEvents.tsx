@@ -25,12 +25,9 @@ const UserEvents = () => {
             .from('meetup_events')
             .select()
             .eq('user_id', currentUser.id)
-
         if (data) {
             setEventList(data)
-            console.log(data)
         }
-
         if (error) console.error(error.message)
     }
 
@@ -39,7 +36,7 @@ const UserEvents = () => {
     }, []);
 
     return (
-        <View className='h-2/3 p-2 flex space-y-2'>
+        <View className='h-2/3 flex space-y-2'>
 
             <View className=' '>
                 <Text className='text-lg font-semibold'> Your events</Text>
