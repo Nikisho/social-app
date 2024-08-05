@@ -4,9 +4,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
+import { selectCurrentUser, setCurrentUser } from '../context/navSlice';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import { FontAwesome } from '@expo/vector-icons';
+import styles from '../utils/styles/shadow';
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -18,7 +20,7 @@ const Header = () => {
             dispatch(setCurrentUser({
                 name: null,
                 email: null,
-                photo:null,
+                photo: null,
                 id: null
             })) // Remember to remove the user from your app's state as well
         } catch (error) {
@@ -32,13 +34,25 @@ const Header = () => {
                 <Text >Create a post</Text>
             </TouchableOpacity>
             <View className='flex flex-row space-x-2'>
-                <Image
-                    className='w-8 rounded-full'
-                    source={{
-                        uri: currentUser?.photo,
-                    }}
-                />
-                <TouchableOpacity className='rounded-2xl px-3 py-1 bg-teal-500' onPress={signOut}>
+                {
+                    currentUser?.photo ?
+
+                        <Image
+                            className='w-8 rounded-full'
+                            source={{
+                                uri: currentUser?.photo,
+                            }}
+                        />
+                        :
+                        <>
+                            <FontAwesome name="user-circle" size={30} color="black" />
+                        </>
+
+                }
+
+                <TouchableOpacity 
+                    style={styles.shadowButtonStyle}
+                    className='rounded-2xl px-3 py-1' onPress={signOut}>
                     <MaterialIcons name="logout" size={24} color="black" />
                 </TouchableOpacity>
             </View>

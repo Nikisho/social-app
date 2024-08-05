@@ -10,15 +10,18 @@ import { Provider, useSelector } from 'react-redux';
 import { selectCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
 import SubmitScreen from './src/screens/submit/SubmitScreen';
-import SignUpScreen from './src/screens/authentication/SignUpScreen';
-import SignInScreen from './src/screens/authentication/SignInScreen';
+import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
+import SignInScreen from './src/screens/authentication/signin/SignInScreen';
+import EventScreen from './src/screens/event/EventScreen';
+import colours from './src/utils/styles/colours';
+import { View } from 'react-native';
 
 const Stack = createStackNavigator();
 const mainTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#a7f3d0'
+    background: colours.primaryColour
   },
 };
 export default function AppWrapper() {
@@ -32,8 +35,8 @@ export default function AppWrapper() {
 function App() {
   const currentUser = useSelector(selectCurrentUser);
   return (
-    <SafeAreaProvider className=''>
-      <SafeAreaView className='flex h-full  bg-emerald-200'>
+    // <SafeAreaProvider className=''>
+      <View className='flex h-full px-2' style={{backgroundColor: colours.primaryColour}}>
         <NavigationContainer theme={mainTheme} >
           <Stack.Navigator screenOptions={{
             headerShown: false
@@ -50,6 +53,7 @@ function App() {
                   <Stack.Screen name="home" component={HomeScreen} />
                   <Stack.Screen name="profile" component={ProfileScreen} />
                   <Stack.Screen name="submit" component={SubmitScreen} />
+                  <Stack.Screen name="event" component={EventScreen} />
                 </>
               )
             }
@@ -59,7 +63,7 @@ function App() {
             <Navbar />
           }
         </NavigationContainer>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </View>
+    // </SafeAreaProvider>
   );
 }

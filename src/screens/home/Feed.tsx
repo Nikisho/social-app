@@ -1,14 +1,21 @@
 import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import FeedCard from './FeedCard';
 import { supabase } from '../../../supabase';
+import FeedCard from '../../components/FeedCard';
 interface eventListProps{
-
-}
+  name: string
+  key: number
+  description: string
+  title:string
+  date: Date
+  photo: string
+  time: Date
+  id: number
+} 
 
 const Feed = () => {
 
-  const [ eventList, setEventList ] = useState<any>();
+  const [ eventList, setEventList ] = useState<eventListProps[]>();
 
   const fetchEvents = async () => {
     const { error, data } = await supabase
@@ -40,6 +47,7 @@ const Feed = () => {
           date={ event.event_date}
           photo={event.users.photo}
           time={event.event_time}
+          id = {event.event_id}
         />
       ))}
     </View>
