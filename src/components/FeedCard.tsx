@@ -1,11 +1,16 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import convertDateFormat from '../utils/functions/convertDateFormat';
 import styles from '../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import hasUserLikedEvent from '../utils/functions/hasUserLikedEvent';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../context/navSlice';
+import { supabase } from '../../supabase';
 
 interface FeedCardProps {
     name: string;
@@ -17,10 +22,50 @@ interface FeedCardProps {
     id: number;
 }
 
-const FeedCard: React.FC<FeedCardProps> = ({ name, title, description, date, photo, time, id }) => {
+const FeedCard: React.FC<FeedCardProps> = ({
+    name,
+    title,
+    description, 
+    date,
+    photo,
+    time,
+    id,
+}) => {
     const formattedDate = convertDateFormat(date);
     const timeSliced = time.slice(0, -3);
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const [hasUserLikedEventState, setHasUserLikedEventState] = useState<boolean>();
+
+    const currentUser = useSelector(selectCurrentUser);
+    const handleSubmitLike = async () => {
+        const { error } = await supabase
+            .from('event_likes')
+            .insert({
+                event_id: id,
+                user_id: currentUser.id
+            })
+        setHasUserLikedEventState(true);
+        if (error) console.error(error.message);
+    };
+
+    const handleUnlike = async () => {
+        const { error } = await supabase
+        .from('event_likes')
+        .delete()
+        .eq('user_id', currentUser.id)
+        .eq('event_id', id )
+
+        setHasUserLikedEventState(false);
+        if (error) console.error(error.message);
+    };
+    const likeEventCheck = async () => {
+        const check = await hasUserLikedEvent(currentUser.id, id);
+        setHasUserLikedEventState(check);
+    };
+
+    useEffect(() => {
+        likeEventCheck();
+    }, []);
 
     return (
         <TouchableOpacity
@@ -69,6 +114,21 @@ const FeedCard: React.FC<FeedCardProps> = ({ name, title, description, date, pho
                     <AntDesign name="clockcircleo" size={24} color="black" />
                     <Text className='font-semibold '> {timeSliced} </Text>
                 </View>
+                {
+                    hasUserLikedEventState ?
+                        <TouchableOpacity 
+                            onPress={handleUnlike}
+                            className='self-center '>
+                            <Ionicons name="heart" size={25} color="red" />
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity 
+                            onPress={handleSubmitLike}
+                            className='self-center '>
+                            <Ionicons name="heart-outline" size={25} color="black" />
+                        </TouchableOpacity>
+                }
+
             </View>
         </TouchableOpacity>
     )
