@@ -3,6 +3,8 @@ import React  from 'react'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import styles from '../../utils/styles/shadow';
 import LikeHandler from '../../components/LikeHandler';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface EngagementBarProps {
     event_id: number;
@@ -10,6 +12,8 @@ interface EngagementBarProps {
 };
 
 const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
+    const navigation = useNavigation<RootStackNavigationProp>()
+
     return (
         <View 
             style={styles.translucidViewStyle}
@@ -18,7 +22,11 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
                 user_id={user_id}
                 event_id={event_id}
             />
-            <TouchableOpacity className='w-1/2  flex flex-row justify-center items-center'>
+            <TouchableOpacity 
+                onPress={() => {navigation.navigate('comment', {
+                    event_id: event_id
+                })}}
+                className='w-1/2  flex flex-row justify-center items-center'>
                 <EvilIcons name="comment" size={30} color="black" />
             </TouchableOpacity>
         </View>

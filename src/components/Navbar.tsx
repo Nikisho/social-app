@@ -8,6 +8,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import colours from '../utils/styles/colours';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';
+import { RootStackNavigationProp } from '../utils/types/types';
 
 
 const Navbar = () => {
@@ -24,12 +25,8 @@ const Navbar = () => {
       icon: <Entypo name="message" size={30} color="white" />,
       navigation: 'messages'
     },
-    // {
-    //   icon: <Ionicons name="person" size={30} color="white" />,
-    //   navigation:'profile'
-    // }
   ];
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<any>();
   const currentUser = useSelector(selectCurrentUser);
   return (
     <View
@@ -47,7 +44,6 @@ const Navbar = () => {
       <TouchableOpacity className={` flex justify-center w-1/4 items-center`}
         onPress={() => navigation.navigate('profile', {
           user_id: currentUser.id,
-          key: currentUser.id
         })}>
         <Text className='text-lg'>
           <Ionicons name="person" size={30} color="white" />

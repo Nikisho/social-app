@@ -7,13 +7,28 @@ import EventDetails from './EventDetails';
 import EngagementBar from './EngagementBar';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
+import { useRoute } from '@react-navigation/native';
 
-interface EventScreenProps {
+interface EventDataProps {
+    name: string
+    key: number
+    event_description: string
+    event_title:string
+    event_date: string
+    photo: string
+    user_id: string;
+    users: {
+        name: string
+        id: number
+        photo: string
+    }
+
 };
 
-const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
+const EventScreen = () => {
+    const route = useRoute<any>()
     const { event_id } = route.params;
-    const [eventData, setEventData] = useState<any>();
+    const [eventData, setEventData] = useState<EventDataProps>();
     const currentUser = useSelector(selectCurrentUser);
 
     const fetchData = async () => {

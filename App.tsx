@@ -15,6 +15,7 @@ import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
 import { View } from 'react-native';
+import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -54,6 +55,7 @@ function App() {
                   <Stack.Screen name="profile" component={ProfileScreen} />
                   <Stack.Screen name="submit" component={SubmitScreen} />
                   <Stack.Screen name="event" component={EventScreen} />
+                  <Stack.Screen name="comment" component={SubmitCommentScreen}/>
                 </>
               )
             }

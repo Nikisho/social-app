@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';
 import LikeHandler from './LikeHandler';
+import { RootStackNavigationProp } from '../utils/types/types';
 
 interface FeedCardProps {
     name: string;
@@ -31,7 +32,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
 }) => {
     const formattedDate = convertDateFormat(date);
     const timeSliced = time.slice(0, -3);
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     return (
         <TouchableOpacity

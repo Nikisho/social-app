@@ -3,6 +3,7 @@ import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface evenDetailsProps {
     user_name: string
@@ -22,7 +23,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
     isUsersOwnPost,
     user_id
 }) => {
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const navigation = useNavigation<RootStackNavigationProp>();
     return (
         <View className='p-2'>
             <View className='flex flex-row space-x-3 items-center'>
