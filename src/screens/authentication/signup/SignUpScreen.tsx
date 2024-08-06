@@ -24,7 +24,7 @@ const SignUpScreen = () => {
 
                 <TouchableOpacity
                     style={styles.shadowButtonStyle} className='p-3  self-center w-5/6 flex items-center'>
-                    <Text className='text-md font-bold'>
+                    <Text className='text-md font-bold text-white'>
                         Use email and password
                     </Text>
                 </TouchableOpacity>
@@ -35,7 +35,7 @@ const SignUpScreen = () => {
                         onPress={() => navigation.navigate('signin')} 
                         style={styles.shadowButtonStyle}
                         className=' py-3 px-4 rounded-full'>
-                        <Text className='font-bold'>Sign in</Text>
+                        <Text className='font-bold text-white'>Sign in</Text>
                     </TouchableOpacity>
                 </View>
             </View>

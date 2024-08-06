@@ -36,9 +36,9 @@ function App() {
   const currentUser = useSelector(selectCurrentUser);
   return (
     // <SafeAreaProvider className=''>
-      <View className='flex h-full px-2' style={{backgroundColor: colours.primaryColour}}>
-        <NavigationContainer theme={mainTheme} >
-          <Stack.Navigator screenOptions={{
+      <View className='flex h-full' style={{backgroundColor: colours.primaryColour}}>
+        <NavigationContainer theme={mainTheme}  >
+          <Stack.Navigator  screenOptions={{
             headerShown: false
           }} >
             {currentUser.id === null ?

@@ -1,30 +1,33 @@
 import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
 import FeedCard from '../../components/FeedCard';
 
-interface eventListProps{
+interface eventListProps {
     name: string
     key: number
     description: string
-    title:string
+    title: string
     date: Date
     photo: string
     time: Date
     id: number
-} 
+}
 
-const UserEvents = () => {
+const UserEvents = ({ user_id }: { user_id: number }) => {
     const [eventList, setEventList] = useState<Array<eventListProps>>();
-    const currentUser = useSelector(selectCurrentUser);
-
     const fetchEvents = async () => {
         const { error, data } = await supabase
             .from('meetup_events')
-            .select()
-            .eq('user_id', currentUser.id)
+            .select(`
+                *,
+                users(
+                id,
+                name,
+                photo
+                )
+            `)
+            .eq('user_id', user_id)
         if (data) {
             setEventList(data)
         }
@@ -33,7 +36,7 @@ const UserEvents = () => {
 
     useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [user_id]);
 
     return (
         <View className='h-2/3 flex space-y-2'>
@@ -46,11 +49,11 @@ const UserEvents = () => {
                     <FeedCard
                         key={event.event_id}
                         id={event.event_id}
-                        name={currentUser.name}
+                        name={event.users.name}
                         description={event.event_description}
                         title={event.event_title}
                         date={event.event_date}
-                        photo={currentUser.photo}
+                        photo={event.users.photo}
                         time={event.event_time}
                     />
                 ))}

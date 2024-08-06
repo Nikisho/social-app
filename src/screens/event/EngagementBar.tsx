@@ -4,6 +4,7 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import { supabase } from '../../../supabase';
 import hasUserLikedEvent from '../../utils/functions/hasUserLikedEvent';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import styles from '../../utils/styles/shadow';
 
 interface EngagementBarProps {
     event_id: number;
@@ -43,7 +44,9 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
         likeEventCheck(); 
     }, [])
     return (
-        <View className='bg-orange-200 rounded-xl py-2 flex flex-row'>
+        <View 
+            style={styles.translucidViewStyle}
+            className='bg-orange-200 rounded-xl py-2 flex flex-row'>
             {
                 hasUserLikedEventState ?
                     <TouchableOpacity

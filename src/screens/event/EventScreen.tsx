@@ -37,7 +37,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
     }, []);
 
     return (
-        <>
+        <View className='mx-2'>
             <Header />
             {/* Post Details 1/3 of screen */}
             {
@@ -49,6 +49,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
                         event_title={eventData.event_title}
                         event_description={eventData.event_description}
                         isUsersOwnPost={eventData.user_id === currentUser.id}
+                        user_id={eventData.users.id}
                     />
                 )
             }
@@ -57,7 +58,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
                 user_id={currentUser.id}
                 event_id={event_id}
             />
-        </>
+        </View>
     )
 }
 

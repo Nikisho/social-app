@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { Children, useEffect, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import convertDateFormat from '../utils/functions/convertDateFormat';
 import styles from '../utils/styles/shadow';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import hasUserLikedEvent from '../utils/functions/hasUserLikedEvent';
@@ -25,7 +25,7 @@ interface FeedCardProps {
 const FeedCard: React.FC<FeedCardProps> = ({
     name,
     title,
-    description, 
+    description,
     date,
     photo,
     time,
@@ -50,10 +50,10 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
     const handleUnlike = async () => {
         const { error } = await supabase
-        .from('event_likes')
-        .delete()
-        .eq('user_id', currentUser.id)
-        .eq('event_id', id )
+            .from('event_likes')
+            .delete()
+            .eq('user_id', currentUser.id)
+            .eq('event_id', id)
 
         setHasUserLikedEventState(false);
         if (error) console.error(error.message);
@@ -63,10 +63,11 @@ const FeedCard: React.FC<FeedCardProps> = ({
         setHasUserLikedEventState(check);
     };
 
-    useEffect(() => {
-        likeEventCheck();
-    }, []);
-
+    useFocusEffect(
+        React.useCallback(() => {
+            likeEventCheck();
+        }, [])
+    );
     return (
         <TouchableOpacity
             onPress={() => {
@@ -116,13 +117,13 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 </View>
                 {
                     hasUserLikedEventState ?
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={handleUnlike}
                             className='self-center '>
                             <Ionicons name="heart" size={25} color="red" />
                         </TouchableOpacity>
                         :
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={handleSubmitLike}
                             className='self-center '>
                             <Ionicons name="heart-outline" size={25} color="black" />

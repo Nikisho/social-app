@@ -23,7 +23,7 @@ const SignInScreen = () => {
             <View className='w-full flex space-y-3'>
 
                 <TouchableOpacity style={styles.shadowButtonStyle} className='p-3 self-center  w-5/6 flex items-center'>
-                    <Text className='text-md font-bold'>
+                    <Text className='text-md font-bold text-white'>
                         Use email and password
                     </Text>
                 </TouchableOpacity>
@@ -35,7 +35,7 @@ const SignInScreen = () => {
                     <TouchableOpacity
                         onPress={() => navigation.navigate('signup')}
                         style={styles.shadowButtonStyle}
-                        className=' py-3 px-4 rounded-full'><Text className='font-semibold'>Sign up</Text></TouchableOpacity>
+                        className=' py-3 px-4 rounded-full'><Text className='font-semibold text-white'>Sign up</Text></TouchableOpacity>
                 </View>
             </View>
 

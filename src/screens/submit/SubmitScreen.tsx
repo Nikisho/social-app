@@ -54,7 +54,7 @@ const SubmitScreen = () => {
     }
 
     return (
-        <View className='flex space-y-5  h-5/6'>
+        <View className='flex space-y-5 mx-3 h-5/6'>
             <View className='border-b'>
 
                 <TextInput className='text-2xl ' placeholder='Title'
@@ -69,7 +69,9 @@ const SubmitScreen = () => {
                     onChangeText={value => handleChange('description', value)}
                 />
             </View>
-            <TouchableOpacity onPress={() => setOpen(true)} className='justify-between flex items-center space-x-2 flex-row bg-orange-200 opacity-90 p-2 rounded-xl'>
+            <TouchableOpacity onPress={() => setOpen(true)} 
+            style={styles.translucidViewStyle}
+                className='justify-between flex items-center space-x-2 flex-row opacity-90 p-2 rounded-xl'>
                 <View className='flex flex-row space-x-2 items-center'>
 
                     <AntDesign name="calendar" size={34} color="black" />
@@ -100,8 +102,8 @@ const SubmitScreen = () => {
             <View className='flex-grow justify-end flex items-center'>
 
                 <TouchableOpacity 
-                    style={styles.shadow}
-                    className='bg-sky-600 py-2 px-3 rounded-xl w-1/4 '
+                    style={styles.shadowButtonStyle}
+                    className='bg-sky-600 py-2 px-3 rounded-xl w-1/2 '
                     onPress={handleSubmit}>
                     <Text className='text-white font-bold text-lg text-center'>Submit</Text>
                 </TouchableOpacity>
