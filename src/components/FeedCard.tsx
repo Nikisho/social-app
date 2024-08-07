@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';
 import LikeHandler from './LikeHandler';
 import { RootStackNavigationProp } from '../utils/types/types';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface FeedCardProps {
     name: string;
@@ -18,7 +19,8 @@ interface FeedCardProps {
     description: string;
     date: string;
     time: string;
-    id: number;
+    event_id: number;
+    user_id: number;
 }
 
 const FeedCard: React.FC<FeedCardProps> = ({
@@ -28,22 +30,27 @@ const FeedCard: React.FC<FeedCardProps> = ({
     date,
     photo,
     time,
-    id,
+    event_id,
+    user_id,
 }) => {
     const formattedDate = convertDateFormat(date);
     const timeSliced = time.slice(0, -3);
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     return (
-        <TouchableOpacity
+        <TouchableWithoutFeedback
             onPress={() => {
                 /* 1. Navigate to the Details route with params */
                 navigation.navigate('event', {
-                    event_id: id,
+                    event_id: event_id,
                 });
             }}
             style={styles.shadow} className='rounded-lg bg-white p-2 mb-3 space-y-1'>
-            <View className='flex flex-row space-x-3 items-center'>
+            <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('profile',
+                    { user_id: user_id }
+                )}
+                className='flex flex-row space-x-3 items-center'>
 
                 {
                     photo === null ?
@@ -62,7 +69,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 <Text>
                     {name}
                 </Text>
-            </View>
+            </TouchableWithoutFeedback>
             <View className='mb-1 space-y-1'>
                 <Text className='text-xl'>
                     {title}
@@ -81,13 +88,13 @@ const FeedCard: React.FC<FeedCardProps> = ({
                     <AntDesign name="clockcircleo" size={24} color="black" />
                     <Text className='font-semibold '> {timeSliced} </Text>
                 </View>
-                <LikeHandler 
+                <LikeHandler
                     user_id={currentUser.id}
-                    event_id={id}
+                    event_id={event_id}
                 />
 
             </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
     )
 }
 

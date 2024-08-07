@@ -8,6 +8,7 @@ import EngagementBar from './EngagementBar';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import { useRoute } from '@react-navigation/native';
+import CommentFeed from './CommentFeed';
 
 interface EventDataProps {
     name: string
@@ -71,6 +72,10 @@ const EventScreen = () => {
             {/* Reaction bar */}
             <EngagementBar 
                 user_id={currentUser.id}
+                event_id={event_id}
+            />
+
+            <CommentFeed
                 event_id={event_id}
             />
         </View>

@@ -14,8 +14,9 @@ import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
+import { useEffect, useState } from 'react';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -35,6 +36,24 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
+
+  //check keyboard listener to ensure the navbar is hidden when the keyboard is up
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => setKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => setKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   return (
     // <SafeAreaProvider className=''>
       <View className='flex h-full' style={{backgroundColor: colours.primaryColour}}>
@@ -61,7 +80,7 @@ function App() {
             }
           </Stack.Navigator>
           {
-            currentUser.id &&
+            currentUser.id && !isKeyboardVisible &&
             <Navbar />
           }
         </NavigationContainer>

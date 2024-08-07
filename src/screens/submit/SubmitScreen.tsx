@@ -22,7 +22,6 @@ const SubmitScreen = () => {
         title: '',
         description: ''
     });
-    console.log(extractTimeFromDate(eventDetails.date))
     const [open, setOpen] = useState(false)
     const handleChange = (name: string, value: string) => {
         setEventDetails((prevData: any | null) => ({
@@ -54,18 +53,20 @@ const SubmitScreen = () => {
     }
 
     return (
-        <View className='flex space-y-5 mx-3 h-5/6'>
+        <View className='flex space-y-2 mx-3 h-5/6'>
             <View className='border-b'>
 
                 <TextInput className='text-2xl ' placeholder='Title'
                     value={eventDetails?.title}
                     onChangeText={value => handleChange('title', value)}
+                    maxLength={50}
                 />
             </View>
             <View className='h-1/3 border-b'>
 
                 <TextInput multiline={true} className='text-lg' placeholder='Description'
                     value={eventDetails?.description}
+                    maxLength={400}
                     onChangeText={value => handleChange('description', value)}
                 />
             </View>

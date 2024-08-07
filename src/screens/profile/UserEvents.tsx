@@ -11,7 +11,7 @@ interface eventListProps {
     date: Date
     photo: string
     time: Date
-    id: number
+    event_id: number
 }
 
 const UserEvents = ({ user_id }: { user_id: number }) => {
@@ -42,19 +42,20 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
         <View className='h-2/3 flex space-y-2'>
 
             <View className=' '>
-                <Text className='text-lg font-semibold'> Your events</Text>
+                <Text className='text-lg font-semibold'>Events</Text>
             </View>
             <View className=''>
                 {eventList?.map((event: any) => (
                     <FeedCard
                         key={event.event_id}
-                        id={event.event_id}
+                        event_id={event.event_id}
                         name={event.users.name}
                         description={event.event_description}
                         title={event.event_title}
                         date={event.event_date}
                         photo={event.users.photo}
                         time={event.event_time}
+                        user_id={event.users.id}
                     />
                 ))}
             </View>
