@@ -1,6 +1,9 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface evenDetailsProps {
     user_name: string
@@ -9,6 +12,7 @@ interface evenDetailsProps {
     event_date: string
     user_photo: string
     isUsersOwnPost: boolean;
+    user_id:number;
 }
 const EventDetails: React.FC<evenDetailsProps> = ({
     user_photo,
@@ -16,26 +20,33 @@ const EventDetails: React.FC<evenDetailsProps> = ({
     event_date,
     event_title,
     event_description,
-    isUsersOwnPost
+    isUsersOwnPost,
+    user_id
 }) => {
+    const navigation = useNavigation<RootStackNavigationProp>();
     return (
         <View className='p-2'>
             <View className='flex flex-row space-x-3 items-center'>
-
-                {
-                    user_photo === null ?
-                        <>
-                            <FontAwesome name="user-circle" size={24} color="black" />
-                        </> :
-                        <>
-                            <Image
-                                className='w-10 h-10 rounded-full'
-                                source={{
-                                    uri: user_photo,
-                                }}
-                            />
-                        </>
-                }
+                <TouchableOpacity
+                    onPress={()=>navigation.navigate('profile',
+                        {user_id: user_id}
+                    )}
+                >
+                    {
+                        user_photo === null ?
+                            <>
+                                <FontAwesome name="user-circle" size={24} color="black" />
+                            </> :
+                            <>
+                                <Image
+                                    className='w-10 h-10 rounded-full'
+                                    source={{
+                                        uri: user_photo,
+                                    }}
+                                />
+                            </>
+                    }
+                </TouchableOpacity>
                 <View>
                     <Text>
                         {user_name}

@@ -53,7 +53,7 @@ const Header = () => {
                 <TouchableOpacity 
                     style={styles.shadowButtonStyle}
                     className='rounded-2xl px-3 py-1' onPress={signOut}>
-                    <MaterialIcons name="logout" size={24} color="black" />
+                    <MaterialIcons name="logout" size={24} color="white" />
                 </TouchableOpacity>
             </View>
         </View>

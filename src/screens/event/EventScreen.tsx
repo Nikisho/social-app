@@ -7,13 +7,29 @@ import EventDetails from './EventDetails';
 import EngagementBar from './EngagementBar';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
+import { useRoute } from '@react-navigation/native';
+import CommentFeed from './CommentFeed';
 
-interface EventScreenProps {
+interface EventDataProps {
+    name: string
+    key: number
+    event_description: string
+    event_title:string
+    event_date: string
+    photo: string
+    user_id: string;
+    users: {
+        name: string
+        id: number
+        photo: string
+    }
+
 };
 
-const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
+const EventScreen = () => {
+    const route = useRoute<any>()
     const { event_id } = route.params;
-    const [eventData, setEventData] = useState<any>();
+    const [eventData, setEventData] = useState<EventDataProps>();
     const currentUser = useSelector(selectCurrentUser);
 
     const fetchData = async () => {
@@ -37,7 +53,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
     }, []);
 
     return (
-        <>
+        <View className='mx-2'>
             <Header />
             {/* Post Details 1/3 of screen */}
             {
@@ -49,6 +65,7 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
                         event_title={eventData.event_title}
                         event_description={eventData.event_description}
                         isUsersOwnPost={eventData.user_id === currentUser.id}
+                        user_id={eventData.users.id}
                     />
                 )
             }
@@ -57,7 +74,11 @@ const EventScreen: React.FC<EventScreenProps> = ({ route }: any) => {
                 user_id={currentUser.id}
                 event_id={event_id}
             />
-        </>
+
+            <CommentFeed
+                event_id={event_id}
+            />
+        </View>
     )
 }
 

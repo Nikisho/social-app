@@ -5,7 +5,7 @@ import Header from '../../components/Header'
 
 const HomeScreen = () => {
   return (
-    <View className=''>
+    <View className='mx-2'>
         <Header />
         <Feed />
     </View>
