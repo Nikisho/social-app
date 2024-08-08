@@ -8,7 +8,8 @@ export type RootStackParamList = {
   comment: {event_id: number};
   event: {event_id: number};
   profile: {user_id:number};
-  message: undefined;
+  chat: {user_id:number};
+  chatlist: undefined;
   search: undefined;
 };
 

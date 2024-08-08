@@ -4,7 +4,6 @@ import { Entypo } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import colours from '../utils/styles/colours';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';
@@ -23,7 +22,7 @@ const Navbar = () => {
     },
     {
       icon: <Entypo name="message" size={30} color="white" />,
-      navigation: 'messages'
+      navigation: 'chatlist'
     },
   ];
   const navigation = useNavigation<any>();

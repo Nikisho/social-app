@@ -5,7 +5,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import convertDateFormat from '../utils/functions/convertDateFormat';
 import styles from '../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';
 import LikeHandler from './LikeHandler';
@@ -40,12 +39,12 @@ const FeedCard: React.FC<FeedCardProps> = ({
     return (
         <TouchableWithoutFeedback
             onPress={() => {
-                /* 1. Navigate to the Details route with params */
                 navigation.navigate('event', {
                     event_id: event_id,
                 });
             }}
-            style={styles.shadow} className='rounded-lg bg-white p-2 mb-3 space-y-1'>
+            // style={styles.shadow} 
+            className='rounded-lg bg-gray-100 p-2 mb-3 space-y-1'>
             <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('profile',
                     { user_id: user_id }

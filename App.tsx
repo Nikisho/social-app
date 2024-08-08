@@ -17,6 +17,8 @@ import colours from './src/utils/styles/colours';
 import { Keyboard, View } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
+import ChatListScreen from './src/screens/chats/ChatListScreen';
+import ChatScreen from './src/screens/chats/ChatScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -56,35 +58,37 @@ function App() {
   }, []);
   return (
     // <SafeAreaProvider className=''>
-      <View className='flex h-full' style={{backgroundColor: colours.primaryColour}}>
-        <NavigationContainer theme={mainTheme}  >
-          <Stack.Navigator  screenOptions={{
-            headerShown: false
-          }} >
-            {currentUser.id === null ?
-              (
-                <>
-                  <Stack.Screen name="signup" component={SignUpScreen} />
-                  <Stack.Screen name="signin" component={SignInScreen} />
-                </>
+    <View className='flex h-full' style={{ backgroundColor: colours.primaryColour }}>
+      <NavigationContainer theme={mainTheme}  >
+        <Stack.Navigator screenOptions={{
+          headerShown: false
+        }} >
+          {currentUser.id === null ?
+            (
+              <>
+                <Stack.Screen name="signup" component={SignUpScreen} />
+                <Stack.Screen name="signin" component={SignInScreen} />
+              </>
 
-              ) : (
-                <>
-                  <Stack.Screen name="home" component={HomeScreen} />
-                  <Stack.Screen name="profile" component={ProfileScreen} />
-                  <Stack.Screen name="submit" component={SubmitScreen} />
-                  <Stack.Screen name="event" component={EventScreen} />
-                  <Stack.Screen name="comment" component={SubmitCommentScreen}/>
-                </>
-              )
-            }
-          </Stack.Navigator>
-          {
-            currentUser.id && !isKeyboardVisible &&
-            <Navbar />
+            ) : (
+              <>
+                <Stack.Screen name="home" component={HomeScreen} />
+                <Stack.Screen name="profile" component={ProfileScreen} />
+                <Stack.Screen name="submit" component={SubmitScreen} />
+                <Stack.Screen name="event" component={EventScreen} />
+                <Stack.Screen name="comment" component={SubmitCommentScreen} />
+                <Stack.Screen name="chatlist" component={ChatListScreen} />
+                <Stack.Screen name="chat" component={ChatScreen} />
+              </>
+            )
           }
-        </NavigationContainer>
-      </View>
+        </Stack.Navigator>
+        {
+          currentUser.id && !isKeyboardVisible &&
+          <Navbar />
+        }
+      </NavigationContainer>
+    </View>
     // </SafeAreaProvider>
   );
 }

@@ -43,14 +43,13 @@ const CommentFeed: React.FC<CommentFeedProps> = ({ event_id }) => {
         }, [])
     );
     return (
-        <ScrollView className='space-y-2 mt-2 '>
+        <ScrollView className='space-y-1 mt-2 -mx-2 '>
             {
                 comments?.map((comment) => (
                     <View
-                        style={styles.shadow}
                         key={comment.comment_id}
-                        className='bg-white
-                                    p-2 m-1 rounded-xl space-y-1'>
+                        className='bg-gray-100 
+                                    py-2 px-3  space-y-1'>
                         <TouchableOpacity
                             onPress={() => navigation.navigate('profile',
                                 { user_id: comment.users.id }
