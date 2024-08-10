@@ -4,7 +4,7 @@ import Navbar from './src/components/Navbar';
 import HomeScreen from './src/screens/home/HomeScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, useNavigationState } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import { Provider, useSelector } from 'react-redux';
 import { selectCurrentUser } from './src/context/navSlice';
@@ -38,27 +38,8 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
-
-  //check keyboard listener to ensure the navbar is hidden when the keyboard is up
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => setKeyboardVisible(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => setKeyboardVisible(false)
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
   return (
-    // <SafeAreaProvider className=''>
-    <View className='flex h-full' style={{ backgroundColor: colours.primaryColour }}>
+    <View className='h-full' style={{ backgroundColor: colours.primaryColour }}>
       <NavigationContainer theme={mainTheme}  >
         <Stack.Navigator screenOptions={{
           headerShown: false
@@ -83,12 +64,45 @@ function App() {
             )
           }
         </Stack.Navigator>
+
+        {/* Only show the conditional navbar if the user is logged in */}
         {
-          currentUser.id && !isKeyboardVisible &&
-          <Navbar />
+          currentUser.id &&
+          <ConditionalNavbar />
         }
       </NavigationContainer>
     </View>
-    // </SafeAreaProvider>
   );
 }
+
+const ConditionalNavbar = () => {
+
+  //Hide the navbar if the kayboard is up and if we're pn the chat screeen.
+  const currentRouteName = useNavigationState(state => state?.routes[state.index]?.name);
+
+  // Determine whether to show the Navbar
+  const showNavbar = currentRouteName !== 'chat';
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => setKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => setKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  return (
+    <>
+      {showNavbar &&
+        !isKeyboardVisible &&
+        <Navbar />}
+    </>
+  );
+};
