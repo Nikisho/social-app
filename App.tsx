@@ -1,8 +1,6 @@
 import 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context'
 import Navbar from './src/components/Navbar';
 import HomeScreen from './src/screens/home/HomeScreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer, useNavigationState } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
@@ -28,6 +26,8 @@ const mainTheme = {
     background: colours.primaryColour
   },
 };
+
+// fix provider bug for redux
 export default function AppWrapper() {
   return (
     <Provider store={store}>

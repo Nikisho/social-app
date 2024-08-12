@@ -6,6 +6,9 @@ import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import ChatHeader from './ChatHeader';
+import InputBox from './InputBox';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ChatBody from './ChatBody';
 
 interface UserDataProps {
   name: string;
@@ -18,14 +21,15 @@ const ChatScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [chatRoomIdState, setChatRoomIdState] = useState<number>();
   const [userData, setUserData] = useState<UserDataProps>();
+  const [messages, setMessages] = useState<string[]>([])
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
       .from('users')
       .select()
       .eq('id', user_id)
-      if (data) setUserData(data[0]);
-      if (error) console.error(error.message); 
+    if (data) setUserData(data[0]);
+    if (error) console.error(error.message);
   };
 
   const fetchChatData = async () => {
@@ -42,8 +46,8 @@ const ChatScreen = () => {
         .select();
 
       const chatRoomId = newChatRoom![0].chat_room_id
-      setChatRoomIdState(newChatRoom![0].chat_room_id);
-
+      setChatRoomIdState(newChatRoom![0].chat_room_id); 
+     
       //Now that we have inserted a row in the chat_rooms table, we can add two rows corresponding 
       //To the participants with the chat_room_id
       const { error: participantError } = await supabase.from('participants').insert([
@@ -54,25 +58,75 @@ const ChatScreen = () => {
       if (participantError) {
         console.error('Error adding participants:', participantError);
         return;
-      } 
+      }
     }
-  };  
+  };
+
+  const fetchMessages = async () => {
+    //The room ID constant does not update right away, 
+    // on the first render it has value undefined
+    // so we return here, then once it updates the second render
+    // fetches the messages
+    if (!chatRoomIdState) return;
+    const { error, data } = await supabase
+      .from('messages')
+      .select()
+      .eq('chat_room_id', chatRoomIdState)
+
+    if (data) {
+      setMessages(data)
+    }
+    if (error) console.error(error.message);
+  };
+
+  const sendMessage = async (newMessage: string) => {
+    const { error } = await supabase
+      .from('messages')
+      .insert({
+        sender_id: currentUser.id,
+        chat_room_id: chatRoomIdState,
+        content: newMessage
+      });
+    fetchMessages();
+    if (error) console.error(error.message);
+  };
+
   useEffect(() => {
     fetchUserData();
     fetchChatData();
-  }, [])
+    fetchMessages();
+  }, [chatRoomIdState]);
+
   return (
-    <View className=''>
+    <SafeAreaProvider className='h-screen'>
       {
         userData && (
-          <ChatHeader
-            name={userData.name}
-            photo={userData.photo}
-            user_id={userData.id}
-          />
+          <>
+            <ChatHeader
+              name={userData.name}
+              photo={userData.photo}
+              user_id={userData.id}
+            />
+          </>
         )
       }
-    </View>
+      {
+        chatRoomIdState && (
+          <>
+            <ChatBody
+              messages={messages}
+              currentUser={currentUser}
+            />
+            <InputBox
+              onSendMessage={sendMessage}
+            />
+          </>
+        )
+      }
+
+
+
+    </SafeAreaProvider>
   )
 }
 
