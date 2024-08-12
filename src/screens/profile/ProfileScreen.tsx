@@ -6,7 +6,7 @@ import { supabase } from '../../../supabase';
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from '../../utils/styles/shadow';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
@@ -35,7 +35,11 @@ const ProfileScreen = ({ route }: any) => {
       throw error;
     }
   };
-
+  const handlePressChat = () => {
+    navigation.navigate('chat',
+      { user_id: user_id }
+    );
+  }
   useEffect(() => {
     fetchUserData();
   }, [user_id])
@@ -66,9 +70,7 @@ const ProfileScreen = ({ route }: any) => {
             {
               user_id !== currentUser.id && (
                 <TouchableOpacity
-                  onPress={() => { navigation.navigate('chat',
-                    {user_id: user_id}
-                  )}}
+                  onPress={handlePressChat}
                   style={styles.shadowButtonStyle}
                   className=' p-2  rounded-xl'>
                   <Entypo name="chat" size={24} color="white" />
