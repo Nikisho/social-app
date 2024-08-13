@@ -6,11 +6,21 @@ import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';
 
 const GoogleSignUp = () => {
+    GoogleSignin.configure({webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID});
     const dispatch = useDispatch();
     const handleSignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
+            if (userInfo.idToken) {
+                const { data, error } = await supabase.auth.signInWithIdToken({
+                    provider: 'google',
+                    token: userInfo.idToken,
+                })
+                console.log(error, data)
+            } else {
+                throw new Error('no ID token present!')
+            }
             const { error, data } = await supabase
                 .from('users')
                 .insert({

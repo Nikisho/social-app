@@ -1,17 +1,10 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import styles from '../../../utils/styles/shadow';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import GoogleSignUp from './GoogleSignUp';
-import colours from '../../../utils/styles/colours';
 
-// GoogleSignin.configure(
-//     // {
-//     //     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
-//     // }
-// )
 const SignUpScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
     return (

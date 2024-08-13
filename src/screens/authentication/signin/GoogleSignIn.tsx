@@ -9,12 +9,7 @@ import { setCurrentUser } from '../../../context/navSlice'
 
 const GoogleSignIn = () => {
 
-    GoogleSignin.configure(
-        {
-            webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
-        }
-    );
-
+    GoogleSignin.configure({webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID});
 
     const dispatch = useDispatch();
     const handleSignIn = async () => {
