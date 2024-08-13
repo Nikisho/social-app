@@ -6,6 +6,7 @@ import colours from '../../utils/styles/colours'
 import { FlatList } from 'react-native-gesture-handler'
 import { supabase } from '../../../supabase'
 import { useFocusEffect } from '@react-navigation/native'
+import formatTime from '../../utils/functions/formatTime'
 
 
 interface Message {
@@ -13,6 +14,7 @@ interface Message {
     chat_room_id: number;
     sender_id: number;
     content: string;
+    created_at: string;
 }
 
 interface MessageProps {
@@ -24,9 +26,9 @@ interface ChatProps {
 }
 
 const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
-
     const renderItem = ({ item }: { item: Message }) => {
-        const isCurrentUser = currentUser.id === item.sender_id; 
+        const isCurrentUser = currentUser.id === item.sender_id;
+        const formattedTime = formatTime(item.created_at)
 
         return (
             <View
@@ -45,6 +47,11 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
                     }}
                 >
                     {item.content}
+                </Text>
+                <Text style={[
+                    isCurrentUser ? styles.rightAlignedText : styles.leftAlignedText
+                ]}>
+                    {formattedTime}
                 </Text>
             </View>
         );
@@ -75,6 +82,7 @@ const styles = StyleSheet.create({
     },
     messageBubble: {
         padding: 10,
+        paddingBottom: 5,
         borderRadius: 10,
         maxWidth: '80%',
         marginVertical: 5,
@@ -84,6 +92,18 @@ const styles = StyleSheet.create({
     },
     otherUserBubble: {
         borderBottomLeftRadius: 0,
+    },
+    rightAlignedText: {
+        paddingTop: 3,
+        textAlign: 'right',
+        fontSize: 8,
+        color: '#ffffff'
+    },
+    leftAlignedText: {
+        paddingTop: 3,
+        textAlign: 'left',
+        fontSize: 8,
+        color: '#000000'
     },
 });
 
