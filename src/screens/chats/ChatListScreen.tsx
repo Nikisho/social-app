@@ -6,11 +6,13 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import { FlatList } from 'react-native-gesture-handler';
 import ChatCard from './ChatCard';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface ChatDataProps {
   receiver_id: number
   receiver_photo: string
   receiver_name: string
+  content: string;
 };
 
 const ChatListScreen = () => {
@@ -24,9 +26,12 @@ const ChatListScreen = () => {
     if (error) { console.error(error.message); }
   };
 
-  useEffect(() => {
-    fetchReceivers();
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchReceivers();
+    }, [])
+  );
   const renderItem: ListRenderItem<ChatDataProps> = ({ item }) => (
     <ChatCard item={item} />
   );

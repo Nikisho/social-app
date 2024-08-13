@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ interface ChatCardProps {
         receiver_id: number
         receiver_photo: string
         receiver_name: string
+        content: string
     }
 }
 const ChatCard: React.FC<ChatCardProps> = ({
@@ -16,13 +17,13 @@ const ChatCard: React.FC<ChatCardProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     return (
-        <TouchableOpacity 
+        <TouchableOpacity
             onPress={() => {
                 navigation.navigate('chat',
-                  { user_id: item.receiver_id }
+                    { user_id: item.receiver_id }
                 );
-              }}
-            className='flex flex-row p-2 items-center space-x-5 bg-gray-100'>
+            }}
+            className='flex flex-row p-2 items-center space-x-3 bg-gray-100'>
             {
                 item.receiver_photo ?
 
@@ -34,14 +35,30 @@ const ChatCard: React.FC<ChatCardProps> = ({
                     />
                     :
                     <>
-                        <FontAwesome name="user-circle" size={35} color="black" />
+                        <FontAwesome name="user-circle" size={38} color="black" />
                     </>
             }
-            <Text>
-                {item.receiver_name}
-            </Text>
+            <View>
+                <Text>
+                    {item.receiver_name}
+                </Text>
+                <Text 
+                    numberOfLines={1} 
+                    style={{fontSize: 12}}
+                    className='text-gray-600'
+                    >
+                    {item.content}
+                </Text>
+            </View>
+
         </TouchableOpacity>
     )
 }
 
 export default ChatCard
+
+const styles = StyleSheet.create({
+    smallText: {
+      fontSize: 5, // just a number, no unit required
+    },
+  });
