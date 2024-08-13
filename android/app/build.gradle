@@ -83,9 +83,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.yourcompany.yourappname'
+    namespace 'com.yourcompany.friendzy'
     defaultConfig {
-        applicationId 'com.yourcompany.yourappname'
+        applicationId 'com.yourcompany.friendzy'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

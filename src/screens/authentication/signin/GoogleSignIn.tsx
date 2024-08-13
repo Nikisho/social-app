@@ -6,12 +6,22 @@ import { supabase } from '../../../../supabase'
 import { useDispatch } from 'react-redux'
 import { setCurrentUser } from '../../../context/navSlice'
 
+
 const GoogleSignIn = () => {
+
+    GoogleSignin.configure(
+        {
+            webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+        }
+    );
+
+
     const dispatch = useDispatch();
     const handleSignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
+            console.log(userInfo.idToken)
             const { error, data } = await supabase
                 .from('users')
                 .select()

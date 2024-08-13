@@ -1,4 +1,4 @@
-package com.yourcompany.yourappname
+package com.yourcompany.friendzy
 
 import android.os.Build
 import android.os.Bundle
