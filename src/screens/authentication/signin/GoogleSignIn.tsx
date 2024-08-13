@@ -21,7 +21,15 @@ const GoogleSignIn = () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo.idToken)
+            if (userInfo.idToken) {
+                const { data, error } = await supabase.auth.signInWithIdToken({
+                    provider: 'google',
+                    token: userInfo.idToken,
+                })
+                console.log(error, data)
+            } else {
+                throw new Error('no ID token present!')
+            }
             const { error, data } = await supabase
                 .from('users')
                 .select()

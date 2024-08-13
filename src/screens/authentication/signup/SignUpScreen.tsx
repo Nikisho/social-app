@@ -7,11 +7,11 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import GoogleSignUp from './GoogleSignUp';
 import colours from '../../../utils/styles/colours';
 
-GoogleSignin.configure(
-    // {
-    //     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
-    // }
-)
+// GoogleSignin.configure(
+//     // {
+//     //     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
+//     // }
+// )
 const SignUpScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
     return (
