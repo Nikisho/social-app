@@ -1,11 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '../../context/navSlice'
+import React from 'react'
 import colours from '../../utils/styles/colours'
 import { FlatList } from 'react-native-gesture-handler'
-import { supabase } from '../../../supabase'
-import { useFocusEffect } from '@react-navigation/native'
 import formatTime from '../../utils/functions/formatTime'
 
 
@@ -61,12 +57,13 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
         <>
             {
                 messages && (
-                    <View className='overflow-y-scroll space-y-5 px-3 py-3'>
+                    <View className='h-4/5 '>
                         <FlatList
-                            data={messages}
+                            data={[...messages].reverse()}
                             renderItem={renderItem}
                             keyExtractor={(item: any) => item.message_id.toString()}
                             contentContainerStyle={styles.container}
+                            inverted
                         />
                     </View>
                 )

@@ -28,7 +28,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
                 item.receiver_photo ?
 
                     <Image
-                        className='w-12 h-12 rounded-full'
+                        className='w-10 h-10 rounded-full'
                         source={{
                             uri: item.receiver_photo,
                         }}

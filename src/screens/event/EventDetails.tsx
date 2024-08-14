@@ -2,7 +2,6 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface evenDetailsProps {
@@ -10,26 +9,29 @@ interface evenDetailsProps {
     event_description: string
     event_title: string
     event_date: string
+    event_time: string
     user_photo: string
     isUsersOwnPost: boolean;
-    user_id:number;
+    user_id: number;
 }
 const EventDetails: React.FC<evenDetailsProps> = ({
     user_photo,
     user_name,
     event_date,
+    event_time,
     event_title,
     event_description,
     isUsersOwnPost,
     user_id
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const timeSliced = event_time.slice(0, -3);
     return (
         <View className='p-2'>
             <View className='flex flex-row space-x-3 items-center'>
                 <TouchableOpacity
-                    onPress={()=>navigation.navigate('profile',
-                        {user_id: user_id}
+                    onPress={() => navigation.navigate('profile',
+                        { user_id: user_id }
                     )}
                 >
                     {
@@ -51,9 +53,15 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                     <Text>
                         {user_name}
                     </Text>
-                    <Text className='opacity-70 italic'>
-                        {event_date}
-                    </Text>
+                    <View className='flex flex-row space-x-3'>
+
+                        <Text className='opacity-70 italic'>
+                            {event_date}
+                        </Text>
+                        <Text className='opacity-70 italic'>
+                            {timeSliced}
+                        </Text>
+                    </View>
                 </View>
                 {
                     isUsersOwnPost && (

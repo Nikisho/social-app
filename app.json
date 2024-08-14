@@ -23,6 +23,7 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "ndkVersion": "26.1.10909125",
       "package": "com.yourcompany.friendzy",
       "versionCode": 1,

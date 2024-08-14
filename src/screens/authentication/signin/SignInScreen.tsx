@@ -7,11 +7,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import GoogleSignIn from './GoogleSignIn'
 
-GoogleSignin.configure(
-    // {
-    //     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
-    // }
-)
+
 const SignInScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>()
     return (
