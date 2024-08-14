@@ -16,6 +16,7 @@ interface EventDataProps {
     event_description: string
     event_title:string
     event_date: string
+    event_time: string
     photo: string
     user_id: string;
     users: {
@@ -63,6 +64,7 @@ const EventScreen = () => {
                         user_name={eventData.users.name}
                         event_date={eventData.event_date}
                         event_title={eventData.event_title}
+                        event_time={eventData.event_time}
                         event_description={eventData.event_description}
                         isUsersOwnPost={eventData.user_id === currentUser.id}
                         user_id={eventData.users.id}

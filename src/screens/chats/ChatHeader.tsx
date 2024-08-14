@@ -31,7 +31,7 @@ const ChatHeader:React.FC<ChatHeaderProps> = ({
             {
                 photo === null ?
                     <>
-                        <FontAwesome name="user-circle" size={28} color="white" />
+                        <FontAwesome name="user-circle" size={38} color="white" />
                     </> :
                     <>
                         <Image

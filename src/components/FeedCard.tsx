@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import convertDateFormat from '../utils/functions/convertDateFormat';
-import styles from '../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';

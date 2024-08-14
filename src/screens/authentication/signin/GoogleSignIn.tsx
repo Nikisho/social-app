@@ -9,7 +9,7 @@ import { setCurrentUser } from '../../../context/navSlice'
 
 const GoogleSignIn = () => {
 
-    GoogleSignin.configure({webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID});
+    GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 
     const dispatch = useDispatch();
     const handleSignIn = async () => {
@@ -17,52 +17,55 @@ const GoogleSignIn = () => {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             if (userInfo.idToken) {
-                const { data, error } = await supabase.auth.signInWithIdToken({
+                const { data: AuthUserData, error: AuthUserError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                console.log(error, data)
+                console.log(AuthUserError, AuthUserData)
+
+                const { error, data } = await supabase
+                    .from('users')
+                    .select()
+                    .eq('email', userInfo?.user.email)
+
+                if (data) {
+
+                    ////If no data, its a new sign up, sign the user up instead///
+                    if (data.length === 0) {
+                        const { error, data } = await supabase
+                            .from('users')
+                            .insert({
+                                name: userInfo.user.name,
+                                email: userInfo.user.email,
+                                photo: userInfo.user.photo,
+                                uid: AuthUserData.user?.id,
+                                auth_provider: 'google'
+                            })
+                            .select('id');
+                        if (error) console.error(error.message);
+                        if (data) {
+                            dispatch(setCurrentUser({
+                                name: userInfo.user.name,
+                                email: userInfo.user.email,
+                                photo: userInfo.user.photo,
+                                id: data[0].id
+                            }))
+                        }
+                        return;
+                    }
+                    console.log(data)
+                    dispatch(setCurrentUser({
+                        name: data[0].name,
+                        email: data[0].email,
+                        photo: data[0].photo,
+                        id: data[0].id
+                    }))
+                }
+                if (error) console.error(error.message)
+
             } else {
                 throw new Error('no ID token present!')
             }
-            const { error, data } = await supabase
-                .from('users')
-                .select()
-                .eq('email', userInfo?.user.email)
-
-            if (data) {
-
-                ////If no data, its a new sign up, sign the user up instead///
-                if (data.length === 0) {
-                    const { error, data } = await supabase
-                        .from('users')
-                        .insert({
-                            name: userInfo.user.name,
-                            email: userInfo.user.email,
-                            photo: userInfo.user.photo,
-                            auth_provider: 'google'
-                        })
-                        .select('id');
-                    if (error) console.error(error.message);
-                    if (data) {
-                        dispatch(setCurrentUser({
-                            name: userInfo.user.name,
-                            email: userInfo.user.email,
-                            photo: userInfo.user.photo,
-                            id: data[0].id
-                        }))
-                    }
-                    return;
-                }
-                console.log(data)
-                dispatch(setCurrentUser({
-                    name: data[0].name,
-                    email: data[0].email,
-                    photo: data[0].photo,
-                    id: data[0].id
-                }))
-            }
-            if (error) console.error(error.message)
         } catch (error) {
             if (isErrorWithCode(error)) {
                 switch (error.code) {

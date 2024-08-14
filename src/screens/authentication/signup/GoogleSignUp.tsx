@@ -6,42 +6,45 @@ import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';
 
 const GoogleSignUp = () => {
-    GoogleSignin.configure({webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID});
+    GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
     const dispatch = useDispatch();
     const handleSignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
+
             if (userInfo.idToken) {
-                const { data, error } = await supabase.auth.signInWithIdToken({
+                const { data: AuthUserData, error:AuthUSerError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                console.log(error, data)
+                console.log(AuthUSerError, AuthUserData);
+
+                const { error, data } = await supabase
+                    .from('users')
+                    .insert({
+                        name: userInfo.user.name,
+                        email: userInfo.user.email,
+                        photo: userInfo.user.photo,
+                        uid: AuthUserData.user?.id,
+                        auth_provider: 'google'
+                    })
+                    .select('id')
+                if (error) { console.error(error.message); }
+                if (error?.code === '23505') {
+                    Alert.alert('You already have an account, just sign in!');
+                    return;
+                }
+                if (data) {
+                    dispatch(setCurrentUser({
+                        name: userInfo.user.name,
+                        email: userInfo.user.email,
+                        photo: userInfo.user.photo,
+                        id: data[0].id
+                    }))
+                }
             } else {
                 throw new Error('no ID token present!')
-            }
-            const { error, data } = await supabase
-                .from('users')
-                .insert({
-                    name: userInfo.user.name,
-                    email: userInfo.user.email,
-                    photo: userInfo.user.photo,
-                    auth_provider: 'google'
-                })
-                .select('id')
-            if (error) { console.error(error.message); }
-            if (error?.code === '23505') {
-                Alert.alert('You already have an account, just sign in!');
-                return;
-            }
-            if (data) {
-                dispatch(setCurrentUser({
-                    name: userInfo.user.name,
-                    email: userInfo.user.email,
-                    photo: userInfo.user.photo,
-                    id: data[0].id
-                }))
             }
 
         } catch (error) {
