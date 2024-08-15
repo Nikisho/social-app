@@ -2,20 +2,21 @@ import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import FeedCard from '../../components/FeedCard';
-interface eventListProps{
+import { useFocusEffect } from '@react-navigation/native';
+interface eventListProps {
   name: string
   key: number
   description: string
-  title:string
+  title: string
   date: Date
   photo: string
   time: Date
   id: number
-} 
+}
 
 const Feed = () => {
 
-  const [ eventList, setEventList ] = useState<eventListProps[]>();
+  const [eventList, setEventList] = useState<eventListProps[]>();
 
   const fetchEvents = async () => {
     const { error, data } = await supabase
@@ -27,27 +28,32 @@ const Feed = () => {
           name,
           photo
         )
-      `)
-    if (data) {setEventList(data)}
+      `).order('created_at', { ascending: false })
+    if (data) { setEventList(data); }
     if (error) console.error(error.message)
   }
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  // useEffect(() => {
+  //   fetchEvents();
+  // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchEvents();
 
+    }, [])
+  );
   return (
-    <ScrollView>
+    <ScrollView className='h-5/6'>
       {eventList?.map((event: any) => (
-        <FeedCard 
+        <FeedCard
           name={event.users.name}
           key={event.event_id}
           description={event.event_description}
           title={event.event_title}
-          date={ event.event_date}
+          date={event.event_date}
           photo={event.users.photo}
           time={event.event_time}
-          event_id = {event.event_id}
+          event_id={event.event_id}
           user_id={event.users.id}
         />
       ))}

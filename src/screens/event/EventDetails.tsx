@@ -3,6 +3,7 @@ import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface evenDetailsProps {
     user_name: string
@@ -27,7 +28,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
     const timeSliced = event_time.slice(0, -3);
     return (
-        <View className='p-2'>
+        <ScrollView className='mb-2 h-1/2'>
             <View className='flex flex-row space-x-3 items-center'>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('profile',
@@ -37,7 +38,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                     {
                         user_photo === null ?
                             <>
-                                <FontAwesome name="user-circle" size={24} color="black" />
+                                <FontAwesome name="user-circle" size={35} color="black" />
                             </> :
                             <>
                                 <Image
@@ -83,7 +84,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                     {event_description}
                 </Text>
             </View>
-        </View>
+        </ScrollView>
 
     )
 }

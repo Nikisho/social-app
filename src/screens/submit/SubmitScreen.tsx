@@ -9,6 +9,8 @@ import { selectCurrentUser } from '../../context/navSlice';
 import formatDate from '../../utils/functions/formatDate';
 import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface eventDetailsProps {
     title: string;
@@ -17,6 +19,7 @@ interface eventDetailsProps {
 }
 const SubmitScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
+    const navigation = useNavigation<RootStackNavigationProp>()
     const [eventDetails, setEventDetails] = useState<eventDetailsProps>({
         date: new Date(),
         title: '',
@@ -48,7 +51,9 @@ const SubmitScreen = () => {
             date: new Date(),
             title: '',
             description: ''
-        })
+        });
+        navigation.navigate('home');
+
         if (error) console.error(error.message);
     }
 
@@ -66,7 +71,7 @@ const SubmitScreen = () => {
 
                 <TextInput multiline={true} className='text-lg' placeholder='Description'
                     value={eventDetails?.description}
-                    maxLength={400}
+                    maxLength={700}
                     onChangeText={value => handleChange('description', value)}
                 />
             </View>
