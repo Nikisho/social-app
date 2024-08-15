@@ -5,7 +5,16 @@ import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';
 
-const GoogleSignUp = () => {
+interface UserDataProps {
+	name: string;
+	age: string;
+};
+
+const GoogleSignUp:React.FC<UserDataProps> = ({
+    name,
+    age
+}) => {
+
     GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
     const dispatch = useDispatch();
     const handleSignIn = async () => {
@@ -23,10 +32,11 @@ const GoogleSignUp = () => {
                 const { error, data } = await supabase
                     .from('users')
                     .insert({
-                        name: userInfo.user.name,
+                        name: name,
                         email: userInfo.user.email,
                         photo: userInfo.user.photo,
                         uid: AuthUserData.user?.id,
+                        age: age,
                         auth_provider: 'google'
                     })
                     .select('id')
@@ -37,7 +47,7 @@ const GoogleSignUp = () => {
                 }
                 if (data) {
                     dispatch(setCurrentUser({
-                        name: userInfo.user.name,
+                        name: name,
                         email: userInfo.user.email,
                         photo: userInfo.user.photo,
                         id: data[0].id

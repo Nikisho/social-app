@@ -1,38 +1,89 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '../../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
-import GoogleSignUp from './GoogleSignUp';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useMultistepForm } from '../../../hooks/useMultistepForm';
+import UserDetailsForm from './UserDetailsForm';
+import SignUpMethodForm from './SignUpMethodForm';
+import colours from '../../../utils/styles/colours';
 
+interface UserDataProps {
+    name: string;
+    age: string;
+}
 const SignUpScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const [userDetails, setUserDetails] = useState<UserDataProps>({
+        name: '',
+        age: ''
+    });
+    const {
+        steps,
+        currentStepIndex,
+        step,
+        isFirstStep,
+        isLastStep,
+        next,
+        back
+    } = useMultistepForm(
+        [
+            <UserDetailsForm {...userDetails} updateFields={updateFields} />,
+            <SignUpMethodForm
+                name={userDetails.name}
+                age={userDetails.age}
+            />
+        ]);
+
+    function updateFields(fields: Partial<UserDataProps>) {
+        setUserDetails(prev => {
+            return { ...prev, ...fields }
+        })
+    };
     return (
-        <View className='flex items-center space-y-5 h-3/4 justify-center'>
-            <Text className='p-2 text-3xl font-bold'>
-                Sign up for Friendzy.
-            </Text>
+        <View className='flex items-center space-y-5 h-full '>
+            {step}
 
-            <View className='w-full flex items-center space-y-3'>
+            {
+                !isFirstStep && (
+                    <View className='w-2/3'>
 
+                        <TouchableOpacity onPress={back}
+                            style={{ backgroundColor: colours.secondaryColour }}
+
+                            className='p-2 rounded-full self-start'
+                        >
+                            <AntDesign name="arrowleft" size={24} color="white" />
+
+                        </TouchableOpacity>
+                    </View>
+
+                )
+            }
+            {
+                !isLastStep && (
+                    <View className='w-2/3'>
+
+                        <TouchableOpacity onPress={next}
+                            style={{ backgroundColor: colours.secondaryColour }}
+                            className={`p-2 rounded-full self-end ${userDetails.name === '' || userDetails.age ===''? 'opacity-50': ''}`}
+                            disabled={userDetails.name === '' || userDetails.age ===''}
+                        >
+                            <AntDesign name="arrowright" size={24} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
+            <View className='absolute bottom-16 flex-row space-x-2'>
+                <Text className=' font-semibold p-3 '>Already have an acccount?</Text>
                 <TouchableOpacity
-                    style={styles.shadowButtonStyle} className='p-3  self-center w-5/6 flex items-center'>
-                    <Text className='text-md font-bold text-white'>
-                        Use email and password
-                    </Text>
+                    onPress={() => navigation.navigate('signin')}
+                    style={styles.shadowButtonStyle}
+                    className=' py-3 px-4 rounded-full'>
+                    <Text className='font-bold text-white'>Sign in</Text>
                 </TouchableOpacity>
-                <GoogleSignUp />
-                <View className='flex flex-row space-x-2 '>
-                    <Text className=' font-semibold p-3 '>Already have an acccount?</Text>
-                    <TouchableOpacity 
-                        onPress={() => navigation.navigate('signin')} 
-                        style={styles.shadowButtonStyle}
-                        className=' py-3 px-4 rounded-full'>
-                        <Text className='font-bold text-white'>Sign in</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
-
         </View>
     )
 }

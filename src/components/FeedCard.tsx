@@ -53,7 +53,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 {
                     photo === null ?
                         <>
-                            <FontAwesome name="user-circle" size={24} color="black" />
+                            <FontAwesome name="user-circle" size={31} color="black" />
                         </> :
                         <>
                             <Image

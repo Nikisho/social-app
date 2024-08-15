@@ -59,7 +59,7 @@ const CommentFeed: React.FC<CommentFeedProps> = ({ event_id }) => {
                             {
                                 comment.users.photo === null ?
                                     <>
-                                        <FontAwesome name="user-circle" size={24} color="black" />
+                                        <FontAwesome name="user-circle" size={31} color="black" />
                                     </> :
                                     <>
                                         <Image
