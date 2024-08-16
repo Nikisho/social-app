@@ -59,7 +59,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
                 messages && (
                     <View className='h-4/5 '>
                         <FlatList
-                            data={[...messages].reverse()}
+                            data={messages}
                             renderItem={renderItem}
                             keyExtractor={(item: any) => item.message_id.toString()}
                             contentContainerStyle={styles.container}

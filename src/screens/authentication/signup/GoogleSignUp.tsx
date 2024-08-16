@@ -23,12 +23,11 @@ const GoogleSignUp:React.FC<UserDataProps> = ({
             const userInfo = await GoogleSignin.signIn();
 
             if (userInfo.idToken) {
-                const { data: AuthUserData, error:AuthUSerError } = await supabase.auth.signInWithIdToken({
+                const { data: AuthUserData, error:AuthUserError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                console.log(AuthUSerError, AuthUserData);
-
+                if (AuthUserError) console.error(AuthUserError.message)
                 const { error, data } = await supabase
                     .from('users')
                     .insert({

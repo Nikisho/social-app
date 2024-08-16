@@ -11,6 +11,8 @@ export type RootStackParamList = {
   chat: {user_id:number};
   chatlist: undefined;
   search: undefined;
+  emailsignup: {name:string, age:string}
+  emailsignin: undefined
 };
 
 // Define the navigation prop types

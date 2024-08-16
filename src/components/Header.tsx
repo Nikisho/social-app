@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '../utils/styles/shadow';
+import { supabase } from '../../supabase';
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Header = () => {
     const signOut = async () => {
         try {
             await GoogleSignin.signOut();
+            const { error } = await supabase.auth.signOut()
             dispatch(setCurrentUser({
                 name: null,
                 email: null,
