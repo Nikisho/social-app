@@ -33,9 +33,6 @@ const Feed = () => {
     if (error) console.error(error.message)
   }
 
-  // useEffect(() => {
-  //   fetchEvents();
-  // }, []);
   useFocusEffect(
     React.useCallback(() => {
       fetchEvents();
