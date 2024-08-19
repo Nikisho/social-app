@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
 import { supabase } from '../../../../supabase'
@@ -10,6 +10,7 @@ import { setCurrentUser } from '../../../context/navSlice'
 const GoogleSignIn = () => {
 
     GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
     const handleSignIn = async () => {

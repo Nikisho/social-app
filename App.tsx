@@ -17,6 +17,8 @@ import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
 import ChatScreen from './src/screens/chats/ChatScreen';
+import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
+import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -49,6 +51,9 @@ function App() {
               <>
                 <Stack.Screen name="signup" component={SignUpScreen} />
                 <Stack.Screen name="signin" component={SignInScreen} />
+                <Stack.Screen name="emailsignup" component={EmailSignUp} />
+                <Stack.Screen name="emailsignin" component={EmailSignIn} />
+
               </>
 
             ) : (

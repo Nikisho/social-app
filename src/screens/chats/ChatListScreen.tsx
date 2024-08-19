@@ -13,6 +13,7 @@ interface ChatDataProps {
   receiver_photo: string
   receiver_name: string
   content: string;
+  room_id: number
 };
 
 const ChatListScreen = () => {
@@ -26,14 +27,16 @@ const ChatListScreen = () => {
     if (error) { console.error(error.message); }
   };
 
-
   useFocusEffect(
     React.useCallback(() => {
       fetchReceivers();
     }, [])
   );
   const renderItem: ListRenderItem<ChatDataProps> = ({ item }) => (
-    <ChatCard item={item} />
+    <ChatCard item={item}
+      currentUser={currentUser}
+
+    />
   );
   return (
     <View className='mx-2'>

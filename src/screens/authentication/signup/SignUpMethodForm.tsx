@@ -2,19 +2,19 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import GoogleSignUp from './GoogleSignUp'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types'
 import styles from '../../../utils/styles/shadow'
+import { useNavigation } from '@react-navigation/native'
+import { RootStackNavigationProp, RootStackParamList } from '../../../utils/types/types'
 interface UserDataProps {
     name: string;
     age: string;
 };
 const SignUpMethodForm: React.FC<UserDataProps> = ({
     name,
-    age
+    age,
 }) => {
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
+    const navigation = useNavigation<RootStackNavigationProp>()
     return (
         <View className='w-full flex  space-y-3 h-1/2 justify-center ' >
             <View className=' h-1/3 space-y-3 self-center'>
@@ -26,6 +26,10 @@ const SignUpMethodForm: React.FC<UserDataProps> = ({
                 </Text>
             </View>
             <TouchableOpacity
+                onPress={() => { navigation.navigate('emailsignup', {
+                    age: age,
+                    name: name
+                })}}
                 style={styles.shadowButtonStyle} className='p-3 self-center w-5/6 flex items-center'>
                 <Text className='text-md font-bold text-white'>
                     Use email and password

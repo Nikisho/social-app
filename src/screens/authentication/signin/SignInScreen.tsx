@@ -25,7 +25,9 @@ const SignInScreen = () => {
 
                 <View className='w-full flex space-y-3'>
 
-                    <TouchableOpacity style={styles.shadowButtonStyle} className='p-3 self-center  w-5/6 flex items-center'>
+                    <TouchableOpacity 
+                        onPress={() => {navigation.navigate('emailsignin')}}
+                        style={styles.shadowButtonStyle} className='p-3 self-center  w-5/6 flex items-center'>
                         <Text className='text-md font-bold text-white'>
                             Use email and password
                         </Text>

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import FeedCard from '../../components/FeedCard';
@@ -39,12 +39,12 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     }, [user_id]);
 
     return (
-        <View className='h-2/3 flex space-y-2'>
+        <View className='h-[60%] flex space-y-2'>
 
-            <View className=' '>
+            <View className=''>
                 <Text className='text-lg font-semibold'>Events</Text>
             </View>
-            <View className=''>
+            <ScrollView className=''>
                 {eventList?.map((event: any) => (
                     <FeedCard
                         key={event.event_id}
@@ -58,7 +58,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                         user_id={event.users.id}
                     />
                 ))}
-            </View>
+            </ScrollView>
         </View>
     )
 }

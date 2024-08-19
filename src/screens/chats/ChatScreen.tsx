@@ -46,8 +46,8 @@ const ChatScreen = () => {
         .select();
 
       const chatRoomId = newChatRoom![0].chat_room_id
-      setChatRoomIdState(newChatRoom![0].chat_room_id); 
-     
+      setChatRoomIdState(newChatRoom![0].chat_room_id);
+
       //Now that we have inserted a row in the chat_rooms table, we can add two rows corresponding 
       //To the participants with the chat_room_id
       const { error: participantError } = await supabase.from('participants').insert([
@@ -72,6 +72,7 @@ const ChatScreen = () => {
       .from('messages')
       .select()
       .eq('chat_room_id', chatRoomIdState)
+      .order('created_at', { ascending: false })
 
     if (data) {
       setMessages(data)
