@@ -203,12 +203,13 @@ const ProfileScreen = ({ route }: any) => {
                   </TextInput>
                   <View className='flex flex-row space-x-1 justify-center'>
                     <TouchableOpacity
-                      className='rounded-xl p-3 bg-red-600 w-1/2'
+                      className='rounded-full p-2 bg-red-500 w-1/2'
                       onPress={() => setModalVisible(!modalVisible)}>
                       <Text className='text-white text-center font-bold'>close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      className='rounded-xl p-3 bg-blue-600 w-1/2'
+                      style={{backgroundColor: colours.secondaryColour}}
+                      className='rounded-full p-2 w-1/2'
                       onPress={updateUserDescription}>
                       <Text className='text-white text-center font-bold'>Save</Text>
                     </TouchableOpacity>
