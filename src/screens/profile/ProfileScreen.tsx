@@ -66,6 +66,24 @@ const ProfileScreen = ({ route }: any) => {
     }
   }
 
+
+  const updateUserDescription = async () => {
+    if (!userData?.bio || userData.bio ==='') {
+      return;
+    }
+
+    const { error } = await supabase
+      .from('users')
+      .update({
+        bio: userData.bio
+      })
+      .eq('id', currentUser.id);
+      if (error) { console.error(error.message); }
+      setModalVisible(!modalVisible);
+  }
+
+
+
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -171,13 +189,30 @@ const ProfileScreen = ({ route }: any) => {
                 setModalVisible(!modalVisible);
               }}>
               <View className='flex-1 justify-center items-center mt-22' >
-                <View  className='bg-white rounded-xl m-20 h-1/2 w-4/5 p-12' style={styles.shadow} >
-                  <Text style={modalStyles.modalText}>Hello World!</Text>
-                  <TouchableOpacity
-                    style={[modalStyles.button, modalStyles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={modalStyles.textStyle}>Save</Text>
-                  </TouchableOpacity>
+                <View className='bg-white rounded-xl m-20 h-1/2 w-4/5 p-5 space-y-5' style={styles.shadow} >
+                  <TextInput className='mb-15 border rounded-lg p-2'
+                    value={userData.bio}
+                    multiline={true}
+                    onChangeText={(value) => (setUserData((prevData: any) => ({
+                      ...prevData,
+                      bio: value
+                    })))}
+
+                  >
+
+                  </TextInput>
+                  <View className='flex flex-row space-x-1 justify-center'>
+                    <TouchableOpacity
+                      className='rounded-xl p-3 bg-red-600 w-1/2'
+                      onPress={() => setModalVisible(!modalVisible)}>
+                      <Text className='text-white text-center font-bold'>close</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className='rounded-xl p-3 bg-blue-600 w-1/2'
+                      onPress={updateUserDescription}>
+                      <Text className='text-white text-center font-bold'>Save</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </Modal>
@@ -205,20 +240,8 @@ const modalStyles = StyleSheet.create({
     padding: 10,
     elevation: 2,
   },
-  buttonOpen: {
-    backgroundColor: colours.secondaryColour,
-  },
   buttonClose: {
     backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
   },
 });
 export default ProfileScreen

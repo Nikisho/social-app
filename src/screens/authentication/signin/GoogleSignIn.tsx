@@ -14,6 +14,7 @@ const GoogleSignIn = () => {
 
     const dispatch = useDispatch();
     const handleSignIn = async () => {
+        setLoading(true);
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
@@ -87,7 +88,7 @@ const GoogleSignIn = () => {
             }
 
         }
-
+        setLoading(false)
     }
     return (
         <View className=' flex w-5/6 items-center self-center mt-2' >
@@ -97,7 +98,7 @@ const GoogleSignIn = () => {
                 style={{ "width": "103%" }}
                 color={GoogleSigninButton?.Color.Dark}
                 onPress={handleSignIn}
-            // disabled={isInProgress}
+                disabled={loading}
             />
         </View>
     )
