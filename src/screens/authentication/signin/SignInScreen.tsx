@@ -1,15 +1,14 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import styles from '../../../utils/styles/shadow'
 import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import GoogleSignIn from './GoogleSignIn'
+import { RootStackNavigationProp } from '../../../utils/types/types'
 
 
 const SignInScreen = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<any>>()
+    const navigation = useNavigation<RootStackNavigationProp>()
     return (
         <View className='flex items-center space-y-5 h-full'>
 

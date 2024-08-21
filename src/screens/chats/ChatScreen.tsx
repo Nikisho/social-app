@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { ChatScreenRouteProp, RootStackNavigationProp, RootStackParamList } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
@@ -15,8 +15,10 @@ interface UserDataProps {
   photo: string;
   id: number;
 }
+
+
 const ChatScreen = () => {
-  const route = useRoute<any>();
+  const route = useRoute<ChatScreenRouteProp>();
   const { user_id } = route.params
   const currentUser = useSelector(selectCurrentUser);
   const [chatRoomIdState, setChatRoomIdState] = useState<number>();

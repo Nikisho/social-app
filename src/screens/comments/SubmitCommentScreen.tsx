@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import styles from '../../utils/styles/shadow';
 import { supabase } from '../../../supabase';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { CommentScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
 
 const SubmitCommentScreen = () => {
-  const route = useRoute<any>();
+  const route = useRoute<CommentScreenRouteProp>();
   const { event_id } = route.params;
   const currentUser = useSelector(selectCurrentUser);
   const [comment, setComment] = useState<string>('');

@@ -28,6 +28,7 @@ const ProfileScreen = ({ route }: any) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isCurrentUserProfile = user_id === currentUser.id;
   const [modalVisible, setModalVisible] = useState(false);
+  const [originalBio, setOriginalBio] = useState('');
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
@@ -36,6 +37,7 @@ const ProfileScreen = ({ route }: any) => {
       .eq('id', user_id)
     if (data) {
       setUserData(data[0]);
+      setOriginalBio(data[0].bio!);
     };
     if (error) {
       throw error;
@@ -82,7 +84,13 @@ const ProfileScreen = ({ route }: any) => {
       setModalVisible(!modalVisible);
   }
 
-
+  const closeModal = () => {
+    setUserData((prevData: any) => ({
+      ...prevData,
+      bio: originalBio
+    }));
+    setModalVisible(!modalVisible);
+  }
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -113,7 +121,7 @@ const ProfileScreen = ({ route }: any) => {
   }, [user_id])
 
   return (
-    <View className='mx-2 h-[90%]'>
+    <View className='mx-2 h-[92%]'>
       {
         userData && (
           <View className='h-[40%]'>
@@ -191,6 +199,7 @@ const ProfileScreen = ({ route }: any) => {
               <View className='flex-1 justify-center items-center mt-22' >
                 <View className='bg-white rounded-xl m-20 h-1/2 w-4/5 p-5 space-y-5' style={styles.shadow} >
                   <TextInput className='mb-15 border rounded-lg p-2'
+                    maxLength={300}
                     value={userData.bio}
                     multiline={true}
                     onChangeText={(value) => (setUserData((prevData: any) => ({
@@ -204,8 +213,8 @@ const ProfileScreen = ({ route }: any) => {
                   <View className='flex flex-row space-x-1 justify-center'>
                     <TouchableOpacity
                       className='rounded-full p-2 bg-red-500 w-1/2'
-                      onPress={() => setModalVisible(!modalVisible)}>
-                      <Text className='text-white text-center font-bold'>close</Text>
+                      onPress={closeModal}>
+                      <Text className='text-white text-center font-bold'>Close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{backgroundColor: colours.secondaryColour}}
@@ -234,15 +243,4 @@ const ProfileScreen = ({ route }: any) => {
     </View>
   )
 }
-const modalStyles = StyleSheet.create({
-
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-});
 export default ProfileScreen

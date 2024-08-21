@@ -7,6 +7,7 @@ import styles from '../../../utils/styles/shadow';
 import { supabase } from '../../../../supabase';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
+import validateEmail from '../../../utils/functions/validateEmail';
 
 const EmailSignIn = () => {
 
@@ -20,9 +21,14 @@ const EmailSignIn = () => {
 	const isDisabled = isEmailEmpty || isPasswordEmpty || loading;
 
 
-	async function signUpWithEmail() {
+	async function signInWithEmail() {
 		setLoading(true);
 
+		if (validateEmail(email) === false) {
+			Alert.alert('Please enter a valid email address');
+			setLoading(false);
+			return;
+		}
 		//Sign up the user to supabase
         const { data:{session}, error: AuthUserError } = await supabase.auth.signInWithPassword({
             email: email,
@@ -53,7 +59,6 @@ const EmailSignIn = () => {
 		if (!session) Alert.alert('Please check your inbox for email verification!')
 		setLoading(false)
 	}
-
 	return (
 		<View className='flex flex-col w-full h-auto items-center justify-end space-y-3 '>
 			<View className=' h-1/4 w-5/6 space-y-3'>
@@ -93,7 +98,7 @@ const EmailSignIn = () => {
 			<View className='w-full flex items-center h-1/4 justify-center'>
 
 				<TouchableOpacity
-					onPress={signUpWithEmail}
+					onPress={signInWithEmail}
 					style={styles.shadowButtonStyle}
 					disabled={isDisabled}
 					className={`w-5/6 space-y-1 p-2 px-5 flex items-center rounded-full ${isDisabled && 'opacity-60'}`}>

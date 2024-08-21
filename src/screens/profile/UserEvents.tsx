@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import FeedCard from '../../components/FeedCard';
+import Feed from '../home/Feed';
 
 interface eventListProps {
     name: string
@@ -12,6 +13,7 @@ interface eventListProps {
     photo: string
     time: Date
     event_id: number
+    id: number
 }
 
 const UserEvents = ({ user_id }: { user_id: number }) => {
@@ -44,7 +46,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
             <View className=''>
                 <Text className='text-lg font-semibold'>Events</Text>
             </View>
-            <ScrollView className=''>
+            {/* <ScrollView className=''>
                 {eventList?.map((event: any) => (
                     <FeedCard
                         key={event.event_id}
@@ -58,7 +60,10 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                         user_id={event.users.id}
                     />
                 ))}
-            </ScrollView>
+            </ScrollView> */}
+            <Feed 
+                eventList={eventList!}
+            />
         </View>
     )
 }

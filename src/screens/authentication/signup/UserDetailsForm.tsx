@@ -35,7 +35,8 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     placeholder='Enter username '
                     className='p-2 px-5 flex items-center rounded-full border bg-gray-200 '
                     value={name}
-                    onChangeText={(value) => updateFields({ name: value })}
+                    maxLength={15}
+                    onChangeText={(value) => updateFields({ name: value.replace(/[^a-z0-9]/gi, '') })}
                 />
 
             </View>
@@ -47,6 +48,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     keyboardType='numeric'
                     placeholder='Enter age '
                     value={age}
+                    maxLength={2}
                     className='p-2 px-5 flex items-center border w-1/3 rounded-full bg-gray-200'
                     onChangeText={(value) => updateFields({ age: value.replace(/[^0-9]/g, '') })}
                 />

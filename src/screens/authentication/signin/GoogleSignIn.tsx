@@ -23,7 +23,7 @@ const GoogleSignIn = () => {
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                console.log(AuthUserError, AuthUserData)
+                console.log(AuthUserData)
 
                 const { error, data } = await supabase
                     .from('users')
@@ -55,7 +55,6 @@ const GoogleSignIn = () => {
                         }
                         return;
                     }
-                    console.log(data)
                     dispatch(setCurrentUser({
                         name: data[0].name,
                         email: data[0].email,

@@ -2,14 +2,15 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
-import colours from '../../../utils/styles/colours';
 import styles from '../../../utils/styles/shadow';
 import { supabase } from '../../../../supabase';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
+import validateEmail from '../../../utils/functions/validateEmail';
+import { EmailSignUpScreenRouteProp } from '../../../utils/types/types';
 
 const EmailSignUp = () => {
-	const route = useRoute<any>();
+	const route = useRoute<EmailSignUpScreenRouteProp>();
 	const { age, name } = route.params;
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
@@ -25,7 +26,11 @@ const EmailSignUp = () => {
 
 	async function signUpWithEmail() {
 		setLoading(true);
-
+		if (validateEmail(email) === false) {
+			Alert.alert('Please enter a valid email address');
+			setLoading(false);
+			return;
+		}
 		//Sign up the user to supabase
 		const {
 			data: { session },

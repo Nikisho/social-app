@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import { useRoute } from '@react-navigation/native';
 import CommentFeed from './CommentFeed';
+import { EventScreenRouteProp } from '../../utils/types/types';
 
 interface EventDataProps {
     name: string
@@ -28,7 +29,7 @@ interface EventDataProps {
 };
 
 const EventScreen = () => {
-    const route = useRoute<any>()
+    const route = useRoute<EventScreenRouteProp>()
     const { event_id } = route.params;
     const [eventData, setEventData] = useState<EventDataProps>();
     const currentUser = useSelector(selectCurrentUser);
@@ -54,7 +55,7 @@ const EventScreen = () => {
     }, []);
 
     return (
-        <View className='mx-2'>
+        <View className='mx-2 h-[90%]'>
             <Header />
             {/* Post Details 1/3 of screen */}
             {

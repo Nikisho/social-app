@@ -19,6 +19,7 @@ import ChatListScreen from './src/screens/chats/ChatListScreen';
 import ChatScreen from './src/screens/chats/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
 import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
+import SearchScreen from './src/screens/search/SearchScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -65,6 +66,7 @@ function App() {
                 <Stack.Screen name="comment" component={SubmitCommentScreen} />
                 <Stack.Screen name="chatlist" component={ChatListScreen} />
                 <Stack.Screen name="chat" component={ChatScreen} />
+                <Stack.Screen name="search" component={SearchScreen} />
               </>
             )
           }

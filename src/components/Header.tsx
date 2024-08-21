@@ -6,14 +6,14 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from '../context/navSlice';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '../utils/styles/shadow';
 import { supabase } from '../../supabase';
+import { RootStackNavigationProp } from '../utils/types/types';
 
 const Header = () => {
     const dispatch = useDispatch();
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser)
     const signOut = async () => {
         try {

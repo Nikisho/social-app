@@ -24,30 +24,34 @@ const Navbar = () => {
       icon: <Entypo name="message" size={30} color="white" />,
       navigation: 'chatlist'
     },
+    {
+      icon: <Ionicons name="person" size={30} color="white" />,
+      navigation: 'profile'
+    },
   ];
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<RootStackNavigationProp>();
   const currentUser = useSelector(selectCurrentUser);
   return (
     <View
       style={{ backgroundColor: colours.secondaryColour }}
-      className=' absolute inset-x-0 bottom-0 h-16 flex justify-between flex-row'>
+      className=' absolute inset-x-0 bottom-0 h-[8%] flex justify-between flex-row'>
 
       {
         menuItems.map((item) => (
           <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/4 items-center`}
-            onPress={() => navigation.navigate(item.navigation)}>
+            onPress={() => {
+              if (item.navigation === 'search' || item.navigation === 'home' || item.navigation === 'chatlist') {
+                navigation.navigate(item.navigation);
+              } else if (item.navigation === 'profile') {
+                navigation.navigate('profile', {
+                  user_id: currentUser.id,
+                })
+              }
+            }}>
             <Text className='text-lg'>{item.icon}</Text>
           </TouchableOpacity>
         ))
       }
-      <TouchableOpacity className={` flex justify-center w-1/4 items-center`}
-        onPress={() => navigation.navigate('profile', {
-          user_id: currentUser.id,
-        })}>
-        <Text className='text-lg'>
-          <Ionicons name="person" size={30} color="white" />
-        </Text>
-      </TouchableOpacity>
     </View>
   )
 }

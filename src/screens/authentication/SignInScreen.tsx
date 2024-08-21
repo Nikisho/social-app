@@ -8,6 +8,7 @@ import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google
 import { supabase } from '../../../supabase'
 import { setCurrentUser } from '../../context/navSlice'
 import { useDispatch } from 'react-redux'
+import { RootStackNavigationProp } from '../../utils/types/types'
 
 
 // GoogleSignin.configure({
@@ -16,7 +17,7 @@ import { useDispatch } from 'react-redux'
 
 const SignInScreen = () => {
 
-    const navigation = useNavigation<NativeStackNavigationProp<any>>()
+    const navigation = useNavigation<RootStackNavigationProp>()
     const dispatch = useDispatch();
     const handleSignIn = async () => {
         try {

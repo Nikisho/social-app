@@ -2,19 +2,19 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import styles from '../../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useMultistepForm } from '../../../hooks/useMultistepForm';
 import UserDetailsForm from './UserDetailsForm';
 import SignUpMethodForm from './SignUpMethodForm';
 import colours from '../../../utils/styles/colours';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 
 interface UserDataProps {
     name: string;
     age: string;
 }
 const SignUpScreen = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const navigation = useNavigation<RootStackNavigationProp>();
     const [userDetails, setUserDetails] = useState<UserDataProps>({
         name: '',
         age: ''
