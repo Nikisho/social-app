@@ -45,7 +45,7 @@ const ChatListScreen = () => {
         className='-mx-2'
         data={receivers}
         renderItem={renderItem}
-        keyExtractor={(item: any) => item.receiver_id.toString()}
+        keyExtractor={(item: ChatDataProps) => item.receiver_id.toString()}
       />
     </View>
   )

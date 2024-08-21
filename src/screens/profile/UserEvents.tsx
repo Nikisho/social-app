@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import FeedCard from '../../components/FeedCard';
-import Feed from '../home/Feed';
+import Feed from '../../components/Feed';
 
 interface eventListProps {
     name: string

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import Feed from './Feed'
+import Feed from '../../components/Feed'
 import Header from '../../components/Header'
 import { supabase } from '../../../supabase'
 import { useFocusEffect } from '@react-navigation/native'

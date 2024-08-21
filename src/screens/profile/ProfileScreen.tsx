@@ -8,8 +8,8 @@ import styles from '../../utils/styles/shadow';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { ProfileScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
 import colours from '../../utils/styles/colours';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
@@ -21,7 +21,8 @@ interface UserDataProps {
   bio: string
 
 }
-const ProfileScreen = ({ route }: any) => {
+const ProfileScreen = () => {
+  const route = useRoute<ProfileScreenRouteProp>();
   const { user_id } = route.params;
   const [userData, setUserData] = useState<UserDataProps>();
   const currentUser = useSelector(selectCurrentUser);

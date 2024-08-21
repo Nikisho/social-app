@@ -1,8 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { supabase } from '../../../supabase';
-import FeedCard from '../../components/FeedCard';
-import { useFocusEffect } from '@react-navigation/native';
+import React from 'react'
+import { supabase } from '../../supabase';
+import FeedCard from './FeedCard';
 interface FeedProps {
   eventList: {
     name: string
