@@ -56,7 +56,7 @@ const EmailSignIn = () => {
 
 
 		if (AuthUserError) Alert.alert(AuthUserError.message)
-		if (!session) Alert.alert('Please check your inbox for email verification!')
+		if (!session) Alert.alert("We could not authenticate you.")
 		setLoading(false)
 	}
 	return (
