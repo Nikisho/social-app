@@ -1,4 +1,4 @@
-package com.yourcompany.friendzy
+package com.linkzy
 
 import android.app.Application
 import android.content.res.Configuration

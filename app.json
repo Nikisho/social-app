@@ -31,7 +31,7 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "ndkVersion": "26.1.10909125",
-      "package": "com.yourcompany.friendzy",
+      "package": "com.linkzy",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

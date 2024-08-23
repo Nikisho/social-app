@@ -20,7 +20,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
         <View className='flex flex-col w-full h-1/2 items-center justify-end space-y-3 '>
             <View className=' h-1/3 space-y-3'>
                 <Text className='text-2xl font-bold'>
-                    Welcome to Friendzy!
+                    Welcome to Linkzy!
                 </Text>
                 <Text>
                 Please tell us your name and age to get started.
