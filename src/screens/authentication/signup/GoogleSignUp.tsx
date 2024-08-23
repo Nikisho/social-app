@@ -1,29 +1,31 @@
 import { View, Text, Alert } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { GoogleSignin, GoogleSigninButton, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';
 
 interface UserDataProps {
-	name: string;
-	age: string;
+    name: string;
+    age: string;
 };
 
-const GoogleSignUp:React.FC<UserDataProps> = ({
+const GoogleSignUp: React.FC<UserDataProps> = ({
     name,
     age
 }) => {
 
     GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState<boolean>(false);
     const handleSignIn = async () => {
+        setLoading(true);
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
 
             if (userInfo.idToken) {
-                const { data: AuthUserData, error:AuthUserError } = await supabase.auth.signInWithIdToken({
+                const { data: AuthUserData, error: AuthUserError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
                 })
@@ -33,7 +35,7 @@ const GoogleSignUp:React.FC<UserDataProps> = ({
                     .insert({
                         name: name,
                         email: userInfo.user.email,
-                        photo: userInfo.user.photo,
+                        // photo: userInfo.user.photo,
                         uid: AuthUserData.user?.id,
                         age: age,
                         auth_provider: 'google'
@@ -42,6 +44,7 @@ const GoogleSignUp:React.FC<UserDataProps> = ({
                 if (error) { console.error(error.message); }
                 if (error?.code === '23505') {
                     Alert.alert('You already have an account, just sign in!');
+                    setLoading(false);
                     return;
                 }
                 if (data) {
@@ -75,6 +78,7 @@ const GoogleSignUp:React.FC<UserDataProps> = ({
                 // an error that's not related to google sign in occurred
             }
         }
+        setLoading(false);
     };
 
     return (
@@ -85,7 +89,7 @@ const GoogleSignUp:React.FC<UserDataProps> = ({
                 style={{ "width": "103%" }}
                 color={GoogleSigninButton?.Color.Dark}
                 onPress={handleSignIn}
-            // disabled={isInProgress}
+                disabled={loading}
             />
         </View>
     )

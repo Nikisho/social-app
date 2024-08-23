@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { Alert, View } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
@@ -24,7 +24,9 @@ const GoogleSignIn = () => {
                     token: userInfo.idToken,
                 })
                 console.log(AuthUserData)
-
+                if (AuthUserError) {
+                    console.error(AuthUserError.message)
+                }
                 const { error, data } = await supabase
                     .from('users')
                     .select()
@@ -32,28 +34,32 @@ const GoogleSignIn = () => {
 
                 if (data) {
 
-                    ////If no data, its a new sign up, sign the user up instead///
+                    ////If no data, its a new sign up///
                     if (data.length === 0) {
-                        const { error, data } = await supabase
-                            .from('users')
-                            .insert({
-                                name: userInfo.user.name,
-                                email: userInfo.user.email,
-                                photo: userInfo.user.photo,
-                                uid: AuthUserData.user?.id,
-                                auth_provider: 'google'
-                            })
-                            .select('id');
-                        if (error) console.error(error.message);
-                        if (data) {
-                            dispatch(setCurrentUser({
-                                name: userInfo.user.name,
-                                email: userInfo.user.email,
-                                photo: userInfo.user.photo,
-                                id: data[0].id
-                            }))
-                        }
+                        // const { error, data } = await supabase
+                        //     .from('users')
+                        //     .insert({
+                        //         name: userInfo.user.name,
+                        //         email: userInfo.user.email,
+                        //         photo: userInfo.user.photo,
+                        //         uid: AuthUserData.user?.id,
+                        //         auth_provider: 'google'
+                        //     })
+                        //     .select('id');
+                        // if (error) console.error(error.message);
+                        // if (data) {
+                        //     dispatch(setCurrentUser({
+                        //         name: userInfo.user.name,
+                        //         email: userInfo.user.email,
+                        //         photo: userInfo.user.photo,
+                        //         id: data[0].id
+                        //     }))
+                        // }
+                        Alert.alert("You don't have an account yet. Sign up instead?");
+                        await GoogleSignin.signOut();
+                        setLoading(false);
                         return;
+
                     }
                     dispatch(setCurrentUser({
                         name: data[0].name,

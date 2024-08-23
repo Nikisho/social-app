@@ -1,4 +1,4 @@
-import { View} from 'react-native'
+import { Text, View} from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../components/Header'
 import SearchComponent from './SearchComponent'
@@ -49,11 +49,18 @@ const SearchScreen = () => {
       <View className='h-[68%]'>
 
         {
-          eventList && (
+          eventList && eventList.length === 0 ? 
+          (
+            <View className='flex flex-row justify-center items-center h-1/2'>
+              <Text className='font-semibold text-lg text-gray-800'>
+                No results, try a different key word. 
+              </Text>
+            </View>
+          ) : (
             <Feed
-              eventList={eventList}
+              eventList={eventList!}
             />
-          )
+          )  
         }
       </View>
     </View>

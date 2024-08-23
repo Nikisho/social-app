@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import styles from '../../utils/styles/shadow';
 
@@ -17,9 +17,9 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
     <View className='h-[20%] flex justify-center items-center space-y-2'>
       <TextInput
         className='p-2 px-5 flex items-center border w-5/6 rounded-full bg-gray-200'
-        maxLength={200}
-        placeholder='Search for key words'
-        onChangeText={(value) => { setQuery(value) }}
+        maxLength={100}
+        placeholder='Search for a key word'
+        onChangeText={(value) => { setQuery(value.replace(/[^a-z0-9]/gi, '')) }}
         value={query}
       />
       <TouchableOpacity onPress={fetchEvents}
