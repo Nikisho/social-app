@@ -30,7 +30,7 @@ export default {
             "supportsTablet": true
         },
         "android": {
-            "googleServicesFile": process.env.GOOGLE_SERVICES_JSON || "./google-services.json",
+            "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
             "ndkVersion": "26.1.10909125",
             "package": "com.linkzy",
             "versionCode": 1,
