@@ -24,6 +24,8 @@ export type ChatScreenRouteProp = RouteProp<RootStackParamList, 'chat'>;
 export type EmailSignUpScreenRouteProp = RouteProp<RootStackParamList, 'emailsignup'>;
 export type CommentScreenRouteProp = RouteProp<RootStackParamList, 'comment'>;
 export type EventScreenRouteProp = RouteProp<RootStackParamList, 'event'>;
+export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'profile'>;
+
 
 
 
