@@ -4,10 +4,13 @@ const path = require('path');
 export default ({ config }) => {
   // Hook to write the google-services.json from environment variable
   if (process.env.GOOGLE_SERVICES_JSON) {
-    const googleServicesPath = path.resolve(__dirname, './android/app/google-services.json');
-    
     try {
+      // Resolve the correct path for google-services.json
+      const googleServicesPath = path.resolve(__dirname, 'android', 'app', 'google-services.json');
+      
+      // Write the JSON content from the environment variable
       fs.writeFileSync(googleServicesPath, process.env.GOOGLE_SERVICES_JSON);
+      
       console.log('google-services.json written successfully');
     } catch (error) {
       console.error('Error writing google-services.json:', error);
@@ -47,7 +50,7 @@ export default ({ config }) => {
         supportsTablet: true
       },
       android: {
-        googleServicesFile: process.env.GOOGLE_SERVICES_JSON, // Set to path where file will be written
+        googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
         ndkVersion: "26.1.10909125",
         package: "com.linkzy",
         versionCode: 1,
