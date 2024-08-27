@@ -1,6 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
 export default {
   // Hook to write the google-services.json from environment variable
   expo: {
@@ -34,7 +31,7 @@ export default {
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
-      ndkVersion: "26.1.10909125",
+      // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       versionCode: 1,
       adaptiveIcon: {
