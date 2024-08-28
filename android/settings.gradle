@@ -1,4 +1,4 @@
-rootProject.name = 'social-app'
+rootProject.name = 'Linkzy'
 
 dependencyResolutionManagement {
   versionCatalogs {

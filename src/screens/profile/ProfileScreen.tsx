@@ -94,6 +94,9 @@ const ProfileScreen = () => {
   }
 
   const pickImage = async () => {
+    if (!isCurrentUserProfile) {
+      return;
+    }
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       base64: true,
