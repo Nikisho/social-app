@@ -36,22 +36,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
         if (error) { throw error.message }
     };
 
-    const navigateToChat = async () => {
-
-        const { error } = await supabase
-            .from('messages')
-            .update({ read_by_recipient: true })
-            .eq('chat_room_id', item.room_id)
-            .neq('sender_id', currentUser.id)
-            .eq('read_by_recipient', false);
-        if (error) { console.error(error.message) }
-
-        navigation.navigate('chat',
-            { user_id: item.receiver_id }
-        );
-    };
-
-
     useFocusEffect(
         React.useCallback(() => {
             fetchMessageCount()
@@ -59,7 +43,11 @@ const ChatCard: React.FC<ChatCardProps> = ({
     );
     return (
         <TouchableOpacity
-            onPress={navigateToChat}
+            onPress={() => {
+                navigation.navigate('chat',
+                    { user_id: item.receiver_id }
+                );
+            }}
             className='flex flex-row p-2 items-center space-x-3 bg-gray-100'>
             {
                 item.receiver_photo ?

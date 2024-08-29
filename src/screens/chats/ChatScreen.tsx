@@ -40,6 +40,7 @@ const ChatScreen = () => {
       .rpc('fetch_chat_room', { user_id_1: user_id, user_id_2: currentUser.id });
     if (data) {
       setChatRoomIdState(data)
+      setMessagesRead(data)
     } else {
       //No data returned so the room does not exist. We can make one 
       const { data: newChatRoom, error } = await supabase
@@ -48,8 +49,9 @@ const ChatScreen = () => {
         .select();
 
       const chatRoomId = newChatRoom![0].chat_room_id
-      setChatRoomIdState(newChatRoom![0].chat_room_id);
+      setMessagesRead(chatRoomId)
 
+      setChatRoomIdState(newChatRoom![0].chat_room_id);
       //Now that we have inserted a row in the chat_rooms table, we can add two rows corresponding 
       //To the participants with the chat_room_id
       const { error: participantError } = await supabase.from('participants').insert([
@@ -63,7 +65,17 @@ const ChatScreen = () => {
       }
     }
   };
-
+  //When the user opens a chat here we set the unread messages to read in the DB
+  //This is done in the chat screen directly to update no matter where the user opens the chat from
+  const setMessagesRead = async (chatRoomID: number) => {
+    const { error } = await supabase
+      .from('messages')
+      .update({ read_by_recipient: true })
+      .eq('chat_room_id', chatRoomID)
+      .neq('sender_id', currentUser.id)
+      .eq('read_by_recipient', false);
+    if (error) { console.error(error.message) }
+  }
   const fetchMessages = async () => {
     //The room ID constant does not update right away, 
     // on the first render it has value undefined
