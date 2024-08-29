@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,9 +8,14 @@ import colours from '../utils/styles/colours';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../context/navSlice';
 import { RootStackNavigationProp } from '../utils/types/types';
+import { supabase } from '../../supabase';
+import Badge from './Badge';
 
 
 const Navbar = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const currentUser = useSelector(selectCurrentUser);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number| null>(null);
   const menuItems = [
     {
       icon: <AntDesign name="search1" size={30} color="white" />,
@@ -21,16 +26,34 @@ const Navbar = () => {
       navigation: 'home'
     },
     {
-      icon: <Entypo name="message" size={30} color="white" />,
+      icon: <View>
+        <Entypo name="message" size={30} color="white" />
+        
+        <Badge messageCount={unreadMessagesCount!} /> 
+      </View>,
       navigation: 'chatlist'
     },
     {
-      icon: <Ionicons name="person" size={30} color="white" />,
+      icon: <Ionicons name="person" size={30} color="white" />, 
       navigation: 'profile'
     },
   ];
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const currentUser = useSelector(selectCurrentUser);
+
+
+  const fetchUnreadMessagesCount = async () => {
+    const { data, error } = await supabase.rpc('fetch_unread_messages_count', { current_user_id: currentUser.id })
+    if (data) {
+      setUnreadMessagesCount(data[0].count);
+      console.log(unreadMessagesCount)
+    }
+    if (error) {
+      throw error.message
+    }
+  }
+
+  useEffect(() => {
+    fetchUnreadMessagesCount();
+  }, [])
   return (
     <View
       style={{ backgroundColor: colours.secondaryColour }}
