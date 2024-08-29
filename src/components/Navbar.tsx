@@ -15,7 +15,7 @@ import Badge from './Badge';
 const Navbar = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const currentUser = useSelector(selectCurrentUser);
-  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number| null>(null);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number | null>(null);
   const menuItems = [
     {
       icon: <AntDesign name="search1" size={30} color="white" />,
@@ -28,13 +28,13 @@ const Navbar = () => {
     {
       icon: <View>
         <Entypo name="message" size={30} color="white" />
-        
-        <Badge messageCount={unreadMessagesCount!} /> 
+
+        <Badge messageCount={unreadMessagesCount!} />
       </View>,
       navigation: 'chatlist'
     },
     {
-      icon: <Ionicons name="person" size={30} color="white" />, 
+      icon: <Ionicons name="person" size={30} color="white" />,
       navigation: 'profile'
     },
   ];
@@ -44,7 +44,6 @@ const Navbar = () => {
     const { data, error } = await supabase.rpc('fetch_unread_messages_count', { current_user_id: currentUser.id })
     if (data) {
       setUnreadMessagesCount(data[0].count);
-      console.log(unreadMessagesCount)
     }
     if (error) {
       throw error.message
@@ -53,7 +52,27 @@ const Navbar = () => {
 
   useEffect(() => {
     fetchUnreadMessagesCount();
-  }, [])
+
+
+    //THIS IS A TEMPORARY SOLUTION AS THIS FORCES DATA TO BE FETCHED EACH 
+    //TIME THE MESSAGES TABLE IS UPDATED. NOT SUSTAINABLE IN LONG TERM!
+    const subscription = supabase
+      .channel('messages')
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+          // filter: ''
+        },
+        (payload) => {
+          console.log('Change detected:', payload);
+          fetchUnreadMessagesCount();  // Re-fetch unread messages count when data changes
+        }
+      )
+      .subscribe();
+  }, []);
+
   return (
     <View
       style={{ backgroundColor: colours.secondaryColour }}

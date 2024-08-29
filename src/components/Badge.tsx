@@ -6,10 +6,10 @@ const Badge = ({messageCount}: {messageCount:number}) => {
         return (
             <View 
                 // style={{ position:"absolute", top:8, right:8, backgroundColor: 'green', padding: 2}} 
-                className='px-1 absolute right-0 bg-green-600 rounded-full'
+                className='px-1 absolute right-0 bg-green-600 rounded-full border border-white'
                 >
               <Text 
-                style={{fontSize: 8, color: 'white'}}
+                style={{fontSize: 9, color: 'white'}}
                 >{messageCount}</Text>
             </View>
           )
