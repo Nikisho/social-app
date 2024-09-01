@@ -60,7 +60,7 @@ function App() {
   };
 
   useEffect(() => {
-    updateExpoPushToken();
+    //updateExpoPushToken();
   }, []);
 
   return (
