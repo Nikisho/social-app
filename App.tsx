@@ -43,22 +43,25 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
-  const { expoPushToken, notification } = usePushNotifications();
-  const data = JSON.stringify(notification, undefined, 2);
+
   const updateExpoPushToken = async () => {
-    const { error } = await supabase 
+    if (currentUser.id === null) {
+      return;
+    }
+    const { expoPushToken } = usePushNotifications();
+    const { error } = await supabase
       .from('users')
       .update({
         expo_push_token: expoPushToken?.data
       })
       .eq('id', currentUser.id)
-      if (error) {console.error(error.message);}
+    if (error) { console.error(error.message); }
 
   };
-  
+
   useEffect(() => {
     updateExpoPushToken();
-  },[]);
+  }, []);
 
   return (
     <View className='h-full' style={{ backgroundColor: colours.primaryColour }}>
