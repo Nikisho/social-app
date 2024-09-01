@@ -59,9 +59,9 @@ function App() {
 
   };
 
-  // useEffect(() => {
-  //   //updateExpoPushToken();
-  // }, []);
+  useEffect(() => {
+    updateExpoPushToken();
+  }, []);
 
   return (
     <View className='h-full' style={{ backgroundColor: colours.primaryColour }}>
