@@ -15,8 +15,8 @@ export default {
         }
       ]
     ],
-    name: "Linkzy",
-    slug: "Linkzy",
+    name: "social-app",
+    slug: "social-app",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
@@ -45,7 +45,7 @@ export default {
     },
     extra: {
       eas: {
-        projectId: "39fc5404-7f98-4dfc-9662-000a0ba6f4f8"
+        projectId: "79e17fd1-764c-424f-9efe-1c4aabd967f6"
       }
     }
   }
