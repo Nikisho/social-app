@@ -76,7 +76,7 @@ const Navbar = () => {
   return (
     <View
       style={{ backgroundColor: colours.secondaryColour }}
-      className=' absolute inset-x-0 bottom-0 h-[8%] flex justify-between flex-row'>
+      className=' absolute inset-x-0 bottom-0 h-[10%] flex justify-between flex-row'>
 
       {
         menuItems.map((item) => (

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Platform } from 'react-native'
 import React from 'react'
 import { supabase } from '../../supabase';
 import FeedCard from './FeedCard';
@@ -43,7 +43,7 @@ const Feed: React.FC<FeedProps> = ({
   //   }, [])
   // );
   return (
-    <ScrollView className='h-5/6'>
+    <ScrollView className={Platform.OS === 'ios'? 'h-[89%]' : 'h-5/6'}>
       {eventList?.map((event: any) => (
         <FeedCard
           name={event.users.name}
