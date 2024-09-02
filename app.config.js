@@ -27,7 +27,8 @@ export default {
       backgroundColor: "#ffffff"
     },
     ios: {
-      supportsTablet: true
+      supportsTablet: true,
+      bundleIdentifier: 'com.linkzy'
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
