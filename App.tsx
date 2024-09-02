@@ -44,6 +44,7 @@ export default function AppWrapper() {
 function App() {
   const currentUser = useSelector(selectCurrentUser);
   const { expoPushToken } = usePushNotifications();
+  console.log(expoPushToken)
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
       return;
