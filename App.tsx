@@ -43,12 +43,11 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
-
+  const { expoPushToken } = usePushNotifications();
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
       return;
     }
-    const { expoPushToken } = usePushNotifications();
     const { error } = await supabase
       .from('users')
       .update({
