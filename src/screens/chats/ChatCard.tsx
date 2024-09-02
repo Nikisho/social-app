@@ -48,19 +48,19 @@ const ChatCard: React.FC<ChatCardProps> = ({
                     { user_id: item.receiver_id }
                 );
             }}
-            className='flex flex-row p-2 items-center space-x-3 bg-gray-100'>
+            className='flex flex-row p-2 py-3 items-center space-x-3 bg-gray-100'>
             {
                 item.receiver_photo ?
 
                     <Image
-                        className='w-10 h-10 rounded-full'
+                        className='w-14 h-14 rounded-full'
                         source={{
                             uri: item.receiver_photo,
                         }}
                     />
                     :
                     <>
-                        <FontAwesome name="user-circle" size={38} color="black" />
+                        <FontAwesome name="user-circle" size={60} color="black" />
                     </>
             }
             <View>
