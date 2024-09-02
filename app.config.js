@@ -34,6 +34,7 @@ export default {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
+      useNextNotificationsApi: true,
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
