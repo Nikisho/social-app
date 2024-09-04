@@ -49,7 +49,7 @@ export const usePushNotifications = (): PushNotificationState => {
             }
 
             token = await Notifications.getExpoPushTokenAsync({
-                projectId: Constants.expoConfig?.extra?.eas.projectId,
+                projectId: Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId,
             });
         } else {
             alert("Must be using a physical device for Push notifications");

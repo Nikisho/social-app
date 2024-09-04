@@ -57,7 +57,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
         <>
             {
                 messages && (
-                    <View className='h-4/5 '>
+                    <View className='h-screen flex-1 '>
                         <FlatList
                             data={messages}
                             renderItem={renderItem}
@@ -76,6 +76,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
+        // height: ''
     },
     messageBubble: {
         padding: 10,

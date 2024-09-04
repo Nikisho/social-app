@@ -106,6 +106,23 @@ const ChatScreen = () => {
     if (error) console.error(error.message);
   };
 
+  //This is to refresh the messages whenever the user receives a message
+  const subscription = supabase
+  .channel('messages')
+  .on('postgres_changes',
+    {
+      event: '*',
+      schema: 'public',
+      table: 'messages',
+      filter: `sender_id=eq.${user_id}`
+    },
+    (payload) => {
+      console.log('Change detected:', payload);
+      fetchMessages();  // Re-fetch unread messages count when data changes
+    }
+  )
+  .subscribe();
+
   useEffect(() => {
     fetchUserData();
     fetchChatData();
