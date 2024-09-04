@@ -12,7 +12,7 @@ import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
-import { Keyboard, SafeAreaView, View } from 'react-native';
+import { Alert, Keyboard, SafeAreaView, View } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
@@ -44,7 +44,12 @@ export default function AppWrapper() {
 function App() {
   const currentUser = useSelector(selectCurrentUser);
   const { expoPushToken } = usePushNotifications();
+
+  //LOGGING FOR TEST HERE
   console.log(expoPushToken)
+  Alert.alert(`${expoPushToken?.data}`)
+  ///
+
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
       return;
