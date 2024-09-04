@@ -43,30 +43,9 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
-  const { expoPushToken } = usePushNotifications();
-
-  //LOGGING FOR TEST HERE
-  console.log(expoPushToken)
-  Alert.alert(`${expoPushToken?.data}`)
-  ///
-
-  const updateExpoPushToken = async () => {
-    if (currentUser.id === null) {
-      return;
-    }
-    const { error } = await supabase
-      .from('users')
-      .update({
-        expo_push_token: expoPushToken?.data
-      })
-      .eq('id', currentUser.id)
-    if (error) { console.error(error.message); }
-
-  };
-
-  useEffect(() => {
-    updateExpoPushToken();
-  }, []);
+  // useEffect(() => {
+  //   updateExpoPushToken();
+  // }, [expoPushToken]);
 
   return (
     <SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
