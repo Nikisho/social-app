@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { EditEventScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types'
 import { supabase } from '../../../supabase'
@@ -22,11 +22,10 @@ const EditEventScreen = () => {
     const route = useRoute<EditEventScreenRouteProp>()
     const { event_id } = route.params;
     const [eventData, setEventData] = useState<EventDataProps | null>(null);
-    const [initialEventData, setInitialEventData] = useState(eventData);
+    const initialEventDataRef = useRef(null);
     const [isEventDataAmended, setIsEventDataAmended] = useState(false);
     const navigation = useNavigation<RootStackNavigationProp>()
-
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     const fetchEventData = async () => {
         const { data, error } = await supabase
             .from('meetup_events')
@@ -39,12 +38,12 @@ const EditEventScreen = () => {
             setEventData({
                 ...data,
                 event_date: new Date(data.event_date),
-            })
-            setInitialEventData(eventData);
+            });
+            initialEventDataRef.current = data;
         }
     }
     const handleChange = (name: string, value: string) => {
-        setEventData((prevData: any | null) => ({
+        setEventData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }));
@@ -87,8 +86,10 @@ const EditEventScreen = () => {
 
 
     useEffect(() => {
-        const isAmended = !_.isEqual(eventData, initialEventData);
-        setIsEventDataAmended(isAmended);
+        if (eventData && initialEventDataRef.current) {
+            const isAmended = !_.isEqual(eventData, initialEventDataRef.current);
+            setIsEventDataAmended(isAmended);
+        }
     }, [eventData]);
 
     useEffect(() => {
@@ -104,8 +105,9 @@ const EditEventScreen = () => {
                 <TouchableOpacity
                     onPress={updateEventDetails}
                     disabled={!isEventDataAmended}
-                    className={`p-2 px-4 bg-blue-300 rounded-full ${!isEventDataAmended && 'opacity-40'}`}>
-                    <Text className='font-bold '>
+                    style={styles.shadowButtonStyle}
+                    className={`p-2 px-3 rounded-full ${!isEventDataAmended && 'opacity-40'}`}>
+                    <Text className='font-bold text-white'>
                         Save changes
                     </Text>
                 </TouchableOpacity>
