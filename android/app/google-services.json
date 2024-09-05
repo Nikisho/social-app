@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "44271322539-0hasng45g45e150k8sddh2vo89h6reck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.linkzy",
+            "certificate_hash": "4e7c43bca75c17daf0cbb0c7f50150cffa096f7c"
+          }
+        },
+        {
           "client_id": "44271322539-f4o0nltvca2jutonla1otvnbr7qesugk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
