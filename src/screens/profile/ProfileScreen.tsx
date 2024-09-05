@@ -1,4 +1,4 @@
-import { View, Text, Image, ImageBackground, Alert, Modal, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, ImageBackground, Alert, Modal, Pressable, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import UserEvents from './UserEvents';
 import { FontAwesome } from '@expo/vector-icons';
@@ -71,7 +71,7 @@ const ProfileScreen = () => {
 
 
   const updateUserDescription = async () => {
-    if (!userData?.bio || userData.bio ==='') {
+    if (!userData?.bio || userData.bio === '') {
       return;
     }
 
@@ -81,8 +81,9 @@ const ProfileScreen = () => {
         bio: userData.bio
       })
       .eq('id', currentUser.id);
-      if (error) { console.error(error.message); }
-      setModalVisible(!modalVisible);
+    if (error) { console.error(error.message); }
+    setModalVisible(!modalVisible);
+    ToastAndroid.show('Description changed successfully', ToastAndroid.SHORT);
   }
 
   const closeModal = () => {
@@ -118,7 +119,11 @@ const ProfileScreen = () => {
         })
         .eq('id', currentUser.id);
       if (error) { console.error(error.message); }
+      ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT);
+
     }
+
+
   }
   useEffect(() => {
     fetchUserData();
@@ -221,7 +226,7 @@ const ProfileScreen = () => {
                       <Text className='text-white text-center font-bold'>Close</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={{backgroundColor: colours.secondaryColour}}
+                      style={{ backgroundColor: colours.secondaryColour }}
                       className='rounded-full p-2 w-1/2'
                       onPress={updateUserDescription}>
                       <Text className='text-white text-center font-bold'>Save</Text>

@@ -19,7 +19,7 @@ const hasUserLikedEvent = async (user_id: number, event_id: number) => {
             // No rows return, the user has not liked the post.
             return;
         }
-        console.log(error.message);
+        console.error(error.message);
     }
 };
 

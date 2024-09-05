@@ -23,6 +23,7 @@
     "expo-image-picker": "~15.0.7",
     "expo-notifications": "~0.28.16",
     "expo-status-bar": "~1.12.1",
+    "lodash": "^4.17.21",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.5",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/lodash": "^4.17.7",
     "@types/react": "~18.2.45",
     "@types/react-native": "^0.73.0",
     "supabase": "^1.191.3",

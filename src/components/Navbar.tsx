@@ -41,7 +41,6 @@ const Navbar = () => {
   ];
 
   const { expoPushToken } = usePushNotifications();
-  console.log(expoPushToken)
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
       return;

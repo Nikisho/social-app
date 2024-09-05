@@ -6,14 +6,15 @@ import { RootStackNavigationProp } from '../../utils/types/types';
 import { ScrollView } from 'react-native-gesture-handler';
 
 interface evenDetailsProps {
-    user_name: string
-    event_description: string
-    event_title: string
-    event_date: string
-    event_time: string
-    user_photo: string
+    user_name: string;
+    event_description: string;
+    event_title: string;
+    event_date: string;
+    event_time: string;
+    user_photo: string;
     isUsersOwnPost: boolean;
     user_id: number;
+    event_id:number;
 }
 const EventDetails: React.FC<evenDetailsProps> = ({
     user_photo,
@@ -23,7 +24,8 @@ const EventDetails: React.FC<evenDetailsProps> = ({
     event_title,
     event_description,
     isUsersOwnPost,
-    user_id
+    user_id,
+    event_id
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const timeSliced = event_time.slice(0, -3);
@@ -66,7 +68,11 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                 </View>
                 {
                     isUsersOwnPost && (
-                        <TouchableOpacity className='flex flex-row justify-end grow'>
+                        <TouchableOpacity className='flex flex-row justify-end grow'
+                            onPress={() => navigation.navigate('editevent', {
+                                event_id: event_id
+                            })}
+                        >
                             <FontAwesome name="edit" size={24} color="black" />
                         </TouchableOpacity>
                     )

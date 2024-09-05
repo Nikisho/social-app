@@ -4,8 +4,8 @@ import HomeScreen from './src/screens/home/HomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer, useNavigationState } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
-import { Provider, useSelector } from 'react-redux';
-import { selectCurrentUser } from './src/context/navSlice';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
 import SubmitScreen from './src/screens/submit/SubmitScreen';
 import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
@@ -22,6 +22,7 @@ import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 import SearchScreen from './src/screens/search/SearchScreen';
 import { usePushNotifications } from './src/utils/functions/usePushNotifications';
 import { supabase } from './supabase';
+import EditEventScreen from './src/screens/event/EditEventScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -43,9 +44,33 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
-  // useEffect(() => {
-  //   updateExpoPushToken();
-  // }, [expoPushToken]);
+  const dispatch = useDispatch();
+  const fetchSession = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log(user) 
+    if (user) {
+      const { data, error } = await supabase
+        .from('users')
+        .select()
+        .eq('uid', user.id);
+      
+      if (error) throw error.message; 
+
+      if (data) {
+        dispatch(setCurrentUser({
+          name: data[0].name,
+          email: data[0].email,
+          photo: data[0].photo,
+          id: data[0].id
+        }))
+      }
+    }
+  }
+
+
+  useEffect(() => {
+    // fetchSession();
+  }, []);
 
   return (
     <SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
@@ -69,6 +94,7 @@ function App() {
                 <Stack.Screen name="profile" component={ProfileScreen} />
                 <Stack.Screen name="submit" component={SubmitScreen} />
                 <Stack.Screen name="event" component={EventScreen} />
+                <Stack.Screen name="editevent" component={EditEventScreen} />
                 <Stack.Screen name="comment" component={SubmitCommentScreen} />
                 <Stack.Screen name="chatlist" component={ChatListScreen} />
                 <Stack.Screen name="chat" component={ChatScreen} />

@@ -16,6 +16,7 @@ export type RootStackParamList = {
   submit: undefined;
   signup:undefined;
   signin:undefined;
+  editevent: {event_id: number};
 };
 
 // Define the navigation prop types
@@ -25,6 +26,8 @@ export type EmailSignUpScreenRouteProp = RouteProp<RootStackParamList, 'emailsig
 export type CommentScreenRouteProp = RouteProp<RootStackParamList, 'comment'>;
 export type EventScreenRouteProp = RouteProp<RootStackParamList, 'event'>;
 export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'profile'>;
+export type EditEventScreenRouteProp = RouteProp<RootStackParamList, 'editevent'>;
+
 
 
 
