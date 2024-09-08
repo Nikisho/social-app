@@ -10,15 +10,26 @@ import { FontAwesome } from '@expo/vector-icons';
 import styles from '../utils/styles/shadow';
 import { supabase } from '../../supabase';
 import { RootStackNavigationProp } from '../utils/types/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 const Header = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser)
     const signOut = async () => {
         try {
+
+            //Sign out of Google.//
             await GoogleSignin.signOut();
-            const { error } = await supabase.auth.signOut()
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error.message;
+
+            //Remove access and refresh tokens from local storage.//
+            await AsyncStorage.removeItem('userAccessToken');
+            await AsyncStorage.removeItem('userRefreshToken');
+
+            //Remove user info from redux.//
             dispatch(setCurrentUser({
                 name: null,
                 email: null,

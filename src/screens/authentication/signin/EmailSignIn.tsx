@@ -1,13 +1,12 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ToastAndroid } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
-import { useRoute } from '@react-navigation/native';
-import colours from '../../../utils/styles/colours';
 import styles from '../../../utils/styles/shadow';
 import { supabase } from '../../../../supabase';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import validateEmail from '../../../utils/functions/validateEmail';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmailSignIn = () => {
 
@@ -30,33 +29,34 @@ const EmailSignIn = () => {
 			return;
 		}
 		//Sign up the user to supabase
-        const { data:{session}, error: AuthUserError } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
-          })
+		const { data: { session }, error: AuthUserError } = await supabase.auth.signInWithPassword({
+			email: email,
+			password: password,
+		})
 
 		//If the sign up is successful, insert a row to public.users
 		if (session) {
+			await AsyncStorage.setItem('userAccessToken', session.access_token);
+			await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
+			const { error, data } = await supabase
+				.from('users')
+				.select()
+				.eq('uid', session.user.id)
 
-            const { error, data} = await supabase
-                .from('users')
-                .select()
-                .eq('uid', session.user.id)
-            
 			//Fetch data once user is retrieved, and add to context
 			if (data) {
 				dispatch(setCurrentUser({
 					name: data[0].name,
 					email: email,
-					// photo: userInfo.user.photo,
+					photo: data[0].photo,
 					id: data[0].id
 				}))
 			}
 		}
 
-
 		if (AuthUserError) Alert.alert(AuthUserError.message)
-		if (!session) Alert.alert("We could not authenticate you.")
+		if (!session) ToastAndroid.show('We could not authenticate you.', ToastAndroid.SHORT);
+
 		setLoading(false)
 	}
 	return (

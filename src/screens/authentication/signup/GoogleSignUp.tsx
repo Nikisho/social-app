@@ -1,9 +1,10 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Text, ToastAndroid } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSignin, GoogleSigninButton, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface UserDataProps {
     name: string;
@@ -28,7 +29,13 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
                 const { data: AuthUserData, error: AuthUserError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
-                })
+                });
+
+                if (AuthUserData.session) {
+                    await AsyncStorage.setItem('userAccessToken', AuthUserData.session.access_token);
+                    await AsyncStorage.setItem('userRefreshToken', AuthUserData.session.refresh_token);
+                }
+
                 if (AuthUserError) console.error(AuthUserError.message)
                 const { error, data } = await supabase
                     .from('users')
@@ -43,7 +50,7 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
                     .select('id')
                 if (error) { console.error(error.message); }
                 if (error?.code === '23505') {
-                    Alert.alert('You already have an account, just sign in!');
+				    ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT);
                     setLoading(false);
                     return;
                 }

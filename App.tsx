@@ -12,7 +12,7 @@ import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
-import { Alert, Keyboard, SafeAreaView, View } from 'react-native';
+import { Keyboard, SafeAreaView } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
@@ -20,9 +20,10 @@ import ChatScreen from './src/screens/chats/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
 import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 import SearchScreen from './src/screens/search/SearchScreen';
-import { usePushNotifications } from './src/utils/functions/usePushNotifications';
 import { supabase } from './supabase';
 import EditEventScreen from './src/screens/event/EditEventScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreen from './src/screens/loading/LoadingScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -45,32 +46,48 @@ export default function AppWrapper() {
 function App() {
   const currentUser = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const fetchSession = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log(user) 
-    if (user) {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('uid', user.id);
-      
-      if (error) throw error.message; 
+  const [loading, setLoading] = useState<boolean>(true);
 
-      if (data) {
-        dispatch(setCurrentUser({
-          name: data[0].name,
-          email: data[0].email,
-          photo: data[0].photo,
-          id: data[0].id
-        }))
-      }
+  const setSession = async () => {
+    const accessToken = await AsyncStorage.getItem('userAccessToken');
+    const refreshToken = await AsyncStorage.getItem('userRefreshToken');
+    
+    if (accessToken && refreshToken) {
+      await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
     }
   }
+  const fetchSession = async () => {
+    await setSession();
+    const { data: { session: user } } = await supabase.auth.getSession();
+    if (!user) {
+      setLoading(false);
+      return
+    };
+    const { data, error } = await supabase
+      .from('users')
+      .select()
+      .eq('uid', user.user.id);
 
+    if (error) throw error.message;
+
+    if (data) {
+      dispatch(setCurrentUser({
+        name: data[0].name,
+        email: data[0].email,
+        photo: data[0].photo,
+        id: data[0].id
+      }))
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
-    // fetchSession();
+    fetchSession();
   }, []);
+
+  if ( loading ) {
+    return <LoadingScreen />
+  }
 
   return (
     <SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
@@ -85,7 +102,6 @@ function App() {
                 <Stack.Screen name="signin" component={SignInScreen} />
                 <Stack.Screen name="emailsignup" component={EmailSignUp} />
                 <Stack.Screen name="emailsignin" component={EmailSignIn} />
-
               </>
 
             ) : (
