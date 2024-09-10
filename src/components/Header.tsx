@@ -1,22 +1,30 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from '../context/navSlice';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from '../utils/styles/shadow';
 import { supabase } from '../../supabase';
 import { RootStackNavigationProp } from '../utils/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DropdownMenu from './DropdownMenu';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 const Header = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation<RootStackNavigationProp>();
-    const currentUser = useSelector(selectCurrentUser)
+    const currentUser = useSelector(selectCurrentUser);
+    const [openMenu, setOpenMenu] = useState(false);
+
+    const navigateProfile = () => {
+        navigation.navigate('profile',
+            {user_id: currentUser.id}
+        );
+    }
     const signOut = async () => {
         try {
 
@@ -40,6 +48,13 @@ const Header = () => {
             console.error(error);
         }
     };
+    useFocusEffect(
+        React.useCallback(() => {
+          setOpenMenu(false);
+              return () => setOpenMenu(false);
+        }, [])
+      );
+
     return (
         <View className='w-full flex flex-row py-3 justify-between'>
             <TouchableOpacity onPress={() => navigation.navigate('submit')} className='rounded-2xl px-3 py-1 border flex flex-row items-center space-x-1'>
@@ -47,28 +62,32 @@ const Header = () => {
                 <Text >Create a post</Text>
             </TouchableOpacity>
             <View className='flex flex-row space-x-2'>
-                {
-                    currentUser?.photo ?
+                <TouchableOpacity onPress={() => setOpenMenu(!openMenu)}>
 
-                        <Image
-                            className='w-8 rounded-full'
-                            source={{
-                                uri: currentUser?.photo,
-                            }}
-                        />
-                        :
-                        <>
-                            <FontAwesome name="user-circle" size={30} color="black" />
-                        </>
-
-                }
-
-                <TouchableOpacity 
-                    style={styles.shadowButtonStyle}
-                    className='rounded-2xl px-3 py-1' onPress={signOut}>
-                    <MaterialIcons name="logout" size={24} color="white" />
+                    {
+                        currentUser?.photo ?
+                            <Image
+                                className='w-8 h-8 rounded-full'
+                                source={{
+                                    uri: currentUser?.photo,
+                                }}
+                            />
+                            :
+                            <>
+                                <FontAwesome name="user-circle" size={30} color="black" />
+                            </>
+                    }
                 </TouchableOpacity>
+
             </View>
+            {
+                openMenu && (
+                    <DropdownMenu 
+                        signOut={signOut}
+                        navigateProfile={navigateProfile}
+                    />
+                )
+            }
         </View>
     )
 }

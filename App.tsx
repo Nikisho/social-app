@@ -51,9 +51,11 @@ function App() {
   const setSession = async () => {
     const accessToken = await AsyncStorage.getItem('userAccessToken');
     const refreshToken = await AsyncStorage.getItem('userRefreshToken');
-    
+
     if (accessToken && refreshToken) {
       await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+    } else {
+      setLoading(false);
     }
   }
   const fetchSession = async () => {
