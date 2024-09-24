@@ -21,7 +21,7 @@ const InputBox:React.FC<ChatBodyProps> = ({
     };
 
     return (
-        <View className='flex h-10 justify-center flex-row px-6 my-2'>
+        <View className='flex h-12 justify-center flex-row px-4 my-2'>
             <View className='bg-gray-200 px-3 w-full rounded-xl flex flex-row items-center justify-between'>
                 <TextInput
                     placeholder='Message'

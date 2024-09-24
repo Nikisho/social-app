@@ -56,7 +56,7 @@ const Header = () => {
       );
 
     return (
-        <View className='w-full flex flex-row py-3 justify-between'>
+        <View className='w-full flex flex-row py-3 justify-between z-20'>
             <TouchableOpacity onPress={() => navigation.navigate('submit')} className='rounded-2xl px-3 py-1 border flex flex-row items-center space-x-1'>
                 <AntDesign name="plus" size={20} color="black" />
                 <Text >Create a post</Text>

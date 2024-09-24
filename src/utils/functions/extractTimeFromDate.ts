@@ -3,7 +3,7 @@ export default function extractTimeFromDate(dateString:any) {
     const date = new Date(dateString);
 
     // Extract hours and minutes
-    const hours = date.getUTCHours();
+    const hours = date.getHours();
     const minutes = date.getUTCMinutes();
   
     // Format hours and minutes to always be two digits

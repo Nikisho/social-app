@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, ToastAndroid } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ToastAndroid, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
@@ -58,7 +58,10 @@ const EmailSignUp = () => {
 				.select('id')
 			if (error) { console.error(error.message); }
 			if (error?.code === '23505') {
-				ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT);
+				Platform.OS === 'android' ?
+				ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT)
+				:
+				Alert.alert('You already have an account, just sign in!')
 				return;
 			}
 

@@ -38,7 +38,7 @@ const mainTheme = {
 export default function AppWrapper() {
   return (
     <Provider store={store}>
-      <App />
+        <App />
     </Provider>
   )
 }
@@ -87,7 +87,7 @@ function App() {
     fetchSession();
   }, []);
 
-  if ( loading ) {
+  if (loading) {
     return <LoadingScreen />
   }
 
@@ -106,8 +106,8 @@ function App() {
                 <Stack.Screen name="emailsignin" component={EmailSignIn} />
               </>
 
-            ) : (
-              <>
+) : (
+  <>
                 <Stack.Screen name="home" component={HomeScreen} />
                 <Stack.Screen name="profile" component={ProfileScreen} />
                 <Stack.Screen name="submit" component={SubmitScreen} />

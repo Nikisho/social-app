@@ -43,7 +43,7 @@ const Feed: React.FC<FeedProps> = ({
   //   }, [])
   // );
   return (
-    <ScrollView className={Platform.OS === 'ios'? 'h-[89%]' : 'h-5/6'}>
+    <ScrollView className={Platform.OS === 'ios'? 'h-[89%] z-0' : 'h-5/6'}>
       {eventList?.map((event: any) => (
         <FeedCard
           name={event.users.name}

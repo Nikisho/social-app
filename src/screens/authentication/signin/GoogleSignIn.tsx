@@ -1,4 +1,4 @@
-import { Alert, ToastAndroid, View } from 'react-native'
+import { Alert, Platform, ToastAndroid, View } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
@@ -41,7 +41,7 @@ const GoogleSignIn = () => {
                 if (data) {
                     ////If no data, its a new sign up///
                     if (data.length === 0) {
-                        ToastAndroid.show("You don't have an account yet. Sign up instead!", ToastAndroid.SHORT);
+                        Platform.OS === 'android' ? ToastAndroid.show("You don't have an account yet. Sign up instead!", ToastAndroid.SHORT) : Alert.alert("You don't have an account yet. Sign up instead!");
                         await GoogleSignin.signOut();
                         setLoading(false);
                         return;

@@ -1,4 +1,4 @@
-import { View, Text, ToastAndroid } from 'react-native'
+import { View, Text, ToastAndroid, Alert, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSignin, GoogleSigninButton, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import { useDispatch } from 'react-redux';
@@ -50,7 +50,11 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
                     .select('id')
                 if (error) { console.error(error.message); }
                 if (error?.code === '23505') {
-				    ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT);
+                    Platform.OS === 'android' ?
+				    ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT)
+                    :
+                    Alert.alert('You already have an account, just sign in!')
+
                     setLoading(false);
                     return;
                 }

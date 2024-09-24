@@ -25,24 +25,24 @@ const ChatHeader:React.FC<ChatHeaderProps> = ({
             onPress={() => navigation.navigate('profile',
                 { user_id: user_id }
             )}
-            style={{backgroundColor: colours.secondaryColour}}
-            className='p-2 py-3 flex  flex-row space-x-3 items-center'>
+            // style={{backgroundColor: colours.secondaryColour}}
+            className='p-2 py-3 flex  flex-row space-x-3 items-center bg-gray-200'>
 
             {
                 photo === null ?
                     <>
-                        <FontAwesome name="user-circle" size={38} color="white" />
+                        <FontAwesome name="user-circle" size={40} color="black" />
                     </> :
                     <>
                         <Image
-                            className='w-10 h-10 rounded-full'
+                            className='w-12 h-12 rounded-full'
                             source={{
                                 uri: photo,
                             }}
                         />
                     </>
             }
-            <Text className='text-white'>
+            <Text className='text-black text-lg'>
                 {name}
             </Text>
         </TouchableOpacity>

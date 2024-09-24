@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, ToastAndroid } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ToastAndroid, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import styles from '../../../utils/styles/shadow';
@@ -55,8 +55,13 @@ const EmailSignIn = () => {
 		}
 
 		if (AuthUserError) Alert.alert(AuthUserError.message)
-		if (!session) ToastAndroid.show('We could not authenticate you.', ToastAndroid.SHORT);
+		if (!session) {
 
+			Platform.OS === 'android' ?
+				ToastAndroid.show('We could not authenticate you.', ToastAndroid.SHORT)
+				:
+				Alert.alert('We could not authenticate you')
+		}
 		setLoading(false)
 	}
 	return (

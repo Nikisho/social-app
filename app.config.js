@@ -28,7 +28,8 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.linkzy'
+      bundleIdentifier: 'com.linkzy',
+      googleServicesFile: "./GoogleService-Info.plist"
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written

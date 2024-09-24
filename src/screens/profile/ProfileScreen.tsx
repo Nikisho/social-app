@@ -1,4 +1,4 @@
-import { View, Text, Image, ImageBackground, Alert, Modal, Pressable, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native'
+import { View, Text, Image, ImageBackground, Alert, Modal, Pressable, StyleSheet, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import UserEvents from './UserEvents';
 import { FontAwesome } from '@expo/vector-icons';
@@ -83,7 +83,7 @@ const ProfileScreen = () => {
       .eq('id', currentUser.id);
     if (error) { console.error(error.message); }
     setModalVisible(!modalVisible);
-    ToastAndroid.show('Description changed successfully', ToastAndroid.SHORT);
+    Platform.OS === 'android' ? ToastAndroid.show('Description changed successfully', ToastAndroid.SHORT) : Alert.alert('Description changed successfully')
   }
 
   const closeModal = () => {
@@ -119,7 +119,8 @@ const ProfileScreen = () => {
         })
         .eq('id', currentUser.id);
       if (error) { console.error(error.message); }
-      ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT);
+
+      Platform.OS === 'android' ? ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT) : Alert.alert('Profile picture changed successfully');
 
     }
 

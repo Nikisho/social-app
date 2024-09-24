@@ -43,7 +43,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 });
             }}
             // style={styles.shadow} 
-            className='rounded-lg bg-gray-100 p-2 mb-3 space-y-1'>
+            className='rounded-lg bg-gray-100 p-2 mb-3 space-y-1 '>
             <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('profile',
                     { user_id: user_id }

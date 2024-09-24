@@ -40,6 +40,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
                 <Text
                     style={{
                         color: isCurrentUser ? '#ffffff' : '#000000',
+                        fontSize: 16
                     }}
                 >
                     {item.content}
@@ -76,6 +77,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
+        paddingHorizontal: 12
         // height: ''
     },
     messageBubble: {

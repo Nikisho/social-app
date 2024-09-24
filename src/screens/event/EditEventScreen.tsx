@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, ToastAndroid, Platform, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { EditEventScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types'
@@ -68,7 +68,9 @@ const EditEventScreen = () => {
         fetchEventData();
         if (Platform.OS === 'android') {
             ToastAndroid.show('Event saved successfully!', ToastAndroid.SHORT);
-        }
+        } else (
+            Alert.alert('Event saved successfully!')
+        )
     };
 
     const deleteEvent = async () => {
@@ -80,7 +82,9 @@ const EditEventScreen = () => {
         if (error) console.error(error.message);
         if (Platform.OS === 'android') {
             ToastAndroid.show('Event deleted successfully!', ToastAndroid.SHORT);
-        }
+        } else (
+            Alert.alert('Event deleted successfully!')
+        )
         navigation.navigate('home')
     };
 

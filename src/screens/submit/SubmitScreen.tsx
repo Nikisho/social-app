@@ -57,6 +57,8 @@ const SubmitScreen = () => {
         if (error) console.error(error.message);
     }
 
+console.log(eventDetails.date)
+
     return (
         <View className='flex space-y-2 mx-3 h-5/6'>
             <View className='border-b'>
