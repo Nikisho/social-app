@@ -10,6 +10,7 @@ import { selectCurrentUser } from '../context/navSlice';
 import { RootStackNavigationProp } from '../utils/types/types';
 import { supabase } from '../../supabase';
 import Badge from './Badge';
+import { usePushNotifications } from '../utils/functions/usePushNotifications';
 
 
 const Navbar = () => {
@@ -39,7 +40,19 @@ const Navbar = () => {
     },
   ];
 
-
+  const { expoPushToken } = usePushNotifications();
+  const updateExpoPushToken = async () => {
+    if (currentUser.id === null) {
+      return;
+    }
+    const { error } = await supabase
+      .from('users')
+      .update({
+        expo_push_token: expoPushToken?.data
+      })
+      .eq('id', currentUser.id)
+    if (error) { console.error(error.message); }
+  };
   const fetchUnreadMessagesCount = async () => {
     const { data, error } = await supabase.rpc('fetch_unread_messages_count', { current_user_id: currentUser.id })
     if (data) {
@@ -52,7 +65,7 @@ const Navbar = () => {
 
   useEffect(() => {
     fetchUnreadMessagesCount();
-
+    updateExpoPushToken();
 
     //THIS IS A TEMPORARY SOLUTION AS THIS FORCES DATA TO BE FETCHED EACH 
     //TIME THE MESSAGES TABLE IS UPDATED. NOT SUSTAINABLE IN LONG TERM!
@@ -71,12 +84,12 @@ const Navbar = () => {
         }
       )
       .subscribe();
-  }, []);
+  }, [expoPushToken]);
 
   return (
     <View
       style={{ backgroundColor: colours.secondaryColour }}
-      className=' absolute inset-x-0 bottom-0 h-[8%] flex justify-between flex-row'>
+      className=' absolute inset-x-0 bottom-0 h-[10%] flex justify-between flex-row'>
 
       {
         menuItems.map((item) => (

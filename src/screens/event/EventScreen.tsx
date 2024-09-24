@@ -14,6 +14,7 @@ import { EventScreenRouteProp } from '../../utils/types/types';
 interface EventDataProps {
     name: string
     key: number
+    event_id: number
     event_description: string
     event_title:string
     event_date: string
@@ -69,6 +70,7 @@ const EventScreen = () => {
                         event_description={eventData.event_description}
                         isUsersOwnPost={eventData.user_id === currentUser.id}
                         user_id={eventData.users.id}
+                        event_id={event_id}
                     />
                 )
             }

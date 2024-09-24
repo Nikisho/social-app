@@ -23,7 +23,6 @@ const SignInScreen = () => {
                 </View>
 
                 <View className='w-full flex space-y-3'>
-
                     <TouchableOpacity 
                         onPress={() => {navigation.navigate('emailsignin')}}
                         style={styles.shadowButtonStyle} className='p-3 self-center  w-5/6 flex items-center'>
@@ -31,10 +30,7 @@ const SignInScreen = () => {
                             Use email and password
                         </Text>
                     </TouchableOpacity>
-
                     <GoogleSignIn />
-
-
                 </View>
             </View>
             <View className='absolute bottom-16 flex-row space-x-2' >

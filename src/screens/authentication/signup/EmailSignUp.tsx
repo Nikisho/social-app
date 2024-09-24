@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ToastAndroid } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import validateEmail from '../../../utils/functions/validateEmail';
 import { EmailSignUpScreenRouteProp } from '../../../utils/types/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmailSignUp = () => {
 	const route = useRoute<EmailSignUpScreenRouteProp>();
@@ -42,6 +43,8 @@ const EmailSignUp = () => {
 
 		//If the sign up is successful, insert a row to public.users
 		if (session) {
+			await AsyncStorage.setItem('userAccessToken', session.access_token);
+			await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
 			const { error, data } = await supabase
 				.from('users')
 				.insert({
@@ -55,7 +58,7 @@ const EmailSignUp = () => {
 				.select('id')
 			if (error) { console.error(error.message); }
 			if (error?.code === '23505') {
-				Alert.alert('You already have an account, just sign in!');
+				ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT);
 				return;
 			}
 

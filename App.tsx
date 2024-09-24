@@ -4,15 +4,15 @@ import HomeScreen from './src/screens/home/HomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer, useNavigationState } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
-import { Provider, useSelector } from 'react-redux';
-import { selectCurrentUser } from './src/context/navSlice';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
 import SubmitScreen from './src/screens/submit/SubmitScreen';
 import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
-import { Keyboard, View } from 'react-native';
+import { Keyboard, SafeAreaView } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
@@ -20,6 +20,10 @@ import ChatScreen from './src/screens/chats/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
 import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 import SearchScreen from './src/screens/search/SearchScreen';
+import { supabase } from './supabase';
+import EditEventScreen from './src/screens/event/EditEventScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreen from './src/screens/loading/LoadingScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -41,8 +45,54 @@ export default function AppWrapper() {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const setSession = async () => {
+    const accessToken = await AsyncStorage.getItem('userAccessToken');
+    const refreshToken = await AsyncStorage.getItem('userRefreshToken');
+
+    if (accessToken && refreshToken) {
+      await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+    } else {
+      setLoading(false);
+    }
+  }
+  const fetchSession = async () => {
+    await setSession();
+    const { data: { session: user } } = await supabase.auth.getSession();
+    if (!user) {
+      setLoading(false);
+      return
+    };
+    const { data, error } = await supabase
+      .from('users')
+      .select()
+      .eq('uid', user.user.id);
+
+    if (error) throw error.message;
+
+    if (data) {
+      dispatch(setCurrentUser({
+        name: data[0].name,
+        email: data[0].email,
+        photo: data[0].photo,
+        id: data[0].id
+      }))
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    fetchSession();
+  }, []);
+
+  if ( loading ) {
+    return <LoadingScreen />
+  }
+
   return (
-    <View className='h-full' style={{ backgroundColor: colours.primaryColour }}>
+    <SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
       <NavigationContainer theme={mainTheme}  >
         <Stack.Navigator screenOptions={{
           headerShown: false
@@ -54,7 +104,6 @@ function App() {
                 <Stack.Screen name="signin" component={SignInScreen} />
                 <Stack.Screen name="emailsignup" component={EmailSignUp} />
                 <Stack.Screen name="emailsignin" component={EmailSignIn} />
-
               </>
 
             ) : (
@@ -63,6 +112,7 @@ function App() {
                 <Stack.Screen name="profile" component={ProfileScreen} />
                 <Stack.Screen name="submit" component={SubmitScreen} />
                 <Stack.Screen name="event" component={EventScreen} />
+                <Stack.Screen name="editevent" component={EditEventScreen} />
                 <Stack.Screen name="comment" component={SubmitCommentScreen} />
                 <Stack.Screen name="chatlist" component={ChatListScreen} />
                 <Stack.Screen name="chat" component={ChatScreen} />
@@ -78,7 +128,7 @@ function App() {
           <ConditionalNavbar />
         }
       </NavigationContainer>
-    </View>
+    </SafeAreaView>
   );
 }
 

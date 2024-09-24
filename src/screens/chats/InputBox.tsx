@@ -21,10 +21,11 @@ const InputBox:React.FC<ChatBodyProps> = ({
     };
 
     return (
-        <View className='absolute inset-x-0 bottom-0 h-24 flex justify-center flex-row py-6 px-6 bg-white'>
+        <View className='flex h-10 justify-center flex-row px-6 my-2'>
             <View className='bg-gray-200 px-3 w-full rounded-xl flex flex-row items-center justify-between'>
                 <TextInput
                     placeholder='Message'
+                    multiline
                     value={message}
                     onChangeText={(value) => {setMessage(value)}}
                     className=' text-lg px-1 w-5/6 h-full'>

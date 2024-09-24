@@ -1,11 +1,11 @@
-import { Alert, View } from 'react-native'
+import { Alert, ToastAndroid, View } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
 import { supabase } from '../../../../supabase'
 import { useDispatch } from 'react-redux'
 import { setCurrentUser } from '../../../context/navSlice'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GoogleSignIn = () => {
 
@@ -18,48 +18,33 @@ const GoogleSignIn = () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
+            
             if (userInfo.idToken) {
                 const { data: AuthUserData, error: AuthUserError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                console.log(AuthUserData)
-                if (AuthUserError) {
-                    console.error(AuthUserError.message)
+                
+                //Add access token to Async Storageto persist login.
+                if (AuthUserData.session) {
+                    await AsyncStorage.setItem('userAccessToken', AuthUserData.session.access_token);
+                    await AsyncStorage.setItem('userRefreshToken', AuthUserData.session.refresh_token);
                 }
+
+                if (AuthUserError) console.error(AuthUserError.message);
+                
                 const { error, data } = await supabase
                     .from('users')
                     .select()
                     .eq('email', userInfo?.user.email)
 
                 if (data) {
-
                     ////If no data, its a new sign up///
                     if (data.length === 0) {
-                        // const { error, data } = await supabase
-                        //     .from('users')
-                        //     .insert({
-                        //         name: userInfo.user.name,
-                        //         email: userInfo.user.email,
-                        //         photo: userInfo.user.photo,
-                        //         uid: AuthUserData.user?.id,
-                        //         auth_provider: 'google'
-                        //     })
-                        //     .select('id');
-                        // if (error) console.error(error.message);
-                        // if (data) {
-                        //     dispatch(setCurrentUser({
-                        //         name: userInfo.user.name,
-                        //         email: userInfo.user.email,
-                        //         photo: userInfo.user.photo,
-                        //         id: data[0].id
-                        //     }))
-                        // }
-                        Alert.alert("You don't have an account yet. Sign up instead?");
+                        ToastAndroid.show("You don't have an account yet. Sign up instead!", ToastAndroid.SHORT);
                         await GoogleSignin.signOut();
                         setLoading(false);
                         return;
-
                     }
                     dispatch(setCurrentUser({
                         name: data[0].name,
