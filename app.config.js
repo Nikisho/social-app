@@ -15,7 +15,7 @@ export default {
         }
       ]
     ],
-    name: "social-app",
+    name: "Linkzy",
     slug: "social-app",
     version: "1.0.0",
     orientation: "portrait",
