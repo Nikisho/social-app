@@ -33,6 +33,9 @@
       "ios": {
         "appleId": "phobereromain@gmail.com",
         "ascAppId": "6720764102",
+        "appleApiKeyPath": "${APP_STORE_CONNECT_API_KEY_PATH}",
+        "appleApiKeyId": "NDJYLKLM7W",
+        "appleApiIssuer": "4df379f0-5a84-4504-bf27-e8383bb6aaa8",
         "appleTeamId": "9T3P8RH5FA"
       }
     }
