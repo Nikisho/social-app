@@ -29,6 +29,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "phobereromain@gmail.com",
+        "ascAppId": "6720764102",
+        "appleTeamId": "9T3P8RH5FA"
+      }
+    }
   }
 }
