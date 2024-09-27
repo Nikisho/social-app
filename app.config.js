@@ -28,7 +28,7 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.linkzy.app',
+      bundleIdentifier: 'com.linkzy',
       googleServicesFile: "./GoogleService-Info.plist"
     },
     android: {
