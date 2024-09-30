@@ -43,6 +43,7 @@ const HomeScreen = () => {
       <Header />
       <Feed
         eventList={eventList!}
+        fetchEvents={fetchEvents}
       />
     </View>
   )

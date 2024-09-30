@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Platform } from 'react-native'
+import { View, Text, ScrollView, Platform, RefreshControl } from 'react-native'
 import React from 'react'
 import { supabase } from '../../supabase';
 import FeedCard from './FeedCard';
@@ -13,11 +13,14 @@ interface FeedProps {
     time: Date
     id: number
   }[]
+  fetchEvents: () => void
 }
 
 const Feed: React.FC<FeedProps> = ({
-  eventList
+  eventList,
+  fetchEvents
 }) => {
+  const [refreshing, setRefreshing] = React.useState(false);
 
   // const [eventList, setEventList] = useState<eventListProps[]>();
 
@@ -42,8 +45,19 @@ const Feed: React.FC<FeedProps> = ({
 
   //   }, [])
   // );
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchEvents()
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
   return (
-    <ScrollView className={Platform.OS === 'ios'? 'h-[89%] z-0' : 'h-5/6'}>
+    <ScrollView className={Platform.OS === 'ios'? 'h-[89%] z-0' : 'h-5/6'}
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }
+    >
       {eventList?.map((event: any) => (
         <FeedCard
           name={event.users.name}
