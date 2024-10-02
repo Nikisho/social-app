@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp, RootStackParamList } from '../../../utils/types/types'
 interface UserDataProps {
     name: string;
-    age: string;
+    age: string | null;
 };
 const SignUpMethodForm: React.FC<UserDataProps> = ({
     name,

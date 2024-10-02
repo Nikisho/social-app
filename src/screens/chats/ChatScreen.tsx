@@ -1,7 +1,7 @@
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { ChatScreenRouteProp, RootStackNavigationProp, RootStackParamList } from '../../utils/types/types';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { ChatScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
@@ -24,6 +24,7 @@ const ChatScreen = () => {
   const [chatRoomIdState, setChatRoomIdState] = useState<number>();
   const [userData, setUserData] = useState<UserDataProps>();
   const [messages, setMessages] = useState<string[]>([])
+  const navigation = useNavigation<RootStackNavigationProp>();
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
@@ -123,6 +124,21 @@ const ChatScreen = () => {
   )
   .subscribe();
 
+  const blockAndReportUser = async () => {
+
+    const { error } = await supabase
+      .from('user_blocked_users')
+      .insert({
+        user_id: currentUser.id,
+        blocked_user_id: user_id
+    });
+
+    if (error) {throw error.message};
+
+    Alert.alert('You will not receive updates and messages from this user')
+    navigation.navigate('chatlist');
+  };
+
   useEffect(() => {
     fetchUserData();
     fetchChatData();
@@ -138,6 +154,7 @@ const ChatScreen = () => {
               name={userData.name}
               photo={userData.photo}
               user_id={userData.id}
+              blockAndReportUser={blockAndReportUser}
             />
           </>
         )

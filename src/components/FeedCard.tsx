@@ -11,7 +11,6 @@ import { RootStackNavigationProp } from '../utils/types/types';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
 import FeedCardOptionsModal from './FeedCardOptionsModal';
-import { Dispatch } from '@reduxjs/toolkit';
 
 interface FeedCardProps {
     name: string;
