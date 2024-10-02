@@ -42,7 +42,14 @@ const EmailSignIn = () => {
 				.from('users')
 				.select()
 				.eq('uid', session.user.id)
-
+			if (data?.length === 0) {
+				Platform.OS === 'android' ?
+					ToastAndroid.show('We could not authenticate you.', ToastAndroid.SHORT)
+					:
+					Alert.alert('We could not authenticate you');
+				setLoading(false);
+				return;
+			}
 			//Fetch data once user is retrieved, and add to context
 			if (data) {
 				dispatch(setCurrentUser({
@@ -64,6 +71,7 @@ const EmailSignIn = () => {
 		}
 		setLoading(false)
 	}
+
 	return (
 		<View className='flex flex-col w-full h-auto items-center justify-end space-y-3 '>
 			<View className=' h-1/4 w-5/6 space-y-3'>
@@ -81,7 +89,7 @@ const EmailSignIn = () => {
 				</Text>
 				<TextInput
 					placeholder='Enter email '
-					className='p-2 px-5 flex items-center rounded-full border bg-gray-200 '
+					className={`p-2 px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'} `}
 					value={email}
 					onChangeText={(value) => { setEmail(value) }}
 				/>
@@ -95,7 +103,7 @@ const EmailSignIn = () => {
 					placeholder='Enter password '
 					value={password}
 					secureTextEntry={true}
-					className='p-2 px-5 flex items-center border  rounded-full bg-gray-200'
+					className={`p-2 px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'} `}
 					onChangeText={(value) => { setPassword(value) }}
 				/>
 

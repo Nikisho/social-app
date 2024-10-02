@@ -4,6 +4,8 @@ import Feed from '../../components/Feed'
 import Header from '../../components/Header'
 import { supabase } from '../../../supabase'
 import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '../../context/navSlice'
 interface eventListProps {
   name: string
   key: number
@@ -16,19 +18,13 @@ interface eventListProps {
 }
 const HomeScreen = () => {
   const [eventList, setEventList] = useState<eventListProps[]>();
+  const currentUser = useSelector(selectCurrentUser);
 
   const fetchEvents = async () => {
     const { error, data } = await supabase
-      .from('meetup_events')
-      .select(`
-        *,
-        users(
-          id,
-          name,
-          photo
-        )
-      `).order('created_at', { ascending: false })
-    if (data) { setEventList(data); }
+      .rpc('get_events_excluding_blocked_users', { current_user_id: currentUser.id });
+      
+    if (data) { setEventList(data);}
     if (error) console.error(error.message)
   }
 

@@ -11,13 +11,13 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 
 interface UserDataProps {
     name: string;
-    age: string;
+    age: string | null;
 }
 const SignUpScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [userDetails, setUserDetails] = useState<UserDataProps>({
         name: '',
-        age: ''
+        age: null
     });
     const {
         steps,
@@ -67,8 +67,8 @@ const SignUpScreen = () => {
 
                         <TouchableOpacity onPress={next}
                             style={{ backgroundColor: colours.secondaryColour }}
-                            className={`p-2 rounded-full self-end ${userDetails.name === '' || userDetails.age ===''? 'opacity-50': ''}`}
-                            disabled={userDetails.name === '' || userDetails.age ===''}
+                            className={`p-2 rounded-full self-end ${userDetails.name === ''? 'opacity-50': ''}`}
+                            disabled={userDetails.name === ''}
                         >
                             <AntDesign name="arrowright" size={24} color="white" />
                         </TouchableOpacity>

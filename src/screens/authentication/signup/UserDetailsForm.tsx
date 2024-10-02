@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-gesture-handler'
 
 interface UserDataProps {
     name: string;
-    age: string;
+    age: string | null;
 };
 
 interface UserDetailsFormProps extends UserDataProps {
@@ -47,7 +47,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                 <TextInput
                     keyboardType='numeric'
                     placeholder='Enter age '
-                    value={age}
+                    value={age!}
                     maxLength={2}
                     className={`px-5 flex items-center border w-1/3 rounded-full bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
                     onChangeText={(value) => updateFields({ age: value.replace(/[^0-9]/g, '') })}

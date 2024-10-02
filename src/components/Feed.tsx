@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Platform, RefreshControl } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { supabase } from '../../supabase';
 import FeedCard from './FeedCard';
 interface FeedProps {
@@ -12,7 +12,7 @@ interface FeedProps {
     photo: string
     time: Date
     id: number
-  }[]
+  }[];
   fetchEvents: () => void
 }
 
@@ -20,31 +20,8 @@ const Feed: React.FC<FeedProps> = ({
   eventList,
   fetchEvents
 }) => {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  // const [eventList, setEventList] = useState<eventListProps[]>();
-
-  // const fetchEvents = async () => {
-  //   const { error, data } = await supabase
-  //     .from('meetup_events')
-  //     .select(`
-  //       *,
-  //       users(
-  //         id,
-  //         name,
-  //         photo
-  //       )
-  //     `).order('created_at', { ascending: false })
-  //   if (data) { setEventList(data); }
-  //   if (error) console.error(error.message)
-  // }
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchEvents();
-
-  //   }, [])
-  // );
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchEvents()
@@ -60,15 +37,16 @@ const Feed: React.FC<FeedProps> = ({
     >
       {eventList?.map((event: any) => (
         <FeedCard
-          name={event.users.name}
+          name={event.user_name}
           key={event.event_id}
           description={event.event_description}
           title={event.event_title}
           date={event.event_date}
-          photo={event.users.photo}
+          photo={event.user_photo}
           time={event.event_time}
           event_id={event.event_id}
-          user_id={event.users.id}
+          user_id={event.user_id}
+          refreshOnBlock={onRefresh}
         />
       ))}
     </ScrollView>

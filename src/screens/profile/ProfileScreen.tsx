@@ -13,6 +13,7 @@ import { ProfileScreenRouteProp, RootStackNavigationProp } from '../../utils/typ
 import colours from '../../utils/styles/colours';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
+import DeleteProfileModal from './DeleteProfileModal';
 interface UserDataProps {
   name: string;
   age: string;
@@ -30,6 +31,8 @@ const ProfileScreen = () => {
   const isCurrentUserProfile = user_id === currentUser.id;
   const [modalVisible, setModalVisible] = useState(false);
   const [originalBio, setOriginalBio] = useState('');
+
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
@@ -169,12 +172,19 @@ const ProfileScreen = () => {
                 <Text className='text-xl font-'>
                   {userData.name}
                 </Text>
-                <Text className='text-xl font-'>
-                  -
-                </Text>
-                <Text className='text-xl font-'>
-                  {userData.age}
-                </Text>
+                {
+                  userData.age && (
+                    <>
+                    <Text className='text-xl font-'>
+                    -
+                  </Text>
+                  <Text className='text-xl font-'>
+                    {userData.age}
+                  </Text>
+                    </>
+                  )
+                }
+
               </View>
               {
                 !isCurrentUserProfile && (
@@ -250,6 +260,23 @@ const ProfileScreen = () => {
       <UserEvents
         user_id={user_id}
       />
+      {
+        isCurrentUserProfile &&
+        <>
+          <TouchableOpacity 
+            onPress={() => setDeleteModalVisible(!deleteModalVisible)}
+            className='w-full mt-4 bg-gray-200 py-3  flex flex-row justify-center rounded-xl'>
+            <Text className='font-semibold'>Delete your account</Text>
+          </TouchableOpacity>
+          <DeleteProfileModal
+            modalVisible={deleteModalVisible}
+            setModalVisible={setDeleteModalVisible}
+            currentUserId={currentUser.id}
+          />
+        </>
+
+      }
+
     </View>
   )
 }

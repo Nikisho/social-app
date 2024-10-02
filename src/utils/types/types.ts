@@ -11,7 +11,7 @@ export type RootStackParamList = {
   chat: {user_id:number};
   chatlist: undefined;
   search: undefined;
-  emailsignup: {name:string, age:string};
+  emailsignup: {name:string, age:string | null};
   emailsignin: undefined;
   submit: undefined;
   signup:undefined;

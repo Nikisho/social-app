@@ -4,6 +4,8 @@ import Header from '../../components/Header'
 import SearchComponent from './SearchComponent'
 import { supabase } from '../../../supabase'
 import Feed from '../../components/Feed'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '../../context/navSlice'
 interface eventListProps {
   name: string
   key: number
@@ -16,24 +18,15 @@ interface eventListProps {
 }
 const SearchScreen = () => {
   const [query, setQuery] = useState<string>('');
-
+  const currentUser = useSelector(selectCurrentUser);
   const [eventList, setEventList] = useState<eventListProps[]>();
   const fetchEvents = async () => {
     if (query === '' || query === null) {
       return;
     }
     const { error, data } = await supabase
-      .from('meetup_events')
-      .select(`
-        *,
-        users(
-          id,
-          name,
-          photo
-        )
-      `)
-      .or(`event_title.ilike.%${query}%, event_description.ilike.%${query}%`)
-      .order('created_at', { ascending: false })
+      .rpc('get_events_excluding_blocked_users', { current_user_id: currentUser.id, query: query });
+
     if (data) { setEventList(data);}
     if (error) console.error(error.message)
   }
@@ -59,6 +52,7 @@ const SearchScreen = () => {
           ) : (
             <Feed
               eventList={eventList!}
+              fetchEvents={fetchEvents}
             />
           )  
         }

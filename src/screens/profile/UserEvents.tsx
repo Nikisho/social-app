@@ -20,18 +20,14 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     const [eventList, setEventList] = useState<Array<eventListProps>>();
     const fetchEvents = async () => {
         const { error, data } = await supabase
-            .from('meetup_events')
-            .select(`
-                *,
-                users(
-                id,
-                name,
-                photo
-                )
-            `)
-            .eq('user_id', user_id)
+        .rpc('get_events_excluding_blocked_users', 
+            { current_user_id:user_id, 
+                filter_user_id: user_id 
+            });
+
         if (data) {
-            setEventList(data)
+            setEventList(data);
+            
         }
         if (error) console.error(error.message)
     }
@@ -41,28 +37,14 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     }, [user_id]);
 
     return (
-        <View className='h-[60%] flex space-y-2'>
+        <View className='h-[50%] flex space-y-2'>
 
             <View className=''>
                 <Text className='text-lg font-semibold'>Events</Text>
             </View>
-            {/* <ScrollView className=''>
-                {eventList?.map((event: any) => (
-                    <FeedCard
-                        key={event.event_id}
-                        event_id={event.event_id}
-                        name={event.users.name}
-                        description={event.event_description}
-                        title={event.event_title}
-                        date={event.event_date}
-                        photo={event.users.photo}
-                        time={event.event_time}
-                        user_id={event.users.id}
-                    />
-                ))}
-            </ScrollView> */}
             <Feed 
                 eventList={eventList!}
+                fetchEvents={fetchEvents}
             />
         </View>
     )

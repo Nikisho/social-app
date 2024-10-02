@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface UserDataProps {
     name: string;
-    age: string;
+    age: string | null;
 };
 
 const GoogleSignUp: React.FC<UserDataProps> = ({
@@ -97,7 +97,7 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
 
             <GoogleSigninButton
                 size={GoogleSigninButton?.Size.Wide}
-                style={{ "width": "103%" }}
+                style={{ "width": "103%"}}
                 color={GoogleSigninButton?.Color.Dark}
                 onPress={handleSignIn}
                 disabled={loading}

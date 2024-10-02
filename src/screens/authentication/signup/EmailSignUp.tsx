@@ -99,7 +99,7 @@ const EmailSignUp = () => {
 				</Text>
 				<TextInput
 					placeholder='Enter email '
-					className='p-2 px-5 flex items-center rounded-full border bg-gray-200 '
+					className={`p-2 px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}` }
 					value={email}
 					onChangeText={(value) => { setEmail(value) }}
 				/>
@@ -113,7 +113,7 @@ const EmailSignUp = () => {
 					placeholder='Enter password '
 					value={password}
 					secureTextEntry={true}
-					className='p-2 px-5 flex items-center border  rounded-full bg-gray-200'
+					className={`p-2 px-5 flex items-center border  rounded-full bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}`}
 					onChangeText={(value) => { setPassword(value) }}
 				/>
 
@@ -126,7 +126,7 @@ const EmailSignUp = () => {
 					placeholder='Confirm password '
 					value={confirmPassword}
 					secureTextEntry={true}
-					className='p-2 px-5 flex items-center border  rounded-full bg-gray-200'
+					className={`p-2 px-5 flex items-center border  rounded-full bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}`}
 					onChangeText={(value) => { setConfirmPassword(value) }}
 				/>
 
