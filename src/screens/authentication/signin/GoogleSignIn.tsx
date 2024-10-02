@@ -24,7 +24,7 @@ const GoogleSignIn = () => {
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                
+                console.log(userInfo)
                 //Add access token to Async Storageto persist login.
                 if (AuthUserData.session) {
                     await AsyncStorage.setItem('userAccessToken', AuthUserData.session.access_token);

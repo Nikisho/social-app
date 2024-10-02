@@ -1,6 +1,5 @@
-import { View, Text, Modal } from 'react-native'
+import { View, Text, Modal, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { supabase } from '../../../supabase';
 import { setCurrentUser } from '../../context/navSlice';
 import { useDispatch } from 'react-redux';

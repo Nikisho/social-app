@@ -1,6 +1,5 @@
-import { View, Text, Modal, Alert } from 'react-native'
+import { View, Text, Modal, Alert , TouchableOpacity} from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import styles from '../utils/styles/shadow'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
