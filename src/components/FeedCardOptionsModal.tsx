@@ -26,11 +26,7 @@ const FeedCardOptionsModal: React.FC<FeedCardOptionsModalProps> = ({
     refreshOnBlock
 }) => {
     
-    const reportEvent = async () => {
-        Alert.alert('This post has been reported');
-        setModalVisible(!modalVisible);
 
-    }
     const deleteEvent = async () => {
         const {error} = await supabase
             .from('meetup_events')
@@ -41,6 +37,24 @@ const FeedCardOptionsModal: React.FC<FeedCardOptionsModalProps> = ({
         refreshOnBlock();
         Alert.alert('Your event has been deleted')
     }
+
+    const reportEvent = async () => {
+
+        const { error } = await supabase
+            .from('reported_posts')
+            .insert({
+                event_id: event_id,
+                poster_id: user_id,
+                reporter_id: currentUser.id
+            });
+
+        setModalVisible(!modalVisible);
+        refreshOnBlock();
+        Alert.alert('This post has been reported, you will not it anymore');
+        if (error) console.error(error.message);
+
+    }
+
     const blockUser = async () => {
         const { error } = await supabase
             .from('user_blocked_users')
