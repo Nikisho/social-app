@@ -16,6 +16,7 @@ export type RootStackParamList = {
   submit: undefined;
   signup:undefined;
   signin:undefined;
+  eula: undefined;
   editevent: {event_id: number};
 };
 

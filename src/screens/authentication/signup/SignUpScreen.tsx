@@ -8,6 +8,7 @@ import UserDetailsForm from './UserDetailsForm';
 import SignUpMethodForm from './SignUpMethodForm';
 import colours from '../../../utils/styles/colours';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import Checkbox from 'expo-checkbox';
 
 interface UserDataProps {
     name: string;
@@ -15,6 +16,7 @@ interface UserDataProps {
 }
 const SignUpScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const [isChecked, setChecked] = useState(false);
     const [userDetails, setUserDetails] = useState<UserDataProps>({
         name: '',
         age: null
@@ -67,12 +69,30 @@ const SignUpScreen = () => {
 
                         <TouchableOpacity onPress={next}
                             style={{ backgroundColor: colours.secondaryColour }}
-                            className={`p-2 rounded-full self-end ${userDetails.name === ''? 'opacity-50': ''}`}
-                            disabled={userDetails.name === ''}
+                            className={`p-2 rounded-full self-end ${userDetails.name === '' || !isChecked ? 'opacity-50' : ''}`}
+                            disabled={userDetails.name === '' || !isChecked}
                         >
                             <AntDesign name="arrowright" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
+                )
+            }
+
+            {
+                isFirstStep && (
+
+                    <View className='absolute bottom-32 flex flex-row left-20'>
+                        <Checkbox
+                            value={isChecked} onValueChange={setChecked}
+                            className='mt-1'
+                        />
+                        <View>
+                            <Text onPress={() => navigation.navigate('eula')} className='w-4/5 ml-2 text-blue-600 underline'>
+                                I agree to Linkzy's End User License Agreement (EULA).
+                            </Text>
+                        </View>
+                    </View>
+
                 )
             }
             <View className='absolute bottom-16 flex-row space-x-2'>

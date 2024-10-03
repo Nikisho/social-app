@@ -24,6 +24,7 @@ import { supabase } from './supabase';
 import EditEventScreen from './src/screens/event/EditEventScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from './src/screens/loading/LoadingScreen';
+import EulaScreen from './src/screens/eula/EulaScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -104,6 +105,8 @@ function App() {
                 <Stack.Screen name="signin" component={SignInScreen} />
                 <Stack.Screen name="emailsignup" component={EmailSignUp} />
                 <Stack.Screen name="emailsignin" component={EmailSignIn} />
+                <Stack.Screen name="eula" component={EulaScreen} />
+
               </>
 
 ) : (
