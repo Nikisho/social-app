@@ -89,8 +89,8 @@ const GoogleSignIn = () => {
                 disabled={loading}
             >
                 <AntDesign name="google" size={24} color="red" />
-                <Text className=' font-semibold text-lg ml-9'>
-                    Continue in with Google
+                <Text className=' font-semibold text-lg ml-12'>
+                    Continue with Google
                 </Text>
             </TouchableOpacity>
         </View>

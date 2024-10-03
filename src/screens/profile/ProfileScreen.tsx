@@ -101,6 +101,15 @@ const ProfileScreen = () => {
     if (!isCurrentUserProfile) {
       return;
     }
+
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permission Required',
+        'We need access to your gallery to let you select images.',
+        [{ text: 'OK' }]
+      );
+    }
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       base64: true,
@@ -175,12 +184,12 @@ const ProfileScreen = () => {
                 {
                   userData.age && (
                     <>
-                    <Text className='text-xl font-'>
-                    -
-                  </Text>
-                  <Text className='text-xl font-'>
-                    {userData.age}
-                  </Text>
+                      <Text className='text-xl font-'>
+                        -
+                      </Text>
+                      <Text className='text-xl font-'>
+                        {userData.age}
+                      </Text>
                     </>
                   )
                 }
@@ -263,7 +272,7 @@ const ProfileScreen = () => {
       {
         isCurrentUserProfile &&
         <>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => setDeleteModalVisible(!deleteModalVisible)}
             className='w-full mt-4 bg-gray-200 py-3  flex flex-row justify-center rounded-xl'>
             <Text className='font-semibold'>Delete your account</Text>
