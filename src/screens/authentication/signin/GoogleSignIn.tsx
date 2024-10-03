@@ -1,11 +1,12 @@
-import { Alert, Platform, ToastAndroid, View } from 'react-native'
+import { Alert, Platform, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
 import { supabase } from '../../../../supabase'
 import { useDispatch } from 'react-redux'
 import { setCurrentUser } from '../../../context/navSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../../utils/styles/shadow'
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const GoogleSignIn = () => {
 
@@ -18,13 +19,12 @@ const GoogleSignIn = () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            
+
             if (userInfo.idToken) {
                 const { data: AuthUserData, error: AuthUserError } = await supabase.auth.signInWithIdToken({
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                console.log(userInfo)
                 //Add access token to Async Storageto persist login.
                 if (AuthUserData.session) {
                     await AsyncStorage.setItem('userAccessToken', AuthUserData.session.access_token);
@@ -32,7 +32,7 @@ const GoogleSignIn = () => {
                 }
 
                 if (AuthUserError) console.error(AuthUserError.message);
-                
+
                 const { error, data } = await supabase
                     .from('users')
                     .select()
@@ -82,14 +82,17 @@ const GoogleSignIn = () => {
     }
     return (
         <View className=' flex w-5/6 items-center self-center mt-2' >
-            <GoogleSigninButton
-                className=''
-                size={GoogleSigninButton?.Size.Wide}
-                style={{ "width": "103%" }}
-                color={GoogleSigninButton?.Color.Dark}
+            <TouchableOpacity className='w-full bg-white px-5 py-4 rounded-full flex flex-row 
+                                items-center'
+                style={styles.shadow}
                 onPress={handleSignIn}
                 disabled={loading}
-            />
+            >
+                <AntDesign name="google" size={24} color="red" />
+                <Text className=' font-semibold text-lg ml-9'>
+                    Continue in with Google
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }

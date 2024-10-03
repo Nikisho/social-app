@@ -4,6 +4,7 @@ import { supabase } from '../../../supabase';
 import { setCurrentUser } from '../../context/navSlice';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../utils/styles/shadow';
 
 interface DeleteProfileModalProps {
     modalVisible: boolean;
@@ -53,9 +54,11 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
                     setModalVisible(!modalVisible);
                 }}>
                 <View className='flex-1 justify-center items-center mt-22 h-full shadow-xl' >
-                    <View className='bg-white rounded-xl m-20 h-auto w-4/5 p-2 space-y-5 items-center'>
-                        <View className='flex w-full space-y-2' >
-                            <Text className='text-xl'>
+                    <View className='bg-white rounded-xl m-20 h-auto w-[90%]  p-2 space-y-5 items-center'
+                    style={styles.shadow}
+                    >
+                        <View className='flex w-full ' >
+                            <Text className='text-lg'>
                                 Are you sure you want to delete your account? This action is
                                 permanent and cannot be undone. All your data, including your profile, events, connections, and messages,
                                 will be permanently deleted. If you're sure, please confirm.
@@ -64,12 +67,12 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
                         <View className='flex flex-row w-full justify-between'>
 
                             <TouchableOpacity
-                                className='rounded-xl p-2 bg-gray-500 '
+                                className='rounded-lg p-2 bg-gray-500 '
                                 onPress={() => setModalVisible(!modalVisible)}>
                                 <Text className='text-white text-center font-bold'>Cancel</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                className='rounded-xl p-2 bg-red-500'
+                                className='rounded-lg p-2 bg-red-500'
                                 onPress={deleteAccount}>
                                 <Text className='text-white text-center font-bold'>Delete my account</Text>
                             </TouchableOpacity>

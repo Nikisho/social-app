@@ -5,7 +5,7 @@ import styles from '../../../utils/styles/shadow'
 import { useNavigation } from '@react-navigation/native'
 import GoogleSignIn from './GoogleSignIn'
 import { RootStackNavigationProp } from '../../../utils/types/types'
-
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const SignInScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>()
@@ -23,10 +23,12 @@ const SignInScreen = () => {
                 </View>
 
                 <View className='w-full flex space-y-3'>
-                    <TouchableOpacity 
-                        onPress={() => {navigation.navigate('emailsignin')}}
-                        style={styles.shadowButtonStyle} className='p-3 self-center  w-5/6 flex items-center'>
-                        <Text className='text-md font-bold text-white'>
+                    <TouchableOpacity
+                        onPress={() => { navigation.navigate('emailsignin') }}
+                        style={styles.shadowButtonStyle} className='px-5 py-4 self-center w-5/6 flex flex-row items-center rounded-full'>
+
+                        <MaterialIcons name="email" size={24} color="white" />
+                        <Text className='text-lg font-bold text-white ml-8'>
                             Use email and password
                         </Text>
                     </TouchableOpacity>

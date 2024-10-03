@@ -4,7 +4,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import GoogleSignUp from './GoogleSignUp'
 import styles from '../../../utils/styles/shadow'
 import { useNavigation } from '@react-navigation/native'
-import { RootStackNavigationProp, RootStackParamList } from '../../../utils/types/types'
+import { RootStackNavigationProp, RootStackParamList } from '../../../utils/types/types';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 interface UserDataProps {
     name: string;
     age: string | null;
@@ -30,8 +32,10 @@ const SignUpMethodForm: React.FC<UserDataProps> = ({
                     age: age,
                     name: name
                 })}}
-                style={styles.shadowButtonStyle} className='p-3 self-center w-5/6 flex items-center'>
-                <Text className='text-md font-bold text-white'>
+                style={styles.shadowButtonStyle} className='px-5 py-4 self-center w-5/6 flex flex-row items-center rounded-full'>
+                                            <MaterialIcons name="email" size={24} color="white" />
+
+                <Text className='text-lg font-bold text-white ml-8'>
                     Use email and password
                 </Text>
             </TouchableOpacity>

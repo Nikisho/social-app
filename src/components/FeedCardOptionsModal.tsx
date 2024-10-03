@@ -49,7 +49,7 @@ const FeedCardOptionsModal: React.FC<FeedCardOptionsModalProps> = ({
 
         setModalVisible(!modalVisible);
         refreshOnBlock();
-        Alert.alert('This post has been reported, you will not it anymore');
+        Alert.alert('This post has been reported, you will not see it anymore');
         if (error) console.error(error.message);
 
     }

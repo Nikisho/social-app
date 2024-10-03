@@ -1,10 +1,12 @@
-import { View, Text, ToastAndroid, Alert, Platform } from 'react-native'
+import { View, Text, ToastAndroid, Alert, Platform, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSignin, GoogleSigninButton, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../../utils/styles/shadow';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 interface UserDataProps {
     name: string;
@@ -51,9 +53,9 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
                 if (error) { console.error(error.message); }
                 if (error?.code === '23505') {
                     Platform.OS === 'android' ?
-				    ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT)
-                    :
-                    Alert.alert('You already have an account, just sign in!')
+                        ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT)
+                        :
+                        Alert.alert('You already have an account, just sign in!')
 
                     setLoading(false);
                     return;
@@ -95,13 +97,17 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
     return (
         <View className=' flex w-5/6 items-center self-center mt-2' >
 
-            <GoogleSigninButton
-                size={GoogleSigninButton?.Size.Wide}
-                style={{ "width": "103%"}}
-                color={GoogleSigninButton?.Color.Dark}
+            <TouchableOpacity className='w-full bg-white px-5 py-4 rounded-full flex flex-row 
+                                items-center'
+                style={styles.shadow}
                 onPress={handleSignIn}
                 disabled={loading}
-            />
+            >
+                <AntDesign name="google" size={24} color="red" />
+                <Text className=' font-semibold text-lg ml-9'>
+                    Continue in with Google
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
