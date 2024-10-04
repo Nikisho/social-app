@@ -2,6 +2,7 @@ export default {
   // Hook to write the google-services.json from environment variable
   expo: {
     plugins: [
+      "expo-apple-authentication",
       [
         "@react-native-google-signin/google-signin",
         {
@@ -29,8 +30,9 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.linkzy',
+      usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.0.2'
+      buildNumber: '1.0.3'
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written

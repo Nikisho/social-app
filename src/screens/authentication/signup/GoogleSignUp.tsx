@@ -64,7 +64,6 @@ const GoogleSignUp: React.FC<UserDataProps> = ({
                     dispatch(setCurrentUser({
                         name: name,
                         email: userInfo.user.email,
-                        // photo: userInfo.user.photo,
                         id: data[0].id
                     }))
                 }

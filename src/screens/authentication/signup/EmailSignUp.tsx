@@ -50,7 +50,6 @@ const EmailSignUp = () => {
 				.insert({
 					name: name,
 					email: email,
-					// photo: userInfo.user.photo,
 					uid: session?.user?.id,
 					age: age,
 					auth_provider: 'email'

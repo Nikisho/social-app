@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Platform } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import GoogleSignUp from './GoogleSignUp'
@@ -6,6 +6,7 @@ import styles from '../../../utils/styles/shadow'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp, RootStackParamList } from '../../../utils/types/types';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AppleSignUp from './AppleSignUp'
 
 interface UserDataProps {
     name: string;
@@ -28,12 +29,14 @@ const SignUpMethodForm: React.FC<UserDataProps> = ({
                 </Text>
             </View>
             <TouchableOpacity
-                onPress={() => { navigation.navigate('emailsignup', {
-                    age: age,
-                    name: name
-                })}}
+                onPress={() => {
+                    navigation.navigate('emailsignup', {
+                        age: age,
+                        name: name
+                    })
+                }}
                 style={styles.shadowButtonStyle} className='px-5 py-4 self-center w-5/6 flex flex-row items-center rounded-full'>
-                                            <MaterialIcons name="email" size={24} color="white" />
+                <MaterialIcons name="email" size={24} color="white" />
 
                 <Text className='text-lg font-bold text-white ml-8'>
                     Use email and password
@@ -43,6 +46,15 @@ const SignUpMethodForm: React.FC<UserDataProps> = ({
                 name={name}
                 age={age}
             />
+            {
+                Platform.OS === 'ios' && (
+                    <AppleSignUp
+                        name={name}
+                        age={age}
+                    />
+                )
+            }
+
         </View>
     )
 }
