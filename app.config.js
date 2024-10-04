@@ -30,7 +30,7 @@ export default {
       supportsTablet: true,
       bundleIdentifier: 'com.linkzy',
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.0.1'
+      buildNumber: '1.0.2'
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
