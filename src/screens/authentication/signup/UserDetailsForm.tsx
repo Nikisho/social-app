@@ -23,7 +23,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     Welcome to Linkzy!
                 </Text>
                 <Text>
-                Please tell us your name and age to get started.
+                Please tell us your name to get started.
                 </Text>
             </View>
 
@@ -42,7 +42,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
             </View>
             <View className='w-5/6 space-y-1'>
                 <Text className='ml-2 text-lg font-bold'>
-                    Age
+                    Age <Text className='text-md font-normal'>(optional)</Text>
                 </Text>
                 <TextInput
                     keyboardType='numeric'
