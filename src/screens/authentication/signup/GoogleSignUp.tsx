@@ -1,6 +1,6 @@
 import { View, Text, ToastAndroid, Alert, Platform, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { GoogleSignin, GoogleSigninButton, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { supabase } from '../../../../supabase';

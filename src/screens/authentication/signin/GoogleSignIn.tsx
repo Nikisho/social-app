@@ -36,8 +36,9 @@ const GoogleSignIn = () => {
                 const { error, data } = await supabase
                     .from('users')
                     .select()
-                    .eq('email', userInfo?.user.email)
+                    .eq('email', userInfo?.user.email);
 
+                if (error) console.error(error.message)
                 if (data) {
                     ////If no data, its a new sign up///
                     if (data.length === 0) {
@@ -53,8 +54,6 @@ const GoogleSignIn = () => {
                         id: data[0].id
                     }))
                 }
-                if (error) console.error(error.message)
-
             } else {
                 throw new Error('no ID token present!')
             }

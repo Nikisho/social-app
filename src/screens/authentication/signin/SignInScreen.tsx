@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Platform } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import styles from '../../../utils/styles/shadow'
@@ -6,12 +6,12 @@ import { useNavigation } from '@react-navigation/native'
 import GoogleSignIn from './GoogleSignIn'
 import { RootStackNavigationProp } from '../../../utils/types/types'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AppleSignIn from './AppleSignIn'
 
 const SignInScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>()
     return (
         <View className='flex items-center space-y-5 h-full'>
-
             <View className='w-full flex  space-y-3 h-1/2 justify-center'>
                 <View className=' h-1/3 space-y-3 self-center'>
                     <Text className='text-2xl font-bold'>
@@ -21,7 +21,6 @@ const SignInScreen = () => {
                         Please choose one of the options below.
                     </Text>
                 </View>
-
                 <View className='w-full flex space-y-3'>
                     <TouchableOpacity
                         onPress={() => { navigation.navigate('emailsignin') }}
@@ -33,6 +32,11 @@ const SignInScreen = () => {
                         </Text>
                     </TouchableOpacity>
                     <GoogleSignIn />
+                    {
+                        Platform.OS === 'ios' && (
+                            <AppleSignIn />
+                        )
+                    }
                 </View>
             </View>
             <View className='absolute bottom-16 flex-row space-x-2' >
