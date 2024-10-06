@@ -75,3 +75,8 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+
+
+# mobile executables
+aab-files
+ipa-files
