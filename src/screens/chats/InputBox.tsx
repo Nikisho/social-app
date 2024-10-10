@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput,KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -20,7 +20,10 @@ const InputBox: React.FC<ChatBodyProps> = ({ onSendMessage }) => {
     };
 
     return (
-        <View className='flex justify-center flex-row px-3 my-2'>
+        <KeyboardAvoidingView className='flex justify-center flex-row px-3 my-2' 
+        behavior='padding'
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+        >
             <View className='bg-gray-200 px-5 py-3 w-full rounded-2xl flex flex-row items-center justify-between'>
                 <TextInput
                     placeholder='Message'
@@ -38,7 +41,7 @@ const InputBox: React.FC<ChatBodyProps> = ({ onSendMessage }) => {
                     <Ionicons name="send-outline" size={20} color="black" />
                 </TouchableOpacity>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

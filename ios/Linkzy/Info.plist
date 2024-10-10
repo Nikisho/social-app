@@ -41,12 +41,12 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.googleusercontent.apps.44271322539-jv9bd5ng9pbjkke0ol4cvklrb3g5lt71</string>
+          <string>com.googleusercontent.apps._some_id_here_</string>
         </array>
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>1.0.3</string>
+    <string>1.0.4</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>

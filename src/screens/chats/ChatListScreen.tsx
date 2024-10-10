@@ -42,7 +42,7 @@ const ChatListScreen = () => {
     <View className='mx-2'>
       <Header />
       <FlatList
-        className={`-mx-2 ${Platform.OS === 'android' && 'h-[84%]'}`}
+        className={`-mx-2 ${'h-[85%]'}`}
         data={receivers}
         renderItem={renderItem}
         keyExtractor={(item: ChatDataProps) => item.receiver_id.toString()}

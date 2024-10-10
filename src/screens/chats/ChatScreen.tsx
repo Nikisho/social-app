@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ChatScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
@@ -16,6 +16,13 @@ interface UserDataProps {
   id: number;
 }
 
+interface Message {
+  message_id: number;
+  chat_room_id: number;
+  sender_id: number;
+  content: string;
+  created_at: string;
+}
 
 const ChatScreen = () => {
   const route = useRoute<ChatScreenRouteProp>();
@@ -23,7 +30,7 @@ const ChatScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [chatRoomIdState, setChatRoomIdState] = useState<number>();
   const [userData, setUserData] = useState<UserDataProps>();
-  const [messages, setMessages] = useState<string[]>([])
+  const [messages, setMessages] = useState<ArrayLike<Message>>([])
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const fetchUserData = async () => {
