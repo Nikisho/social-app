@@ -1,4 +1,4 @@
-import { View, Text, ListRenderItem } from 'react-native'
+import { View, Text, ListRenderItem, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import { supabase } from '../../../supabase';
@@ -42,7 +42,7 @@ const ChatListScreen = () => {
     <View className='mx-2'>
       <Header />
       <FlatList
-        className='-mx-2'
+        className={`-mx-2 ${Platform.OS === 'android' && 'h-[84%]'}`}
         data={receivers}
         renderItem={renderItem}
         keyExtractor={(item: ChatDataProps) => item.receiver_id.toString()}

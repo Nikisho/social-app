@@ -13,12 +13,9 @@ interface Message {
     created_at: string;
 }
 
-interface MessageProps {
-    item: Message;
-}
 interface ChatProps {
     currentUser: { id: number };
-    messages: string[]
+    messages: ArrayLike<Message>
 }
 
 const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {

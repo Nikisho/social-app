@@ -30,6 +30,7 @@ const Header = () => {
 
             //Sign out of Google.//
             await GoogleSignin.signOut();
+            
             const { error } = await supabase.auth.signOut();
             if (error) throw error.message;
 

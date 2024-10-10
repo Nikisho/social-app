@@ -169,28 +169,25 @@ const ProfileScreen = () => {
                 }
                 {
                   isCurrentUserProfile && (
-                    <View className=''>
-                      <FontAwesome className='' name="edit" size={20} color="black" />
+                    <View className='absolute right-5'>
+                      <FontAwesome className='' name="edit" size={30} color="white" />
                     </View>
                   )
                 }
 
               </TouchableOpacity>
-              <View className='flex flex-row space-x-3 items-center'>
+              <View className='flex flex-row items-center justify-between space-x-3 '>
 
-                <Text className='text-xl font-'>
+                <Text className='text-xl font-bold'>
                   {userData.name}
                 </Text>
                 {
                   userData.age && (
-                    <>
-                      <Text className='text-xl font-'>
-                        -
-                      </Text>
-                      <Text className='text-xl font-'>
-                        {userData.age}
-                      </Text>
-                    </>
+                    <Text 
+                        style={{backgroundColor: colours.secondaryColour}}
+                        className='text-xl px-4 rounded-full font-bold text-white'>
+                      {userData.age}
+                    </Text>
                   )
                 }
 
