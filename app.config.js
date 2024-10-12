@@ -6,7 +6,7 @@ export default {
       [
         "@react-native-google-signin/google-signin",
         {
-          iosUrlScheme: "com.googleusercontent.apps._some_id_here_"
+          iosUrlScheme: "com.googleusercontent.apps.44271322539-jv9bd5ng9pbjkke0ol4cvklrb3g5lt71"
         }
       ],
       [
@@ -18,7 +18,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.1.4",
+    version: "1.1.5",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -32,14 +32,14 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.0.5'
+      buildNumber: '1.0.6'
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,
-      versionCode: 7,
+      versionCode: 8,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"

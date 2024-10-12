@@ -138,7 +138,7 @@ const ChatScreen = () => {
       .insert({
         sender_id: currentUser.id,
         chat_room_id: chatRoomIdState,
-        mediaUrl: mediaUrl,
+        mediaUrl: media? mediaUrl : null,
         content: newMessage
       });
       await fetchMessages();
