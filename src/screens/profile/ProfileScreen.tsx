@@ -1,4 +1,4 @@
-import { View, Text, Image, ImageBackground, Alert, Modal, Pressable, StyleSheet, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
+import { View, Text, Image, Alert, Modal, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import UserEvents from './UserEvents';
 import { FontAwesome } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import styles from '../../utils/styles/shadow';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ProfileScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
 import colours from '../../utils/styles/colours';
@@ -31,7 +31,7 @@ const ProfileScreen = () => {
   const isCurrentUserProfile = user_id === currentUser.id;
   const [modalVisible, setModalVisible] = useState(false);
   const [originalBio, setOriginalBio] = useState('');
-
+  const dispatch = useDispatch();
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const fetchUserData = async () => {
@@ -124,14 +124,21 @@ const ProfileScreen = () => {
         photo: result.assets[0].uri
       }))
       updateProfilePictureInStorageBucket(result.assets[0].base64!);
+      const photoUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/users/${currentUser.id}/profile_picture.jpg?v=${new Date().getTime()}`
       const { error } = await supabase
         .from('users')
         .update({
-          photo: `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/users/${currentUser.id}/profile_picture.jpg?v=${new Date().getTime()}`,
+          photo: photoUrl,
         })
         .eq('id', currentUser.id);
       if (error) { console.error(error.message); }
 
+      dispatch(setCurrentUser({
+          name: currentUser.name,
+          photo: photoUrl,
+          id: currentUser.id
+
+      }))
       Platform.OS === 'android' ? ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT) : Alert.alert('Profile picture changed successfully');
 
     }

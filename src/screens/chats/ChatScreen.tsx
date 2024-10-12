@@ -9,6 +9,10 @@ import ChatHeader from './ChatHeader';
 import InputBox from './InputBox';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ChatBody from './ChatBody';
+import SendMedia from './SendMedia';
+import { decode } from 'base64-arraybuffer';
+import { uuidv4 } from '../../utils/functions/uuidv4';
+import { ImagePickerAsset } from 'expo-image-picker';
 
 interface UserDataProps {
   name: string;
@@ -20,6 +24,7 @@ interface Message {
   message_id: number;
   chat_room_id: number;
   sender_id: number;
+  mediaUrl: string
   content: string;
   created_at: string;
 }
@@ -30,7 +35,8 @@ const ChatScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [chatRoomIdState, setChatRoomIdState] = useState<number>();
   const [userData, setUserData] = useState<UserDataProps>();
-  const [messages, setMessages] = useState<ArrayLike<Message>>([])
+  const [messages, setMessages] = useState<ArrayLike<Message>>([]);
+  const [media, setMedia] = useState<ImagePickerAsset| null>(null);
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const fetchUserData = async () => {
@@ -41,7 +47,7 @@ const ChatScreen = () => {
     if (data) setUserData(data[0]);
     if (error) console.error(error.message);
   };
-
+  
   const fetchChatData = async () => {
     //check if chat room exists
     const { data, error } = await supabase
@@ -97,20 +103,45 @@ const ChatScreen = () => {
       .order('created_at', { ascending: false })
 
     if (data) {
-      setMessages(data)
+      setMessages(data);
     }
     if (error) console.error(error.message);
   };
 
+  const updateProfilePictureInStorageBucket = async (file: string, unique_file_identifier: string) => {
+    const arrayBuffer = decode(file);
+    try {
+      const { error } = await supabase
+        .storage
+        .from('chat_rooms_media')
+        .upload(`${chatRoomIdState}/${unique_file_identifier}.jpg`, arrayBuffer, {
+          contentType: 'image/png',
+          upsert: true,
+        });
+      if (error) {
+        console.error('Upload error:', error.message);
+      }
+    } catch (error) {
+      console.error('Conversion or upload error:', error);
+    }
+  }
+
+
   const sendMessage = async (newMessage: string) => {
+    const unique_file_identifier = uuidv4(9);
+    const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/chat_rooms_media/${chatRoomIdState}/${unique_file_identifier}.jpg`
+    if (media) {
+      await updateProfilePictureInStorageBucket(media.base64!, unique_file_identifier);
+    }
     const { error } = await supabase
       .from('messages')
       .insert({
         sender_id: currentUser.id,
         chat_room_id: chatRoomIdState,
+        mediaUrl: mediaUrl,
         content: newMessage
       });
-    fetchMessages();
+      await fetchMessages();
     if (error) console.error(error.message);
   };
 
@@ -152,6 +183,14 @@ const ChatScreen = () => {
     fetchMessages();
   }, [chatRoomIdState]);
 
+
+  if (media) {
+    return <SendMedia 
+              media={media} 
+              setMedia={setMedia}
+              onSendMessage={sendMessage}
+            />
+  }
   return (
     <SafeAreaProvider className='h-screen'>
       {
@@ -175,6 +214,7 @@ const ChatScreen = () => {
             />
             <InputBox
               onSendMessage={sendMessage}
+              setMedia={setMedia}
             />
           </>
         )

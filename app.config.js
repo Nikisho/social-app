@@ -18,7 +18,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.1.1",
+    version: "1.1.4",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -32,14 +32,14 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.0.4'
+      buildNumber: '1.0.5'
     },
     android: {
       googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,
-      versionCode: 6,
+      versionCode: 7,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
