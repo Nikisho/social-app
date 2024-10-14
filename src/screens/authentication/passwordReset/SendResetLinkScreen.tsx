@@ -1,5 +1,5 @@
 import { View, Text, Platform, TouchableOpacity, ToastAndroid, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler';
 import validateEmail from '../../../utils/functions/validateEmail';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -23,15 +23,41 @@ const SendResetLinkScreen = () => {
                 Alert.alert("Please enter a valid email address")
             return;
         }
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: 'com.linkzy://resetpassword',  // This uses Linking to generate the full URL
+        });
+        if (error) throw error.message;
+
+
         Platform.OS === 'android' ?
             ToastAndroid.show("We've send you a link to reset your password.", ToastAndroid.SHORT)
             :
             Alert.alert("We've send you a link to reset your password.")
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: resetScreenUrl,
-        });
-        if (error) throw error.message;
     };
+
+    useEffect(() => {
+        const handleDeepLink = (url: string) => {
+            const route = url.replace(/.*?:\/\//g, ''); // Remove the scheme
+            console.log('Deep link URL:', url); // Debugging
+            if (route === 'com.linkzy/resetpassword') {
+                navigation.navigate('resetpassword'); // Navigate to the reset password screen
+            }
+        };
+
+        const subscription = Linking.addEventListener('url', ({ url }) => handleDeepLink(url));
+
+        // Handle the initial URL if the app was opened by a link
+        Linking.getInitialURL().then((url) => {
+            if (url) {
+                handleDeepLink(url);
+            }
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, [navigation]); // Ensure navigation is in the dependency array
 
     return (
         <View className='flex h-1/2 justify-center px-5'>

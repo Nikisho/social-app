@@ -96,7 +96,7 @@ function App() {
     prefixes: ['com.linkzy://', 'https://com.linkzy'], // Your app's scheme and web URL
     config: {
       screens: {
-        resetpassword: 'resetpassword', // This should match the Stack.Screen name
+        resetpassword: 'resetpassword'// This should match the Stack.Screen name
       },
     },
   };
