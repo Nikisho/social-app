@@ -55,7 +55,7 @@ const SendMedia: React.FC<SendMediaProps> = ({
                 }}
             />
             <KeyboardAvoidingView
-                className='flex justify-start flex-row px-1 space-x-3 items-center'
+                className='flex justify-start flex-row px-1 space-x-3  items-center'
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
             >
@@ -71,6 +71,7 @@ const SendMedia: React.FC<SendMediaProps> = ({
                         maxLength={300}
                         value={message}
                         onChangeText={setMessage}
+                        className='px-4'
                         onContentSizeChange={(event) => {
                             // Dynamically change height but cap it at 120 and ensure a minimum of 40
                             const newHeight = Math.max(40, Math.min(event.nativeEvent.contentSize.height, 120));
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         marginTop: 0,
+        marginBottom: 10
     },
     inputContainer: {
         backgroundColor: 'white',

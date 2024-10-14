@@ -5,6 +5,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
 import colours from '../../utils/styles/colours';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 interface ChatCardProps {
     item: {
@@ -67,13 +68,17 @@ const ChatCard: React.FC<ChatCardProps> = ({
                 <Text>
                     {item.receiver_name}
                 </Text>
-                <Text
-                    numberOfLines={1}
-                    style={{ fontSize: 12 }}
-                    className='text-gray-600'
-                >
-                    {item.content}
-                </Text>
+                {
+                    item.content ?
+                        <Text
+                            numberOfLines={1}
+                            style={{ fontSize: 12 }}
+                            className={`text-gray-600 ${!item.content && 'italic'}`}
+                        >
+                            {item.content}
+                        </Text>
+                        :
+                        <MaterialIcons name="insert-photo" size={24} color="black" />}
             </View>
             {
                 unreadMessageCount && (
