@@ -18,6 +18,7 @@ export type RootStackParamList = {
   signin:undefined;
   eula: undefined;
   editevent: {event_id: number};
+  settings: undefined;
 };
 
 // Define the navigation prop types

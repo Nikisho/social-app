@@ -25,6 +25,7 @@ import EditEventScreen from './src/screens/event/EditEventScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from './src/screens/loading/LoadingScreen';
 import EulaScreen from './src/screens/eula/EulaScreen';
+import SettingsScreen from './src/screens/settings/SettingsScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -120,6 +121,8 @@ function App() {
                 <Stack.Screen name="chatlist" component={ChatListScreen} />
                 <Stack.Screen name="chat" component={ChatScreen} />
                 <Stack.Screen name="search" component={SearchScreen} />
+                <Stack.Screen name="eula" component={EulaScreen} />
+                <Stack.Screen name="settings" component={SettingsScreen} />
               </>
             )
           }

@@ -59,7 +59,7 @@ const EulaScreen = () => {
 
         <Button 
           title="Back" 
-          onPress={() => navigation.navigate('signup')}
+          onPress={() => navigation.goBack()}
           color="#000000"
         />
       </ScrollView>

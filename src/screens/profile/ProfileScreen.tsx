@@ -13,7 +13,7 @@ import { ProfileScreenRouteProp, RootStackNavigationProp } from '../../utils/typ
 import colours from '../../utils/styles/colours';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
-import DeleteProfileModal from './DeleteProfileModal';
+import Fontisto from '@expo/vector-icons/Fontisto';
 interface UserDataProps {
   name: string;
   age: string;
@@ -32,7 +32,6 @@ const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [originalBio, setOriginalBio] = useState('');
   const dispatch = useDispatch();
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
@@ -134,9 +133,9 @@ const ProfileScreen = () => {
       if (error) { console.error(error.message); }
 
       dispatch(setCurrentUser({
-          name: currentUser.name,
-          photo: photoUrl,
-          id: currentUser.id
+        name: currentUser.name,
+        photo: photoUrl,
+        id: currentUser.id
 
       }))
       Platform.OS === 'android' ? ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT) : Alert.alert('Profile picture changed successfully');
@@ -154,7 +153,7 @@ const ProfileScreen = () => {
       {
         userData && (
           <View className='h-[40%]'>
-            <View className=' flex items-center space-y-2'>
+            <View className=' flex space-x-5 py-2 flex flex-row items-center'>
               <TouchableOpacity
                 className='flex flex-row items-center space-x-3'
                 onPress={pickImage}
@@ -183,32 +182,49 @@ const ProfileScreen = () => {
                 }
 
               </TouchableOpacity>
-              <View className='flex flex-row items-center justify-between space-x-3 '>
+              <View className='flex flex- items-start justify-between space-y-2 '>
 
-                <Text className='text-xl font-bold'>
-                  {userData.name}
-                </Text>
+                <View className='flex flex-row space-x-3'>
+
+                  <Text className='text-xl font-bold'>
+                    {userData.name}
+                  </Text>
+                  {
+                    userData.age && (
+                      <View
+                        style={{ backgroundColor: colours.secondaryColour }}
+                        className='rounded-full px-3'
+                      >
+
+                        <Text
+                          className='text-lg font-bold text-white'>
+                          {userData.age}
+                        </Text>
+                      </View>
+                    )
+                  }
+                </View>
                 {
-                  userData.age && (
-                    <Text 
-                        style={{backgroundColor: colours.secondaryColour}}
-                        className='text-xl px-4 rounded-full font-bold text-white'>
-                      {userData.age}
-                    </Text>
+                  !isCurrentUserProfile ? (
+                    <TouchableOpacity
+                      onPress={handlePressChat}
+                      style={styles.shadowButtonStyle}
+                      className=' p-2 rounded-xl flex flex-row place-self-end'>
+                      <Entypo name="chat" size={24} color="white" />
+                    </TouchableOpacity>
+                  ) :
+                  (
+                    <TouchableOpacity 
+                      onPress={() => navigation.navigate('settings')}
+                      className='rounded-full p-1 bg-white'
+                      style={styles.shadow}
+                    >
+                      <Fontisto name="player-settings" size={24} color="black" />
+                    </TouchableOpacity>
                   )
                 }
-
               </View>
-              {
-                !isCurrentUserProfile && (
-                  <TouchableOpacity
-                    onPress={handlePressChat}
-                    style={styles.shadowButtonStyle}
-                    className=' p-2  rounded-xl'>
-                    <Entypo name="chat" size={24} color="white" />
-                  </TouchableOpacity>
-                )
-              }
+
 
             </View>
             <View className='flex flex-row items-center space-x-3'>
@@ -273,23 +289,6 @@ const ProfileScreen = () => {
       <UserEvents
         user_id={user_id}
       />
-      {
-        isCurrentUserProfile &&
-        <>
-          <TouchableOpacity
-            onPress={() => setDeleteModalVisible(!deleteModalVisible)}
-            className='w-full mt-4 bg-gray-200 py-3  flex flex-row justify-center rounded-xl'>
-            <Text className='font-semibold'>Delete your account</Text>
-          </TouchableOpacity>
-          <DeleteProfileModal
-            modalVisible={deleteModalVisible}
-            setModalVisible={setDeleteModalVisible}
-            currentUserId={currentUser.id}
-          />
-        </>
-
-      }
-
     </View>
   )
 }
