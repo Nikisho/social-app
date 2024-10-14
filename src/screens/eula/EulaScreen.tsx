@@ -1,13 +1,17 @@
 import React from 'react';
-import { ScrollView, Text, StyleSheet, View, Button } from 'react-native';
+import { ScrollView, Text, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const EulaScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity className="py-5 " onPress={() => navigation.goBack()}>
+        <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
+      </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.heading}>End User License Agreement (EULA)</Text>
 
@@ -57,8 +61,8 @@ const EulaScreen = () => {
           Linkzy reserves the right to modify this EULA at any time. Changes will be posted within the app and take effect immediately.
         </Text>
 
-        <Button 
-          title="Back" 
+        <Button
+          title="Back"
           onPress={() => navigation.goBack()}
           color="#000000"
         />

@@ -9,6 +9,7 @@ import { setCurrentUser } from '../../../context/navSlice';
 import validateEmail from '../../../utils/functions/validateEmail';
 import { EmailSignUpScreenRouteProp } from '../../../utils/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import validatePassword from '../../../utils/functions/validatePassword';
 
 const EmailSignUp = () => {
 	const route = useRoute<EmailSignUpScreenRouteProp>();
@@ -20,9 +21,9 @@ const EmailSignUp = () => {
 	const dispatch = useDispatch();
 	const isPasswordMismatch = confirmPassword !== password;
 	const isEmailEmpty = email === '';
-	const isPasswordEmpty = password === '';
+	const isPasswordValid = validatePassword(password);
 
-	const isDisabled = isPasswordMismatch || isEmailEmpty || isPasswordEmpty || loading;
+	const isDisabled = isPasswordMismatch || isEmailEmpty || !isPasswordValid || loading;
 
 
 	async function signUpWithEmail() {
@@ -58,9 +59,9 @@ const EmailSignUp = () => {
 			if (error) { console.error(error.message); }
 			if (error?.code === '23505') {
 				Platform.OS === 'android' ?
-				ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT)
-				:
-				Alert.alert('You already have an account, just sign in!')
+					ToastAndroid.show('You already have an account, just sign in!', ToastAndroid.SHORT)
+					:
+					Alert.alert('You already have an account, just sign in!')
 				return;
 			}
 
@@ -76,9 +77,9 @@ const EmailSignUp = () => {
 		}
 
 
-		if (AuthUserError) Alert.alert(AuthUserError.message)
-		if (!session) Alert.alert('Please check your inbox for email verification!')
-		setLoading(false)
+		if (AuthUserError) Alert.alert(AuthUserError.message);
+		if (!session) Alert.alert('Sorry, we could not sign you up');
+		setLoading(false);
 	}
 
 	return (
@@ -98,7 +99,7 @@ const EmailSignUp = () => {
 				</Text>
 				<TextInput
 					placeholder='Enter email '
-					className={`p-2 px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}` }
+					className={`p-2 px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
 					value={email}
 					onChangeText={(value) => { setEmail(value) }}
 				/>
@@ -112,7 +113,7 @@ const EmailSignUp = () => {
 					placeholder='Enter password '
 					value={password}
 					secureTextEntry={true}
-					className={`p-2 px-5 flex items-center border  rounded-full bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}`}
+					className={`p-2 px-5 flex items-center border  rounded-full bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
 					onChangeText={(value) => { setPassword(value) }}
 				/>
 
@@ -125,11 +126,17 @@ const EmailSignUp = () => {
 					placeholder='Confirm password '
 					value={confirmPassword}
 					secureTextEntry={true}
-					className={`p-2 px-5 flex items-center border  rounded-full bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}`}
+					className={`p-2 px-5 flex items-center border  rounded-full bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
 					onChangeText={(value) => { setConfirmPassword(value) }}
 				/>
 
 			</View>
+			{(!isPasswordValid && password !== '')&&  (
+				<Text className='text-red-500 w-5/6 text-center'>
+					Password must be 6-16 characters long, contain at least one number and one special character.
+				</Text>
+			)}
+
 			<View className='w-full flex items-center h-1/4 justify-center'>
 
 				<TouchableOpacity

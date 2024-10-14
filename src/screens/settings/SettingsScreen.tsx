@@ -32,12 +32,12 @@ const SettingsScreen = () => {
     {
       title: 'Contact Support',
       icon: <MaterialIcons name="headphones" size={24} color="black" />,
-      onPress: () => openURL('https://www.linkzyapp.com'),
+      onPress: () => openURL('https://www.linkzyapp.com/contactus.html'),
     },
     {
       title: 'About Linkzy',
       icon: <AntDesign name="questioncircle" size={24} color="black" />,
-      onPress: () => openURL('https://www.linkzyapp.com/contactus.html'),
+      onPress: () => openURL('https://www.linkzyapp.com'),
     },
   ];
 

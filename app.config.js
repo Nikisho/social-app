@@ -1,6 +1,7 @@
 export default {
   // Hook to write the google-services.json from environment variable
   expo: {
+    scheme: 'com.linkzy',
     plugins: [
       "expo-apple-authentication",
       [

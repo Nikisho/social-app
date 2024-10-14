@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import validateEmail from '../../../utils/functions/validateEmail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 
 const EmailSignIn = () => {
 
@@ -16,7 +18,7 @@ const EmailSignIn = () => {
 	const dispatch = useDispatch();
 	const isEmailEmpty = email === '';
 	const isPasswordEmpty = password === '';
-
+	const navigation = useNavigation<RootStackNavigationProp>();
 	const isDisabled = isEmailEmpty || isPasswordEmpty || loading;
 
 
@@ -120,6 +122,13 @@ const EmailSignIn = () => {
 					</Text>
 				</TouchableOpacity>
 			</View>
+			<TouchableOpacity 
+				onPress={() => navigation.navigate('sendresetlink')}
+			>
+				<Text>
+					Forgotten your password?
+				</Text>
+			</TouchableOpacity>
 
 		</View>
 	)

@@ -26,6 +26,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from './src/screens/loading/LoadingScreen';
 import EulaScreen from './src/screens/eula/EulaScreen';
 import SettingsScreen from './src/screens/settings/SettingsScreen';
+import SendResetLinkScreen from './src/screens/authentication/passwordReset/SendResetLinkScreen';
+import ResetPasswordScreen from './src/screens/authentication/passwordReset/ResetPasswordScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -40,7 +42,7 @@ const mainTheme = {
 export default function AppWrapper() {
   return (
     <Provider store={store}>
-        <App />
+      <App />
     </Provider>
   )
 }
@@ -89,13 +91,25 @@ function App() {
     fetchSession();
   }, []);
 
+
+  const linking = {
+    prefixes: ['com.linkzy://', 'https://com.linkzy'], // Your app's scheme and web URL
+    config: {
+      screens: {
+        resetpassword: 'resetpassword', // This should match the Stack.Screen name
+      },
+    },
+  };
+  
+
+
   if (loading) {
     return <LoadingScreen />
   }
 
   return (
     <SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
-      <NavigationContainer theme={mainTheme}  >
+      <NavigationContainer theme={mainTheme} linking={linking} >
         <Stack.Navigator screenOptions={{
           headerShown: false
         }} >
@@ -107,11 +121,12 @@ function App() {
                 <Stack.Screen name="emailsignup" component={EmailSignUp} />
                 <Stack.Screen name="emailsignin" component={EmailSignIn} />
                 <Stack.Screen name="eula" component={EulaScreen} />
+                <Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
+                <Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
 
               </>
-
-) : (
-  <>
+            ) : (
+              <>
                 <Stack.Screen name="home" component={HomeScreen} />
                 <Stack.Screen name="profile" component={ProfileScreen} />
                 <Stack.Screen name="submit" component={SubmitScreen} />

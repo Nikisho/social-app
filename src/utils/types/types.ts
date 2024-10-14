@@ -19,6 +19,8 @@ export type RootStackParamList = {
   eula: undefined;
   editevent: {event_id: number};
   settings: undefined;
+  sendresetlink:undefined;
+  resetpassword:undefined;
 };
 
 // Define the navigation prop types
