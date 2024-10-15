@@ -1,6 +1,5 @@
-import { View, Text, Image } from 'react-native'
+import { View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../supabase';
 import Header from '../../components/Header';
 import EventDetails from './EventDetails';

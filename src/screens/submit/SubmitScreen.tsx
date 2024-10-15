@@ -1,4 +1,4 @@
-import { View, Text,  TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import DatePicker from 'react-native-date-picker';
@@ -11,6 +11,7 @@ import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface eventDetailsProps {
     title: string;
@@ -59,25 +60,35 @@ const SubmitScreen = () => {
 
 
     return (
-        <View className='flex space-y-2 mx-3 h-5/6'>
-            <View className='border-b'>
-
-                <TextInput className='text-2xl ' placeholder='Title'
+        <View className='flex space-y-2 mx-3 '>
+            <View className='p-1 flex-row flex items-center'>
+                <TouchableOpacity className="py-3 pr-5 " onPress={() => navigation.goBack()}>
+                    <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
+                </TouchableOpacity>
+                <Text className='text-2xl font-semibold '>
+                    Post an event
+                </Text>
+            </View>
+            <View >
+                <TextInput className='text-2xl bg-white p-4 rounded-xl ' placeholder='Title'
                     value={eventDetails?.title}
+                    style={styles.shadow}
                     onChangeText={value => handleChange('title', value)}
                     maxLength={50}
                 />
             </View>
-            <View className='h-1/3 border-b'>
+            <View className='h-1/3 bg-white p-4 rounded-xl mb-1'
+                style={styles.shadow}
 
+            >
                 <TextInput multiline={true} className='text-lg' placeholder='Description'
                     value={eventDetails?.description}
                     maxLength={700}
                     onChangeText={value => handleChange('description', value)}
                 />
             </View>
-            <TouchableOpacity onPress={() => setOpen(true)} 
-            style={styles.translucidViewStyle}
+            <TouchableOpacity onPress={() => setOpen(true)}
+                style={styles.translucidViewStyle}
                 className='justify-between flex items-center space-x-2 flex-row opacity-90 p-2 rounded-xl'>
                 <View className='flex flex-row space-x-2 items-center'>
 
@@ -106,11 +117,11 @@ const SubmitScreen = () => {
                     setOpen(false)
                 }}
             />
-            <View className='flex-grow justify-end flex items-center'>
+            <View className='justify-end h-1/4 flex grow items-end '>
 
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.shadowButtonStyle}
-                    className='bg-sky-600 py-2 px-3 rounded-xl w-1/2 '
+                    className='bg-sky-600 py-3 px-3 rounded-xl w-full '
                     onPress={handleSubmit}>
                     <Text className='text-white font-bold text-lg text-center'>Submit</Text>
                 </TouchableOpacity>

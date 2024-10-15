@@ -3,6 +3,7 @@ import React from 'react';
 import colours from '../../utils/styles/colours';
 import { FlatList } from 'react-native-gesture-handler';
 import formatTime from '../../utils/functions/formatTime';
+import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 
 interface Message {
     message_id: number;
@@ -21,7 +22,7 @@ interface ChatProps {
 const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
     const renderItem = ({ item }: { item: Message }) => {
         const isCurrentUser = currentUser.id === item.sender_id;
-        const formattedTime = formatTime(item.created_at);
+        const formattedTime = extractTimeFromDate(item.created_at);
 
         return (
             <View

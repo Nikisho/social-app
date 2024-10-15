@@ -13,6 +13,7 @@ interface ChatDataProps {
   receiver_photo: string
   receiver_name: string
   content: string;
+  last_message_time: string;
   room_id: number
 };
 
