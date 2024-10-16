@@ -11,7 +11,7 @@ import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import SubmitScreenHeader from './SubmitScreenHeader';
 
 interface eventDetailsProps {
     title: string;
@@ -56,19 +56,11 @@ const SubmitScreen = () => {
         navigation.navigate('home');
 
         if (error) console.error(error.message);
-    }
-
+    };
 
     return (
         <View className='flex space-y-2 mx-3 '>
-            <View className='p-1 flex-row flex items-center'>
-                <TouchableOpacity className="py-3 pr-5 " onPress={() => navigation.goBack()}>
-                    <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
-                </TouchableOpacity>
-                <Text className='text-2xl font-semibold '>
-                    Post an event
-                </Text>
-            </View>
+            <SubmitScreenHeader/>
             <View >
                 <TextInput className='text-2xl bg-white p-4 rounded-xl ' placeholder='Title'
                     value={eventDetails?.title}
@@ -118,7 +110,6 @@ const SubmitScreen = () => {
                 }}
             />
             <View className='justify-end h-1/4 flex grow items-end '>
-
                 <TouchableOpacity
                     style={styles.shadowButtonStyle}
                     className='bg-sky-600 py-3 px-3 rounded-xl w-full '

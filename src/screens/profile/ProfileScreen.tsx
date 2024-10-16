@@ -1,11 +1,11 @@
-import { View, Text, Image, Alert, Modal, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
+import { View, Text, Image, Alert, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import UserEvents from './UserEvents';
 import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../supabase';
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from '../../utils/styles/shadow';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { ScrollView} from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -14,18 +14,26 @@ import colours from '../../utils/styles/colours';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import AmendBioModal from './AmendBioModal';
+
 interface UserDataProps {
   name: string;
   age: string;
   photo: string;
-  id: string;
+  id: number | null;
   bio: string
 
 }
 const ProfileScreen = () => {
   const route = useRoute<ProfileScreenRouteProp>();
   const { user_id } = route.params;
-  const [userData, setUserData] = useState<UserDataProps>();
+  const [userData, setUserData] = useState<UserDataProps>({
+    age: '',
+    bio: '',
+    id: null,
+    photo: '',
+    name: ''
+  });
   const currentUser = useSelector(selectCurrentUser);
   const navigation = useNavigation<RootStackNavigationProp>();
   const isCurrentUserProfile = user_id === currentUser.id;
@@ -237,52 +245,23 @@ const ProfileScreen = () => {
                 )
               }
             </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setModalVisible(!modalVisible);
-              }}>
-              <View className='flex-1 justify-center items-center mt-22' >
-                <View className='bg-white rounded-xl m-20 h-1/2 w-4/5 p-5 space-y-5' style={styles.shadow} >
-                  <TextInput className='mb-15 border rounded-lg p-2'
-                    maxLength={300}
-                    value={userData.bio}
-                    multiline={true}
-                    onChangeText={(value) => (setUserData((prevData: any) => ({
-                      ...prevData,
-                      bio: value
-                    })))}
 
-                  >
-
-                  </TextInput>
-                  <View className='flex flex-row space-x-1 justify-center'>
-                    <TouchableOpacity
-                      className='rounded-full p-2 bg-red-500 w-1/2'
-                      onPress={closeModal}>
-                      <Text className='text-white text-center font-bold'>Close</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{ backgroundColor: colours.secondaryColour }}
-                      className='rounded-full p-2 w-1/2'
-                      onPress={updateUserDescription}>
-                      <Text className='text-white text-center font-bold'>Save</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </Modal>
             <ScrollView>
               <Text className='text-sm'
               >
                 {userData.bio}
               </Text>
             </ScrollView>
-
+            <AmendBioModal 
+              setModalVisible={setModalVisible}
+              closeModal={closeModal}
+              userData={userData}
+              setUserData={setUserData}
+              modalVisible={modalVisible}
+              updateUserDescription={updateUserDescription}
+            />
           </View>
+          
 
         )
       }

@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Linking } from 'react-native';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
-import DeleteProfileModal from '../profile/DeleteProfileModal';
+import DeleteProfileModal from './DeleteProfileModal';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import Ionicons from '@expo/vector-icons/Ionicons';

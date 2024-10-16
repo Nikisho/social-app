@@ -7,6 +7,7 @@ import { selectCurrentUser } from '../../context/navSlice';
 import { FlatList } from 'react-native-gesture-handler';
 import ChatCard from './ChatCard';
 import { useFocusEffect } from '@react-navigation/native';
+import ChatListScreenHeader from './ChatListScreenHeader';
 
 interface ChatDataProps {
   receiver_id: number
@@ -41,7 +42,7 @@ const ChatListScreen = () => {
   );
   return (
     <View className='mx-2'>
-      <Header />
+      <ChatListScreenHeader/>
       <FlatList
         className={`-mx-2 ${'h-[85%]'}`}
         data={receivers}
