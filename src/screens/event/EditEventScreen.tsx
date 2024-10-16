@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { EditEventScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types'
 import { supabase } from '../../../supabase'
 import { TextInput } from 'react-native-gesture-handler'
-import DatePicker from 'react-native-date-picker'
+import DatePicker, { DatePickerProps } from 'react-native-date-picker'
 import styles from '../../utils/styles/shadow'
 import formatDate from '../../utils/functions/formatDate'
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -42,7 +42,7 @@ const EditEventScreen = () => {
             initialEventDataRef.current = data;
         }
     }
-    const handleChange = (name: string, value: string) => {
+    const handleChange = (name: string, value: string | Date) => {
         setEventData((prevData: any) => ({
             ...prevData,
             [name]: value,
@@ -167,7 +167,7 @@ const EditEventScreen = () => {
                             modal
                             open={open}
                             date={eventData.event_date}
-                            onConfirm={(date: any) => {
+                            onConfirm={(date: Date = new Date) => {
                                 setOpen(false)
                                 handleChange('event_date', date)
                                 handleChange('event_time', date.toTimeString().split(' ')[0])

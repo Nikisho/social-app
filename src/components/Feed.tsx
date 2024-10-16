@@ -1,17 +1,19 @@
-import { View, Text, ScrollView, Platform, RefreshControl } from 'react-native'
+import { ScrollView, Platform, RefreshControl } from 'react-native'
 import React, { useState } from 'react'
-import { supabase } from '../../supabase';
 import FeedCard from './FeedCard';
+
+
 interface FeedProps {
   eventList: {
-    name: string
+    user_name: string
     key: number
-    description: string
-    title: string
-    date: Date
-    photo: string
-    time: Date
-    id: number
+    event_description: string
+    event_title: string
+    event_date: string
+    user_photo: string
+    event_time: string
+    event_id: number
+    user_id: number;
   }[];
   fetchEvents: () => void
 }
@@ -30,12 +32,12 @@ const Feed: React.FC<FeedProps> = ({
     }, 2000);
   }, []);
   return (
-    <ScrollView className={Platform.OS === 'ios'? 'h-[89%] z-0' : 'h-5/6'}
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }
+    <ScrollView className={Platform.OS === 'ios' ? 'h-[89%] z-0' : 'h-5/6'}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
-      {eventList?.map((event: any) => (
+      {eventList?.map((event) => (
         <FeedCard
           name={event.user_name}
           key={event.event_id}

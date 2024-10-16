@@ -97,7 +97,7 @@ const ProfileScreen = () => {
   }
 
   const closeModal = () => {
-    setUserData((prevData: any) => ({
+    setUserData((prevData: UserDataProps) => ({
       ...prevData,
       bio: originalBio
     }));
@@ -126,7 +126,7 @@ const ProfileScreen = () => {
       quality: 1,
     });
     if (!result.canceled) {
-      setUserData((prevData: any) => ({
+      setUserData((prevData: UserDataProps) => ({
         ...prevData,
         photo: result.assets[0].uri
       }))

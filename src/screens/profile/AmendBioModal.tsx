@@ -8,20 +8,19 @@ interface UserDataProps {
     age: string;
     photo: string;
     id: number | null;
-    bio: string
-  
-};
+    bio: string;
+}
+
 interface AmendBioModalProps {
     setModalVisible: (bool: boolean) => void;
     updateUserDescription: () => void;
-    closeModal: () =>void
-    setUserData: (userData: any ) => void;
+    closeModal: () => void;
+    setUserData: React.Dispatch<React.SetStateAction<UserDataProps>>;
     modalVisible: boolean;
     userData: {
         bio: string;
-    }
-};
-
+    };
+}
 const AmendBioModal: React.FC<AmendBioModalProps> = ({
     setModalVisible,
     setUserData,
@@ -46,13 +45,11 @@ const AmendBioModal: React.FC<AmendBioModalProps> = ({
                             maxLength={300}
                             value={userData.bio}
                             multiline={true}
-                            onChangeText={(value) => (setUserData((prevData: UserDataProps) => ({
+                            onChangeText={(value) => (setUserData((prevData) => ({
                                 ...prevData,
                                 bio: value
                             })))}
-
                         >
-
                         </TextInput>
                         <View className='flex flex-row space-x-1 justify-center'>
                             <TouchableOpacity

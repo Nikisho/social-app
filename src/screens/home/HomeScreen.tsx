@@ -7,14 +7,16 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../context/navSlice'
 interface eventListProps {
-  name: string
+  user_name: string
   key: number
-  description: string
-  title: string
-  date: Date
-  photo: string
-  time: Date
-  id: number
+  event_description: string
+  event_title: string
+  event_date: string
+  user_photo: string
+  event_time: string
+  event_id: number
+  user_id: number;
+
 }
 const HomeScreen = () => {
   const [eventList, setEventList] = useState<eventListProps[]>();

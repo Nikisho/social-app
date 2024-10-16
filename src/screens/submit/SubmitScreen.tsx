@@ -27,8 +27,8 @@ const SubmitScreen = () => {
         description: ''
     });
     const [open, setOpen] = useState(false)
-    const handleChange = (name: string, value: string) => {
-        setEventDetails((prevData: any | null) => ({
+    const handleChange = (name: string, value: string | Date) => {
+        setEventDetails((prevData: eventDetailsProps) => ({
             ...prevData,
             [name]: value
         }));
@@ -101,7 +101,7 @@ const SubmitScreen = () => {
                 modal
                 open={open}
                 date={eventDetails.date}
-                onConfirm={(date: any) => {
+                onConfirm={(date: Date) => {
                     setOpen(false)
                     handleChange('date', date)
                 }}

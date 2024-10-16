@@ -70,7 +70,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
                     <FlatList
                         data={messages}
                         renderItem={renderItem}
-                        keyExtractor={(item: any) => item.message_id.toString()}
+                        keyExtractor={(item: Message) => item.message_id.toString()}
                         contentContainerStyle={styles.flatListContent}
                         inverted
                     />

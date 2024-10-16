@@ -5,15 +5,15 @@ import FeedCard from '../../components/FeedCard';
 import Feed from '../../components/Feed';
 
 interface eventListProps {
-    name: string
+    user_name: string
     key: number
-    description: string
-    title: string
-    date: Date
-    photo: string
-    time: Date
+    event_description: string
+    event_title: string
+    event_date: string
+    user_photo: string
+    event_time: string
     event_id: number
-    id: number
+    user_id: number
 }
 
 const UserEvents = ({ user_id }: { user_id: number }) => {
