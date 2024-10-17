@@ -20,7 +20,7 @@ export type RootStackParamList = {
   editevent: {event_id: number};
   settings: undefined;
   sendresetlink:undefined;
-  resetpassword:undefined;
+  resetpassword:{access_token: string, refresh_token: string};
 };
 
 // Define the navigation prop types
@@ -31,6 +31,7 @@ export type CommentScreenRouteProp = RouteProp<RootStackParamList, 'comment'>;
 export type EventScreenRouteProp = RouteProp<RootStackParamList, 'event'>;
 export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'profile'>;
 export type EditEventScreenRouteProp = RouteProp<RootStackParamList, 'editevent'>;
+export type ResetPasswordScreenRouteProps = RouteProp<RootStackParamList, 'resetpassword'>;
 
 
 

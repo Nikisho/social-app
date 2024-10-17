@@ -1,18 +1,38 @@
-// ResetPasswordScreen.js
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, Alert, Text, Platform, TouchableOpacity } from 'react-native';
 import { supabase } from '../../../../supabase';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../../utils/types/types';
+import { ResetPasswordScreenRouteProps, RootStackNavigationProp } from '../../../utils/types/types';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import validatePassword from '../../../utils/functions/validatePassword';
 
 const ResetPasswordScreen = () => {
-    const navigation = useNavigation<RootStackNavigationProp>()
-    const route = useRoute();
-    // const { token } = route.params; 
+    const navigation = useNavigation<RootStackNavigationProp>();
     const [newPassword, setNewPassword] = useState('');
+    const route = useRoute<ResetPasswordScreenRouteProps>();
+    const { access_token, refresh_token } = route.params;
+    const isPasswordValid = validatePassword(newPassword);
+
+    const setSession = async () => {
+
+        if (access_token && refresh_token) {
+            const { error } = await supabase.auth.setSession({
+                access_token: access_token,
+                refresh_token: refresh_token
+            });
+            if (error) {
+                throw error.message
+            }
+            console.log('Authenticated')
+        } else {
+            console.log('This did not work')
+        }
+    };
+
+    useEffect(() => {
+        setSession();
+    }, []);
 
     const handlePasswordReset = async () => {
         const { error } = await supabase
@@ -40,6 +60,7 @@ const ResetPasswordScreen = () => {
                     Reset your password
                 </Text>
             </View>
+            
             <TextInput
                 placeholder="Enter your new password"
                 value={newPassword}
@@ -47,9 +68,15 @@ const ResetPasswordScreen = () => {
                 onChangeText={setNewPassword}
                 secureTextEntry
             />
+            {(!isPasswordValid && newPassword !== '') && (
+                <Text className='text-red-500 w-ful mt-1'>
+                    Password must be 6-16 characters long, contain at least one number and one special character.
+                </Text>
+            )}
             <TouchableOpacity
                 onPress={handlePasswordReset}
-                className='py-5 bg-blue-500 flex flex-row justify-center my-5 rounded-lg'>
+                disabled={!isPasswordValid}
+                className={`py-5 bg-blue-500 flex flex-row justify-center my-5 rounded-lg ${!isPasswordValid && 'opacity-40'}`}>
                 <Text className='text-white font-bold'>
                     Confirm
                 </Text>

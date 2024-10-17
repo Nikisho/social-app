@@ -12,7 +12,7 @@ import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
-import { Keyboard, SafeAreaView } from 'react-native';
+import { Keyboard, Linking, SafeAreaView } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
@@ -31,156 +31,158 @@ import ResetPasswordScreen from './src/screens/authentication/passwordReset/Rese
 
 const Stack = createStackNavigator();
 const mainTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: colours.primaryColour
-  },
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		background: colours.primaryColour
+	},
 };
 
 // fix provider bug for redux
 export default function AppWrapper() {
-  return (
-    <Provider store={store}>
-      <App />
-    </Provider>
-  )
+	return (
+		<Provider store={store}>
+			<App />
+		</Provider>
+	)
 }
 
 function App() {
-  const currentUser = useSelector(selectCurrentUser);
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState<boolean>(true);
+	
+	const currentUser = useSelector(selectCurrentUser);
+	const dispatch = useDispatch();
+	const [loading, setLoading] = useState<boolean>(true);
 
-  const setSession = async () => {
-    const accessToken = await AsyncStorage.getItem('userAccessToken');
-    const refreshToken = await AsyncStorage.getItem('userRefreshToken');
+	const setSession = async () => {
+		const accessToken = await AsyncStorage.getItem('userAccessToken');
+		const refreshToken = await AsyncStorage.getItem('userRefreshToken');
+		// const { params, errorCode } =
 
-    if (accessToken && refreshToken) {
-      await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
-    } else {
-      setLoading(false);
-    }
-  }
-  const fetchSession = async () => {
-    await setSession();
-    const { data: { session: user } } = await supabase.auth.getSession();
-    if (!user) {
-      setLoading(false);
-      return
-    };
-    const { data, error } = await supabase
-      .from('users')
-      .select()
-      .eq('uid', user.user.id);
+		if (accessToken && refreshToken) {
+			await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+		} else {
+			setLoading(false);
+		}
+	};
 
-    if (error) throw error.message;
+	const fetchSession = async () => {
+		await setSession();
+		const { data: { session: user } } = await supabase.auth.getSession();
+		if (!user) {
+			setLoading(false);
+			return
+		};
+		const { data, error } = await supabase
+			.from('users')
+			.select()
+			.eq('uid', user.user.id);
 
-    if (data) {
-      dispatch(setCurrentUser({
-        name: data[0].name,
-        email: data[0].email,
-        photo: data[0].photo,
-        id: data[0].id
-      }))
-    }
-    setLoading(false);
-  }
+		if (error) throw error.message;
 
-  useEffect(() => {
-    fetchSession();
-  }, []);
+		if (data) {
+			dispatch(setCurrentUser({
+				name: data[0].name,
+				email: data[0].email,
+				photo: data[0].photo,
+				id: data[0].id
+			}))
+		}
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		fetchSession();
+	}, []);
+
+	const linking = {
+		prefixes: ['com.linkzy://', 'https://com.linkzy'], // Your app's scheme and web URL
+		config: {
+			screens: {
+				resetpassword: 'resetpassword'// This should match the Stack.Screen name
+			},
+		},
+	};
 
 
-  const linking = {
-    prefixes: ['com.linkzy://', 'https://com.linkzy'], // Your app's scheme and web URL
-    config: {
-      screens: {
-        resetpassword: 'resetpassword'// This should match the Stack.Screen name
-      },
-    },
-  };
-  
 
+	if (loading) {
+		return <LoadingScreen />
+	}
 
-  if (loading) {
-    return <LoadingScreen />
-  }
+	return (
+		<SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
+			<NavigationContainer theme={mainTheme} linking={linking} >
+				<Stack.Navigator screenOptions={{
+					headerShown: false
+				}} >
+					{currentUser.id === null ?
+						(
+							<>
+								<Stack.Screen name="signup" component={SignUpScreen} />
+								<Stack.Screen name="signin" component={SignInScreen} />
+								<Stack.Screen name="emailsignup" component={EmailSignUp} />
+								<Stack.Screen name="emailsignin" component={EmailSignIn} />
+								<Stack.Screen name="eula" component={EulaScreen} />
+								<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
+								<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
 
-  return (
-    <SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
-      <NavigationContainer theme={mainTheme} linking={linking} >
-        <Stack.Navigator screenOptions={{
-          headerShown: false
-        }} >
-          {currentUser.id === null ?
-            (
-              <>
-                <Stack.Screen name="signup" component={SignUpScreen} />
-                <Stack.Screen name="signin" component={SignInScreen} />
-                <Stack.Screen name="emailsignup" component={EmailSignUp} />
-                <Stack.Screen name="emailsignin" component={EmailSignIn} />
-                <Stack.Screen name="eula" component={EulaScreen} />
-                <Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
-                <Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
+							</>
+						) : (
+							<>
+								<Stack.Screen name="home" component={HomeScreen} />
+								<Stack.Screen name="profile" component={ProfileScreen} />
+								<Stack.Screen name="submit" component={SubmitScreen} />
+								<Stack.Screen name="event" component={EventScreen} />
+								<Stack.Screen name="editevent" component={EditEventScreen} />
+								<Stack.Screen name="comment" component={SubmitCommentScreen} />
+								<Stack.Screen name="chatlist" component={ChatListScreen} />
+								<Stack.Screen name="chat" component={ChatScreen} />
+								<Stack.Screen name="search" component={SearchScreen} />
+								<Stack.Screen name="eula" component={EulaScreen} />
+								<Stack.Screen name="settings" component={SettingsScreen} />
+							</>
+						)
+					}
+				</Stack.Navigator>
 
-              </>
-            ) : (
-              <>
-                <Stack.Screen name="home" component={HomeScreen} />
-                <Stack.Screen name="profile" component={ProfileScreen} />
-                <Stack.Screen name="submit" component={SubmitScreen} />
-                <Stack.Screen name="event" component={EventScreen} />
-                <Stack.Screen name="editevent" component={EditEventScreen} />
-                <Stack.Screen name="comment" component={SubmitCommentScreen} />
-                <Stack.Screen name="chatlist" component={ChatListScreen} />
-                <Stack.Screen name="chat" component={ChatScreen} />
-                <Stack.Screen name="search" component={SearchScreen} />
-                <Stack.Screen name="eula" component={EulaScreen} />
-                <Stack.Screen name="settings" component={SettingsScreen} />
-              </>
-            )
-          }
-        </Stack.Navigator>
-
-        {/* Only show the conditional navbar if the user is logged in */}
-        {
-          currentUser.id &&
-          <ConditionalNavbar />
-        }
-      </NavigationContainer>
-    </SafeAreaView>
-  );
+				{/* Only show the conditional navbar if the user is logged in */}
+				{
+					currentUser.id &&
+					<ConditionalNavbar />
+				}
+			</NavigationContainer>
+		</SafeAreaView>
+	);
 }
 
 const ConditionalNavbar = () => {
 
-  //Hide the navbar if the kayboard is up and if we're pn the chat screeen.
-  const currentRouteName = useNavigationState(state => state?.routes[state.index]?.name);
+	//Hide the navbar if the kayboard is up and if we're pn the chat screeen.
+	const currentRouteName = useNavigationState(state => state?.routes[state.index]?.name);
 
-  // Determine whether to show the Navbar
-  const showNavbar = currentRouteName !== 'chat';
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => setKeyboardVisible(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => setKeyboardVisible(false)
-    );
+	// Determine whether to show the Navbar
+	const showNavbar = currentRouteName !== 'chat';
+	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+	useEffect(() => {
+		const keyboardDidShowListener = Keyboard.addListener(
+			'keyboardDidShow',
+			() => setKeyboardVisible(true)
+		);
+		const keyboardDidHideListener = Keyboard.addListener(
+			'keyboardDidHide',
+			() => setKeyboardVisible(false)
+		);
 
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-  return (
-    <>
-      {showNavbar &&
-        !isKeyboardVisible &&
-        <Navbar />}
-    </>
-  );
+		return () => {
+			keyboardDidShowListener.remove();
+			keyboardDidHideListener.remove();
+		};
+	}, []);
+	return (
+		<>
+			{showNavbar &&
+				!isKeyboardVisible &&
+				<Navbar />}
+		</>
+	);
 };

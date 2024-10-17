@@ -8,12 +8,12 @@ import * as Linking from 'expo-linking';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import { handleUrl } from '../../../utils/functions/handleUrl';
 
 const SendResetLinkScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [email, setEmail] = useState<string>('');
     const isEmailValid = validateEmail(email);
-    const resetScreenUrl = Linking.createURL('resetpassword');
 
     const sendResetLink = async () => {
         if (!isEmailValid) {
@@ -23,41 +23,25 @@ const SendResetLinkScreen = () => {
                 Alert.alert("Please enter a valid email address")
             return;
         }
-
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'com.linkzy://resetpassword',  // This uses Linking to generate the full URL
+            redirectTo: 'com.linkzy://resetpassword', 
         });
         if (error) throw error.message;
-
-
         Platform.OS === 'android' ?
             ToastAndroid.show("We've send you a link to reset your password.", ToastAndroid.SHORT)
             :
             Alert.alert("We've send you a link to reset your password.")
     };
-
+ 
     useEffect(() => {
-        const handleDeepLink = (url: string) => {
-            const route = url.replace(/.*?:\/\//g, ''); // Remove the scheme
-            console.log('Deep link URL:', url); // Debugging
-            if (route === 'com.linkzy/resetpassword') {
-                navigation.navigate('resetpassword'); // Navigate to the reset password screen
-            }
-        };
-
-        const subscription = Linking.addEventListener('url', ({ url }) => handleDeepLink(url));
-
-        // Handle the initial URL if the app was opened by a link
+        const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url, navigation));
         Linking.getInitialURL().then((url) => {
-            if (url) {
-                handleDeepLink(url);
-            }
+            if (url) {handleUrl(url, navigation);}
         });
-
         return () => {
             subscription.remove();
         };
-    }, [navigation]); // Ensure navigation is in the dependency array
+    }, []);
 
     return (
         <View className='flex h-1/2 justify-center px-5'>
@@ -94,3 +78,5 @@ const SendResetLinkScreen = () => {
 }
 
 export default SendResetLinkScreen
+
+
