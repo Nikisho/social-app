@@ -37,7 +37,7 @@ const DropdownMenu:React.FC<DropDownManuProps> = ({
                 </TouchableOpacity>
                 <TouchableOpacity 
                     onPress={signOut}
-                    className='p-3 border-t bg-white rounded-bl-xl rounded-br-xl flex items-center flex-row space-x-4' style={styles.shadowButtonStyle}>
+                    className='p-3  bg-white rounded-bl-xl rounded-br-xl flex items-center flex-row space-x-4' style={styles.shadowButtonStyle}>
                     <MaterialIcons name="logout" size={22} color="white" />
                     <Text className='text-white font-semibold'>Sign out</Text>
                 </TouchableOpacity>

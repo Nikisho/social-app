@@ -42,7 +42,7 @@ const UserInterestsForm:React.FC<UserPhotoFormProps> = ({
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
+            <View className='flex mt-14 mb-6'>
                 <Text style={styles.headerText}>
                     Help us match you with the right experiences!
                 </Text>
@@ -88,13 +88,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        paddingVertical: 16,
+        paddingVertical: 10, // You can adjust this value to reduce space
     },
     headerContainer: {
         marginLeft: 8,
         width: '80%',
         marginBottom: 0,
         flex: 1,
+        marginTop: 20, // Adjust this value to reduce the space between header and ScrollView
     },
     headerText: {
         fontSize: 20,
@@ -137,6 +138,6 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         width: '100%',
-        height: '65%',
+        height: '60%',
     },
 });

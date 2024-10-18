@@ -9,7 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 
 
-const GoogleSignUp = () => {
+const GoogleSignUp = ({
+    isChecked
+}: {isChecked: boolean}) => {
 
     GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
     const navigation = useNavigation<RootStackNavigationProp>();
@@ -76,11 +78,11 @@ const GoogleSignUp = () => {
     return (
         <View className=' flex w-5/6 items-center self-center mt-2' >
 
-            <TouchableOpacity className='w-full bg-white px-5 py-4 rounded-full flex flex-row 
-                                items-center'
+            <TouchableOpacity className={`w-full bg-white px-5 py-4 rounded-full flex flex-row 
+                                items-center ${!isChecked && 'opacity-50'}`}
                 style={styles.shadow}
                 onPress={handleSignIn}
-                disabled={loading}
+                disabled={loading || !isChecked}
             >
                 <AntDesign name="google" size={24} color="red" />
                 <Text className=' font-semibold text-lg ml-12'>

@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { SetStateAction, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -10,6 +10,7 @@ import LikeHandler from './LikeHandler';
 import { RootStackNavigationProp } from '../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import FeedCardOptionsModal from './FeedCardOptionsModal';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface FeedCardProps {
     name: string;

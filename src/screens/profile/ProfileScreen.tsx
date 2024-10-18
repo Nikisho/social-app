@@ -246,10 +246,25 @@ const ProfileScreen = () => {
             </View>
 
             <ScrollView>
-              <Text className='text-sm'
-              >
-                {userData.bio}
-              </Text>
+
+              {
+                userData.bio? 
+                <Text className='text-sm'
+                >
+                  {userData.bio}
+                </Text> :
+                <View className='w-full flex items-center justify-center'>
+                  {currentUser.id === user_id? 
+                  <Text>
+                    Add a description to help others know you better!
+                  </Text> :
+                  <Text>
+                    This user has not added a description
+                  </Text>
+                  }
+                </View>
+              }
+
             </ScrollView>
             <AmendBioModal 
               setModalVisible={setModalVisible}

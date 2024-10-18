@@ -9,7 +9,7 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 
 
 const AppleSignUp = (
-
+    {isChecked}: {isChecked: boolean}
 ) => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation<RootStackNavigationProp>();
@@ -79,9 +79,9 @@ const AppleSignUp = (
         <View className='flex w-5/6 items-center self-center mt-2'>
             <TouchableOpacity
                 onPress={handleSignIn}
-                disabled={loading}
-                className='w-full bg-black px-5 py-4 rounded-full flex flex-row 
-                           items-center'>
+                disabled={loading || !isChecked}
+                className={`w-full bg-black px-5 py-4 rounded-full flex flex-row 
+                           items-center ${!isChecked && 'opacity-50'}`}>
                 <AntDesign name="apple1" size={24} color="white" />
                 <Text className='text-white font-bold text-lg ml-12'>Continue with apple</Text>
             </TouchableOpacity>

@@ -49,11 +49,12 @@ export default function AppWrapper() {
 }
 
 function App() {
-	
+
 	const currentUser = useSelector(selectCurrentUser);
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
+	console.log(inCompleteSignUp) 
 	const setSession = async () => {
 		const accessToken = await AsyncStorage.getItem('userAccessToken');
 		const refreshToken = await AsyncStorage.getItem('userRefreshToken');
@@ -88,10 +89,10 @@ function App() {
 				photo: data[0].photo,
 				id: data[0].id
 			}))
-		} else {
-			setIncompleteSignUp(!inCompleteSignUp);
-			setLoading(false);
-
+			if (data.length === 0) {
+				setIncompleteSignUp(true);
+				setLoading(false);
+			};
 		}
 		setLoading(false);
 	};
@@ -112,11 +113,9 @@ function App() {
 
 
 	if (loading) {
-		return <LoadingScreen />
+		return <LoadingScreen displayText='Loading...' />
 	}
-	if (inCompleteSignUp) {
-		return <UserDetailsScreen/>
-	}
+
 
 	return (
 		<SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
@@ -127,14 +126,21 @@ function App() {
 					{currentUser.id === null ?
 						(
 							<>
-								<Stack.Screen name="signup" component={SignUpScreen} />
-								<Stack.Screen name="signin" component={SignInScreen} />
-								<Stack.Screen name="emailsignup" component={EmailSignUp} />
-								<Stack.Screen name="emailsignin" component={EmailSignIn} />
-								<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
-								<Stack.Screen name="eula" component={EulaScreen} />
-								<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
-								<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
+								{
+									inCompleteSignUp ? (
+										<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
+									) :
+										<>
+											<Stack.Screen name="signup" component={SignUpScreen} />
+											<Stack.Screen name="signin" component={SignInScreen} />
+											<Stack.Screen name="emailsignup" component={EmailSignUp} />
+											<Stack.Screen name="emailsignin" component={EmailSignIn} />
+											<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
+											<Stack.Screen name="eula" component={EulaScreen} />
+											<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
+											<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
+										</>
+								}
 
 							</>
 						) : (

@@ -4,7 +4,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker';
 
 interface UserDataProps {
-    photo: string | null;
+    photo: ImagePicker.ImagePickerAsset | null;
 };
 
 interface UserPhotoFormProps extends UserDataProps {
@@ -34,7 +34,7 @@ const UserPhotoForm: React.FC<UserPhotoFormProps> = ({
             quality: 1,
         });
         if (!result.canceled) {
-            updateFields({ photo: result.assets[0].uri })
+            updateFields({ photo: result.assets[0]})
         }
     }
     return (
@@ -53,7 +53,7 @@ const UserPhotoForm: React.FC<UserPhotoFormProps> = ({
                 {
                     photo ?
                         <Image
-                            source={{ uri: `${photo}` }}
+                            source={{ uri: `${photo.uri}` }}
                             className='h-52 w-52 rounded-full '
                         /> :
                         <MaterialCommunityIcons 

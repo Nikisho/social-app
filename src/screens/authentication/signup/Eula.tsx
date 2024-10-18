@@ -1,11 +1,18 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import Checkbox from 'expo-checkbox'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../../utils/types/types'
 
-const Eula = () => {
-    const [isChecked, setChecked] = useState(false);
+interface EulaProps {
+    isChecked: boolean,
+    setChecked: (bool: boolean) => void;
+}
+
+const Eula:React.FC<EulaProps> = ({
+    isChecked,
+    setChecked
+}) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     return (
         <View className='absolute bottom-32 flex flex-row left-20'>
