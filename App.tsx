@@ -12,7 +12,7 @@ import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
-import { Keyboard, Linking, SafeAreaView } from 'react-native';
+import { Keyboard, SafeAreaView } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
@@ -28,6 +28,7 @@ import EulaScreen from './src/screens/eula/EulaScreen';
 import SettingsScreen from './src/screens/settings/SettingsScreen';
 import SendResetLinkScreen from './src/screens/authentication/passwordReset/SendResetLinkScreen';
 import ResetPasswordScreen from './src/screens/authentication/passwordReset/ResetPasswordScreen';
+import UserDetailsScreen from './src/screens/authentication/signup/UserDetailsScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -52,11 +53,10 @@ function App() {
 	const currentUser = useSelector(selectCurrentUser);
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
-
+	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
 	const setSession = async () => {
 		const accessToken = await AsyncStorage.getItem('userAccessToken');
 		const refreshToken = await AsyncStorage.getItem('userRefreshToken');
-		// const { params, errorCode } =
 
 		if (accessToken && refreshToken) {
 			await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
@@ -68,6 +68,7 @@ function App() {
 	const fetchSession = async () => {
 		await setSession();
 		const { data: { session: user } } = await supabase.auth.getSession();
+		console.log(user)
 		if (!user) {
 			setLoading(false);
 			return
@@ -79,13 +80,18 @@ function App() {
 
 		if (error) throw error.message;
 
-		if (data) {
+		if (data && data.length > 0) {
+			console.log(data)
 			dispatch(setCurrentUser({
 				name: data[0].name,
 				email: data[0].email,
 				photo: data[0].photo,
 				id: data[0].id
 			}))
+		} else {
+			setIncompleteSignUp(!inCompleteSignUp);
+			setLoading(false);
+
 		}
 		setLoading(false);
 	};
@@ -108,6 +114,9 @@ function App() {
 	if (loading) {
 		return <LoadingScreen />
 	}
+	if (inCompleteSignUp) {
+		return <UserDetailsScreen/>
+	}
 
 	return (
 		<SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
@@ -122,6 +131,7 @@ function App() {
 								<Stack.Screen name="signin" component={SignInScreen} />
 								<Stack.Screen name="emailsignup" component={EmailSignUp} />
 								<Stack.Screen name="emailsignin" component={EmailSignIn} />
+								<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
 								<Stack.Screen name="eula" component={EulaScreen} />
 								<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
 								<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />

@@ -3,22 +3,16 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { supabase } from '../../../../supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
-import { setCurrentUser } from '../../../context/navSlice';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 
-interface AppleSignUpProps {
-    name: string;
-    age: string | null;
-}
 
-const AppleSignUp:React.FC<AppleSignUpProps> = ({
-    name,
-    age
-}) => {
+const AppleSignUp = (
 
-    const dispatch = useDispatch();
+) => {
     const [loading, setLoading] = useState<boolean>(false);
+    const navigation = useNavigation<RootStackNavigationProp>();
     const handleSignIn = async () => {
         setLoading(true);
         try {
@@ -29,68 +23,61 @@ const AppleSignUp:React.FC<AppleSignUpProps> = ({
                 ],
             });
 
-
-            //Authenticate with supabase//
             if (credential.identityToken) {
-                const { error: AuthUserError, data: { session }} = await supabase.auth.signInWithIdToken({
-                  provider: 'apple',
-                  token: credential.identityToken,
+
+                const { data: existingUser } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('uid', credential.email);
+
+                if ( existingUser && existingUser?.length > 0) {
+                    alert("It looks like you already have an account. Please sign in instead.");
+                    navigation.navigate('signin');
+                    setLoading(true);
+                    return;
+                }
+
+                const { error: AuthUserError, data: { session } } = await supabase.auth.signInWithIdToken({
+                    provider: 'apple',
+                    token: credential.identityToken,
                 });
 
-                if (AuthUserError) {throw AuthUserError.message};
+                if (AuthUserError) { throw AuthUserError.message };
 
                 if (session) {
                     await AsyncStorage.setItem('userAccessToken', session.access_token);
                     await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
-
-                    const { error, data } = await supabase
-                    .from('users')
-                    .insert({
-                        name: name,
-                        email: session.user.email,
-                        uid: session.user.id,
-                        age: age,
-                        auth_provider: 'apple'
-                    })
-                    .select('id');
-
-                    if (error) {
-                        if (error.code === '23505') {
-                            Alert.alert('You already have an account, just sign in!');
-                            setLoading(false);
-                            return;
-                        }
-                        throw error.message;
-                    }
-
-                    if (data) {
-                        dispatch(setCurrentUser({
-                            name: name,
-                            email: session.user.email,
-                            id: data[0].id
-                        }))
-                    }
+                    navigation.navigate('userdetailsscreen');
                 }
 
-              } else {
-                throw new Error('No identityToken.');
-              }
-              ///////////////////////////////
-
-            // signed in
-        } catch (e: any) {
-            if (e.code === 'ERR_REQUEST_CANCELED') {
-                // handle that the user canceled the sign-in flow
             } else {
-                // handle other errors
+                throw new Error('No identityToken.');
+            }
+
+        } catch (e: any) {
+            switch (e.code) {
+                case 'ERR_REQUEST_CANCELED':
+                    console.log('User canceled the Apple sign-in flow.');
+                    Alert.alert('You canceled the sign-in process. Please try again if you wish to continue.');
+                    break;
+                case 'ERR_UNSUPPORTED_PLATFORM':
+                    console.log('Apple sign-in is not supported on this platform.');
+                    Alert.alert('Apple sign-in is not supported on this device.');
+                    break;
+                case 'ERR_NETWORK':
+                    console.log('Network error occurred during Apple sign-in.');
+                    Alert.alert('A network issue occurred. Please check your connection and try again.');
+                    break;
+                default:
+                    console.error('Unknown Apple sign-in error:', e.message);
+                    Alert.alert('An unknown error occurred. Please try again later.');
             }
         }
         setLoading(false);
     };
-
     return (
         <View className='flex w-5/6 items-center self-center mt-2'>
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={handleSignIn}
                 disabled={loading}
                 className='w-full bg-black px-5 py-4 rounded-full flex flex-row 

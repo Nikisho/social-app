@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { TextInput } from 'react-native-gesture-handler'
 import DatePicker from 'react-native-date-picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { supabase } from '../../../supabase';

@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity, Alert, ToastAndroid, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ToastAndroid, Platform, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { TextInput } from 'react-native-gesture-handler'
 import styles from '../../../utils/styles/shadow';
 import { supabase } from '../../../../supabase';
 import { useDispatch } from 'react-redux';
@@ -50,6 +49,7 @@ const EmailSignIn = () => {
 					:
 					Alert.alert('We could not authenticate you');
 				setLoading(false);
+				navigation.navigate('userdetailsscreen')
 				return;
 			}
 			//Fetch data once user is retrieved, and add to context

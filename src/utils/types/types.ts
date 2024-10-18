@@ -11,7 +11,7 @@ export type RootStackParamList = {
   chat: {user_id:number};
   chatlist: undefined;
   search: undefined;
-  emailsignup: {name:string, age:string | null};
+  emailsignup: undefined;
   emailsignin: undefined;
   submit: undefined;
   signup:undefined;
@@ -20,6 +20,7 @@ export type RootStackParamList = {
   editevent: {event_id: number};
   settings: undefined;
   sendresetlink:undefined;
+  userdetailsscreen: undefined;
   resetpassword:{access_token: string, refresh_token: string};
 };
 

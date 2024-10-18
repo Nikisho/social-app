@@ -1,8 +1,6 @@
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
 import React from 'react';
 import colours from '../../utils/styles/colours';
-import { FlatList } from 'react-native-gesture-handler';
-import formatTime from '../../utils/functions/formatTime';
 import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 
 interface Message {

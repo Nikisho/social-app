@@ -1,9 +1,8 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
-import { ScrollView } from 'react-native-gesture-handler';
 
 interface evenDetailsProps {
     user_name: string;

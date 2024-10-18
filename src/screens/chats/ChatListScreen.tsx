@@ -1,10 +1,8 @@
-import { View, Text, ListRenderItem, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Header from '../../components/Header'
+import { View, ListRenderItem, FlatList } from 'react-native'
+import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
-import { FlatList } from 'react-native-gesture-handler';
 import ChatCard from './ChatCard';
 import { useFocusEffect } from '@react-navigation/native';
 import ChatListScreenHeader from './ChatListScreenHeader';

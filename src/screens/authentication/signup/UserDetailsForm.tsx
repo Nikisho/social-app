@@ -1,6 +1,5 @@
-import { View, Text, Platform } from 'react-native'
+import { View, Text, Platform, TextInput } from 'react-native'
 import React from 'react'
-import { TextInput } from 'react-native-gesture-handler'
 
 interface UserDataProps {
     name: string;
@@ -18,26 +17,26 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
 }) => {
     return (
         <View className='flex flex-col w-full h-1/2 items-center justify-end space-y-3 '>
-            <View className=' h-1/3 space-y-3'>
-                <Text className='text-2xl font-bold'>
-                    Welcome to Linkzy!
+            <View className='ml-2 w-5/6 mb-5 flex'>
+                <Text className=' text-xl font-bold'>
+                    Let’s personalize your experience!
                 </Text>
-                <Text>
-                Please tell us your name to get started.
+                <Text className='py-1'>
+                    Please enter your name to get started.
                 </Text>
             </View>
+            <View className='w-5/6 space-y-1 '>
 
-            <View className='w-5/6 space-y-1'>
                 <Text className='ml-2 text-lg font-bold'>
                     Name
                 </Text>
                 <TextInput
                     placeholder='Enter username '
-                    className={` px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios'? 'py-4' : 'py-2'}`}
+                    className={` px-5 flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
                     value={name}
                     maxLength={15}
                     onChangeText={(value) => updateFields({ name: value.replace(/[^a-z0-9_]/gi, '') })}
-                    />
+                />
 
             </View>
             <View className='w-5/6 space-y-1'>

@@ -1,6 +1,5 @@
-import { View, Text, Platform, TouchableOpacity, ToastAndroid, Alert } from 'react-native'
+import { View, Text, Platform, TouchableOpacity, ToastAndroid, Alert, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { TextInput } from 'react-native-gesture-handler';
 import validateEmail from '../../../utils/functions/validateEmail';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { supabase } from '../../../../supabase';

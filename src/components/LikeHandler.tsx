@@ -1,9 +1,8 @@
-import { View, Text, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import getLikeCount from '../utils/functions/getLikeCount';
 import { supabase } from '../../supabase';
 import hasUserLikedEvent from '../utils/functions/hasUserLikedEvent';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 

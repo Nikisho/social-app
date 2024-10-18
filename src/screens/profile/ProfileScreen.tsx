@@ -1,11 +1,10 @@
-import { View, Text, Image, Alert, TouchableOpacity, ToastAndroid, Platform } from 'react-native'
+import { View, Text, Image, Alert, TouchableOpacity, ToastAndroid, Platform, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import UserEvents from './UserEvents';
 import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../supabase';
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from '../../utils/styles/shadow';
-import { ScrollView} from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import { useNavigation, useRoute } from '@react-navigation/native';

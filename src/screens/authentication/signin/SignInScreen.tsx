@@ -1,6 +1,5 @@
-import { View, Text, Platform } from 'react-native'
+import { View, Text, Platform, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import styles from '../../../utils/styles/shadow'
 import { useNavigation } from '@react-navigation/native'
 import GoogleSignIn from './GoogleSignIn'

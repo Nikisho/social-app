@@ -1,7 +1,6 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { TextInput } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import styles from '../../utils/styles/shadow';

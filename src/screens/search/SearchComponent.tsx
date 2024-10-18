@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React from 'react'
-import { TextInput } from 'react-native-gesture-handler'
 import styles from '../../utils/styles/shadow';
 
 interface SearchComponentProps {

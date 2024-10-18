@@ -1,10 +1,9 @@
-import { View, Text, TouchableOpacity, ToastAndroid, Platform, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, ToastAndroid, Platform, Alert, TextInput } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { EditEventScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types'
 import { supabase } from '../../../supabase'
-import { TextInput } from 'react-native-gesture-handler'
-import DatePicker, { DatePickerProps } from 'react-native-date-picker'
+import DatePicker from 'react-native-date-picker'
 import styles from '../../utils/styles/shadow'
 import formatDate from '../../utils/functions/formatDate'
 import AntDesign from '@expo/vector-icons/AntDesign';

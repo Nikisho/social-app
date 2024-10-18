@@ -1,116 +1,56 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import styles from '../../../utils/styles/shadow';
-import { useNavigation } from '@react-navigation/native';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { useMultistepForm } from '../../../hooks/useMultistepForm';
-import UserDetailsForm from './UserDetailsForm';
-import SignUpMethodForm from './SignUpMethodForm';
-import colours from '../../../utils/styles/colours';
-import { RootStackNavigationProp } from '../../../utils/types/types';
-import Checkbox from 'expo-checkbox';
+import { View, Text, Platform, TouchableOpacity } from 'react-native'
+import React from 'react'
+import styles from '../../../utils/styles/shadow'
+import { useNavigation } from '@react-navigation/native'
+import { RootStackNavigationProp } from '../../../utils/types/types'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import GoogleSignUp from './GoogleSignUp'
+import AppleSignUp from './AppleSignUp'
+import Eula from './Eula'
 
-interface UserDataProps {
-    name: string;
-    age: string | null;
-}
-const SignUpScreen = () => {
+const SignInScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
-    const [isChecked, setChecked] = useState(false);
-    const [userDetails, setUserDetails] = useState<UserDataProps>({
-        name: '',
-        age: null
-    });
-    const {
-        steps,
-        currentStepIndex,
-        step,
-        isFirstStep,
-        isLastStep,
-        next,
-        back
-    } = useMultistepForm(
-        [
-            <UserDetailsForm {...userDetails} updateFields={updateFields} />,
-            <SignUpMethodForm
-                name={userDetails.name}
-                age={userDetails.age}
-            />
-        ]);
-
-    function updateFields(fields: Partial<UserDataProps>) {
-        setUserDetails(prev => {
-            return { ...prev, ...fields }
-        })
-    };
     return (
-        <View className='flex items-center space-y-5 h-full '>
-            {step}
+        <View className='flex items-center space-y-5 h-full'>
+            <View className='w-full flex  space-y-3 h-1/2 justify-center'>
+                <View className=' h-1/3 space-y-3 self-center'>
+                    <Text className='text-2xl font-bold'>
+                        Sign Up to Linkzy Now 🚀
+                    </Text>
+                    <Text>
+                        Please choose one of the options below.
+                    </Text>
+                </View>
+                <View className='w-full flex space-y-3'>
+                    <TouchableOpacity
+                        onPress={() => { navigation.navigate('emailsignup') }}
+                        style={styles.shadowButtonStyle} className='px-5 py-4 self-center w-5/6 flex flex-row items-center rounded-full'>
 
-            {
-                !isFirstStep && (
-                    <View className='w-2/3'>
-
-                        <TouchableOpacity onPress={back}
-                            style={{ backgroundColor: colours.secondaryColour }}
-
-                            className='p-2 rounded-full self-start'
-                        >
-                            <AntDesign name="arrowleft" size={24} color="white" />
-
-                        </TouchableOpacity>
-                    </View>
-
-                )
-            }
-            {
-                !isLastStep && (
-                    <View className='w-2/3'>
-
-                        <TouchableOpacity onPress={next}
-                            style={{ backgroundColor: colours.secondaryColour }}
-                            className={`p-2 rounded-full self-end ${userDetails.name === '' || !isChecked ? 'opacity-50' : ''}`}
-                            disabled={userDetails.name === '' || !isChecked}
-                        >
-                            <AntDesign name="arrowright" size={24} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
-
-            {
-                isFirstStep && (
-
-                    <View className='absolute bottom-32 flex flex-row left-20'>
-                        <Checkbox
-                            value={isChecked} onValueChange={setChecked}
-                            className='mt-1'
-                        />
-                        <View>
-                            <Text onPress={() => navigation.navigate('eula')} className='w-4/5 ml-2 text-blue-600 underline'>
-                                I agree to Linkzy's End User License Agreement (EULA).
-                            </Text>
-                        </View>
-                    </View>
-
-                )
-            }
-            <View className='absolute bottom-16 flex-row space-x-2'>
-                <Text className=' font-semibold p-3 '>Already have an acccount?</Text>
+                        <MaterialIcons name="email" size={24} color="white" />
+                        <Text className='text-lg font-bold text-white ml-8'>
+                            Use email and password
+                        </Text>
+                    </TouchableOpacity>
+                    <GoogleSignUp/>
+                    {
+                        Platform.OS === 'ios' && (
+                            <AppleSignUp />
+                        )
+                    }
+                </View>
+            </View>
+            <Eula/>
+            <View className='absolute bottom-16 flex-row space-x-2' >
+                <Text className=' font-semibold p-3'>Already have an account?</Text>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('signin')}
                     style={styles.shadowButtonStyle}
-                    className=' py-3 px-4 rounded-full'>
-                    <Text className='font-bold text-white'>Sign in</Text>
-                </TouchableOpacity>
+                    className=' py-3 px-4 rounded-full'><Text className='font-semibold text-white'>Sign In</Text></TouchableOpacity>
             </View>
+
         </View>
+
     )
 }
 
-
-
-export default SignUpScreen;
-
-
-
+export default SignInScreen
