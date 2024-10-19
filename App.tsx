@@ -54,7 +54,6 @@ function App() {
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
-	console.log(inCompleteSignUp) 
 	const setSession = async () => {
 		const accessToken = await AsyncStorage.getItem('userAccessToken');
 		const refreshToken = await AsyncStorage.getItem('userRefreshToken');
@@ -69,7 +68,6 @@ function App() {
 	const fetchSession = async () => {
 		await setSession();
 		const { data: { session: user } } = await supabase.auth.getSession();
-		console.log(user)
 		if (!user) {
 			setLoading(false);
 			return
@@ -102,10 +100,10 @@ function App() {
 	}, []);
 
 	const linking = {
-		prefixes: ['com.linkzy://', 'https://com.linkzy'], // Your app's scheme and web URL
+		prefixes: ['com.linkzy://', 'https://com.linkzy'], 
 		config: {
 			screens: {
-				resetpassword: 'resetpassword'// This should match the Stack.Screen name
+				resetpassword: 'resetpassword'
 			},
 		},
 	};

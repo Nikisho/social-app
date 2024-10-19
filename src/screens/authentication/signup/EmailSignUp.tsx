@@ -49,7 +49,10 @@ const EmailSignUp = () => {
 			})
 			if ( AuthUserError) {
 				setLoading(false);
-				throw AuthUserError.message;
+				if (AuthUserError.code === 'user_already_exists') {
+					Alert.alert("Please sign in to finish setting up your profile");
+					navigation.navigate('signin');
+				}
 			}
 			if (session) {
 				await AsyncStorage.setItem('userAccessToken', session.access_token);
