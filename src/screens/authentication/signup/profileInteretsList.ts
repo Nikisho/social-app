@@ -171,6 +171,7 @@ const interestGroups = [
         name: 'Music',
         code: 11,
         interests: [
+            { description: '🎵 Afrobeats', code: 210 },
             { description: '🎵 Alternative', code: 127 },
             { description: '🎵 Blues', code: 128 },
             { description: '🎵 Classical', code: 129 },

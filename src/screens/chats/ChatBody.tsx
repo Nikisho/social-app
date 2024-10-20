@@ -44,13 +44,14 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
                 {
                     item.content && (
                         <Text
-                        style={{
-                            color: isCurrentUser ? '#ffffff' : '#000000',
-                            fontSize: 16,
-                        }}
-                    >
-                        {item.content}
-                    </Text>
+                            selectable={true}
+                            style={{
+                                color: isCurrentUser ? '#ffffff' : '#000000',
+                                fontSize: 16,
+                            }}
+                        >
+                            {item.content}
+                        </Text>
                     )
                 }
 
