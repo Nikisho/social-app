@@ -50,7 +50,7 @@ const SignInScreen = () => {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('signin')}
                     style={styles.shadowButtonStyle}
-                    className=' py-3 px-4 rounded-full'><Text className='font-semibold text-white'>Sign In</Text></TouchableOpacity>
+                    className=' py-3 px-4 rounded-full'><Text className='font-semibold text-white'>Sign in</Text></TouchableOpacity>
             </View>
 
         </View>

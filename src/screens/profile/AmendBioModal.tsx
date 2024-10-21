@@ -7,7 +7,6 @@ interface UserDataProps {
     name: string;
     age: string;
     photo: string;
-    id: number | null;
     bio: string;
 }
 
