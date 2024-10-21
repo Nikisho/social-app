@@ -80,7 +80,6 @@ function App() {
 		if (error) throw error.message;
 
 		if (data && data.length > 0) {
-			console.log(data)
 			dispatch(setCurrentUser({
 				name: data[0].name,
 				email: data[0].email,

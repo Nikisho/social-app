@@ -15,6 +15,13 @@ export default {
         {
           photosPermission: "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          androidAppId: "ca-app-pub-8692182271223423~9299510838",
+          iosAppId: "ca-app-pub-8692182271223423~4609656473"
+        }
       ]
     ],
     name: "Linkzy",
@@ -36,7 +43,7 @@ export default {
       buildNumber: '1.0.7'
     },
     android: {
-      googleServicesFile: './android/app/google-services.json', // Set to path where file will be written
+      googleServicesFile: './google-services.json', // Set to path where file will be written
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,

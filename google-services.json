@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "44271322539",
+    "project_id": "friendzy-auth",
+    "storage_bucket": "friendzy-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44271322539:android:03c118216155d85c80beee",
+        "android_client_info": {
+          "package_name": "com.linkzy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44271322539-0hasng45g45e150k8sddh2vo89h6reck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.linkzy",
+            "certificate_hash": "4e7c43bca75c17daf0cbb0c7f50150cffa096f7c"
+          }
+        },
+        {
+          "client_id": "44271322539-f4o0nltvca2jutonla1otvnbr7qesugk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.linkzy",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "44271322539-pgftptc2q0gn7v0ut0csn1db8lvidso8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUD60lH1rqnqvNMbGW8jxgJo_i2Hsu0lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44271322539-9p7psu414c035ajhbbu0lo7el0nevf10.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

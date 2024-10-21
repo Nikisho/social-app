@@ -1,6 +1,7 @@
-import { ScrollView, Platform, RefreshControl } from 'react-native'
+import { ScrollView, Platform, RefreshControl, View } from 'react-native'
 import React, { useState } from 'react'
 import FeedCard from './FeedCard';
+import GoogleAds from './GoogleAds';
 
 
 interface FeedProps {
@@ -37,19 +38,26 @@ const Feed: React.FC<FeedProps> = ({
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {eventList?.map((event) => (
-        <FeedCard
-          name={event.user_name}
-          key={event.event_id}
-          description={event.event_description}
-          title={event.event_title}
-          date={event.event_date}
-          photo={event.user_photo}
-          time={event.event_time}
-          event_id={event.event_id}
-          user_id={event.user_id}
-          refreshOnBlock={onRefresh}
-        />
+      {eventList?.map((event, index) => (
+        <View key={event.event_id}>
+          {/* Render the feed card */}
+          <FeedCard
+            name={event.user_name}
+            description={event.event_description}
+            title={event.event_title}
+            date={event.event_date}
+            photo={event.user_photo}
+            time={event.event_time}
+            event_id={event.event_id}
+            user_id={event.user_id}
+            refreshOnBlock={onRefresh}
+          />
+          
+          {/* Display ad after every 3rd card */}
+          {(index + 1) % 3 === 0 && (
+            <GoogleAds />
+          )}
+        </View>
       ))}
     </ScrollView>
   )

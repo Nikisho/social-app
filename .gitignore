@@ -80,3 +80,5 @@ yarn-error.*
 # mobile executables
 aab-files
 ipa-files
+
+android/keystores
