@@ -29,6 +29,7 @@ import SettingsScreen from './src/screens/settings/SettingsScreen';
 import SendResetLinkScreen from './src/screens/authentication/passwordReset/SendResetLinkScreen';
 import ResetPasswordScreen from './src/screens/authentication/passwordReset/ResetPasswordScreen';
 import UserDetailsScreen from './src/screens/authentication/signup/UserDetailsScreen';
+import UpdateInterestsScreen from './src/screens/profile/UpdateInterestsScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -153,6 +154,7 @@ function App() {
 								<Stack.Screen name="search" component={SearchScreen} />
 								<Stack.Screen name="eula" component={EulaScreen} />
 								<Stack.Screen name="settings" component={SettingsScreen} />
+								<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
 							</>
 						)
 					}

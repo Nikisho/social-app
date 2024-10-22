@@ -1,26 +1,21 @@
 import { View, Text, Image, Alert, TouchableOpacity, ToastAndroid, Platform, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import UserEvents from './UserEvents';
-import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../supabase';
-import Entypo from '@expo/vector-icons/Entypo';
-import styles from '../../utils/styles/shadow';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ProfileScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
-import colours from '../../utils/styles/colours';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import AmendBioModal from './AmendBioModal';
 import UserDetails from './UserDetails';
+import UserInterests from './UserInterests';
+import UpdateBioModal from './UpdateBioModal';
 
 interface UserDataProps {
   name: string;
   age: string;
   photo: string;
-  id: number | null;
   bio: string
 
 }
@@ -30,7 +25,6 @@ const ProfileScreen = () => {
   const [userData, setUserData] = useState<UserDataProps>({
     age: '',
     bio: '',
-    id: null,
     photo: '',
     name: ''
   });
@@ -174,13 +168,17 @@ const ProfileScreen = () => {
           />
         )
       }
-      <AmendBioModal
+      <UpdateBioModal
         setModalVisible={setModalVisible}
         closeModal={closeModal}
         userData={userData}
         setUserData={setUserData}
         modalVisible={modalVisible}
         updateUserDescription={updateUserDescription}
+      />
+      <UserInterests 
+        user_id={user_id}
+        isCurrentUserProfile={isCurrentUserProfile}
       />
       <UserEvents
         user_id={user_id}

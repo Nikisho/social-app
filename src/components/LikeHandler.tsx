@@ -57,7 +57,7 @@ const LikeHandler: React.FC<LikeHandlerProps> = ({
     );
     return (
 
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback className='w-1/2 bg-red-200'>
             <View className='w-1/2'>
                 {
                     hasUserLikedEventState ?

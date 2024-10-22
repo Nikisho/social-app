@@ -22,6 +22,7 @@ export type RootStackParamList = {
   sendresetlink:undefined;
   userdetailsscreen: undefined;
   resetpassword:{access_token: string, refresh_token: string};
+  updateinterests:{user_interests: {interest_code:number, interest_group_code:number, interests: { description: string}}[]};
 };
 
 // Define the navigation prop types
@@ -33,6 +34,8 @@ export type EventScreenRouteProp = RouteProp<RootStackParamList, 'event'>;
 export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'profile'>;
 export type EditEventScreenRouteProp = RouteProp<RootStackParamList, 'editevent'>;
 export type ResetPasswordScreenRouteProps = RouteProp<RootStackParamList, 'resetpassword'>;
+export type UpdateInterestsScreenRouteProps = RouteProp<RootStackParamList, 'updateinterests'>;
+
 
 
 

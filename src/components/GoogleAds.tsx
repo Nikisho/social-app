@@ -13,7 +13,7 @@ const GoogleAds = () => {
         <>
             <BannerAd
                 unitId={adUnitId!}
-                size={BannerAdSize.FULL_BANNER}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 requestOptions={{ requestNonPersonalizedAdsOnly: true }}
             />
         </>

@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import interestGroups from './profileInteretsList';
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import ProfileInterestsSelector from '../../../components/ProfileInterestsSelector';
 
 interface UserDataProps {
     userInterests: {
@@ -12,34 +12,10 @@ interface UserDataProps {
 interface UserPhotoFormProps extends UserDataProps {
     updateFields: (fields: Partial<UserDataProps>) => void;
 };
-const UserInterestsForm:React.FC<UserPhotoFormProps> = ({
+const UserInterestsForm: React.FC<UserPhotoFormProps> = ({
     userInterests,
     updateFields
 }) => {
-    const maxNumberOfInterests = 5;
-    const selectInterests = async (interest: { description: string; code: number }, interestGroup: any) => {
-        // Check if the maximum number of interests has been reached
-        if (userInterests && userInterests.length >= maxNumberOfInterests && !userInterests?.some((item:any) => item.interestCode === interest.code)) {
-            return;
-        }
-        const interestObject = {
-            interestCode: interest.code,
-            interestGroupCode: interestGroup.code,
-        };
-        const isSelected = userInterests?.some((item:any) => item.interestCode === interest.code);
-        if (isSelected) {
-            // If selected, remove it from the interests
-            const updatedInterests = userInterests.filter(item => item.interestCode !== interest.code);
-            updateFields({ userInterests: updatedInterests });
-        } else {
-            // Check if the maximum number of interests has been reached
-            if (userInterests.length < maxNumberOfInterests) {
-                // If not selected, add it to the interests
-                updateFields({ userInterests: [...userInterests, interestObject] });
-            }
-        }
-    };
-
     return (
         <View style={styles.container}>
             <View className='flex mt-14 mb-6'>
@@ -50,34 +26,10 @@ const UserInterestsForm:React.FC<UserPhotoFormProps> = ({
                     Select five interests to personalise your journey.
                 </Text>
             </View>
-            <ScrollView
-                contentContainerStyle={styles.scrollContainer}
-                style={styles.scrollView}
-            >
-                {interestGroups.map((interestGroup) => (
-                    <View key={interestGroup.name} style={styles.groupContainer}>
-                        <Text style={styles.groupTitle}>{interestGroup.name}</Text>
-
-                        <View style={styles.interestsContainer}>
-                            {interestGroup.interests.map((interest) => {
-                                // Check if the interest is selected
-                                const isSelected = userInterests?.some((item:any) => item.interestCode === interest.code);
-                                return (
-                                    <TouchableOpacity 
-                                        key={interest.code} // Add a unique key here
-                                        onPress={() => selectInterests(interest, interestGroup)}
-                                        style={[styles.interestButton, isSelected && styles.selectedInterest]}
-                                    >
-                                        <Text style={styles.interestText}>
-                                            {interest.description}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    </View>
-                ))}
-            </ScrollView>
+            <ProfileInterestsSelector 
+                userInterests={userInterests}
+                updateFields={updateFields}
+            />
         </View>
     );
 };
@@ -122,7 +74,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     interestButton: {
-        backgroundColor: '#f0f0f0', 
+        backgroundColor: '#f0f0f0',
         padding: 8,
         margin: 4,
         borderRadius: 20,
@@ -131,10 +83,10 @@ const styles = StyleSheet.create({
     },
     selectedInterest: {
         backgroundColor: '#1E90FF', // Highlighted background color for selected interests
-        borderColor: '#388e3c', 
+        borderColor: '#388e3c',
     },
     interestText: {
-        color: '#000', 
+        color: '#000',
     },
     scrollView: {
         width: '100%',

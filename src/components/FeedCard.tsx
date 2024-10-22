@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { SetStateAction, useState } from 'react'
+import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import React, { useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import convertDateFormat from '../utils/functions/convertDateFormat';
@@ -10,7 +10,6 @@ import LikeHandler from './LikeHandler';
 import { RootStackNavigationProp } from '../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import FeedCardOptionsModal from './FeedCardOptionsModal';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface FeedCardProps {
     name: string;
@@ -42,7 +41,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
     const currentUser = useSelector(selectCurrentUser);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     return (
-        <TouchableWithoutFeedback
+        <TouchableOpacity
             onPress={() => {
                 navigation.navigate('event', {
                     event_id: event_id,
@@ -52,12 +51,11 @@ const FeedCard: React.FC<FeedCardProps> = ({
             className='rounded-lg bg-gray-100 p-2 mb-3 space-y-1 '>
             <View className=' flex flex-row justify-between'>
 
-                <TouchableWithoutFeedback
+                <TouchableOpacity
                     onPress={() => navigation.navigate('profile',
                         { user_id: user_id }
                     )}
                     className='flex flex-row space-x-3 items-center'>
-
                     {
                         photo === null ?
                             <>
@@ -75,7 +73,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                     <Text>
                         {name}
                     </Text>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
                 <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
                     <Entypo name="dots-three-vertical" size={20} color="black" />
                 </TouchableWithoutFeedback>
@@ -117,7 +115,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 />
             }
 
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
     )
 }
 

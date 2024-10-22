@@ -10,7 +10,7 @@ interface UserDataProps {
     bio: string;
 }
 
-interface AmendBioModalProps {
+interface UpdateBioModalProps {
     setModalVisible: (bool: boolean) => void;
     updateUserDescription: () => void;
     closeModal: () => void;
@@ -20,7 +20,7 @@ interface AmendBioModalProps {
         bio: string;
     };
 }
-const AmendBioModal: React.FC<AmendBioModalProps> = ({
+const UpdateBioModal: React.FC<UpdateBioModalProps> = ({
     setModalVisible,
     setUserData,
     closeModal,
@@ -70,4 +70,4 @@ const AmendBioModal: React.FC<AmendBioModalProps> = ({
     )
 }
 
-export default AmendBioModal
+export default UpdateBioModal
