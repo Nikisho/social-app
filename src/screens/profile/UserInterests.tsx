@@ -1,46 +1,26 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { supabase } from '../../../supabase';
+import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import {  useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface UserInterestsProps {
     user_id: number;
     isCurrentUserProfile: boolean
-}
-interface Interests {
-    interest_code: number;
-    interest_group_code: number;
-    interests: {
-        description: string;
-    }
-}
-const UserInterests:React.FC<UserInterestsProps> = ({user_id, isCurrentUserProfile}) => {
-    const [userInterests, setUserInterests] = useState<Interests[]>();
-    const navigation = useNavigation<RootStackNavigationProp>();
-    
-    const fetchInterests = async () => {
-        const { error, data } = await supabase
-            .from('user_interests')
-            .select(`*,
-                interests (
-                    interest_code,
-                    description
-                )
-                `)
-            .eq('user_id', user_id)
-        if (data) {
-            setUserInterests(data)
-            console.log(data)
+    userInterests: {
+        interest_code: number;
+        interest_group_code: number;
+        interests: {
+            description: string;
         }
-        if (error) console.error( error.message);
-    };
+    }[]
+}
 
-    useEffect(() => {
-        fetchInterests();
-    },[]);
-
+const UserInterests:React.FC<UserInterestsProps> = ({
+    isCurrentUserProfile,
+    userInterests
+}) => {
+    const navigation = useNavigation<RootStackNavigationProp>();
     return (
         <View>
             <View className='flex flex-row items-center space-x-3'>
@@ -57,17 +37,27 @@ const UserInterests:React.FC<UserInterestsProps> = ({user_id, isCurrentUserProfi
                     )
                 }
             </View>
+            {
+                userInterests?.length === 0 ?
+                <View>
+                    <Text className='italic py-3'>
+                        No interests added yet
+                    </Text>
+                </View>
+                :
             <View 
                 style={styles.interestsContainer}
                 >
             {
                 userInterests?.map((interest) => (
-                    <View style={styles.interestButton}>
+                    <View style={styles.interestButton} key={interest.interest_code}>
                         <Text>{interest.interests.description}</Text>
                     </View>
                     ))
                 }
                 </View>
+            }
+
         </View>
     )
 }

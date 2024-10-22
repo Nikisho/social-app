@@ -134,7 +134,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 <Text>
                                     Add a description to help others know you better!
                                 </Text> :
-                                <Text>
+                                <Text className='italic'>
                                     This user has not added a description
                                 </Text>
                             }
