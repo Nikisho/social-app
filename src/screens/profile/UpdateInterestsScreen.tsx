@@ -8,7 +8,7 @@ import { supabase } from '../../../supabase'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../context/navSlice'
 import LoadingScreen from '../loading/LoadingScreen'
-import platformAlert from '../../utils/functions/PlatformAlert'
+import platformAlert from '../../utils/functions/platformAlert'
 
 
 interface InterestsProps {
