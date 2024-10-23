@@ -8,6 +8,8 @@ import styles from '../../utils/styles/shadow'
 import formatDate from '../../utils/functions/formatDate'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import _ from 'lodash';
+import platformAlert from '../../utils/functions/platformAlert'
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface EventDataProps {
     event_title: string;
@@ -65,11 +67,7 @@ const EditEventScreen = () => {
 
         if (error) console.error(error.message);
         fetchEventData();
-        if (Platform.OS === 'android') {
-            ToastAndroid.show('Event saved successfully!', ToastAndroid.SHORT);
-        } else (
-            Alert.alert('Event saved successfully!')
-        )
+        platformAlert('Event saved successfully');
     };
 
     const deleteEvent = async () => {
@@ -101,10 +99,17 @@ const EditEventScreen = () => {
 
     return (
         <View className='p-2 px-3  '>
-            <View className='mt-2 flex flex-row justify-between items-center'>
-                <Text className='font-bold  '>
+            <View className='flex flex-row justify-between items-center'>
+                <View className='flex flex-row items-center space-x-3'>
+
+                <TouchableOpacity className="py-3 " onPress={() => navigation.goBack()}>
+                    <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
+                </TouchableOpacity>
+                <Text className='text-2xl font-semibold '>
                     Edit your event
                 </Text>
+                </View>
+
                 <TouchableOpacity
                     onPress={updateEventDetails}
                     disabled={!isEventDataAmended}

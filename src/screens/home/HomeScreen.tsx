@@ -22,18 +22,29 @@ interface eventListProps {
   event_time: string
   event_id: number
   user_id: number;
+};
 
+interface HubProps {
+  hub_name: string;
+  hub_code: number;
 }
+
 const HomeScreen = () => {
   const [eventList, setEventList] = useState<eventListProps[]>();
   const currentUser = useSelector(selectCurrentUser);
   const [filterEventsModalVisible, setFilterEventsModalVisible] = useState<boolean>(false);
   const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
   const [sortingOption, setSortingOption] = useState<string>('event_date');
+  const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
 
   const fetchEvents = async () => {
     const { error, data } = await supabase
-      .rpc('get_events_excluding_blocked_users', { current_user_id: currentUser.id, sorting_option: sortingOption });
+      .rpc('get_events_excluding_blocked_users',
+        { 
+          current_user_id: currentUser.id, 
+          sorting_option: sortingOption,
+          hub_code: selectedHub?.hub_code
+        });
 
     if (data) { setEventList(data); }
     if (error) console.error(error.message)
@@ -42,7 +53,7 @@ const HomeScreen = () => {
   useFocusEffect(
     React.useCallback(() => {
       fetchEvents();
-    }, [sortingOption])
+    }, [sortingOption, selectedHub])
   );
   return (
     <View className='mx-2'>
@@ -54,7 +65,7 @@ const HomeScreen = () => {
           style={styles.translucidViewStyle}
         >
           <Entypo name="location-pin" size={24} color="black" />
-          <Text>London</Text>
+          <Text>{selectedHub?.hub_name}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setFilterEventsModalVisible(!filterEventsModalVisible)}
@@ -79,6 +90,8 @@ const HomeScreen = () => {
       <ChooseEventLocationModal
         modalVisible={chooseEventLocationModalVisible}
         setModalVisible={setChooseEventLocationModalVisible}
+        selectedHub={selectedHub}
+        setSelectedHub={setSelectedHub}
         />
     </View>
   )
