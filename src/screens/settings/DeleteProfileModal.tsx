@@ -81,7 +81,6 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
 
                 </View>
             </Modal>
-
         </View>
     )
 }
