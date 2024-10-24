@@ -37,13 +37,16 @@ const HomeScreen = () => {
   const [sortingOption, setSortingOption] = useState<string>('event_date');
   const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
 
-  const fetchEvents = async () => {
+  const fetchEvents: (hub_code:number | null, sorting_option: string| null) => void = async (
+    hub_code: number | null, 
+    sorting_option: string | null
+  ) => {
     const { error, data } = await supabase
       .rpc('get_events_excluding_blocked_users',
         { 
           current_user_id: currentUser.id, 
-          sorting_option: sortingOption,
-          hub_code: selectedHub?.hub_code
+          sorting_option: sorting_option,
+          hub_code:hub_code
         });
 
     if (data) { setEventList(data); }
@@ -52,7 +55,7 @@ const HomeScreen = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchEvents();
+      fetchEvents(selectedHub?.hub_code!, sortingOption);
     }, [sortingOption, selectedHub])
   );
   return (
@@ -65,7 +68,7 @@ const HomeScreen = () => {
           style={styles.translucidViewStyle}
         >
           <Entypo name="location-pin" size={24} color="black" />
-          <Text>{selectedHub?.hub_name}</Text>
+          <Text>{selectedHub ? selectedHub.hub_name : 'All'}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setFilterEventsModalVisible(!filterEventsModalVisible)}
@@ -79,7 +82,9 @@ const HomeScreen = () => {
 
       <Feed
         eventList={eventList!}
-        fetchEvents={fetchEvents}
+        fetchEvents={() => fetchEvents(selectedHub?.hub_code!, sortingOption)}
+        sorting_option={sortingOption}
+        hub_code={selectedHub?.hub_code!}
       />
       <FilterEventsModal
         modalVisible={filterEventsModalVisible}
@@ -90,7 +95,6 @@ const HomeScreen = () => {
       <ChooseEventLocationModal
         modalVisible={chooseEventLocationModalVisible}
         setModalVisible={setChooseEventLocationModalVisible}
-        selectedHub={selectedHub}
         setSelectedHub={setSelectedHub}
         />
     </View>

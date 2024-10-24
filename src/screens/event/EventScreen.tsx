@@ -1,12 +1,12 @@
 import { View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import Header from '../../components/Header';
 import EventDetails from './EventDetails';
 import EngagementBar from './EngagementBar';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
-import { useRoute } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import CommentFeed from './CommentFeed';
 import { EventScreenRouteProp } from '../../utils/types/types';
 
@@ -15,7 +15,7 @@ interface EventDataProps {
     key: number
     event_id: number
     event_description: string
-    event_title:string
+    event_title: string
     event_date: string
     event_time: string
     photo: string
@@ -49,15 +49,14 @@ const EventScreen = () => {
         if (data) { setEventData(data[0]) }
         if (error) console.error(error.message)
     }
-    
-    useEffect(() => {
-        fetchData();
-    }, []);
-
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
     return (
         <View className='mx-2 h-[90%]'>
             <Header />
-            {/* Post Details 1/3 of screen */}
             {
                 eventData && (
                     <EventDetails
@@ -74,7 +73,7 @@ const EventScreen = () => {
                 )
             }
             {/* Reaction bar */}
-            <EngagementBar 
+            <EngagementBar
                 user_id={currentUser.id}
                 event_id={event_id}
             />

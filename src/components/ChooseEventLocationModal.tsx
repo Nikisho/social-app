@@ -11,19 +11,16 @@ interface HubProps {
 interface ChooseEventLocationModalProps {
     modalVisible: boolean
     setModalVisible: (modalVisible: boolean) => void;
-    selectedHub: HubProps | null;
     setSelectedHub: (selectedHub: HubProps) => void;
 }
 
-
 const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
     modalVisible,
-    selectedHub,
     setSelectedHub,
     setModalVisible
 }) => {
-
     const [hubs, setHubs] = useState<HubProps[] | null>(null);
+    const [tempSelectedHub, setTempSelectedHub] = useState<HubProps>();
     const fetchHubs = async () => {
         const { error, data } = await supabase
             .from('hubs')
@@ -36,6 +33,11 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
         )
     };
 
+    const handleSelectHub = async () => {
+        setSelectedHub({hub_code: tempSelectedHub?.hub_code!, hub_name: tempSelectedHub?.hub_name!});
+        setModalVisible(!modalVisible);
+    };
+    
     useEffect(() => {
         fetchHubs();
     }, []);
@@ -53,7 +55,7 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
                     style={styles.shadow}
                 >
                     <View
-                        className='w-full p-1 flex flex-row items-center '
+                        className='w-full p-1 py-3 flex flex-row items-center justify-between'
                     >
                         <TouchableOpacity
                             onPress={() => setModalVisible(!modalVisible)}
@@ -61,14 +63,22 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
 
                             <AntDesign name="close" size={25} color="black" />
                         </TouchableOpacity>
-                        <Text className='place-self-center ml-28'>Select a hub</Text>
+                        <Text className='place-self-center '>Select a hub</Text>
+                        <TouchableOpacity 
+                            onPress={handleSelectHub}
+                            style={styles.shadowButtonStyle}
+                            className='p-2 rounded-xl'>
+                            <Text className='text-white'>
+                                OK
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                     <ScrollView className=''>
                         {
                             hubs?.map((hub) => (
                                 <TouchableOpacity
-                                    onPress={() => setSelectedHub({hub_code: hub.hub_code, hub_name: hub.hub_name})}
-                                    className={`w-full flex flex-row justify-center p-1 my-1 rounded-xl ${selectedHub?.hub_name === hub.hub_name ? 'bg-blue-400' : 'bg-gray-200'}`}
+                                    onPress={() => setTempSelectedHub({hub_code: hub.hub_code, hub_name: hub.hub_name})}
+                                    className={`w-full flex flex-row justify-center p-1 my-1 rounded-xl ${tempSelectedHub?.hub_name === hub.hub_name ? 'bg-blue-400' : 'bg-gray-200'}`}
                                     key={hub.hub_code}>
                                     <Text className='text-xl'>
                                         {hub.hub_name}

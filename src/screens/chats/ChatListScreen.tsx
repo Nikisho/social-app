@@ -20,7 +20,6 @@ interface ChatDataProps {
 const ChatListScreen = () => {
 	const [receivers, setReceivers] = useState<Array<ChatDataProps>>();
 	const currentUser = useSelector(selectCurrentUser);
-
 	const fetchReceivers = async () => {
 		const { error, data } = await supabase
 			.rpc('fetch_receivers', { current_user_id: currentUser.id });

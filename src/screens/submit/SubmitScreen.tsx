@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import DatePicker from 'react-native-date-picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -6,17 +6,26 @@ import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import formatDate from '../../utils/functions/formatDate';
-import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import SubmitScreenHeader from './SubmitScreenHeader';
+import Entypo from '@expo/vector-icons/Entypo';
+import platformAlert from '../../utils/functions/platformAlert';
+import ChooseEventLocationModal from '../../components/ChooseEventLocationModal';
+import extractTimeFromDateSubmit from '../../utils/functions/extractTimeFromDateSubmit';
 
 interface eventDetailsProps {
     title: string;
     description: string;
     date: Date;
 }
+
+interface HubProps {
+    hub_name: string;
+    hub_code: number;
+  }
+  
 const SubmitScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const navigation = useNavigation<RootStackNavigationProp>()
@@ -25,7 +34,9 @@ const SubmitScreen = () => {
         title: '',
         description: ''
     });
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
+    const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
     const handleChange = (name: string, value: string | Date) => {
         setEventDetails((prevData: eventDetailsProps) => ({
             ...prevData,
@@ -34,8 +45,8 @@ const SubmitScreen = () => {
     };
 
     const handleSubmit = async () => {
-        if (eventDetails.title === '' || eventDetails.description === '') {
-            Alert.alert('Please, enter a title and description.')
+        if (eventDetails.title === '' || eventDetails.description === '' || selectedHub === null) {
+            platformAlert('Please, enter a title, description and select a hub.')
             return;
         }
         const { error } = await supabase
@@ -45,7 +56,8 @@ const SubmitScreen = () => {
                 event_date: eventDetails.date,
                 event_title: eventDetails.title,
                 event_description: eventDetails.description,
-                event_time: extractTimeFromDate(eventDetails.date)
+                event_time: extractTimeFromDateSubmit(eventDetails.date),
+                hub_code: selectedHub?.hub_code
             });
         setEventDetails({
             date: new Date(),
@@ -53,13 +65,11 @@ const SubmitScreen = () => {
             description: ''
         });
         navigation.navigate('home');
-
         if (error) console.error(error.message);
     };
-
     return (
         <View className='flex space-y-2 mx-3 '>
-            <SubmitScreenHeader/>
+            <SubmitScreenHeader />
             <View >
                 <TextInput className='text-2xl bg-white p-4 rounded-xl ' placeholder='Title'
                     value={eventDetails?.title}
@@ -68,9 +78,8 @@ const SubmitScreen = () => {
                     maxLength={50}
                 />
             </View>
-            <View className='h-1/3 bg-white p-4 rounded-xl mb-1'
+            <View className='h-1/3 bg-white p-4 rounded-xl mb-5'
                 style={styles.shadow}
-
             >
                 <TextInput multiline={true} className='text-lg' placeholder='Description'
                     value={eventDetails?.description}
@@ -80,7 +89,7 @@ const SubmitScreen = () => {
             </View>
             <TouchableOpacity onPress={() => setOpen(true)}
                 style={styles.translucidViewStyle}
-                className='justify-between flex items-center space-x-2 flex-row opacity-90 p-2 rounded-xl'>
+                className='justify-between flex items-center space-x-2 flex-row p-2 rounded-xl mb-3'>
                 <View className='flex flex-row space-x-2 items-center'>
 
                     <AntDesign name="calendar" size={34} color="black" />
@@ -92,9 +101,17 @@ const SubmitScreen = () => {
 
                     <AntDesign name="clockcircle" size={24} color="black" />
                     <Text className='text-lg'>
-                        {extractTimeFromDate(eventDetails.date)}
-                    </Text>
+                        {extractTimeFromDateSubmit(eventDetails.date)}
+                    </Text> 
                 </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => setChooseEventLocationModalVisible(!chooseEventLocationModalVisible)}
+                className='mb-3 p-3 bg-white rounded-xl flex flex-row items-center space-x-3 '
+                style={styles.translucidViewStyle}
+            >
+                <Entypo name="location-pin" size={24} color="black" />
+                <Text className='text-lg'>{selectedHub ? selectedHub.hub_name : 'Choose a hub'}</Text>
             </TouchableOpacity>
             <DatePicker
                 modal
@@ -108,7 +125,12 @@ const SubmitScreen = () => {
                     setOpen(false)
                 }}
             />
-            <View className='justify-end h-1/4 flex grow items-end '>
+            <ChooseEventLocationModal 
+                setModalVisible={setChooseEventLocationModalVisible}
+                modalVisible={chooseEventLocationModalVisible}
+                setSelectedHub={setSelectedHub}
+            />
+            <View className='justify-center h-1/4 flex grow items-end '>
                 <TouchableOpacity
                     style={styles.shadowButtonStyle}
                     className='bg-sky-600 py-3 px-3 rounded-xl w-full '

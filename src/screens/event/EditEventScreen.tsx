@@ -68,6 +68,7 @@ const EditEventScreen = () => {
         if (error) console.error(error.message);
         fetchEventData();
         platformAlert('Event saved successfully');
+        navigation.goBack();
     };
 
     const deleteEvent = async () => {
@@ -77,11 +78,7 @@ const EditEventScreen = () => {
             .eq('event_id', event_id);
 
         if (error) console.error(error.message);
-        if (Platform.OS === 'android') {
-            ToastAndroid.show('Event deleted successfully!', ToastAndroid.SHORT);
-        } else (
-            Alert.alert('Event deleted successfully!')
-        )
+        platformAlert('Your event has been deleted');
         navigation.navigate('home')
     };
 

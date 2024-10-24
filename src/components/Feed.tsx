@@ -1,8 +1,7 @@
-import { ScrollView, Platform, RefreshControl, View, Text, TouchableOpacity } from 'react-native'
+import { ScrollView, Platform, RefreshControl, View } from 'react-native'
 import React, { useState } from 'react'
 import FeedCard from './FeedCard';
 import GoogleAds from './GoogleAds';
-import styles from '../utils/styles/shadow';
 
 
 interface FeedProps {
@@ -17,23 +16,26 @@ interface FeedProps {
     event_id: number
     user_id: number;
   }[];
-  fetchEvents: () => void
+  fetchEvents: (hob_code: number | null, sorting_option: string | null) => void
+  hub_code: number | null;
+  sorting_option: string | null
 }
 
 const Feed: React.FC<FeedProps> = ({
   eventList,
-  fetchEvents
+  fetchEvents,
+  hub_code,
+  sorting_option
 }) => {
   const [refreshing, setRefreshing] = useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchEvents()
+    fetchEvents(hub_code, sorting_option)
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
-  }, []);
-  return (
+  }, [hub_code, sorting_option, fetchEvents]);
+    return (
       <ScrollView className={Platform.OS === 'ios' ? 'h-[80%] z-0' : 'h-5/6'}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

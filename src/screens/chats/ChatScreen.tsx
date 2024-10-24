@@ -104,6 +104,7 @@ const ChatScreen = () => {
 
     if (data) {
       setMessages(data);
+      setMessagesRead(chatRoomIdState)
     }
     if (error) console.error(error.message);
   };
@@ -158,6 +159,7 @@ const ChatScreen = () => {
     (payload) => {
       console.log('Change detected:', payload);
       fetchMessages();  // Re-fetch unread messages count when data changes
+
     }
   )
   .subscribe();

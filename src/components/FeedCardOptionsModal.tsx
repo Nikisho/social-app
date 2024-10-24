@@ -4,6 +4,7 @@ import styles from '../utils/styles/shadow'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import { supabase } from '../../supabase';
+import platformAlert from '../utils/functions/platformAlert';
 
 interface FeedCardOptionsModalProps {
     modalVisible: boolean;
@@ -34,7 +35,7 @@ const FeedCardOptionsModal: React.FC<FeedCardOptionsModalProps> = ({
         if (error) console.error(error.message);
 
         refreshOnBlock();
-        Alert.alert('Your event has been deleted')
+        platformAlert('Your event has been deleted')
     }
 
     const reportEvent = async () => {

@@ -165,7 +165,6 @@ const ProfileScreen = () => {
 			.eq('user_id', user_id)
 		if (data) {
 			setUserInterests(data)
-			console.log(data)
 		}
 		if (error) console.error(error.message);
 	};

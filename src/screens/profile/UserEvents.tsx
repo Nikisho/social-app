@@ -47,7 +47,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     }, [user_id]);
 
     return (
-        <View className='h-[50%] flex space-y-2'>
+        <View className='h-[48%] flex space-y-2'>
 
             <View className=''>
                 <Text className='text-lg font-semibold'>Events</Text>
@@ -76,6 +76,8 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                     <Feed
                         eventList={eventList!}
                         fetchEvents={fetchEvents}
+                        sorting_option={null}
+                        hub_code={null}
                     />
             }
 

@@ -8,6 +8,7 @@ import validateEmail from '../../../utils/functions/validateEmail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 const EmailSignIn = () => {
 
@@ -19,7 +20,6 @@ const EmailSignIn = () => {
 	const isPasswordEmpty = password === '';
 	const navigation = useNavigation<RootStackNavigationProp>();
 	const isDisabled = isEmailEmpty || isPasswordEmpty || loading;
-
 
 	async function signInWithEmail() {
 		setLoading(true);
@@ -44,12 +44,9 @@ const EmailSignIn = () => {
 				.select()
 				.eq('uid', session.user.id)
 			if (data?.length === 0) {
-				Platform.OS === 'android' ?
-					ToastAndroid.show('We could not authenticate you.', ToastAndroid.SHORT)
-					:
-					Alert.alert('We could not authenticate you');
+				platformAlert("Let's finalise your signup.")
 				setLoading(false);
-				navigation.navigate('userdetailsscreen')
+				navigation.navigate('userdetailsscreen');
 				return;
 			}
 			//Fetch data once user is retrieved, and add to context

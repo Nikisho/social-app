@@ -56,6 +56,8 @@ const SearchScreen = () => {
             <Feed
               eventList={eventList!}
               fetchEvents={fetchEvents}
+              sorting_option={null}
+              hub_code={null}
             />
           )  
         }
