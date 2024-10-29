@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import DatePicker from 'react-native-date-picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -24,8 +24,8 @@ interface eventDetailsProps {
 interface HubProps {
     hub_name: string;
     hub_code: number;
-  }
-  
+}
+
 const SubmitScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const navigation = useNavigation<RootStackNavigationProp>()
@@ -78,14 +78,25 @@ const SubmitScreen = () => {
                     maxLength={50}
                 />
             </View>
-            <View className='h-1/3 bg-white p-4 rounded-xl mb-5'
+            <View className='h-1/3 bg-white p-4 rounded-xl mb-5 flex'
                 style={styles.shadow}
             >
-                <TextInput multiline={true} className='text-lg' placeholder='Description'
-                    value={eventDetails?.description}
-                    maxLength={700}
-                    onChangeText={value => handleChange('description', value)}
-                />
+                <View className='h-[85%]'>
+                    <TextInput multiline={true} className='text-lg' placeholder='Description'
+                        value={eventDetails?.description}
+                        maxLength={700}
+                        onChangeText={value => handleChange('description', value)}
+                    />
+                </View>
+
+                <TouchableOpacity 
+                    style={styles.shadowButtonStyle}
+                    onPress={Keyboard.dismiss}
+                    className='self-end p-2 rounded-lg'>
+                    <Text className='text-white'>
+                        OK
+                    </Text>
+                </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => setOpen(true)}
                 style={styles.translucidViewStyle}
@@ -102,7 +113,7 @@ const SubmitScreen = () => {
                     <AntDesign name="clockcircle" size={24} color="black" />
                     <Text className='text-lg'>
                         {extractTimeFromDateSubmit(eventDetails.date)}
-                    </Text> 
+                    </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity
@@ -125,7 +136,7 @@ const SubmitScreen = () => {
                     setOpen(false)
                 }}
             />
-            <ChooseEventLocationModal 
+            <ChooseEventLocationModal
                 setModalVisible={setChooseEventLocationModalVisible}
                 modalVisible={chooseEventLocationModalVisible}
                 setSelectedHub={setSelectedHub}

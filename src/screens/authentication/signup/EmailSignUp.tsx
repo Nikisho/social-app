@@ -1,14 +1,13 @@
 import { View, Text, TouchableOpacity, Alert, Platform, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import styles from '../../../utils/styles/shadow';
 import { supabase } from '../../../../supabase';
-import { useDispatch } from 'react-redux';
-import { setCurrentUser } from '../../../context/navSlice';
 import validateEmail from '../../../utils/functions/validateEmail';
-import { EmailSignUpScreenRouteProp, RootStackNavigationProp } from '../../../utils/types/types';
+import {  RootStackNavigationProp } from '../../../utils/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import validatePassword from '../../../utils/functions/validatePassword';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 const EmailSignUp = () => {
 	const [email, setEmail] = useState<string>('');
@@ -36,7 +35,7 @@ const EmailSignUp = () => {
 			.eq('email', email);
 
 		if (existingUser && existingUser.length > 0) {
-			alert("It looks like you already have an account. Please sign in instead.");
+			platformAlert("It looks like you already have an account. Please sign in instead.");
 			navigation.navigate('signin');
 			setLoading(false);
 		} else {
@@ -62,7 +61,6 @@ const EmailSignUp = () => {
 				if (!session) Alert.alert('Sorry, we could not sign you up');
 				setLoading(false);
 			}
-
 		}
 	}
 

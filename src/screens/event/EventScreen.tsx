@@ -25,6 +25,10 @@ interface EventDataProps {
         id: number
         photo: string
     }
+    hubs : {
+        hub_name: string;
+        hub_code: number;
+    }
 
 };
 
@@ -43,6 +47,9 @@ const EventScreen = () => {
               id,
               name,
               photo
+            ), hubs (
+                hub_code,
+                hub_name
             )
           `)
             .eq('event_id', event_id)
@@ -68,6 +75,7 @@ const EventScreen = () => {
                         event_description={eventData.event_description}
                         isUsersOwnPost={eventData.user_id === currentUser.id}
                         user_id={eventData.users.id}
+                        event_location={eventData.hubs.hub_name}
                         event_id={event_id}
                     />
                 )

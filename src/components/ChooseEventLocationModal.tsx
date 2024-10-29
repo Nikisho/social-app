@@ -34,9 +34,11 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
     };
 
     const handleSelectHub = async () => {
+        if (!tempSelectedHub) return;
         setSelectedHub({hub_code: tempSelectedHub?.hub_code!, hub_name: tempSelectedHub?.hub_name!});
         setModalVisible(!modalVisible);
     };
+
     
     useEffect(() => {
         fetchHubs();

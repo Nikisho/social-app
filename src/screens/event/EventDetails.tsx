@@ -3,6 +3,8 @@ import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
+import Entypo from '@expo/vector-icons/Entypo';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 interface evenDetailsProps {
     user_name: string;
@@ -12,8 +14,9 @@ interface evenDetailsProps {
     event_time: string;
     user_photo: string;
     isUsersOwnPost: boolean;
+    event_location: string;
     user_id: number;
-    event_id:number;
+    event_id: number;
 }
 const EventDetails: React.FC<evenDetailsProps> = ({
     user_photo,
@@ -23,6 +26,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
     event_title,
     event_description,
     isUsersOwnPost,
+    event_location,
     user_id,
     event_id
 }) => {
@@ -55,7 +59,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                     <Text>
                         {user_name}
                     </Text>
-                    <View className='flex flex-row space-x-3'>
+                    {/* <View className='flex flex-row space-x-3'>
 
                         <Text className='opacity-70 italic'>
                             {event_date}
@@ -63,7 +67,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                         <Text className='opacity-70 italic'>
                             {timeSliced}
                         </Text>
-                    </View>
+                    </View> */}
                 </View>
                 {
                     isUsersOwnPost && (
@@ -83,7 +87,30 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                     {event_title}
                 </Text>
             </View>
+            <View className='mt-3 flex flex-row items-center space-x-1'>
+                <Entypo name="location-pin" size={24} color="black" />
 
+                <Text>
+                    {event_location}
+                </Text>
+            </View>
+            <View className='mb-3 flex flex-row items-center space-x-5'>
+                <View className='flex flex-row space-x-2 my-2 mx-1 items-center'>
+
+                    <AntDesign name="calendar" size={18} color="black" />
+
+                    <Text>
+                        {event_date}
+                    </Text>
+                </View>
+                <View className='flex flex-row space-x-2 items-center'>
+                    <AntDesign name="clockcircleo" size={18} color="black" />
+                    <Text>
+                        {timeSliced}
+                    </Text>
+                </View>
+
+            </View>
             <View>
                 <Text className=''>
                     {event_description}

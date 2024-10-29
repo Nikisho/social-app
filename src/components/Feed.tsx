@@ -36,7 +36,7 @@ const Feed: React.FC<FeedProps> = ({
     }, 2000);
   }, [hub_code, sorting_option, fetchEvents]);
     return (
-      <ScrollView className={Platform.OS === 'ios' ? 'h-[80%] z-0' : 'h-5/6'}
+      <ScrollView className={Platform.OS === 'ios' ? 'h-[80%] z-0' : 'h-[78%]'}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
