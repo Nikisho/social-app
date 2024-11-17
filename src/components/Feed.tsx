@@ -36,13 +36,13 @@ const Feed: React.FC<FeedProps> = ({
     }, 2000);
   }, [hub_code, sorting_option, fetchEvents]);
     return (
-      <ScrollView className={Platform.OS === 'ios' ? 'h-[80%] z-0' : 'h-[78%]'}
+      <ScrollView className={` mx-[-8] ${Platform.OS === 'ios' ? 'h-[80%] z-0' : 'h-[76%]'}`}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         {eventList?.map((event, index) => (
-          <View key={event.event_id}>
+          <View key={event.event_id} className='flex items-center w-full'>
             {/* Render the feed card */}
             <FeedCard
               name={event.user_name}

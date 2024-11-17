@@ -30,6 +30,8 @@ const GoogleSignUp = ({
                 if (existingUser && existingUser.length > 0) {
                     alert("It looks like you already have an account. Please sign in instead.");
                     navigation.navigate('signin');
+                    setLoading(false);
+                    return;
                 } else {
                     const { data: { session }, error: AuthUserError } = await supabase.auth.signInWithIdToken({
                         provider: 'google',

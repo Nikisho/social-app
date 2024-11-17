@@ -13,6 +13,8 @@ const EulaScreen = () => {
         <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+  
+
         <Text style={styles.heading}>End User License Agreement (EULA)</Text>
 
         <Text style={styles.sectionHeading}>1. Acceptance of Terms</Text>
@@ -20,12 +22,17 @@ const EulaScreen = () => {
           By downloading or using the Linkzy app, you agree to this End User License Agreement (EULA). This EULA is a legal agreement between you and Linkzy, governing your use of the application.
         </Text>
 
-        <Text style={styles.sectionHeading}>2. User-Generated Content</Text>
+        <Text style={styles.sectionHeading}>2. Age requirement</Text>
+        <Text style={styles.text}>
+          Linkzy is strictly for users aged 18 and older. By agreeing to this EULA, you confirm that you are at least 18 years old. Users found to be under the age of 18 will have their accounts terminated immediately.
+        </Text>
+
+        <Text style={styles.sectionHeading}>3. User-Generated Content</Text>
         <Text style={styles.text}>
           Linkzy allows users to create, post, and share content. However, you agree not to post any content that is illegal, offensive, discriminatory, harmful, or otherwise objectionable. Linkzy has no tolerance for objectionable content or abusive behavior.
         </Text>
 
-        <Text style={styles.sectionHeading}>3. Prohibited Conduct</Text>
+        <Text style={styles.sectionHeading}>4. Prohibited Conduct</Text>
         <Text style={styles.text}>
           You may not use the app to:
         </Text>
@@ -36,12 +43,12 @@ const EulaScreen = () => {
           - Violate any applicable laws or regulations.
         </Text>
 
-        <Text style={styles.sectionHeading}>4. Account Suspension or Termination</Text>
+        <Text style={styles.sectionHeading}>5. Account Suspension or Termination</Text>
         <Text style={styles.text}>
           Linkzy reserves the right to suspend or terminate accounts that violate this agreement or participate in abusive or illegal behavior.
         </Text>
 
-        <Text style={styles.sectionHeading}>5. No Tolerance for Objectionable Content</Text>
+        <Text style={styles.sectionHeading}>6. No Tolerance for Objectionable Content</Text>
         <Text style={styles.text}>
           There is zero tolerance for any objectionable content, including but not limited to:
         </Text>
@@ -51,12 +58,12 @@ const EulaScreen = () => {
           - Violence or threats of violence.
         </Text>
 
-        <Text style={styles.sectionHeading}>6. Limitation of Liability</Text>
+        <Text style={styles.sectionHeading}>7. Limitation of Liability</Text>
         <Text style={styles.text}>
           Linkzy is not responsible for the actions of users on the app. We do our best to moderate and remove inappropriate content, but users engage with the app at their own risk.
         </Text>
 
-        <Text style={styles.sectionHeading}>7. Changes to this Agreement</Text>
+        <Text style={styles.sectionHeading}>8. Changes to this Agreement</Text>
         <Text style={styles.text}>
           Linkzy reserves the right to modify this EULA at any time. Changes will be posted within the app and take effect immediately.
         </Text>

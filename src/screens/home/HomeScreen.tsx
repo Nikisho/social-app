@@ -59,7 +59,7 @@ const HomeScreen = () => {
     }, [sortingOption, selectedHub])
   );
   return (
-    <View className='mx-2'>
+    <View className='px-2'>
       <Header />
       <View className='flex flex-row space-x-2'>
         <TouchableOpacity
@@ -79,7 +79,6 @@ const HomeScreen = () => {
           <Text> {sortingOption === 'created_at' ? 'New' : 'Event date'}</Text>
         </TouchableOpacity>
       </View>
-
       <Feed
         eventList={eventList!}
         fetchEvents={() => fetchEvents(selectedHub?.hub_code!, sortingOption)}

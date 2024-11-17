@@ -28,12 +28,12 @@ const AppleSignUp = (
                 const { data: existingUser } = await supabase
                     .from('users')
                     .select('*')
-                    .eq('uid', credential.email);
+                    .eq('email', credential.email);
 
                 if ( existingUser && existingUser?.length > 0) {
                     alert("It looks like you already have an account. Please sign in instead.");
                     navigation.navigate('signin');
-                    setLoading(true);
+                    setLoading(false);
                     return;
                 }
 

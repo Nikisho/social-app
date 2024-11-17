@@ -10,6 +10,7 @@ import LikeHandler from './LikeHandler';
 import { RootStackNavigationProp } from '../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import FeedCardOptionsModal from './FeedCardOptionsModal';
+import styles from '../utils/styles/shadow';
 
 interface FeedCardProps {
     name: string;
@@ -47,8 +48,10 @@ const FeedCard: React.FC<FeedCardProps> = ({
                     event_id: event_id,
                 });
             }}
-            // style={styles.shadow} 
-            className='rounded-lg bg-gray-100 p-2 mb-3 space-y-1 '>
+            style={styles.shadow} 
+            className='rounded-xl bg-white p-2 my-3 space-y-1 shadow-lg w-[93%]'
+    
+            >
             <View className=' flex flex-row justify-between'>
 
                 <TouchableOpacity

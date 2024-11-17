@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../supabase';
+import LoadingView from './InterestsLoader';
 
 interface UserDataProps {
     userInterests: {
@@ -27,7 +28,9 @@ const ProfileInterestsSelector:React.FC<ProfileInterestsSelectorProps> = ({
 }) => {
     const [interestGroups, setInterestGroups] = useState< InterestGroup[] | null>();
     const maxNumberOfInterests = 5;
+    const [loading, setLoading] = useState<boolean>(false);
     const fetchInterests = async () => {
+        setLoading(true);
         const { data, error } = await supabase
             .from('interests')
             .select(`
@@ -58,8 +61,10 @@ const ProfileInterestsSelector:React.FC<ProfileInterestsSelectorProps> = ({
                 return acc;
               }, []);
             setInterestGroups(interestGroups)
+            setLoading(false);
         }
         if (error) throw error.message;
+        setLoading(false);
     };
 
     const selectInterests = async (interest: { description: string; code: number }, interestGroup: any) => {
@@ -87,7 +92,17 @@ const ProfileInterestsSelector:React.FC<ProfileInterestsSelectorProps> = ({
 
     useEffect(() => {
         fetchInterests();
-    }, [])
+    }, []);
+
+    if (loading) {
+
+       return (
+            <View className='h-[65%]'>
+                <LoadingView/>
+            </View>
+       )
+    }
+
     return (
         <ScrollView
             contentContainerStyle={styles.scrollContainer}

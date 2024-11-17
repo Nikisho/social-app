@@ -13,6 +13,8 @@ import { decode } from 'base64-arraybuffer';
 import { ImagePickerAsset } from 'expo-image-picker';
 import { User } from '@supabase/supabase-js';
 import LoadingScreen from '../../loading/LoadingScreen';
+import { usePushNotifications } from '../../../utils/functions/usePushNotifications';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 interface UserDataProps {
     name: string;
@@ -25,6 +27,7 @@ interface UserDataProps {
 }
 const UserDetailsScreen = () => {
     const dispatch = useDispatch();
+    const { expoPushToken } = usePushNotifications();
     const [user, setUser] = useState<User | null>(null);
     const [ loading, setLoading] = useState<boolean>(false);
     const [userDetails, setUserDetails] = useState<UserDataProps>({
@@ -107,6 +110,13 @@ const UserDetailsScreen = () => {
 
     }
     const createProfile = async () => {
+        if (userDetails.age) {
+            const numericValue = parseInt(userDetails?.age!, 10);
+            if (numericValue < 18) {
+                platformAlert('Sorry, you must be 18 or older to use Linkzy. Please check back when you meet this age requirement!');
+                return;
+            }
+        }
         setLoading(!loading);
         const { data, error } = await supabase
             .from('users')
@@ -115,7 +125,8 @@ const UserDetailsScreen = () => {
                 age: userDetails.age ? userDetails.age : null,
                 email: user?.email,
                 auth_provider: user?.app_metadata.provider,
-                uid: user?.id
+                uid: user?.id,
+                expo_push_token: expoPushToken?.data
             })
             .select('id')
             .single();

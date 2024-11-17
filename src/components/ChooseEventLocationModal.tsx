@@ -25,6 +25,7 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
         const { error, data } = await supabase
             .from('hubs')
             .select('hub_name, hub_code')
+            .order('hub_code') 
         if (data) {
             setHubs(data)
         }
