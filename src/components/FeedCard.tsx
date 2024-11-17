@@ -49,7 +49,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 });
             }}
             style={styles.shadow} 
-            className='rounded-xl bg-white p-2 my-3 space-y-1 shadow-lg w-[93%]'
+            className='rounded-xl bg-white p-2 my-3 space-y-1 w-[93%]'
     
             >
             <View className=' flex flex-row justify-between'>

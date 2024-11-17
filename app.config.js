@@ -1,6 +1,10 @@
 export default {
   // Hook to write the google-services.json from environment variable
   expo: {
+    updates: {
+      url: "https://u.expo.dev/79e17fd1-764c-424f-9efe-1c4aabd967f6",
+    },
+    runtimeVersion: "1.0.0",
     scheme: 'com.linkzy',
     plugins: [
       "expo-apple-authentication",
