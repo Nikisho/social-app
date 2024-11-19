@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, Dimensions, FlatList } from 'react-nativ
 import React from 'react';
 import colours from '../../utils/styles/colours';
 import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
+import Hyperlink from 'react-native-hyperlink';
 
 interface Message {
     message_id: number;
@@ -43,15 +44,20 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
                 )}
                 {
                     item.content && (
-                        <Text
-                            selectable={true}
-                            style={{
-                                color: isCurrentUser ? '#ffffff' : '#000000',
-                                fontSize: 16,
-                            }}
+                        <Hyperlink
+                            linkDefault={true}
+                            linkStyle={{ color: "blue" }}
                         >
-                            {item.content}
-                        </Text>
+                            <Text
+                                selectable={true}
+                                style={{
+                                    color: isCurrentUser ? '#ffffff' : '#000000',
+                                    fontSize: 16,
+                                }}
+                            >
+                                {item.content}
+                            </Text>
+                        </Hyperlink>
                     )
                 }
 

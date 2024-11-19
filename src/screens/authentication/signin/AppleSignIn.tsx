@@ -58,10 +58,22 @@ const AppleSignIn = () => {
 
             }
         } catch (e: any) {
-            if (e.code === 'ERR_REQUEST_CANCELED') {
-                // handle that the user canceled the sign-in flow
-            } else {
-                // handle other errors
+            switch (e.code) {
+                case 'ERR_REQUEST_CANCELED':
+                    console.log('User canceled the Apple sign-in flow.');
+                    Alert.alert('You canceled the sign-in process. Please try again if you wish to continue.');
+                    break;
+                case 'ERR_UNSUPPORTED_PLATFORM':
+                    console.log('Apple sign-in is not supported on this platform.');
+                    Alert.alert('Apple sign-in is not supported on this device.');
+                    break;
+                case 'ERR_NETWORK':
+                    console.log('Network error occurred during Apple sign-in.');
+                    Alert.alert('A network issue occurred. Please check your connection and try again.');
+                    break;
+                default:
+                    console.error('Unknown Apple sign-in error:', e.message);
+                    Alert.alert('An unknown error occurred. Please try again later.');
             }
         }
         setLoading(false);

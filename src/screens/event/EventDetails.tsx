@@ -1,10 +1,11 @@
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView, Linking } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Hyperlink from 'react-native-hyperlink'
 
 interface evenDetailsProps {
     user_name: string;
@@ -59,15 +60,6 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                     <Text>
                         {user_name}
                     </Text>
-                    {/* <View className='flex flex-row space-x-3'>
-
-                        <Text className='opacity-70 italic'>
-                            {event_date}
-                        </Text>
-                        <Text className='opacity-70 italic'>
-                            {timeSliced}
-                        </Text>
-                    </View> */}
                 </View>
                 {
                     isUsersOwnPost && (
@@ -96,9 +88,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
             </View>
             <View className='mb-3 flex flex-row items-center space-x-5'>
                 <View className='flex flex-row space-x-2 my-2 mx-1 items-center'>
-
                     <AntDesign name="calendar" size={18} color="black" />
-
                     <Text>
                         {event_date}
                     </Text>
@@ -109,12 +99,16 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                         {timeSliced}
                     </Text>
                 </View>
-
             </View>
             <View>
-                <Text className=''>
-                    {event_description}
-                </Text>
+                <Hyperlink 
+                    linkDefault={ true }
+                    linkStyle={ { color: "blue" } }
+                    >
+                    <Text className=''>
+                        {event_description}
+                    </Text>
+                </Hyperlink>
             </View>
         </ScrollView>
 

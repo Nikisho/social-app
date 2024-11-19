@@ -57,23 +57,29 @@ const GoogleSignIn = () => {
             } else {
                 throw new Error('no ID token present!')
             }
-        } catch (error) {
+        } catch (error: any) {
             if (isErrorWithCode(error)) {
                 switch (error.code) {
                     case statusCodes.SIGN_IN_CANCELLED:
-                        // user cancelled the login flow
+                        console.log('User cancelled the Google sign-in process.');
+                        Alert.alert('You cancelled the sign-in process. Please try again.');
                         break;
                     case statusCodes.IN_PROGRESS:
-                        // operation (eg. sign in) already in progress
+                        console.log('Google sign-in already in progress.');
+                        Alert.alert('Sign-in is already in progress. Please wait.');
                         break;
                     case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-                        // play services not available or outdated
+                        console.log('Google Play Services are not available or outdated.');
+                        Alert.alert('Google Play Services are not available. Please update or try again later.');
                         break;
                     default:
-                    // some other error happened
+                        console.error('Unknown error during Google sign-in:', error.message);
+                        Alert.alert('An unknown error occurred. Please try again later.');
                 }
             } else {
-                // an error that's not related to google sign in occurred
+                // Non-Google related errors (like network issues)
+                console.error('Non-Google Sign-in Error:', error.message);
+                Alert.alert('An unexpected error occurred. Please check your connection and try again.');
             }
 
         }
