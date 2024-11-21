@@ -14,7 +14,7 @@ import UpdateBioModal from './UpdateBioModal';
 
 interface UserDataProps {
 	name: string;
-	age: string;
+	date_of_birth: Date | null;
 	photo: string;
 	bio: string
 
@@ -31,7 +31,7 @@ const ProfileScreen = () => {
 	const route = useRoute<ProfileScreenRouteProp>();
 	const { user_id } = route.params;
 	const [userData, setUserData] = useState<UserDataProps>({
-		age: '',
+		date_of_birth: null,
 		bio: '',
 		photo: '',
 		name: ''
@@ -182,7 +182,7 @@ const ProfileScreen = () => {
 				userData && (
 					<UserDetails
 						name={userData.name}
-						age={userData.age}
+						dateOfBirth={userData.date_of_birth}
 						photo={userData.photo}
 						bio={userData.bio}
 						handlePressChat={handlePressChat}

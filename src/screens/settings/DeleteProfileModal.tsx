@@ -5,6 +5,7 @@ import { setCurrentUser } from '../../context/navSlice';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../utils/styles/shadow';
+import platformAlert from '../../utils/functions/platformAlert';
 
 interface DeleteProfileModalProps {
     modalVisible: boolean;
@@ -17,19 +18,17 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
     setModalVisible,
     currentUserId
 }) => {
-
     const dispatch = useDispatch();
     const deleteAccount = async () => {
 
         const { error } = await supabase.rpc('delete_user');
-        if (error) {throw error.message};
+        if (error) { throw error.message };
 
         const { error: DeleteUserError } = await supabase
             .from('users')
             .delete()
             .eq('id', currentUserId);
         if (DeleteUserError) { throw DeleteUserError.message };
-
 
         //Remove user info from redux.//
         await AsyncStorage.removeItem('userAccessToken');
@@ -41,6 +40,26 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
             id: null
         }));
         setModalVisible(!modalVisible);
+        //Delete the user's folder and profile picture.
+        await deleteUserFolder();
+        platformAlert('Account deleted successfully.')
+    };
+
+    const deleteUserFolder = async () => {
+        const { data , error:DeleteBucketFolderError } = await supabase
+        .storage
+        .from('users')
+        .remove([`${currentUserId}/profile_picture.jpg`])
+        if (DeleteBucketFolderError) {
+            console.error(DeleteBucketFolderError)
+        }
+        if (data) {
+            const { error:DeleteEmptyBucket } = await supabase
+            .storage
+            .from('users')
+            .remove([`/${currentUserId}`]) 
+            if (DeleteEmptyBucket) console.error(DeleteEmptyBucket.message)
+        }
     };
 
     return (
@@ -55,7 +74,7 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
                 }}>
                 <View className='flex-1 justify-center items-center mt-22 h-full shadow-xl' >
                     <View className='bg-white rounded-xl m-20 h-auto w-[90%]  p-2 space-y-5 items-center'
-                    style={styles.shadow}
+                        style={styles.shadow}
                     >
                         <View className='flex w-full ' >
                             <Text className='text-lg'>
@@ -78,7 +97,6 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
                             </TouchableOpacity>
                         </View>
                     </View>
-
                 </View>
             </Modal>
         </View>

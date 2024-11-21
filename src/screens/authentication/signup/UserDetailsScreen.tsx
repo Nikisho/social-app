@@ -15,10 +15,11 @@ import { User } from '@supabase/supabase-js';
 import LoadingScreen from '../../loading/LoadingScreen';
 import { usePushNotifications } from '../../../utils/functions/usePushNotifications';
 import platformAlert from '../../../utils/functions/platformAlert';
+import getAge from '../../../utils/functions/getAge';
 
 interface UserDataProps {
     name: string;
-    age: string | null;
+    dateOfBirth: Date | null;
     photo: ImagePickerAsset | null;
     userInterests: {
         interestCode: number;
@@ -32,10 +33,13 @@ const UserDetailsScreen = () => {
     const [ loading, setLoading] = useState<boolean>(false);
     const [userDetails, setUserDetails] = useState<UserDataProps>({
         name: '',
-        age: null,
+        dateOfBirth: new Date(),
         photo: null,
         userInterests: []
     });
+    console.log(userDetails.dateOfBirth);
+
+
     function updateFields(fields: Partial<UserDataProps>) {
         setUserDetails(prev => {
             return { ...prev, ...fields }
@@ -110,9 +114,9 @@ const UserDetailsScreen = () => {
 
     }
     const createProfile = async () => {
-        if (userDetails.age) {
-            const numericValue = parseInt(userDetails?.age!, 10);
-            if (numericValue < 18) {
+        if (userDetails.dateOfBirth) {
+            const userAge = getAge(userDetails.dateOfBirth);
+            if (userAge < 18) {
                 platformAlert('Sorry, you must be 18 or older to use Linkzy. Please check back when you meet this age requirement!');
                 return;
             }
@@ -122,7 +126,7 @@ const UserDetailsScreen = () => {
             .from('users')
             .insert({
                 name: userDetails.name,
-                age: userDetails.age ? userDetails.age : null,
+                date_of_birth : userDetails.dateOfBirth ? userDetails.dateOfBirth : null,
                 email: user?.email,
                 auth_provider: user?.app_metadata.provider,
                 uid: user?.id,
@@ -137,7 +141,7 @@ const UserDetailsScreen = () => {
             const photoUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/users/${data.id}/profile_picture.jpg?v=${new Date().getTime()}`
             dispatch(setCurrentUser({
                 name: userDetails.name,
-                age: userDetails.age ? userDetails.age : null,
+                age: userDetails.dateOfBirth ? `${getAge(userDetails.dateOfBirth)}` : null,
                 photo: userDetails.photo ? photoUrl : null,
                 id: data.id
             }))

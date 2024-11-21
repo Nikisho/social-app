@@ -5,7 +5,7 @@ import styles from '../../utils/styles/shadow';
 
 interface UserDataProps {
     name: string;
-    age: string;
+    date_of_birth: Date | null;
     photo: string;
     bio: string;
 }

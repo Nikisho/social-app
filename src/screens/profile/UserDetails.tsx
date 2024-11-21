@@ -9,10 +9,11 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
+import getAge from '../../utils/functions/getAge';
 
 interface UserDetailsProps {
     name: string;
-    age: string;
+    dateOfBirth: Date | null;
     photo: string;
     bio: string
     handlePressChat: () => void;
@@ -26,7 +27,7 @@ interface UserDetailsProps {
 const UserDetails: React.FC<UserDetailsProps> = ({
     name,
     photo,
-    age,
+    dateOfBirth,
     bio,
     handlePressChat,
     setModalVisible,
@@ -37,6 +38,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
+    console.log(dateOfBirth)
     return (
         <View className='h-[35%]'>
             <View className=' flex space-x-5 py-1 flex flex-row items-center'>
@@ -75,7 +77,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             {name}
                         </Text>
                         {
-                            age && (
+                            dateOfBirth && (
                                 <View
                                     style={{ backgroundColor: colours.secondaryColour }}
                                     className='rounded-full px-3'
@@ -83,7 +85,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 
                                     <Text
                                         className='text-lg font-bold text-white'>
-                                        {age}
+                                        {getAge(dateOfBirth)}
                                     </Text>
                                 </View>
                             )
