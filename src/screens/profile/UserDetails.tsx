@@ -38,7 +38,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
-    console.log(dateOfBirth)
     return (
         <View className='h-[35%]'>
             <View className=' flex space-x-5 py-1 flex flex-row items-center'>
