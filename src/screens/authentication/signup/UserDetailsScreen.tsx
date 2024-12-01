@@ -37,8 +37,6 @@ const UserDetailsScreen = () => {
         photo: null,
         userInterests: []
     });
-    console.log(userDetails.dateOfBirth);
-
 
     function updateFields(fields: Partial<UserDataProps>) {
         setUserDetails(prev => {

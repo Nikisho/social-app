@@ -30,6 +30,7 @@ import SendResetLinkScreen from './src/screens/authentication/passwordReset/Send
 import ResetPasswordScreen from './src/screens/authentication/passwordReset/ResetPasswordScreen';
 import UserDetailsScreen from './src/screens/authentication/signup/UserDetailsScreen';
 import UpdateInterestsScreen from './src/screens/profile/UpdateInterestsScreen';
+import * as Linking from 'expo-linking';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -55,7 +56,15 @@ function App() {
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
-
+    // useEffect(() => {
+    //     const subscription = Linking.addEventListener('url', ({ url }) => console.log(url));
+    //     Linking.getInitialURL().then((url) => {
+    //         if (url) console.log(url)
+    //     });
+    //     return () => { 
+    //         subscription.remove();
+    //     }; 
+    // }, []);
 	const setSession = async () => {
 			const accessToken = await AsyncStorage.getItem('userAccessToken');
 			const refreshToken = await AsyncStorage.getItem('userRefreshToken');

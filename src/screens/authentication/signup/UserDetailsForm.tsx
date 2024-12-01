@@ -68,9 +68,10 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     date={dateOfBirth!}
                     onConfirm={(date: Date) => {
                         setOpen(false)
-                        // handleChange('date', date)
                         updateFields({ dateOfBirth: date})
                     }}
+                    buttonColor='black'
+                    theme='light'
                     onCancel={() => {
                         setOpen(false)
                     }}
