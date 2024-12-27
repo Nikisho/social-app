@@ -19,9 +19,11 @@ interface UserDetailsProps {
     handlePressChat: () => void;
     pickImage: () => void;
     setModalVisible: (modalVisible: boolean) => void;
+    setProfilePictureModalVisible: (profilePictureModalVisible: boolean) => void;
     isCurrentUserProfile: boolean
     user_id: number;
     modalVisible: boolean;
+    profilePictureModalVisible: boolean
 }
 
 const UserDetails: React.FC<UserDetailsProps> = ({
@@ -34,7 +36,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     pickImage,
     isCurrentUserProfile,
     user_id,
-    modalVisible
+    modalVisible,
+    profilePictureModalVisible,
+    setProfilePictureModalVisible
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
@@ -43,7 +47,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
             <View className=' flex space-x-5 py-1 flex flex-row items-center'>
                 <TouchableOpacity
                     className='flex flex-row items-center space-x-3'
-                    onPress={pickImage}
+                    onPress={() => setProfilePictureModalVisible(!profilePictureModalVisible)}
                 >
                     {
                         photo ?
@@ -60,7 +64,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             </>
                     }
                     {
-                        isCurrentUserProfile && (
+                        false && (
                             <View className='absolute right-5'>
                                 <FontAwesome className='' name="edit" size={30} color="white" />
                             </View>

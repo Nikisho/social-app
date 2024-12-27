@@ -48,10 +48,10 @@ const FeedCard: React.FC<FeedCardProps> = ({
                     event_id: event_id,
                 });
             }}
-            style={styles.shadow} 
-            className='rounded-xl bg-white p-2 my-3 space-y-1 w-[93%]'
-    
-            >
+            style={styles.shadow}
+            className='rounded-xl bg-white p-2 my-3 space-y-2 w-[93%]'
+
+        >
             <View className=' flex flex-row justify-between'>
 
                 <TouchableOpacity
@@ -91,14 +91,17 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 </Text>
             </View>
 
-            <View className='space-x-3 flex flex-row items-center'>
-                <View className='space-x-1 flex flex-row items-center '>
-                    <AntDesign name="calendar" size={24} color="black" />
-                    <Text className='font-semibold '> {formattedDate} </Text>
-                </View>
-                <View className='space-x-1 flex flex-row items-center '>
-                    <AntDesign name="clockcircleo" size={24} color="black" />
-                    <Text className='font-semibold '> {timeSliced} </Text>
+            <View className='space-x-3 flex flex-row items-center bg-white'>
+                <View className='space-x-2 flex-row flex p-2 rounded-xl bg-[#176b7d]' style={styles.shadow}>
+
+                    <View className='space-x-1 flex flex-row items-center '>
+                        <AntDesign name="calendar" size={24} color="white" />
+                        <Text className=' text-white font-bold '> {formattedDate} </Text>
+                    </View>
+                    <View className='space-x-1 flex flex-row items-center '>
+                        <AntDesign name="clockcircleo" size={24} color="white" />
+                        <Text className=' text-white font-bold '> {timeSliced} </Text>
+                    </View>
                 </View>
                 <LikeHandler
                     user_id={currentUser.id}
@@ -107,7 +110,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
             </View>
             {
-                modalVisible && 
+                modalVisible &&
                 <FeedCardOptionsModal
                     setModalVisible={setModalVisible}
                     modalVisible={modalVisible}

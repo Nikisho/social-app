@@ -1,5 +1,5 @@
-import { View, TouchableOpacity} from 'react-native'
-import React  from 'react'
+import { View, TouchableOpacity } from 'react-native'
+import React from 'react'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import styles from '../../utils/styles/shadow';
 import LikeHandler from '../../components/LikeHandler';
@@ -15,19 +15,25 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
     const navigation = useNavigation<RootStackNavigationProp>()
 
     return (
-        <View 
+        <View
             style={styles.translucidViewStyle}
             className='rounded-xl py-2 flex flex-row '>
             <LikeHandler
                 user_id={user_id}
                 event_id={event_id}
             />
-            <TouchableOpacity 
-                onPress={() => {navigation.navigate('comment', {
-                    event_id: event_id
-                })}}
-                className='w-1/2  flex flex-row justify-center items-center'>
-                <EvilIcons name="comment" size={30} color="black" />
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('comment', {
+                        event_id: event_id
+                    })
+                }}
+                className='w-1/2 flex flex-row justify-center items-center'>
+                <View className='p-3 rounded-full bg-white flex justify-center'
+                    style={styles.shadow}
+                >
+                    <EvilIcons name="comment" size={30} color="black" />
+                </View>
             </TouchableOpacity>
         </View>
     )

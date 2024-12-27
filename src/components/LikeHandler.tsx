@@ -5,6 +5,8 @@ import { supabase } from '../../supabase';
 import hasUserLikedEvent from '../utils/functions/hasUserLikedEvent';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
+import styles from '../utils/styles/shadow';
+import colours from '../utils/styles/colours';
 
 interface LikeHandlerProps {
     event_id: number;
@@ -57,30 +59,40 @@ const LikeHandler: React.FC<LikeHandlerProps> = ({
     );
     return (
 
-        <TouchableWithoutFeedback className='w-1/2 bg-red-200'>
-            <View className='w-1/2'>
-                {
-                    hasUserLikedEventState ?
-                        <TouchableOpacity
-                            onPress={handleUnlike}
-                            className='w-full flex flex-row justify-center space-x-3 items-center'>
-                            <Ionicons name="heart" size={25} color="red" />
-                            <Text>
-                                {likeNumber}
-                            </Text>
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity
-                            onPress={handleSubmitLike}
-                            className='w-full flex flex-row justify-center space-x-3 items-center'>
+        <TouchableOpacity
+        className='w-1/2'
+        >
+            {
+                hasUserLikedEventState ?
+                    <TouchableOpacity
+                        onPress={handleUnlike}
+                        className='w-full flex flex-row justify-center space-x-3 items-center'>
+
+                        <View className='p-3 rounded-full bg-white flex justify-center'
+                            style={styles.shadow}
+                        >
+                            <Ionicons name="heart" size={25} color={colours.secondaryColour} />
+                        </View>
+                        <Text>
+                            {likeNumber}
+                        </Text>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
+                        onPress={handleSubmitLike}
+                        className='w-full flex flex-row justify-center space-x-3 items-center'>
+
+                        <View className='p-3 rounded-full bg-white'
+                            style={styles.shadow}
+                        >
                             <Ionicons name="heart-outline" size={25} color="black" />
-                            <Text>
-                                {likeNumber}
-                            </Text>
-                        </TouchableOpacity>
-                }
-            </View>
-        </TouchableWithoutFeedback>
+                        </View>
+                        <Text>
+                            {likeNumber}
+                        </Text>
+                    </TouchableOpacity>
+            }
+        </TouchableOpacity>
     )
 }
 

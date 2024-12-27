@@ -11,6 +11,8 @@ import { decode } from 'base64-arraybuffer';
 import UserDetails from './UserDetails';
 import UserInterests from './UserInterests';
 import UpdateBioModal from './UpdateBioModal';
+import ProfilePictureModal from './ProfilePictureModal';
+import platformAlert from '../../utils/functions/platformAlert';
 
 interface UserDataProps {
 	name: string;
@@ -40,6 +42,7 @@ const ProfileScreen = () => {
 	const navigation = useNavigation<RootStackNavigationProp>();
 	const isCurrentUserProfile = user_id === currentUser.id;
 	const [modalVisible, setModalVisible] = useState(false);
+	const [profilePictureModalVisible, setProfilePictureModalVisible] = useState(false);
 	const [originalBio, setOriginalBio] = useState('');
 	const [userInterests, setUserInterests] = useState<Interests[]>();
 
@@ -153,6 +156,29 @@ const ProfileScreen = () => {
 			Platform.OS === 'android' ? ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT) : Alert.alert('Profile picture changed successfully');
 		}
 	}
+
+	const clearImage = async () => {
+		if (currentUser.id !== user_id || currentUser.photo === null) {
+			return;
+		}
+		const { error } = await supabase
+			.from('users')
+			.update({
+				photo: null,
+			})
+			.eq('id', currentUser.id);
+
+		if (error) (console.error(error.message));
+
+		dispatch(setCurrentUser({
+			name: currentUser.name,
+			photo: null,
+			id: currentUser.id
+		}));
+		platformAlert('Image cleared successfully.')
+	};
+
+
 	const fetchInterests = async () => {
 		const { error, data } = await supabase
 			.from('user_interests')
@@ -183,7 +209,7 @@ const ProfileScreen = () => {
 					<UserDetails
 						name={userData.name}
 						dateOfBirth={userData.date_of_birth}
-						photo={userData.photo}
+						photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
 						bio={userData.bio}
 						handlePressChat={handlePressChat}
 						setModalVisible={setModalVisible}
@@ -191,6 +217,8 @@ const ProfileScreen = () => {
 						isCurrentUserProfile={isCurrentUserProfile}
 						user_id={user_id}
 						modalVisible={modalVisible}
+						setProfilePictureModalVisible={setProfilePictureModalVisible}
+						profilePictureModalVisible={profilePictureModalVisible}
 					/>
 				)
 			}
@@ -209,6 +237,14 @@ const ProfileScreen = () => {
 			/>
 			<UserEvents
 				user_id={user_id}
+			/>
+			<ProfilePictureModal
+				setModalVisible={setProfilePictureModalVisible}
+				modalVisible={profilePictureModalVisible}
+				photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
+				user_id={user_id}
+				pickImage={pickImage}
+				clearImage={clearImage}
 			/>
 		</View>
 	)

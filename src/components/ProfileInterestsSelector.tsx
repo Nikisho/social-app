@@ -27,7 +27,7 @@ const ProfileInterestsSelector:React.FC<ProfileInterestsSelectorProps> = ({
     updateFields
 }) => {
     const [interestGroups, setInterestGroups] = useState< InterestGroup[] | null>();
-    const maxNumberOfInterests = 5;
+    const maxNumberOfInterests = 10;
     const [loading, setLoading] = useState<boolean>(false);
     const fetchInterests = async () => {
         setLoading(true);

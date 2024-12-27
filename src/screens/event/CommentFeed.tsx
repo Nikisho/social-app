@@ -42,7 +42,7 @@ const CommentFeed: React.FC<CommentFeedProps> = ({ event_id }) => {
         }, [])
     );
     return (
-        <ScrollView className='space-y-1 mt-2 -mx-2 '>
+        <ScrollView className='space-y-1 mt-2 -mx-2 h-1/2'>
             {
                 comments?.map((comment) => (
                     <View

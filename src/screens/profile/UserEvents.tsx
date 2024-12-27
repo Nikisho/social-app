@@ -1,13 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
-import FeedCard from '../../components/FeedCard';
 import Feed from '../../components/Feed';
 import { AntDesign } from '@expo/vector-icons';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
-import { current } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 
@@ -47,8 +45,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     }, [user_id]);
 
     return (
-        <View className='h-[48%] flex space-y-2'>
-
+        <View className='h-[51%] mt-5 flex space-y-2'>
             <View className=''>
                 <Text className='text-lg font-semibold'>Events</Text>
             </View>

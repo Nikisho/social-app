@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
-import {  useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 
 interface UserInterestsProps {
@@ -16,7 +16,7 @@ interface UserInterestsProps {
     }[]
 }
 
-const UserInterests:React.FC<UserInterestsProps> = ({
+const UserInterests: React.FC<UserInterestsProps> = ({
     isCurrentUserProfile,
     userInterests
 }) => {
@@ -27,7 +27,7 @@ const UserInterests:React.FC<UserInterestsProps> = ({
                 <Text className='text-lg font-semibold my-1'>Interests</Text>
                 {
                     isCurrentUserProfile && (
-                        <TouchableOpacity  
+                        <TouchableOpacity
                             onPress={() => navigation.navigate('updateinterests', {
                                 user_interests: userInterests!
                             })}
@@ -39,23 +39,24 @@ const UserInterests:React.FC<UserInterestsProps> = ({
             </View>
             {
                 userInterests?.length === 0 ?
-                <View>
-                    <Text className='italic py-3'>
-                        No interests added yet
-                    </Text>
-                </View>
-                :
-            <View 
-                style={styles.interestsContainer}
-                >
-            {
-                userInterests?.map((interest) => (
-                    <View style={styles.interestButton} key={interest.interest_code}>
-                        <Text>{interest.interests.description}</Text>
+                    <View>
+                        <Text className='italic py-3'>
+                            No interests added yet
+                        </Text>
                     </View>
-                    ))
-                }
-                </View>
+                    :
+                    <ScrollView
+                        horizontal
+                        className=''
+                    >
+                        {
+                            userInterests?.map((interest) => (
+                                <View style={styles.interestButton} key={interest.interest_code}>
+                                    <Text>{interest.interests.description}</Text>
+                                </View>
+                            ))
+                        }
+                    </ScrollView>
             }
 
         </View>

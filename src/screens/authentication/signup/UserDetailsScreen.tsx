@@ -16,6 +16,7 @@ import LoadingScreen from '../../loading/LoadingScreen';
 import { usePushNotifications } from '../../../utils/functions/usePushNotifications';
 import platformAlert from '../../../utils/functions/platformAlert';
 import getAge from '../../../utils/functions/getAge';
+import formatDate from '../../../utils/functions/formatDate';
 
 interface UserDataProps {
     name: string;
@@ -112,7 +113,8 @@ const UserDetailsScreen = () => {
 
     }
     const createProfile = async () => {
-        if (userDetails.dateOfBirth) {
+        const todaysDate = new Date();
+        if (userDetails.dateOfBirth && formatDate(userDetails.dateOfBirth) !== formatDate(todaysDate)) {
             const userAge = getAge(userDetails.dateOfBirth);
             if (userAge < 18) {
                 platformAlert('Sorry, you must be 18 or older to use Linkzy. Please check back when you meet this age requirement!');
@@ -124,7 +126,7 @@ const UserDetailsScreen = () => {
             .from('users')
             .insert({
                 name: userDetails.name,
-                date_of_birth : userDetails.dateOfBirth ? userDetails.dateOfBirth : null,
+                date_of_birth : formatDate(userDetails.dateOfBirth!) !== formatDate(todaysDate)? userDetails.dateOfBirth : null,
                 email: user?.email,
                 auth_provider: user?.app_metadata.provider,
                 uid: user?.id,

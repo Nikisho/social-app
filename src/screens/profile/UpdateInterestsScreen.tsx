@@ -10,11 +10,6 @@ import LoadingScreen from '../loading/LoadingScreen'
 import platformAlert from '../../utils/functions/platformAlert'
 
 
-interface InterestsProps {
-    interestCode: number;
-    interestGroupCode: number
-};
-
 const UpdateInterestsScreen = () => {
     const route = useRoute<UpdateInterestsScreenRouteProps>();
     const [loading, setLoading] = useState<boolean>();
@@ -25,7 +20,6 @@ const UpdateInterestsScreen = () => {
         interestCode: item.interest_code,
         interestGroupCode: item.interest_group_code
     }));
-
 
     // have to code it this way because we are reusing the sign up component
     const [ userDetails, setUserDetails ] = useState({
@@ -72,7 +66,7 @@ const UpdateInterestsScreen = () => {
                     Update your interests
                 </Text>
                 <Text className='my-2'>
-                    Choose up to five options!
+                    Choose up to ten options!
                 </Text>
             </View>
             <ProfileInterestsSelector
