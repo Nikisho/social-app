@@ -18,7 +18,8 @@ interface UserDataProps {
 	name: string;
 	date_of_birth: Date | null;
 	photo: string;
-	bio: string
+	bio: string;
+	sex: number | null
 
 }
 interface Interests {
@@ -36,7 +37,8 @@ const ProfileScreen = () => {
 		date_of_birth: null,
 		bio: '',
 		photo: '',
-		name: ''
+		name: '',
+		sex: null
 	});
 	const currentUser = useSelector(selectCurrentUser);
 	const navigation = useNavigation<RootStackNavigationProp>();
@@ -56,6 +58,7 @@ const ProfileScreen = () => {
 		if (data) {
 			setUserData(data[0]);
 			setOriginalBio(data[0].bio!);
+			console.log(data[0].sex)
 		};
 		if (error) {
 			throw error;
@@ -211,9 +214,9 @@ const ProfileScreen = () => {
 						dateOfBirth={userData.date_of_birth}
 						photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
 						bio={userData.bio}
+						sex={userData.sex}
 						handlePressChat={handlePressChat}
 						setModalVisible={setModalVisible}
-						pickImage={pickImage}
 						isCurrentUserProfile={isCurrentUserProfile}
 						user_id={user_id}
 						modalVisible={modalVisible}

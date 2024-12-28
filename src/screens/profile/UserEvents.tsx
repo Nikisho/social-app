@@ -18,7 +18,8 @@ interface eventListProps {
     user_photo: string
     event_time: string
     event_id: number
-    user_id: number
+    user_id: number;
+    event_type: string;
 }
 
 const UserEvents = ({ user_id }: { user_id: number }) => {

@@ -22,6 +22,7 @@ interface eventListProps {
   event_time: string
   event_id: number
   user_id: number;
+  event_type: string;
 };
 
 interface HubProps {
@@ -36,7 +37,6 @@ const HomeScreen = () => {
   const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
   const [sortingOption, setSortingOption] = useState<string>('event_date');
   const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
-
   const fetchEvents: (hub_code:number | null, sorting_option: string| null) => void = async (
     hub_code: number | null, 
     sorting_option: string | null

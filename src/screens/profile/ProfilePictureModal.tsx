@@ -37,7 +37,7 @@ const ProfilePictureModal: React.FC<ProfilePictureModalTypes> = ({
                 onPress={() => setModalVisible(!modalVisible)}
                 className='flex-1 mt-20 items-center ' >
                 <TouchableWithoutFeedback>
-                    <View className='bg-white m-20 h-1/3 w-4/5' style={styles.shadow} >
+                    <View className='bg-white m-20 h-1/3 w-5/6' style={styles.shadow} >
 
                         {
                             photo ?

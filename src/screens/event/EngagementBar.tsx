@@ -29,7 +29,7 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
                     })
                 }}
                 className='w-1/2 flex flex-row justify-center items-center'>
-                <View className='p-3 rounded-full bg-white flex justify-center'
+                <View className='p-2 rounded-full bg-white flex justify-center'
                     style={styles.shadow}
                 >
                     <EvilIcons name="comment" size={30} color="black" />

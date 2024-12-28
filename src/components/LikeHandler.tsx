@@ -68,28 +68,28 @@ const LikeHandler: React.FC<LikeHandlerProps> = ({
                         onPress={handleUnlike}
                         className='w-full flex flex-row justify-center space-x-3 items-center'>
 
-                        <View className='p-3 rounded-full bg-white flex justify-center'
+                        <View className='p-2 rounded-full bg-white flex flex-row items-center space-x-3'
                             style={styles.shadow}
                         >
                             <Ionicons name="heart" size={25} color={colours.secondaryColour} />
-                        </View>
                         <Text>
                             {likeNumber}
                         </Text>
+                        </View>
                     </TouchableOpacity>
                     :
                     <TouchableOpacity
                         onPress={handleSubmitLike}
                         className='w-full flex flex-row justify-center space-x-3 items-center'>
 
-                        <View className='p-3 rounded-full bg-white'
+                        <View className='p-2 rounded-full bg-white flex flex-row items-center space-x-3'
                             style={styles.shadow}
                         >
                             <Ionicons name="heart-outline" size={25} color="black" />
-                        </View>
                         <Text>
                             {likeNumber}
                         </Text>
+                        </View>
                     </TouchableOpacity>
             }
         </TouchableOpacity>

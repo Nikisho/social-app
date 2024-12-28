@@ -22,6 +22,7 @@ interface UserDataProps {
     name: string;
     dateOfBirth: Date | null;
     photo: ImagePickerAsset | null;
+    sex: number | null ,
     userInterests: {
         interestCode: number;
         interestGroupCode: number
@@ -36,9 +37,9 @@ const UserDetailsScreen = () => {
         name: '',
         dateOfBirth: new Date(),
         photo: null,
+        sex: null,
         userInterests: []
     });
-
     function updateFields(fields: Partial<UserDataProps>) {
         setUserDetails(prev => {
             return { ...prev, ...fields }
@@ -129,6 +130,7 @@ const UserDetailsScreen = () => {
                 date_of_birth : formatDate(userDetails.dateOfBirth!) !== formatDate(todaysDate)? userDetails.dateOfBirth : null,
                 email: user?.email,
                 auth_provider: user?.app_metadata.provider,
+                sex: userDetails.sex,
                 uid: user?.id,
                 expo_push_token: expoPushToken?.data
             })
@@ -143,6 +145,7 @@ const UserDetailsScreen = () => {
                 name: userDetails.name,
                 age: userDetails.dateOfBirth ? `${getAge(userDetails.dateOfBirth)}` : null,
                 photo: userDetails.photo ? photoUrl : null,
+                sex: userDetails.sex,
                 id: data.id
             }))
         }
@@ -171,17 +174,14 @@ const UserDetailsScreen = () => {
                     )
                 }
                 {
-
                     <TouchableOpacity onPress={isLastStep ? createProfile : next}
                         style={{ backgroundColor: colours.secondaryColour }}
                         className={`p-2 rounded-full self-end ${userDetails.name === '' ? 'opacity-50' : ''}`}
-                        disabled={userDetails.name === ''}
+                        disabled={userDetails.name === '' || userDetails.sex === null}
                     >
                         <AntDesign name="arrowright" size={24} color="white" />
                     </TouchableOpacity>
-
                 }
-
             </View>
         </View>
     )

@@ -15,6 +15,7 @@ interface FeedProps {
     event_time: string
     event_id: number
     user_id: number;
+    event_type: string;
   }[];
   fetchEvents: (hob_code: number | null, sorting_option: string | null) => void
   hub_code: number | null;
@@ -54,6 +55,7 @@ const Feed: React.FC<FeedProps> = ({
               event_id={event.event_id}
               user_id={event.user_id}
               refreshOnBlock={onRefresh}
+              event_type={event.event_type}
             />
 
             {/* Display ad after every 3rd card */}

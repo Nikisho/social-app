@@ -5,7 +5,8 @@ const initialState = {
         name: null,
         email: null,
         photo:null,
-        id: null
+        id: null,
+        sex: null
     }
 }
 

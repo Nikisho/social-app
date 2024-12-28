@@ -51,7 +51,8 @@ const AppleSignIn = () => {
                             name: data[0].name,
                             email: data[0].email,
                             photo: data[0].photo,
-                            id: data[0].id
+                            id: data[0].id,
+                            sex: data[0].sex
                         }))
                     }
                 }

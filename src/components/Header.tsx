@@ -71,14 +71,14 @@ const Header = () => {
                     {
                         currentUser?.photo ?
                             <Image
-                                className='w-8 h-8 rounded-full'
+                                className='w-10 h-10 rounded-full'
                                 source={{
                                     uri: currentUser?.photo,
                                 }}
                             />
                             :
                             <>
-                                <FontAwesome name="user-circle" size={30} color="black" />
+                                <FontAwesome name="user-circle" size={42} color="black" />
                             </>
                     }
                 </TouchableOpacity>

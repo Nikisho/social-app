@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Keyboard } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Keyboard, Switch } from 'react-native'
 import React, { useState } from 'react'
 import DatePicker from 'react-native-date-picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -34,6 +34,7 @@ const SubmitScreen = () => {
         title: '',
         description: ''
     });
+    const [isWomenOnly, setIsWomenOnly] = useState<boolean>(false);
     const [open, setOpen] = useState(false);
     const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
     const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
@@ -57,6 +58,7 @@ const SubmitScreen = () => {
                 event_title: eventDetails.title,
                 event_description: eventDetails.description,
                 event_time: extractTimeFromDateSubmit(eventDetails.date),
+                event_type: isWomenOnly? 'women-only' : 'general',
                 hub_code: selectedHub?.hub_code
             });
         setEventDetails({
@@ -89,7 +91,7 @@ const SubmitScreen = () => {
                     />
                 </View>
 
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.shadowButtonStyle}
                     onPress={Keyboard.dismiss}
                     className='self-end p-2 rounded-lg'>
@@ -141,7 +143,26 @@ const SubmitScreen = () => {
                 modalVisible={chooseEventLocationModalVisible}
                 setSelectedHub={setSelectedHub}
             />
-            <View className='justify-center h-1/4 flex grow items-end '>
+            {
+                currentUser.sex === 2 && (
+
+                    <View className='flex flex-row  justify-between'>
+                        <View className='p-2 bg-orange-100 rounded-xl'>
+                            <Text className='text-lg '>
+                                Women Only
+                            </Text>
+                        </View>
+
+                        <Switch
+                            trackColor={{ false: "#767577", true: "#81b0ff" }}
+                            onValueChange={() => setIsWomenOnly(!isWomenOnly)}
+                            value={isWomenOnly}
+                        />
+                    </View>
+                )
+            }
+
+            <View className='justify-center h-1/6 flex grow items-end '>
                 <TouchableOpacity
                     style={styles.shadowButtonStyle}
                     className='bg-sky-600 py-3 px-3 rounded-xl w-full '

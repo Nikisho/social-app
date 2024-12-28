@@ -21,6 +21,7 @@ interface FeedCardProps {
     time: string;
     event_id: number;
     user_id: number;
+    event_type: string;
     refreshOnBlock: () => void;
 
 }
@@ -34,6 +35,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
     time,
     event_id,
     user_id,
+    event_type,
     refreshOnBlock
 }) => {
     const formattedDate = convertDateFormat(date);
@@ -41,6 +43,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    
     return (
         <TouchableOpacity
             onPress={() => {
@@ -49,8 +52,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 });
             }}
             style={styles.shadow}
-            className='rounded-xl bg-white p-2 my-3 space-y-2 w-[93%]'
-
+            className={`rounded-xl bg-white p-2 my-3 space-y-4 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2) &&  'hidden' }` }
         >
             <View className=' flex flex-row justify-between'>
 
@@ -77,9 +79,21 @@ const FeedCard: React.FC<FeedCardProps> = ({
                         {name}
                     </Text>
                 </TouchableOpacity>
-                <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
-                    <Entypo name="dots-three-vertical" size={20} color="black" />
-                </TouchableWithoutFeedback>
+                <View className='flex flex-row'>
+                    {event_type === 'women-only' &&
+                    <View className=' bg-red-200 rounded-lg p-2'>
+                        <Text className='text-black font-semibold'>
+                            Women Only
+                        </Text>
+                    </View>
+                    }
+
+                    <TouchableWithoutFeedback 
+                        className=''
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Entypo name="dots-three-vertical" size={20} color="black" />
+                    </TouchableWithoutFeedback>
+                </View>
             </View>
 
             <View className='mb-1 space-y-1'>

@@ -10,14 +10,15 @@ import { RootStackNavigationProp } from '../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import getAge from '../../utils/functions/getAge';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface UserDetailsProps {
     name: string;
     dateOfBirth: Date | null;
     photo: string;
-    bio: string
+    bio: string;
+    sex: number | null;
     handlePressChat: () => void;
-    pickImage: () => void;
     setModalVisible: (modalVisible: boolean) => void;
     setProfilePictureModalVisible: (profilePictureModalVisible: boolean) => void;
     isCurrentUserProfile: boolean
@@ -31,9 +32,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     photo,
     dateOfBirth,
     bio,
+    sex,
     handlePressChat,
     setModalVisible,
-    pickImage,
     isCurrentUserProfile,
     user_id,
     modalVisible,
@@ -72,7 +73,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </TouchableOpacity>
-                <View className='flex flex- items-start justify-between space-y-2 '>
+                <View className='flex items-start justify-between space-y-2 '>
 
                     <View className='flex flex-row space-x-3'>
 
@@ -94,6 +95,16 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             )
                         }
                     </View>
+                    <View className={`p-1 rounded-lg ${sex === 1 ? 'bg-blue-100' : 'bg-red-200'} ${sex === 0 && 'hidden' }`}>
+                        {sex === 1 && (
+                            <Ionicons name="male" size={22} color="black" />
+                        )}
+                        {sex === 2 && (
+                            <Ionicons name="female" size={22} color="black" />
+                        )}
+                    </View>
+                </View>
+                <View className='flex items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
                             <TouchableOpacity
@@ -114,9 +125,8 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             )
                     }
                 </View>
-
-
             </View>
+
             <View className='flex flex-row items-center space-x-3'>
                 <Text className='text-lg font-semibold my-1'>About</Text>
                 {
