@@ -19,8 +19,6 @@ const UpdateAppModal = () => {
     setLoading(true);
     const buildNumber = Constants.expoConfig?.ios?.buildNumber;
     const versionCode = Constants.expoConfig?.android?.versionCode;
-
-    console.log(versionCode)
     const { data, error } = await supabase
       .from('app_version')
       .select()
@@ -32,7 +30,6 @@ const UpdateAppModal = () => {
       setLoading(false);
       return;
     }
-
     if (data && data.length > 0) {
       if (Platform.OS === 'ios') {
         setIsOutDated(data[0]?.build_number !== buildNumber);
