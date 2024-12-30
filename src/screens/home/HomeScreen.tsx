@@ -11,6 +11,7 @@ import styles from '../../utils/styles/shadow'
 import FilterEventsModal from '../../components/FilterEventsModal';
 import Entypo from '@expo/vector-icons/Entypo';
 import ChooseEventLocationModal from '../../components/ChooseEventLocationModal';
+import UpdateAppModal from '../../components/UpdateAppModal';
 
 interface eventListProps {
   user_name: string
@@ -61,6 +62,7 @@ const HomeScreen = () => {
   return (
     <View className='px-2'>
       <Header />
+      <UpdateAppModal />
       <View className='flex flex-row space-x-2'>
         <TouchableOpacity
           onPress={() => setChooseEventLocationModalVisible(!chooseEventLocationModalVisible)}

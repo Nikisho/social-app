@@ -58,7 +58,6 @@ const ProfileScreen = () => {
 		if (data) {
 			setUserData(data[0]);
 			setOriginalBio(data[0].bio!);
-			console.log(data[0].sex)
 		};
 		if (error) {
 			throw error;

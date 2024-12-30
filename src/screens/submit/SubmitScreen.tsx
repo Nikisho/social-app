@@ -147,7 +147,7 @@ const SubmitScreen = () => {
                 currentUser.sex === 2 && (
 
                     <View className='flex flex-row  justify-between'>
-                        <View className='p-2 bg-orange-100 rounded-xl'>
+                        <View className='p-2 bg-red-100 rounded-xl'>
                             <Text className='text-lg '>
                                 Women Only
                             </Text>
