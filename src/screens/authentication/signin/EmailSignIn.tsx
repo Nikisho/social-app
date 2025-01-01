@@ -23,7 +23,6 @@ const EmailSignIn = () => {
 
 	async function signInWithEmail() {
 		setLoading(true);
-
 		if (validateEmail(email) === false) {
 			Alert.alert('Please enter a valid email address');
 			setLoading(false);
@@ -34,7 +33,6 @@ const EmailSignIn = () => {
 			email: email,
 			password: password,
 		})
-
 		//If the sign up is successful, insert a row to public.users
 		if (session) {
 			await AsyncStorage.setItem('userAccessToken', session.access_token);
@@ -61,7 +59,15 @@ const EmailSignIn = () => {
 			}
 		}
 
-		if (AuthUserError) Alert.alert(AuthUserError.message)
+		if (AuthUserError) {
+			Alert.alert(AuthUserError.message);
+			console.error(AuthUserError.message);
+			if (AuthUserError.code === 'user_banned') {
+				setLoading(false);
+				platformAlert("Your account is suspended due to guideline violations. Contact support at support@linkzy.com for help")
+				return;
+			}
+		}
 		if (!session) {
 
 			Platform.OS === 'android' ?

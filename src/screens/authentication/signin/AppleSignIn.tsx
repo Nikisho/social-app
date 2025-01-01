@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { useState } from 'react';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 const AppleSignIn = () => {
 
@@ -21,14 +22,23 @@ const AppleSignIn = () => {
                 ],
             });
 
+            if (!credential?.identityToken) {
+                throw new Error('Apple sign-in failed: Missing identity token.');
+            }
+
             //Now authenticate with Supabase.
             if (credential.identityToken) {
                 const { error: AuthUserError, data: { session } } = await supabase.auth.signInWithIdToken({
                     provider: 'apple',
                     token: credential.identityToken,
                 });
-                if (AuthUserError) { throw AuthUserError.message };
-
+                if (AuthUserError) { 
+                    console.error(AuthUserError.message);
+                    if (AuthUserError.code === 'user_banned') {
+                        platformAlert("Your account is suspended due to guideline violations. Contact support at support@linkzy.com for help")
+                        return;
+                    }
+                };
                 if (session) {
                     await AsyncStorage.setItem('userAccessToken', session.access_token);
                     await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
@@ -40,11 +50,9 @@ const AppleSignIn = () => {
 
                     if (error) {throw error.message;}
                     if (data) {
-
                         //If no data, its a new sign up//
                         if (data.length === 0) {
                             Alert.alert('You do not have an account yet. Sign up instead')
-                            setLoading(false);
                             return;
                         }
                         dispatch(setCurrentUser({
@@ -77,7 +85,9 @@ const AppleSignIn = () => {
                     Alert.alert('An unknown error occurred. Please try again later.');
             }
         }
-        setLoading(false);
+        finally {
+            setLoading(false);
+        }
     };
 
     return (

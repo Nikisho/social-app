@@ -7,6 +7,7 @@ import { setCurrentUser } from '../../../context/navSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../../utils/styles/shadow'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import platformAlert from '../../../utils/functions/platformAlert'
 
 const GoogleSignIn = () => {
 
@@ -31,20 +32,27 @@ const GoogleSignIn = () => {
                     await AsyncStorage.setItem('userRefreshToken', AuthUserData.session.refresh_token);
                 }
 
-                if (AuthUserError) console.error(AuthUserError.message);
+                if (AuthUserError) {
+                    console.error(AuthUserError.message);
+                    if (AuthUserError.code === 'user_banned') {
+                        await GoogleSignin.signOut();
+                        platformAlert("Your account is suspended due to guideline violations. Contact support at support@linkzy.com for help")
+                        return;
+                    }
+                }
 
                 const { error, data } = await supabase
                     .from('users')
                     .select()
                     .eq('email', userInfo?.user.email);
 
-                if (error) console.error(error.message)
+                if (error) { throw new Error(error.message); }
+
                 if (data) {
                     ////If no data, its a new sign up///
                     if (data.length === 0) {
                         Platform.OS === 'android' ? ToastAndroid.show("You don't have an account yet. Sign up instead!", ToastAndroid.SHORT) : Alert.alert("You don't have an account yet. Sign up instead!");
                         await GoogleSignin.signOut();
-                        setLoading(false);
                         return;
                     }
                     dispatch(setCurrentUser({
@@ -84,7 +92,9 @@ const GoogleSignIn = () => {
             }
 
         }
-        setLoading(false)
+        finally {
+            setLoading(false);
+        }
     }
     return (
         <View className=' flex w-5/6 items-center self-center mt-2' >
