@@ -32,41 +32,62 @@ interface HubProps {
 }
 
 const HomeScreen = () => {
-  const [eventList, setEventList] = useState<eventListProps[]>();
-  const currentUser = useSelector(selectCurrentUser);
+  const [eventList, setEventList] = useState<eventListProps[]>([]);
+  const [hasMore, setHasMore] = useState(true); // Tracks if more events can be fetched
   const [filterEventsModalVisible, setFilterEventsModalVisible] = useState<boolean>(false);
   const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
   const [sortingOption, setSortingOption] = useState<string>('event_date');
   const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
-  const fetchEvents: (hub_code:number | null, sorting_option: string| null) => void = async (
-    hub_code: number | null, 
-    sorting_option: string | null
+  const [pageNumber, setPageNumber] = useState(1);
+  const currentUser = useSelector(selectCurrentUser);
+
+  const fetchEvents = async (
+    hub_code: number | null,
+    sorting_option: string | null,
+    page: number = 1
   ) => {
-    const { error, data } = await supabase
-      .rpc('get_events_excluding_blocked_users',
-        { 
-          current_user_id: currentUser.id, 
-          sorting_option: sorting_option,
-          hub_code:hub_code
-        });
+    const limit = 5 
+    const offset = (page - 1) * limit;
+    console.log(offset + ' LOOK') 
+    try {
+      const { data, error } = await supabase.rpc('get_events_excluding_blocked_users_v2', {
+        current_user_id: currentUser.id,
+        sorting_option,
+        hub_code,
+        lmt: limit,
+        ofst: offset,
+      });
 
-    if (data) { setEventList(data); }
-    if (error) console.error(error.message)
-  }
+      if (error) throw error;
 
+      if (data) {
+        // Append or replace the event list based on the page number
+        setEventList((prevEvents) => (page === 1 ? data : [...prevEvents, ...data]));
+        setHasMore(data.length === limit); // If fewer results than the limit, no more data
+      }
+    } catch (error:any) {
+      console.error('Error fetching events:', error.message);
+    }
+  };
+
+  // Refetch events when the hub, sorting option, or page number changes
   useFocusEffect(
     React.useCallback(() => {
-      fetchEvents(selectedHub?.hub_code!, sortingOption);
+      fetchEvents(selectedHub?.hub_code || null, sortingOption,pageNumber);
     }, [sortingOption, selectedHub])
   );
+
   return (
-    <View className='px-2'>
+    <View className="px-2">
+      {/* Header */}
       <Header />
       <UpdateAppModal />
-      <View className='flex flex-row space-x-2'>
+
+      {/* Filter and Location Modals */}
+      <View className="flex flex-row space-x-2">
         <TouchableOpacity
           onPress={() => setChooseEventLocationModalVisible(!chooseEventLocationModalVisible)}
-          className='p-2 mb-3  px-3 bg-white rounded-full flex flex-row items-center space-x-1 '
+          className="p-2 mb-3 px-3 bg-white rounded-full flex flex-row items-center space-x-1"
           style={styles.translucidViewStyle}
         >
           <Entypo name="location-pin" size={24} color="black" />
@@ -74,19 +95,29 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setFilterEventsModalVisible(!filterEventsModalVisible)}
-          className='p-2 mb-3 px-3 bg-white rounded-full flex flex-row items-center space-x-1'
+          className="p-2 mb-3 px-3 bg-white rounded-full flex flex-row items-center space-x-1"
           style={styles.translucidViewStyle}
         >
           <Ionicons name="filter" size={22} color="black" />
-          <Text> {sortingOption === 'created_at' ? 'New' : 'Event date'}</Text>
+          <Text>{sortingOption === 'created_at' ? 'New' : 'Event date'}</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Feed */}
       <Feed
-        eventList={eventList!}
-        fetchEvents={() => fetchEvents(selectedHub?.hub_code!, sortingOption)}
+        eventList={eventList}
+        fetchEvents={(hub_code, sorting_option, page) =>
+          fetchEvents(hub_code, sorting_option, page)
+        }
         sorting_option={sortingOption}
-        hub_code={selectedHub?.hub_code!}
+        page={pageNumber}
+        setPage={setPageNumber}
+        hub_code={selectedHub?.hub_code || null}
+        hasMore={hasMore}
+        setHasMore={setHasMore}
       />
+
+      {/* Modals */}
       <FilterEventsModal
         modalVisible={filterEventsModalVisible}
         setModalVisible={setFilterEventsModalVisible}
@@ -97,9 +128,9 @@ const HomeScreen = () => {
         modalVisible={chooseEventLocationModalVisible}
         setModalVisible={setChooseEventLocationModalVisible}
         setSelectedHub={setSelectedHub}
-        />
+      />
     </View>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
