@@ -54,7 +54,9 @@ const EmailSignIn = () => {
 					email: email,
 					photo: data[0].photo,
 					id: data[0].id,
-					sex: data[0].sex
+					sex: data[0].sex,
+					gemCount: data[0].gem_count
+
 				}))
 			}
 		}

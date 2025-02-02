@@ -18,6 +18,7 @@ interface EventDataProps {
     event_title: string
     event_date: string
     event_time: string
+    event_type: string
     photo: string
     user_id: string;
     users: {
@@ -77,6 +78,7 @@ const EventScreen = () => {
                         user_id={eventData.users.id}
                         event_location={eventData.hubs.hub_name}
                         event_id={event_id}
+                        event_type={eventData.event_type}
                     />
                 )
             }

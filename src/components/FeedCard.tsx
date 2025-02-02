@@ -52,7 +52,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 });
             }}
             style={styles.shadow}
-            className={`rounded-xl bg-white p-2 my-3 space-y-4 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2) &&  'hidden' }` }
+            className={`rounded-xl bg-white p-2 my-3 space-y-4 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2 && currentUser.id !== 3) &&  'hidden' }` }
         >
             <View className=' flex flex-row justify-between'>
 

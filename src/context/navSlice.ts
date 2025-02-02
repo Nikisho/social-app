@@ -6,7 +6,8 @@ const initialState = {
         email: null,
         photo:null,
         id: null,
-        sex: null
+        sex: null,
+        gemCount: null
     }
 }
 

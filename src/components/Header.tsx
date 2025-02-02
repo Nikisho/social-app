@@ -12,6 +12,8 @@ import { supabase } from '../../supabase';
 import { RootStackNavigationProp } from '../utils/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownMenu from './DropdownMenu';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import abbrNum from '../utils/functions/abbrNum';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 const Header = () => {
@@ -65,7 +67,13 @@ const Header = () => {
                 <AntDesign name="plus" size={20} color="black" />
                 <Text className='text-whie font-bold' >New post</Text>
             </TouchableOpacity>
-            <View className='flex flex-row space-x-2'>
+            <View className='flex flex-row space-x-2 items-center'>
+                <View className='flex flex-row space-x-1 p-2 rounded-xl bg-blue-100'>
+                    <Text className='font-bold '>
+                        {abbrNum(currentUser?.gemCount, 2)}
+                    </Text>
+                    <FontAwesome5 name="gem" size={18} color="green" />
+                </View>
                 <TouchableOpacity onPress={() => setOpenMenu(!openMenu)}>
 
                     {

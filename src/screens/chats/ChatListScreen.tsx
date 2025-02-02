@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import ChatCard from './ChatCard';
 import { useFocusEffect } from '@react-navigation/native';
-import ChatListScreenHeader from './ChatListScreenHeader';
 import NoMessagesView from './NoMessageView';
+import SecondaryHeader from '../../components/SecondaryHeader';
 
 interface ChatDataProps {
 	receiver_id: number
@@ -39,7 +39,9 @@ const ChatListScreen = () => {
 	);
 	return (
 		<View className='mx-2'>
-			<ChatListScreenHeader />
+			<SecondaryHeader
+				displayText='My chats'
+			/>
 			{
 				receivers?.length !==0 ?
 					<FlatList

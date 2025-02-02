@@ -48,7 +48,6 @@ const HomeScreen = () => {
   ) => {
     const limit = 5 
     const offset = (page - 1) * limit;
-    console.log(offset + ' LOOK') 
     try {
       const { data, error } = await supabase.rpc('get_events_excluding_blocked_users_v2', {
         current_user_id: currentUser.id,

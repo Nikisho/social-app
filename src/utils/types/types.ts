@@ -23,6 +23,7 @@ export type RootStackParamList = {
   userdetailsscreen: undefined;
   resetpassword:{access_token: string, refresh_token: string};
   updateinterests:{user_interests: {interest_code:number, interest_group_code:number, interests: { description: string}}[]};
+  leaderboard:undefined
 };
 
 // Define the navigation prop types

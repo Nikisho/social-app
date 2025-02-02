@@ -9,11 +9,11 @@ import formatDate from '../../utils/functions/formatDate';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
-import SubmitScreenHeader from './SubmitScreenHeader';
 import Entypo from '@expo/vector-icons/Entypo';
 import platformAlert from '../../utils/functions/platformAlert';
 import ChooseEventLocationModal from '../../components/ChooseEventLocationModal';
 import extractTimeFromDateSubmit from '../../utils/functions/extractTimeFromDateSubmit';
+import SecondaryHeader from '../../components/SecondaryHeader';
 
 interface eventDetailsProps {
     title: string;
@@ -45,9 +45,34 @@ const SubmitScreen = () => {
         }));
     };
 
+    const canPost = async () => {
+
+        const now = new Date();
+        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Set to Monday
+        startOfWeek.setHours(0, 0, 0, 0);
+        const { data, error, count } = await supabase
+            .from('meetup_events')
+            .select('user_id', { count: 'exact' }) // Use 'exact' to get an accurate row count
+            .eq('user_id', currentUser.id)
+            .gte('event_date', startOfWeek.toISOString());
+
+        if (error) {
+            console.error('Error fetching post count:', error);
+            return;
+        }
+        if (count && count >= 1) {
+            alert('You have exceeded the limit of 1 post this week');
+            return false;
+        }
+    };
+
     const handleSubmit = async () => {
         if (eventDetails.title === '' || eventDetails.description === '' || selectedHub === null) {
             platformAlert('Please, enter a title, description and select a hub.')
+            return;
+        }
+        const checkIfUserHasExceededPostLimit = await canPost()
+        if (checkIfUserHasExceededPostLimit === false) {
             return;
         }
         const { error } = await supabase
@@ -58,7 +83,7 @@ const SubmitScreen = () => {
                 event_title: eventDetails.title,
                 event_description: eventDetails.description,
                 event_time: extractTimeFromDateSubmit(eventDetails.date),
-                event_type: isWomenOnly? 'women-only' : 'general',
+                event_type: isWomenOnly ? 'women-only' : 'general',
                 hub_code: selectedHub?.hub_code
             });
         setEventDetails({
@@ -71,7 +96,9 @@ const SubmitScreen = () => {
     };
     return (
         <View className='flex space-y-2 mx-3 '>
-            <SubmitScreenHeader />
+            <SecondaryHeader
+                displayText='Post an event'
+            />
             <View >
                 <TextInput className='text-2xl bg-white p-4 rounded-xl ' placeholder='Title'
                     value={eventDetails?.title}

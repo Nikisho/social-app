@@ -8,6 +8,7 @@ import { RootStackNavigationProp } from '../../utils/types/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import SecondaryHeader from '../../components/SecondaryHeader';
 
 const SettingsScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -43,15 +44,13 @@ const SettingsScreen = () => {
 
   return (
     <View className="h-full">
-      <View className='flex flex-row items-center'>
-        <TouchableOpacity className="py-5 px-5 " onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
-        </TouchableOpacity>
-        <Text className="text-2xl font-bold">Account settings</Text>
+      <View className='px-2'>
 
-      </View>
-
-      <View className="w-full flex flex-row justify-center pb-10">
+      <SecondaryHeader
+        displayText='Account settings'
+        />
+        </View>
+      <View className="w-full flex flex-row justify-center pb-5">
       </View>
 
       {menuItems.map((item, index) => (

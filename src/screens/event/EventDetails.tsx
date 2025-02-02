@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, Linking } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,8 @@ interface evenDetailsProps {
     event_location: string;
     user_id: number;
     event_id: number;
+    event_type: string
+
 }
 const EventDetails: React.FC<evenDetailsProps> = ({
     user_photo,
@@ -28,6 +30,7 @@ const EventDetails: React.FC<evenDetailsProps> = ({
     event_description,
     isUsersOwnPost,
     event_location,
+    event_type,
     user_id,
     event_id
 }) => {
@@ -61,6 +64,18 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                         {user_name}
                     </Text>
                 </View>
+                <View className='flex flex-row grow justify-end '>
+
+                    {event_type === 'women-only' &&
+                        <View className=' bg-red-200 rounded-lg p-2'>
+                            <Text className='text-black font-semibold'>
+                                Women Only
+                            </Text>
+                        </View>
+
+                    }
+                </View>
+
                 {
                     isUsersOwnPost && (
                         <TouchableOpacity className='flex flex-row justify-end grow'
@@ -101,10 +116,10 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                 </View>
             </View>
             <View>
-                <Hyperlink 
-                    linkDefault={ true }
-                    linkStyle={ { color: "blue" } }
-                    >
+                <Hyperlink
+                    linkDefault={true}
+                    linkStyle={{ color: "blue" }}
+                >
                     <Text className=''>
                         {event_description}
                     </Text>

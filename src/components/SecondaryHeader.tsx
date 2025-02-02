@@ -1,10 +1,16 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { RootStackNavigationProp } from '../utils/types/types'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
 
-const SubmitScreenHeader = () => {
+interface SecondaryHeaderType {
+    displayText: string;
+}
+
+const SecondaryHeader:React.FC<SecondaryHeaderType> = ({
+    displayText
+}) => {
     const navigation = useNavigation<RootStackNavigationProp>()
     return (
         <View className='p-1 flex-row flex items-center'>
@@ -12,10 +18,10 @@ const SubmitScreenHeader = () => {
                 <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
             </TouchableOpacity>
             <Text className='text-2xl font-semibold '>
-                Post an event
+                {displayText}
             </Text>
         </View>
-    )
+  )
 }
 
-export default SubmitScreenHeader
+export default SecondaryHeader

@@ -11,7 +11,7 @@ import { RootStackNavigationProp } from '../utils/types/types';
 import { supabase } from '../../supabase';
 import Badge from './Badge';
 import { usePushNotifications } from '../utils/functions/usePushNotifications';
-
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Navbar = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -37,6 +37,10 @@ const Navbar = () => {
     {
       icon: <Ionicons name="person" size={30} color="white" />,
       navigation: 'profile'
+    },
+    {
+      icon: <MaterialIcons name="leaderboard" size={24} color="white" />,
+      navigation: 'leaderboard'
     },
   ];
 
@@ -93,9 +97,9 @@ const Navbar = () => {
 
       {
         menuItems.map((item) => (
-          <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/4 items-center`}
+          <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}
             onPress={() => {
-              if (item.navigation === 'search' || item.navigation === 'home' || item.navigation === 'chatlist') {
+              if (item.navigation === 'search' || item.navigation === 'home' || item.navigation === 'chatlist' || item.navigation === 'leaderboard'  ) {
                 navigation.navigate(item.navigation);
               } else if (item.navigation === 'profile') {
                 navigation.navigate('profile', {

@@ -33,6 +33,7 @@ import UpdateInterestsScreen from './src/screens/profile/UpdateInterestsScreen';
 import * as Linking from 'expo-linking';
 import React from 'react';
 import Constants from 'expo-constants';
+import LeaderboardScreen from './src/screens/leaderboard/LeaderboardScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -90,7 +91,8 @@ function App() {
 				email: data[0].email,
 				photo: data[0].photo,
 				id: data[0].id,
-				sex: data[0].sex
+				sex: data[0].sex,
+				gemCount: data[0].gem_count
 			}))
 			if (data.length === 0) {
 				setIncompleteSignUp(true);
@@ -157,6 +159,7 @@ function App() {
 								<Stack.Screen name="eula" component={EulaScreen} />
 								<Stack.Screen name="settings" component={SettingsScreen} />
 								<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
+								<Stack.Screen name="leaderboard" component={LeaderboardScreen} />
 							</>
 						)
 					}
