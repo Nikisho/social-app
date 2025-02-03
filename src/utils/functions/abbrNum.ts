@@ -6,7 +6,7 @@ function abbrNum(number: number, decPlaces: number): string {
     const decFactor = Math.pow(10, decPlaces);
 
     // Enumerate number abbreviations
-    const abbrev = ["k", "m", "b", "t"];
+    const abbrev = ["K", "M", "B", "T"];
 
     // Loop through the abbreviations in reverse order
     for (let i = abbrev.length - 1; i >= 0; i--) {

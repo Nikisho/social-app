@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { MaterialIcons } from '@expo/vector-icons';
+import React, {useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +11,8 @@ import { supabase } from '../../supabase';
 import { RootStackNavigationProp } from '../utils/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownMenu from './DropdownMenu';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import abbrNum from '../utils/functions/abbrNum';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 const Header = () => {
@@ -70,9 +69,9 @@ const Header = () => {
             <View className='flex flex-row space-x-2 items-center'>
                 <View className='flex flex-row space-x-1 p-2 rounded-xl bg-blue-100'>
                     <Text className='font-bold '>
-                        {abbrNum(currentUser?.gemCount, 2)}
+                        {abbrNum(currentUser?.gemCount, 1)}
                     </Text>
-                    <FontAwesome5 name="gem" size={18} color="green" />
+                     <MaterialCommunityIcons name="diamond" size={20} color="turquoise" />
                 </View>
                 <TouchableOpacity onPress={() => setOpenMenu(!openMenu)}>
 

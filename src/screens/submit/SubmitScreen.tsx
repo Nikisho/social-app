@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import DatePicker from 'react-native-date-picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { supabase } from '../../../supabase';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import formatDate from '../../utils/functions/formatDate';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,8 @@ import platformAlert from '../../utils/functions/platformAlert';
 import ChooseEventLocationModal from '../../components/ChooseEventLocationModal';
 import extractTimeFromDateSubmit from '../../utils/functions/extractTimeFromDateSubmit';
 import SecondaryHeader from '../../components/SecondaryHeader';
+import GemPostModal from './GemPostModal';
+import BuyGemsModal from '../../components/BuyGemsModal';
 
 interface eventDetailsProps {
     title: string;
@@ -28,7 +30,9 @@ interface HubProps {
 
 const SubmitScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
-    const navigation = useNavigation<RootStackNavigationProp>()
+    const extraPostGemPrice = 100;
+    const navigation = useNavigation<RootStackNavigationProp>();
+    const dispatch = useDispatch();
     const [eventDetails, setEventDetails] = useState<eventDetailsProps>({
         date: new Date(),
         title: '',
@@ -36,6 +40,9 @@ const SubmitScreen = () => {
     });
     const [isWomenOnly, setIsWomenOnly] = useState<boolean>(false);
     const [open, setOpen] = useState(false);
+    const [gemPostModalVisible, setGemPostModalVisible] = useState<boolean>(false);
+    const [buyGemsModalVisible, setBuyGemsModalVisible] = useState<boolean>(false);
+    const [modalPromiseResolver, setModalPromiseResolver] = useState<((value: boolean) => void) | null>(null);
     const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
     const [selectedHub, setSelectedHub] = useState<HubProps | null>(null);
     const handleChange = (name: string, value: string | Date) => {
@@ -46,7 +53,6 @@ const SubmitScreen = () => {
     };
 
     const canPost = async () => {
-
         const now = new Date();
         const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Set to Monday
         startOfWeek.setHours(0, 0, 0, 0);
@@ -56,13 +62,43 @@ const SubmitScreen = () => {
             .eq('user_id', currentUser.id)
             .gte('event_date', startOfWeek.toISOString());
 
-        if (error) {
+        if (error) { 
             console.error('Error fetching post count:', error);
             return;
         }
         if (count && count >= 1) {
-            alert('You have exceeded the limit of 1 post this week');
             return false;
+        }
+    };
+    const showModalAndWaitForUserAction = () => {
+        return new Promise((resolve) => {
+            setModalPromiseResolver(() => resolve); // Store resolver in state
+            setGemPostModalVisible(true); // Show modal
+        });
+    };
+
+    const handleModalAction = (userConfirmed: boolean) => {
+        if (modalPromiseResolver) {
+            modalPromiseResolver(userConfirmed); // Resolve the promise
+        }
+        setGemPostModalVisible(false); // Hide modal
+    };
+
+    const deductGems = async(gems: number) => {
+        const { error:deductGemsError} = await supabase
+            .from('users')
+            .update({
+                gem_count: gems,
+            })
+            .eq('id', currentUser.id);
+
+        if (deductGemsError) {
+            console.error(deductGemsError?.message);
+        } else {
+            dispatch(setCurrentUser({
+                ...currentUser,
+                gemCount: gems
+            }))
         }
     };
 
@@ -71,9 +107,21 @@ const SubmitScreen = () => {
             platformAlert('Please, enter a title, description and select a hub.')
             return;
         }
-        const checkIfUserHasExceededPostLimit = await canPost()
+        const checkIfUserHasExceededPostLimit = await canPost();
+        const newCount = currentUser.gemCount - extraPostGemPrice;
         if (checkIfUserHasExceededPostLimit === false) {
-            return;
+            const userConfirmed = await showModalAndWaitForUserAction();
+
+            if (!userConfirmed) {
+                return;
+            }
+
+            if (newCount< 0) {
+                setBuyGemsModalVisible(true);
+                return;
+            }
+            deductGems(newCount);
+
         }
         const { error } = await supabase
             .from('meetup_events')
@@ -94,10 +142,19 @@ const SubmitScreen = () => {
         navigation.navigate('home');
         if (error) console.error(error.message);
     };
+
     return (
         <View className='flex space-y-2 mx-3 '>
             <SecondaryHeader
                 displayText='Post an event'
+            />
+            <GemPostModal
+                modalVisible={gemPostModalVisible}
+                onAction={handleModalAction}
+            />
+            <BuyGemsModal 
+                modalVisible={buyGemsModalVisible}
+                setModalVisible={setBuyGemsModalVisible}
             />
             <View >
                 <TextInput className='text-2xl bg-white p-4 rounded-xl ' placeholder='Title'
