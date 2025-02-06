@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import styles from '../utils/styles/shadow'
 import abbrNum from '../utils/functions/abbrNum'
 import platformAlert from '../utils/functions/platformAlert'
-import { useStripe } from '@stripe/stripe-react-native';
 
 interface BuyGamsModalProps {
     modalVisible: boolean
@@ -33,7 +32,6 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
     modalVisible,
     setModalVisible
 }) => {
-    // const { presentPaymentSheet, initPaymentSheet } = useStripe(); 
     const [loading, setLoading] = useState(false);
 
     const fetchPaymentIntent = async () => {
@@ -58,27 +56,27 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
         const paymentData = await fetchPaymentIntent();
         if (!paymentData) return;
 
-        const { error } = await initPaymentSheet({
-            paymentIntentClientSecret: paymentData.paymentIntent,
-            merchantDisplayName: "YourApp",
-            customerId: paymentData.customer,
-            customerEphemeralKeySecret: paymentData.ephemeralKey,
-            allowsDelayedPaymentMethods: true,
-        });
+        // const { error } = await initPaymentSheet({
+        //     paymentIntentClientSecret: paymentData.paymentIntent,
+        //     merchantDisplayName: "com.linkzy",
+        //     customerId: paymentData.customer,
+        //     customerEphemeralKeySecret: paymentData.ephemeralKey,
+        //     allowsDelayedPaymentMethods: true,
+        // });
 
-        if (error) {
-            platformAlert("Error " + error.message);
-            setLoading(false);
-            return;
-        }
+        // if (error) {
+        //     platformAlert("Error " + error.message);
+        //     setLoading(false);
+        //     return;
+        // }
 
-        const { error: paymentError } = await presentPaymentSheet();
+        // const { error: paymentError } = await presentPaymentSheet();
 
-        if (paymentError) {
-            platformAlert("Payment Failed " + paymentError.message);
-        } else {
-            platformAlert("Success" + "Payment completed!");
-        }
+        // if (paymentError) {
+        //     platformAlert("Payment Failed " + paymentError.message);
+        // } else {
+        //     platformAlert("Success" + "Payment completed!");
+        // }
 
         setLoading(false);
     };
