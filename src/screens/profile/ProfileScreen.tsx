@@ -135,6 +135,12 @@ const ProfileScreen = () => {
 			quality: 1,
 		});
 		if (!result.canceled) {
+			// dispatch(setCurrentUser({
+			// 	name: currentUser.name,
+			// 	photo: result.assets[0].uri,
+			// 	id: currentUser.id
+
+			// }))
 			setUserData((prevData: UserDataProps) => ({
 				...prevData,
 				photo: result.assets[0].uri
@@ -150,10 +156,8 @@ const ProfileScreen = () => {
 			if (error) { console.error(error.message); }
 
 			dispatch(setCurrentUser({
-				name: currentUser.name,
-				photo: photoUrl,
-				id: currentUser.id
-
+				...currentUser,
+				photo: photoUrl
 			}))
 			Platform.OS === 'android' ? ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT) : Alert.alert('Profile picture changed successfully');
 		}

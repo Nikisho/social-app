@@ -14,7 +14,7 @@ import EventScreen from './src/screens/event/EventScreen';
 import colours from './src/utils/styles/colours';
 import { Keyboard, Platform, SafeAreaView, View } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
 import ChatScreen from './src/screens/chats/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
@@ -34,6 +34,7 @@ import * as Linking from 'expo-linking';
 import React from 'react';
 import Constants from 'expo-constants';
 import LeaderboardScreen from './src/screens/leaderboard/LeaderboardScreen';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -47,9 +48,15 @@ const mainTheme = {
 // fix provider bug for redux
 export default function AppWrapper() {
 	return (
-		<Provider store={store}>
+		<StripeProvider
+			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
+			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
+			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
+		>
+			<Provider store={store}>
 				<App />
-		</Provider>
+			</Provider>
+		</StripeProvider>
 	)
 }
 
@@ -59,7 +66,6 @@ function App() {
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
-
 	const setSession = async () => {
 		const accessToken = await AsyncStorage.getItem('userAccessToken');
 		const refreshToken = await AsyncStorage.getItem('userRefreshToken');
@@ -101,6 +107,20 @@ function App() {
 		}
 		setLoading(false);
 	};
+
+	// const handleDeepLink = useCallback(
+	//   async (url: string | null) => {
+	// 	if (url) {
+	// 	  const stripeHandled = await handleURLCallback(url);
+	// 	  if (stripeHandled) {
+	// 		// This was a Stripe URL - you can return or add extra handling here as you see fit
+	// 	  } else {
+	// 		// This was NOT a Stripe URL – handle as you normally would
+	// 	  }
+	// 	}
+	//   },
+	//   [handleURLCallback]
+	// );
 
 	useEffect(() => {
 		fetchSession();

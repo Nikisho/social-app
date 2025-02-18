@@ -69,7 +69,8 @@ const Header = () => {
             <View className='flex flex-row space-x-2 items-center'>
                 <View className='flex flex-row space-x-1 p-2 rounded-xl bg-blue-100'>
                     <Text className='font-bold '>
-                        {abbrNum(currentUser?.gemCount, 1)}
+                        
+                        { currentUser?.gemCount && abbrNum(currentUser?.gemCount, 1)}
                     </Text>
                      <MaterialCommunityIcons name="diamond" size={20} color="turquoise" />
                 </View>

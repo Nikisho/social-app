@@ -47,7 +47,7 @@ const SendResetLinkScreen = () => {
             <TouchableOpacity className="py-5 " onPress={() => navigation.goBack()}>
                 <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
             </TouchableOpacity>
-            <View className='w-full flex flex items-center space-y-5'>
+            <View className='w-full flex items-center space-y-5'>
                 <FontAwesome name="lock" size={44} color="black" />
                 <Text className='text-2xl font-semibold'>
                     Touble loggin in?

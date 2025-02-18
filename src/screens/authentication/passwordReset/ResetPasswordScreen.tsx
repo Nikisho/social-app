@@ -55,7 +55,7 @@ const ResetPasswordScreen = () => {
             <View className='w-full flex items-center my-5'>
                 <FontAwesome5 name="key" size={44} color="black" />
             </View>
-            <View className='w-full flex flex items-center space-y-5 mb-10'>
+            <View className='w-full flex items-center space-y-5 mb-10'>
                 <Text className='text-xl font-semibold'>
                     Reset your password
                 </Text>

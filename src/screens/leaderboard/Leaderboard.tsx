@@ -2,7 +2,7 @@ import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import { FontAwesome } from '@expo/vector-icons';
-import LoadingScreen from '../loading/LoadingScreen';
+import LeaderboardSkeleton from './LeaderboardSkeleton';
 
 const Leaderboard = () => {
 
@@ -73,6 +73,11 @@ const Leaderboard = () => {
                 </Text>
             </TouchableOpacity>
         </View>
+
+        {loading ? 
+            <LeaderboardSkeleton />
+            :
+        
         <FlatList
             className='h-4/5'
             data={users}
@@ -118,6 +123,7 @@ const Leaderboard = () => {
                 </View>
             )}
         />
+}
         </>
     )
 }

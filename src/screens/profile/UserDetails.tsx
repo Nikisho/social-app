@@ -45,7 +45,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     const currentUser = useSelector(selectCurrentUser);
     return (
         <View className='h-[35%]'>
-            <View className=' flex space-x-5 py-1 flex flex-row items-center'>
+            <View className=' flex space-x-5 py-1 flex-row items-center'>
                 <TouchableOpacity
                     className='flex flex-row items-center space-x-3'
                     onPress={() => setProfilePictureModalVisible(!profilePictureModalVisible)}

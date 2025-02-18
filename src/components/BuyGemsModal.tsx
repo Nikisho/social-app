@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 import styles from '../utils/styles/shadow'
 import abbrNum from '../utils/functions/abbrNum'
 import platformAlert from '../utils/functions/platformAlert'
+import { initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native'
+import { supabase } from '../../supabase'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectCurrentUser, setCurrentUser } from '../context/navSlice'
 
 interface BuyGamsModalProps {
     modalVisible: boolean
@@ -12,18 +16,21 @@ const gemOptions = [
     {
         id: 1,
         price: '2.99',
+        amount: 299,
         quantity: 100,
         gems: '💎'
     },
     {
         id: 2,
         price: '4.99',
+        amount: 499,
         quantity: 500,
         gems: '💎💎💎'
     },
     {
         id: 3,
         price: '6.99',
+        amount: 699,
         quantity: 1000,
         gems: '💎💎💎💎'
     },
@@ -33,52 +40,89 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
     setModalVisible
 }) => {
     const [loading, setLoading] = useState(false);
+    const currentUser = useSelector(selectCurrentUser);
+    const dispatch = useDispatch();
+    const fetchPaymentSheetParams = async (amount: number) => {
+        const { data, error } = await supabase.functions.invoke(
+            "create-checkout-session", {
+            body: { amount: amount },
+        }
+        );
+        console.log(data, error);
+        if (!data || error) {
+            Alert.alert(`Error: ${error?.message ?? "no data"}`);
+            return {};
+        }
+        const { paymentIntent, ephemeralKey, customer, stripe_pk } = data;
+        return {
+            paymentIntent,
+            ephemeralKey,
+            customer
+        };
+    };
 
-    const fetchPaymentIntent = async () => {
-        try {
-            const response = await fetch("https://your-supabase-function-url/create-payment-intent", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: 1000, currency: "usd" }) // 10 USD
-            });
+    const openPaymentSheet = async (amount: number, extraGemCount: number) => {
+        await initializePaymentSheet(amount);
 
-            const { paymentIntent, ephemeralKey, customer } = await response.json();
-            return { paymentIntent, ephemeralKey, customer };
-        } catch (error) {
-            console.error("Error fetching payment intent:", error);
-            Alert.alert("Payment failed", "Try again later.");
-            return null;
+        const { error } = await presentPaymentSheet();
+        if (error) {
+            Alert.alert(`Error code: ${error.code}`, error.message);
+        } else {
+            // Alert.alert('Success', 'Your order is confirmed!');
+            const { data, error } = await supabase
+                .from('users')
+                .update({
+                    gem_count: currentUser?.gemCount + extraGemCount
+                }).
+                eq('id', currentUser.id)
+                .select()
+                .single()
+            if (error) {
+                console.error(error.message)
+            } else {
+
+                dispatch(setCurrentUser({
+                    ...currentUser,
+                    gemCount: data.gem_count
+                }));
+                platformAlert(`You received ${extraGemCount.toString()} extra gems!`)
+            }
+            setModalVisible(false)
         }
     };
 
-    const handlePayment = async () => {
-        setLoading(true);
-        const paymentData = await fetchPaymentIntent();
-        if (!paymentData) return;
+    const initializePaymentSheet = async (amount: number) => {
+        const {
+            paymentIntent,
+            ephemeralKey,
+            customer,
+        } = await fetchPaymentSheetParams(amount);
 
-        // const { error } = await initPaymentSheet({
-        //     paymentIntentClientSecret: paymentData.paymentIntent,
-        //     merchantDisplayName: "com.linkzy",
-        //     customerId: paymentData.customer,
-        //     customerEphemeralKeySecret: paymentData.ephemeralKey,
-        //     allowsDelayedPaymentMethods: true,
-        // });
-
-        // if (error) {
-        //     platformAlert("Error " + error.message);
-        //     setLoading(false);
-        //     return;
-        // }
-
-        // const { error: paymentError } = await presentPaymentSheet();
-
-        // if (paymentError) {
-        //     platformAlert("Payment Failed " + paymentError.message);
-        // } else {
-        //     platformAlert("Success" + "Payment completed!");
-        // }
-
-        setLoading(false);
+        console.log('Pymt Intent received: ', paymentIntent, ephemeralKey, customer)
+        const { error } = await initPaymentSheet({
+            merchantDisplayName: "Linkzy",
+            customerId: customer,
+            customerEphemeralKeySecret: ephemeralKey,
+            paymentIntentClientSecret: paymentIntent,
+            // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+            //methods that complete payment after a delay, like SEPA Debit and Sofort.
+            allowsDelayedPaymentMethods: true,
+            returnURL: 'https://www.linkzyapp.com',
+            defaultBillingDetails: {
+                name: 'Jane Doe',
+            },
+            applePay: {
+                merchantCountryCode: "GB",  // Change to your country code (e.g., "GB" for the UK)
+            },
+            googlePay: {
+                merchantCountryCode: 'GB',
+                testEnv: true, // use test environment
+            },
+        });
+        if (error) {
+            console.error(error.message);
+            platformAlert(error.message)
+        }
     };
 
     return (
@@ -106,8 +150,9 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
                     <View className='flex flex-row space-x-1 '>
                         {
                             gemOptions.map((gemOption) => (
-                                <TouchableOpacity
-                                    className='w-1/3 flex flex items-center bg-teal-500 p-3 rounded-xl space-y-4'>
+                                <TouchableOpacity key={gemOption.id}
+                                    onPress={() => openPaymentSheet(gemOption.amount, gemOption.quantity)}
+                                    className='w-1/3 flex items-center bg-teal-500 p-3 rounded-xl space-y-4'>
                                     <Text
                                         className=' px-2 text-xl text-white font-bold'>
                                         {gemOption.quantity}
@@ -117,7 +162,7 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
 
                                     </Text>
                                     <Text className='px-2 text-xl text-white font-bold' >
-                                        {gemOption.price}
+                                        £{gemOption.price}
                                     </Text>
                                 </TouchableOpacity>
                             ))
@@ -125,9 +170,9 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
                     </View>
                     <TouchableOpacity
                         onPress={() => setModalVisible(false)}
-                        className='bg-gray-100 px2 rounded-lg  w-1/2'>
+                        className=' px2 rounded-lg  w-1/2'>
 
-                        <Text className='text-lg text-center '>
+                        <Text className=' text-center '>
                             No, thanks
                         </Text>
                     </TouchableOpacity>

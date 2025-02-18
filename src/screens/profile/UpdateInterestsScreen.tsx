@@ -61,7 +61,7 @@ const UpdateInterestsScreen = () => {
     }
     return (
         <View>
-            <View className='w-full py-5 flex flex items-center my-3'>
+            <View className='w-full py-5 flex items-center my-3'>
                 <Text className='text-2xl font-semibold '>
                     Update your interests
                 </Text>

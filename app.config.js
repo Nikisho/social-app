@@ -26,6 +26,13 @@ export default {
           androidAppId: "ca-app-pub-8692182271223423~9299510838",
           iosAppId: "ca-app-pub-8692182271223423~4609656473"
         }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": 'merchant.com.linkzy',
+          "enableGooglePay": true
+        }
       ]
     ],
     name: "Linkzy",
