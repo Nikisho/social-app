@@ -52,6 +52,7 @@ const SubmitScreen = () => {
         }));
     };
 
+
     const canPost = async () => {
         const now = new Date();
         const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Set to Monday
@@ -60,7 +61,7 @@ const SubmitScreen = () => {
             .from('meetup_events')
             .select('user_id', { count: 'exact' }) // Use 'exact' to get an accurate row count
             .eq('user_id', currentUser.id)
-            .gte('event_date', startOfWeek.toISOString());
+            .gte('created_at', startOfWeek.toISOString());
 
         if (error) { 
             console.error('Error fetching post count:', error);

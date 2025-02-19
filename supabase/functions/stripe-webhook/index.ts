@@ -2,14 +2,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
 import Stripe from "npm:stripe@^11.16";
-
+import { supabaseAdmin } from '../_utils/supabase.ts'
 // @ts-ignore
 const stripe = Stripe(Deno.env.get("STRIPE_API_KEY"));
 const server = Deno.listen({ port: 8080 });
-
-const SUPABASE_URL = Deno.env.get("SECRET_SUPABASE_URL")!;
-const SUPABASE_KEY = Deno.env.get("SECRET_SUPABASE_KEY")!;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function handler(request: Request) {
   const signature = request.headers.get("Stripe-Signature");
@@ -30,16 +26,17 @@ async function handler(request: Request) {
       undefined,
     );
 
-    if (receivedEvent.type === "checkout.session.completed") {
+    if (receivedEvent.type === "payment_intent.succeeded") {
       const session = receivedEvent.data.object;
-      const { email, id } = session.customer_details;
-
-      const { error } = await supabase
+      console.log(' ✅ Session received: ', session)
+      const { error } = await supabaseAdmin
         .from("transactions")
-        // .insert([{ email:'test', stripe_session_id: '3' }]);
         .insert({
-          email: email,
-          stripe_payment_id: id,
+          stripe_payment_id: session.id,
+          status: session.status, 
+          stripe_customer_id: session.customer,
+          amount: session.amount,
+          currency: session.currency
         });
 
       if (error) throw error;

@@ -45,7 +45,7 @@ const Header = () => {
                 email: null,
                 photo: null,
                 id: null
-            })) // Remember to remove the user from your app's state as well
+            })) 
         } catch (error) {
             console.error(error);
         }
@@ -70,7 +70,7 @@ const Header = () => {
                 <View className='flex flex-row space-x-1 p-2 rounded-xl bg-blue-100'>
                     <Text className='font-bold '>
                         
-                        { currentUser?.gemCount && abbrNum(currentUser?.gemCount, 1)}
+                        { currentUser?.gemCount ? abbrNum(currentUser?.gemCount, 1) : 0}
                     </Text>
                      <MaterialCommunityIcons name="diamond" size={20} color="turquoise" />
                 </View>

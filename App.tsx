@@ -90,7 +90,6 @@ function App() {
 			.eq('uid', user.user.id);
 
 		if (error) throw error.message;
-
 		if (data && data.length > 0) {
 			dispatch(setCurrentUser({
 				name: data[0].name,

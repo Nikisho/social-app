@@ -51,7 +51,7 @@ const GemPostModal: React.FC<GemPostModalProps> = ({ modalVisible, onAction }) =
                     </View>
                     <Text className='text-xl font-semibold'>You’ve Reached Your Limit! </Text>
                     <Text className='text-lg text- flex'>
-                        You’ve already posted 2 events this week. Would you like to post one more for {gem_cost} gems?
+                        You’ve already posted 1 event this week. Would you like to post one more for {gem_cost} gems?
                     </Text>
                     <View className='flex flex-row my-2 items-center space-x-2 bg-gray-200 p-2 rounded-xl'>
                         <Text style={{ fontFamily: 'American Typewriter' }} className='font-bold text-lg' >{gem_cost}</Text>
