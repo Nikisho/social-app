@@ -19,7 +19,6 @@ const GemPostModal: React.FC<GemPostModalProps> = ({ modalVisible, onAction }) =
     if (!modalVisible) return null;
 
     const handleYes = () => {
-        console.log('first')
         onAction(true);
     };
     const handleCancel = () => {

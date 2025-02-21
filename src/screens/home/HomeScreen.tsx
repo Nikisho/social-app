@@ -41,12 +41,14 @@ const HomeScreen = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const currentUser = useSelector(selectCurrentUser);
 
+  console.log(pageNumber);
+
   const fetchEvents = async (
     hub_code: number | null,
     sorting_option: string | null,
     page: number = 1
   ) => {
-    const limit = 5 
+    const limit = 3
     const offset = (page - 1) * limit;
     try {
       const { data, error } = await supabase.rpc('get_events_excluding_blocked_users_v2', {
@@ -69,9 +71,11 @@ const HomeScreen = () => {
     }
   };
 
+  // console.log(eventList)
   // Refetch events when the hub, sorting option, or page number changes
   useFocusEffect(
     React.useCallback(() => {
+      // setPageNumber(1)
       fetchEvents(selectedHub?.hub_code || null, sortingOption,pageNumber);
     }, [sortingOption, selectedHub])
   );

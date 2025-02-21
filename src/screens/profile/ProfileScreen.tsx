@@ -135,12 +135,6 @@ const ProfileScreen = () => {
 			quality: 1,
 		});
 		if (!result.canceled) {
-			// dispatch(setCurrentUser({
-			// 	name: currentUser.name,
-			// 	photo: result.assets[0].uri,
-			// 	id: currentUser.id
-
-			// }))
 			setUserData((prevData: UserDataProps) => ({
 				...prevData,
 				photo: result.assets[0].uri
@@ -159,7 +153,7 @@ const ProfileScreen = () => {
 				...currentUser,
 				photo: photoUrl
 			}))
-			Platform.OS === 'android' ? ToastAndroid.show('Profile picture saved successfully', ToastAndroid.SHORT) : Alert.alert('Profile picture changed successfully');
+			platformAlert('Profile picture changed successfully')
 		}
 	}
 
@@ -177,9 +171,8 @@ const ProfileScreen = () => {
 		if (error) (console.error(error.message));
 
 		dispatch(setCurrentUser({
-			name: currentUser.name,
+			...currentUser,
 			photo: null,
-			id: currentUser.id
 		}));
 		platformAlert('Image cleared successfully.')
 	};
@@ -247,7 +240,7 @@ const ProfileScreen = () => {
 			<ProfilePictureModal
 				setModalVisible={setProfilePictureModalVisible}
 				modalVisible={profilePictureModalVisible}
-				photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
+				photo={isCurrentUserProfile ? currentUser.photo : userData.photo}
 				user_id={user_id}
 				pickImage={pickImage}
 				clearImage={clearImage}

@@ -2,7 +2,6 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import React, {  useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../supabase';
-import styles from '../../utils/styles/shadow';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 

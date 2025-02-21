@@ -1,4 +1,4 @@
-import { Alert, Platform, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { Alert, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin'
 import { supabase } from '../../../../supabase'
@@ -51,7 +51,7 @@ const GoogleSignIn = () => {
                 if (data) {
                     ////If no data, its a new sign up///
                     if (data.length === 0) {
-                        Platform.OS === 'android' ? ToastAndroid.show("You don't have an account yet. Sign up instead!", ToastAndroid.SHORT) : Alert.alert("You don't have an account yet. Sign up instead!");
+                        platformAlert("You don't have an account yet. Sign up instead!")
                         await GoogleSignin.signOut();
                         return;
                     }

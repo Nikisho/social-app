@@ -48,7 +48,6 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
             body: { amount: amount },
         }
         );
-        console.log(data, error);
         if (!data || error) {
             Alert.alert(`Error: ${error?.message ?? "no data"}`);
             return {};
@@ -98,7 +97,6 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
             customer,
         } = await fetchPaymentSheetParams(amount);
 
-        console.log('Pymt Intent received: ', paymentIntent, ephemeralKey, customer)
         const { error } = await initPaymentSheet({
             merchantDisplayName: "Linkzy",
             customerId: customer,

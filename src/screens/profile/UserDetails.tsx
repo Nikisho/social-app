@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import getAge from '../../utils/functions/getAge';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import UserBadges from './UserBadges';
 
 interface UserDetailsProps {
     name: string;
@@ -43,6 +44,8 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
+    const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-400' : 'bg-red-300')
+
     return (
         <View className='h-[35%]'>
             <View className=' flex space-x-5 py-1 flex-row items-center'>
@@ -83,25 +86,23 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                         {
                             dateOfBirth && (
                                 <View
-                                    style={{ backgroundColor: colours.secondaryColour }}
-                                    className='rounded-full px-3'
+                                    // style={{ backgroundColor: colours.secondaryColour }}
+                                    className={` flex flex-row rounded-xl px-2 ${genderColour}`}
                                 >
 
+                                    {sex !== 0 && (
+                                        <Text className="text-lg font-semibold text-white">
+                                            {sex === 1 ? "♂" : "♀"}
+                                        </Text>
+                                    )}
+
                                     <Text
-                                        className='text-lg font-bold text-white'>
+                                        className='text-lg font-semibold text-white'>
                                         {getAge(dateOfBirth)}
                                     </Text>
                                 </View>
                             )
                         }
-                    </View>
-                    <View className={`p-1 rounded-lg ${sex === 1 ? 'bg-blue-100' : 'bg-red-200'} ${sex === 0 && 'hidden' }`}>
-                        {sex === 1 && (
-                            <Ionicons name="male" size={22} color="black" />
-                        )}
-                        {sex === 2 && (
-                            <Ionicons name="female" size={22} color="black" />
-                        )}
                     </View>
                 </View>
                 <View className='flex items-end grow px-5'>
@@ -126,7 +127,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
                 </View>
             </View>
-
+            <UserBadges
+                user_id={user_id}
+            />
             <View className='flex flex-row items-center space-x-3'>
                 <Text className='text-lg font-semibold my-1'>About</Text>
                 {
@@ -137,6 +140,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     )
                 }
             </View>
+
             <ScrollView>
                 {
                     bio ?

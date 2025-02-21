@@ -50,20 +50,31 @@ const Feed: React.FC<FeedProps> = ({
     }
   };
 
-  const onEndReached = (() => {
-    let loading = false;
-    return async () => {
+  // const onEndReached = (() => {
+  //   if (!hasMore || loadingMore) return; // Prevent duplicate calls
+  //   let loading = false;
+  //   return async () => {
+  //     setLoadingMore(true);
+  //     if (hasMore && !loading) {
+  //       loading = true;
+  //       const nextPage = page + 1;
+  //       setPage(nextPage);
+  //       await fetchEvents(hub_code, sorting_option, nextPage);
+  //       loading = false;
+  //     }
+  //     setLoadingMore(false);
+  //   };
+  // })();
+
+  const onEndReached = async () => {
+    if (hasMore && !loadingMore) {
       setLoadingMore(true);
-      if (hasMore && !loading) {
-        loading = true;
-        const nextPage = page + 1;
-        setPage(nextPage);
-        await fetchEvents(hub_code, sorting_option, nextPage);
-        loading = false;
-      }
+      const nextPage = page + 1;
+      setPage(nextPage);
+      await fetchEvents(hub_code, sorting_option, nextPage);
       setLoadingMore(false);
-    };
-  })();
+    }
+  };
 
 
   return (
