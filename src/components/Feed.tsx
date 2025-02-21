@@ -1,8 +1,7 @@
-import { ScrollView, Platform, RefreshControl, View, FlatList, ActivityIndicator } from 'react-native'
+import { ScrollView, Platform, RefreshControl, View, FlatList, ActivityIndicator, Text } from 'react-native'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import FeedCard from './FeedCard';
 import GoogleAds from './GoogleAds';
-
 
 interface FeedProps {
   eventList: {
@@ -17,66 +16,19 @@ interface FeedProps {
     user_id: number;
     event_type: string;
   }[];
-  fetchEvents: (hob_code: number | null, sorting_option: string | null, pageNumber?: number) => Promise<void>
-  hub_code: number | null;
-  sorting_option: string | null
-  page: number
-  setPage: Dispatch<SetStateAction<number>>
-  hasMore: boolean;
-  setHasMore: Dispatch<SetStateAction<boolean>>
+  loading: boolean;
+  refreshing:boolean,
+  onRefresh:() => Promise<void>,
+  onEndReached:() => Promise<void>,
 }
 
-const Feed: React.FC<FeedProps> = ({
+const Feed:React.FC<FeedProps> = ({
   eventList,
-  fetchEvents,
-  hub_code,
-  sorting_option,
-  setPage,
-  page,
-  hasMore,
-  setHasMore
+  loading,
+  refreshing,
+  onRefresh,
+  onEndReached,
 }) => {
-  const [refreshing, setRefreshing] = useState(false);
-  const [loadingMore, setLoadingMore] = useState<any>(false);
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    setHasMore(true);
-    setPage(1); // Reset to page 1
-    try {
-      await fetchEvents(hub_code, sorting_option, 1);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
-  // const onEndReached = (() => {
-  //   if (!hasMore || loadingMore) return; // Prevent duplicate calls
-  //   let loading = false;
-  //   return async () => {
-  //     setLoadingMore(true);
-  //     if (hasMore && !loading) {
-  //       loading = true;
-  //       const nextPage = page + 1;
-  //       setPage(nextPage);
-  //       await fetchEvents(hub_code, sorting_option, nextPage);
-  //       loading = false;
-  //     }
-  //     setLoadingMore(false);
-  //   };
-  // })();
-
-  const onEndReached = async () => {
-    if (hasMore && !loadingMore) {
-      setLoadingMore(true);
-      const nextPage = page + 1;
-      setPage(nextPage);
-      await fetchEvents(hub_code, sorting_option, nextPage);
-      setLoadingMore(false);
-    }
-  };
-
-
   return (
     <FlatList
       className={`mx-[-8] ${Platform.OS === 'ios' ? 'h-[80%] z-0' : 'h-[76%]'}`}
@@ -102,7 +54,14 @@ const Feed: React.FC<FeedProps> = ({
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
-      ListFooterComponent={loadingMore && <ActivityIndicator size="small" color="#808080" />}
+      ListFooterComponent={loading ? <ActivityIndicator size="small" color="#808080" /> : null}      
+      ListEmptyComponent={
+        !loading && !refreshing ? (
+          <View className="flex items-center justify-center p-4">
+            <Text className="text-gray-500">No events found.</Text>
+          </View>
+        ) : null
+      }
     />
   );
 };
