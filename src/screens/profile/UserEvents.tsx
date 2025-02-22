@@ -24,43 +24,8 @@ interface eventListProps {
 }
 
 const UserEvents = ({ user_id }: { user_id: number }) => {
-    // const [eventList, setEventList] = useState<Array<eventListProps>>();
-    // const [hasMore, setHasMore] = useState(true); // Tracks if more events can be fetched
     const currentUser = useSelector(selectCurrentUser);
     const navigation = useNavigation<RootStackNavigationProp>();
-    const [pageNumber, setPageNumber] = useState(1);
-
-    // const fetchEvents = async (
-    //     hub_code: number | null,
-    //     sorting_option: string | null,
-    //     page: number = 1
-    // ) => {
-    //     const limit = 5 
-    //     const offset = (page - 1) * limit;
-    //     const { error, data } = await supabase
-    //         .rpc('get_events_excluding_blocked_users_v2',
-    //             {
-    //                 current_user_id: user_id,
-    //                 filter_user_id: user_id,
-    //                 sorting_option,
-    //                 hub_code,
-    //                 lmt: limit,
-    //                 ofst: offset,
-    //             });
-
-    //     if (data) {
-    //     // Append or replace the event list based on the page number
-    //     setEventList((prevEvents: any) => (page === 1 ? data : [...prevEvents, ...data]));
-    //     setHasMore(data.length === limit); // If fewer results than the limit, no more data
-
-    //     }
-    //     if (error) console.error(error.message)
-    // }
-
-    // useEffect(() => {
-    //     fetchEvents(null,'event_date',pageNumber);
-    // }, [user_id]);
-
     const fetchEvents = useCallback(
         async (page: number) => {
             const limit = 3;
@@ -92,6 +57,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
         onRefresh,
         onEndReached,
     } = usePagination(fetchEvents);
+    
     return (
         <View className='h-[51%] mt-5 flex space-y-2'>
             <View className=''>
@@ -118,18 +84,6 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                             </View>
                     )
                     :
-                    // <Feed
-                    //     eventList={eventList!}
-                    //     fetchEvents={(hub_code, sorting_option, page) =>
-                    //         fetchEvents(hub_code, sorting_option, page)
-                    //     }
-                    //     page={pageNumber}
-                    //     setPage={setPageNumber}
-                    //     hasMore={hasMore}
-                    //     sorting_option={'event_date'}
-                    //     hub_code={null}
-                    //     setHasMore={setHasMore}
-                    // />
                     <Feed
                         eventList={eventList}
                         loading={loading}
