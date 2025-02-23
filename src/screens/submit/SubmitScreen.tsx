@@ -147,7 +147,7 @@ const SubmitScreen = () => {
     return (
         <View className='flex space-y-2 mx-3 '>
             <SecondaryHeader
-                displayText='Post an event'
+                displayText='Create post'
             />
             <GemPostModal
                 modalVisible={gemPostModalVisible}

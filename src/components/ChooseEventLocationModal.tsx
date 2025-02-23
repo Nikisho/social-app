@@ -11,7 +11,7 @@ interface HubProps {
 interface ChooseEventLocationModalProps {
     modalVisible: boolean
     setModalVisible: (modalVisible: boolean) => void;
-    setSelectedHub: (selectedHub: HubProps) => void;
+    setSelectedHub: (selectedHub: HubProps | null) => void;
 }
 
 const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
@@ -20,12 +20,12 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
     setModalVisible
 }) => {
     const [hubs, setHubs] = useState<HubProps[] | null>(null);
-    const [tempSelectedHub, setTempSelectedHub] = useState<HubProps>();
+    const [tempSelectedHub, setTempSelectedHub] = useState<HubProps | null>();
     const fetchHubs = async () => {
         const { error, data } = await supabase
             .from('hubs')
             .select('hub_name, hub_code')
-            .order('hub_code') 
+            .order('hub_code')
         if (data) {
             setHubs(data)
         }
@@ -35,12 +35,25 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
     };
 
     const handleSelectHub = async () => {
-        if (!tempSelectedHub) return;
-        setSelectedHub({hub_code: tempSelectedHub?.hub_code!, hub_name: tempSelectedHub?.hub_name!});
+        if (!tempSelectedHub) {
+            setSelectedHub(null)
+            setModalVisible(!modalVisible);
+            return
+        };
+
+        setSelectedHub({ hub_code: tempSelectedHub?.hub_code!, hub_name: tempSelectedHub?.hub_name! });
         setModalVisible(!modalVisible);
     };
 
-    
+    const handleSelectTempHub = (hub: HubProps) => {
+        if (tempSelectedHub && (tempSelectedHub?.hub_code === hub.hub_code && tempSelectedHub?.hub_name === hub.hub_name)) {
+            setTempSelectedHub(null)
+            console.log('test')
+            return;
+        }
+        setTempSelectedHub({ hub_code: hub.hub_code, hub_name: hub.hub_name })
+    }
+
     useEffect(() => {
         fetchHubs();
     }, []);
@@ -67,7 +80,7 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
                             <AntDesign name="close" size={25} color="black" />
                         </TouchableOpacity>
                         <Text className='place-self-center '>Select a hub</Text>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={handleSelectHub}
                             style={styles.shadowButtonStyle}
                             className='p-2 rounded-xl'>
@@ -80,7 +93,8 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
                         {
                             hubs?.map((hub) => (
                                 <TouchableOpacity
-                                    onPress={() => setTempSelectedHub({hub_code: hub.hub_code, hub_name: hub.hub_name})}
+                                    // onPress={() => setTempSelectedHub({hub_code: hub.hub_code, hub_name: hub.hub_name})}
+                                    onPress={() => handleSelectTempHub(hub)}
                                     className={`w-full flex flex-row justify-center p-1 my-1 rounded-xl ${tempSelectedHub?.hub_name === hub.hub_name ? 'bg-blue-400' : 'bg-gray-200'}`}
                                     key={hub.hub_code}>
                                     <Text className='text-xl'>
