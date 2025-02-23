@@ -1,5 +1,5 @@
-import { ScrollView, Platform, RefreshControl, View, FlatList, ActivityIndicator, Text } from 'react-native'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Platform, RefreshControl, View, FlatList, ActivityIndicator, Text } from 'react-native'
+import React from 'react'
 import FeedCard from './FeedCard';
 import GoogleAds from './GoogleAds';
 

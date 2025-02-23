@@ -1,14 +1,15 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Image, TouchableOpacity, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import { FontAwesome } from '@expo/vector-icons';
 import LeaderboardSkeleton from './LeaderboardSkeleton';
+import CompetitionCountDown from './CompetitionCountDown';
 
 const Leaderboard = () => {
 
     const [users, setUsers] = useState<any>();
-    const [loading, setLoading] = useState<boolean>();
-    const [filter, setFilter] = useState<string>('alltime');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>('7days');
 
     const fetchLeaderboard = async () => {
         setLoading(true)
@@ -25,20 +26,6 @@ const Leaderboard = () => {
             setLoading(false)
         }
     };
-    function ordinal_suffix_of(i:number) {
-        let j = i % 10,
-            k = i % 100;
-        if (j === 1 && k !== 11) {
-            return i + "st";
-        }
-        if (j === 2 && k !== 12) {
-            return i + "nd";
-        }
-        if (j === 3 && k !== 13) {
-            return i + "rd";
-        }
-        return i + "th";
-    }
 
     useEffect(() => {
         fetchLeaderboard();
@@ -47,13 +34,12 @@ const Leaderboard = () => {
     return (
         <>
         <View className='flex flex-row bg-gray-200 rounded-xl items-center justify-between'>
-
             <TouchableOpacity
-                className={`${filter==='alltime' && 'bg-blue-300'} flex items-center w-1/3 p-3 rounded-l-xl`}
-                onPress={()=> setFilter('alltime')}
+                className={`${filter==='7days' && 'bg-blue-300'} flex items-center w-1/3 p-3 rounded-l-xl`}
+                onPress={()=> setFilter('7days')}
             >
                 <Text>
-                    All time
+                    Week
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -65,21 +51,24 @@ const Leaderboard = () => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                className={`${filter==='7days' && 'bg-blue-300'} flex items-center  w-1/3 p-3 rounded-r-xl`}
-                onPress={()=> setFilter('7days')}
+                className={`${filter==='alltime' && 'bg-blue-300'} flex items-center  w-1/3 p-3 rounded-r-xl`}
+                onPress={()=> setFilter('alltime')}
             >
                 <Text>
-                    Week
+                    All time
                 </Text>
             </TouchableOpacity>
         </View>
+      <CompetitionCountDown 
+        filter={filter}
+      />
 
         {loading ? 
             <LeaderboardSkeleton />
             :
         
         <FlatList
-            className='h-4/5'
+            className={`${filter === 'alltime' ? 'h-4/5': 'h-2/3'}`}
             data={users}
             keyExtractor={(item) => item.poster_id.toString()}
             renderItem={({ item, index }) => (
@@ -91,7 +80,6 @@ const Leaderboard = () => {
                             ${item.rank === 3 && 'bg-amber-500'}
                             `}>
                             <Text className='text-l '>
-                                {/* {ordinal_suffix_of(item.rank).toString()} */}
                                 {item.rank.toString()}
                             </Text>
                         </View>
@@ -122,6 +110,8 @@ const Leaderboard = () => {
                     </Text>
                 </View>
             )}
+            refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchLeaderboard} />}
+            
         />
 }
         </>
