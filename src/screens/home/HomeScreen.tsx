@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Feed from '../../components/Feed'
 import Header from '../../components/Header'
 import { supabase } from '../../../supabase'
@@ -13,19 +13,6 @@ import Entypo from '@expo/vector-icons/Entypo';
 import ChooseEventLocationModal from '../../components/ChooseEventLocationModal';
 import UpdateAppModal from '../../components/UpdateAppModal';
 import { usePagination } from '../../hooks/usePagination';
-
-interface eventListProps {
-  user_name: string
-  key: number
-  event_description: string
-  event_title: string
-  event_date: string
-  user_photo: string
-  event_time: string
-  event_id: number
-  user_id: number;
-  event_type: string;
-};
 
 interface HubProps {
   hub_name: string;
@@ -62,7 +49,7 @@ const HomeScreen = () => {
       onRefresh();
     }, [selectedHub, sortingOption])
   );
-  
+
   const {
     data: eventList,
     page,

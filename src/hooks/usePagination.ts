@@ -1,6 +1,16 @@
-import { useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-
+interface eventListProps {
+  user_name: string
+  key: number
+  event_description: string
+  event_title: string
+  event_date: string
+  user_photo: string
+  event_time: string
+  event_id: number
+  user_id: number;
+  event_type: string;
+};
 export const usePagination = (
   fetchFunction: any,
   initialPage = 1,
@@ -26,7 +36,7 @@ export const usePagination = (
           setData(result);
         } else {
           // When loading more pages, append new results
-          setData((prev:any) => [...prev, ...result]);
+          setData((prev:eventListProps[]) => [...prev, ...result]);
         }
         // Determine if there's more data to load
         setHasMore(result.length === limit);
