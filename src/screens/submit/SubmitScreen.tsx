@@ -29,7 +29,7 @@ interface HubProps {
 }
 
 const SubmitScreen = () => {
-    const currentUser = useSelector(selectCurrentUser);
+    const currentUser = useSelector(selectCurrentUser); 
     const extraPostGemPrice = 100;
     const navigation = useNavigation<RootStackNavigationProp>();
     const dispatch = useDispatch();
@@ -52,21 +52,21 @@ const SubmitScreen = () => {
         }));
     };
 
-
     const canPost = async () => {
         const now = new Date();
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Set to Monday
-        startOfWeek.setHours(0, 0, 0, 0);
+        const day = now.getDay() === 0 ? 7 : now.getDay(); // Treat Sunday as 7
+        const startOfWeek = new Date(now.setDate(now.getDate() - day + 1));        startOfWeek.setHours(0, 0, 0, 0);
         const { data, error, count } = await supabase
             .from('meetup_events')
             .select('user_id', { count: 'exact' }) // Use 'exact' to get an accurate row count
             .eq('user_id', currentUser.id)
             .gte('created_at', startOfWeek.toISOString());
-
+        
         if (error) { 
             console.error('Error fetching post count:', error);
             return;
         }
+
         if (count && count >= 1) {
             return false;
         }
