@@ -8,18 +8,6 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../context/navSlice'
 import { usePagination } from '../../hooks/usePagination'
 
-interface eventListProps {
-  user_name: string
-  key: number
-  event_description: string
-  event_title: string
-  event_date: string
-  user_photo: string
-  event_time: string
-  event_id: number
-  user_id: number;
-
-}
 const SearchScreen = () => {
   const [query, setQuery] = useState<string>('');
   const currentUser = useSelector(selectCurrentUser);
@@ -29,7 +17,7 @@ const SearchScreen = () => {
     const offset = (page - 1) * limit;
     const { data, error } = await supabase.rpc('get_events_excluding_blocked_users_v2', {
       current_user_id: currentUser.id,
-      query: query, // Use the query state
+      query: query,
       lmt: limit,
       ofst: offset,
     });

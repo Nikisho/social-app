@@ -20,7 +20,6 @@ const BoostEvent: React.FC<BoostEventProps> = ({
     const dispatch = useDispatch();
     const [buyGemsModalVisible, setBuyGemsModalVisible] = useState<boolean>(false);
 
-
     const boostEvent = async () => {
 
         if (currentUser.gemCount < 50) {

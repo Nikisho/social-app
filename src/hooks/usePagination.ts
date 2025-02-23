@@ -7,30 +7,29 @@ export const usePagination = (
   limit = 3,
   skipInitialLoad = false,
 ) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [page, setPage] = useState(initialPage);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const route = useRoute();
+
   const fetchData = useCallback(
-    async (page: number, isRefreshing = false) => {
+    async (page:number, isRefreshing = false) => {
       if (loading) return;
 
       setLoading(true);
       try {
         const result = await fetchFunction(page);
-        if (result.length > 0) {
-          setData((prev) => (isRefreshing ? result : [...prev, ...result]));
-          setHasMore(result.length === limit);
+        // Update data state whether or not there are results
+        if (isRefreshing) {
+          // On refresh, replace the current data with the new results (even if empty)
+          setData(result);
         } else {
-          //Only sets the events to [] on the home page to prevent
-          //bug on the profile page
-          if (route.name === "home") {
-            setData([]);
-          }
-          setHasMore(false);
+          // When loading more pages, append new results
+          setData((prev:any) => [...prev, ...result]);
         }
+        // Determine if there's more data to load
+        setHasMore(result.length === limit);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

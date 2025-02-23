@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import Header from '../../components/Header';
@@ -10,6 +10,7 @@ import { useFocusEffect, useRoute } from '@react-navigation/native';
 import CommentFeed from './CommentFeed';
 import { EventScreenRouteProp } from '../../utils/types/types';
 import BoostEvent from './BoostEvent';
+import styles from '../../utils/styles/shadow';
 
 interface EventDataProps {
     name: string
@@ -83,11 +84,21 @@ const EventScreen = () => {
                     />
                 )
             }
-
             {
-                currentUser.id === eventData?.users?.id &&
-                (!eventData?.boost_expires_at || new Date(eventData.boost_expires_at) < new Date()) && (
-                    <BoostEvent event_id={event_id} />
+                currentUser.id === eventData?.users?.id && ( 
+                    !eventData?.boost_expires_at || new Date(eventData.boost_expires_at) < new Date() ? ( 
+                        <BoostEvent event_id={event_id} /> 
+                    ) : (
+                        <View className='flex my-5 flex-row justify-center'>
+                            <View
+                                style={styles.shadow}
+                                className='p-2 rounded-full bg-yellow-200 w-1/3 pl-5'>
+                                <Text className='text-center text-lg'>
+                                    Boosted 💥
+                                </Text>
+                            </View>
+                        </View>
+                    )
                 )
             }
 
