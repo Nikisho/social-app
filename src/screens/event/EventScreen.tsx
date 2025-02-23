@@ -9,6 +9,7 @@ import { selectCurrentUser } from '../../context/navSlice';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import CommentFeed from './CommentFeed';
 import { EventScreenRouteProp } from '../../utils/types/types';
+import BoostEvent from './BoostEvent';
 
 interface EventDataProps {
     name: string
@@ -26,10 +27,11 @@ interface EventDataProps {
         id: number
         photo: string
     }
-    hubs : {
+    hubs: {
         hub_name: string;
         hub_code: number;
     }
+    boost_expires_at: Date
 
 };
 
@@ -38,7 +40,6 @@ const EventScreen = () => {
     const { event_id } = route.params;
     const [eventData, setEventData] = useState<EventDataProps>();
     const currentUser = useSelector(selectCurrentUser);
-
     const fetchData = async () => {
         const { error, data } = await supabase
             .from('meetup_events')
@@ -82,6 +83,14 @@ const EventScreen = () => {
                     />
                 )
             }
+
+            {
+                currentUser.id === eventData?.users?.id &&
+                (!eventData?.boost_expires_at || new Date(eventData.boost_expires_at) < new Date()) && (
+                    <BoostEvent event_id={event_id} />
+                )
+            }
+
             {/* Reaction bar */}
             <EngagementBar
                 user_id={currentUser.id}

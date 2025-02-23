@@ -72,7 +72,6 @@ const EventDetails: React.FC<evenDetailsProps> = ({
                                 Women Only
                             </Text>
                         </View>
-
                     }
                 </View>
 
