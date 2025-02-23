@@ -57,9 +57,12 @@ const HomeScreen = () => {
     [currentUser, selectedHub, sortingOption]
   );
 
-  useEffect(() => {
-    onRefresh();
-  }, [selectedHub, sortingOption]);
+  useFocusEffect(
+    React.useCallback(() => {
+      onRefresh();
+    }, [selectedHub, sortingOption])
+  );
+  
   const {
     data: eventList,
     page,
@@ -70,7 +73,7 @@ const HomeScreen = () => {
     onEndReached,
   } = usePagination(fetchEvents);
 
-  
+
   return (
     <View className="px-2">
       {/* Header */}
