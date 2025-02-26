@@ -9,7 +9,7 @@ const Leaderboard = () => {
 
     const [users, setUsers] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
-    const [filter, setFilter] = useState<string>('7days');
+    const [filter, setFilter] = useState<string>('week');
 
     const fetchLeaderboard = async () => {
         setLoading(true)
@@ -35,8 +35,8 @@ const Leaderboard = () => {
         <>
         <View className='flex flex-row bg-gray-200 rounded-xl items-center justify-between'>
             <TouchableOpacity
-                className={`${filter==='7days' && 'bg-blue-300'} flex items-center w-1/3 p-3 rounded-l-xl`}
-                onPress={()=> setFilter('7days')}
+                className={`${filter==='week' && 'bg-blue-300'} flex items-center w-1/3 p-3 rounded-l-xl`}
+                onPress={()=> setFilter('week')}
             >
                 <Text>
                     Week

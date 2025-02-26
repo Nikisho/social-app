@@ -48,7 +48,6 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
     const handleSelectTempHub = (hub: HubProps) => {
         if (tempSelectedHub && (tempSelectedHub?.hub_code === hub.hub_code && tempSelectedHub?.hub_name === hub.hub_name)) {
             setTempSelectedHub(null)
-            console.log('test')
             return;
         }
         setTempSelectedHub({ hub_code: hub.hub_code, hub_name: hub.hub_name })

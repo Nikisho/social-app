@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import styles from '../../utils/styles/shadow'
 import BoostEventModal from './BoostEventModal'
 import { supabase } from '../../../supabase'
@@ -8,12 +8,41 @@ import { selectCurrentUser, setCurrentUser } from '../../context/navSlice'
 import platformAlert from '../../utils/functions/platformAlert'
 import BuyGemsModal from '../../components/BuyGemsModal'
 
+
+
+interface EventDataProps {
+    name: string
+    key: number
+    event_id: number
+    event_description: string
+    event_title: string
+    event_date: string
+    event_time: string
+    event_type: string
+    photo: string
+    user_id: string;
+    users: {
+        name: string
+        id: number
+        photo: string
+    }
+    hubs: {
+        hub_name: string;
+        hub_code: number;
+    }
+    boost_expires_at: Date
+
+};
 interface BoostEventProps {
     event_id: number;
+    eventData:EventDataProps
+    setEventData: Dispatch<EventDataProps| undefined>
 }
 
 const BoostEvent: React.FC<BoostEventProps> = ({
-    event_id
+    event_id,
+    eventData,
+    setEventData
 }) => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const currentUser = useSelector(selectCurrentUser);
@@ -50,6 +79,11 @@ const BoostEvent: React.FC<BoostEventProps> = ({
                 ...currentUser,
                 gemCount: currentUser.gemCount - 50
             }))
+
+            setEventData({
+                ...eventData,
+                boost_expires_at: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+            })
         };
         setModalVisible(!modalVisible);
         platformAlert('Your event is boosted for 24 hours 🚀')

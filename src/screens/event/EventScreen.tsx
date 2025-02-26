@@ -86,8 +86,12 @@ const EventScreen = () => {
             }
             {
                 currentUser.id === eventData?.users?.id && ( 
-                    !eventData?.boost_expires_at || new Date(eventData.boost_expires_at) < new Date() ? ( 
-                        <BoostEvent event_id={event_id} /> 
+                    (!eventData?.boost_expires_at || new Date(eventData.boost_expires_at) < new Date()) ? ( 
+                        <BoostEvent 
+                            event_id={event_id}
+                            eventData={eventData!}
+                            setEventData={setEventData}
+                        /> 
                     ) : (
                         <View className='flex my-5 flex-row justify-center'>
                             <View

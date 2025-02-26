@@ -16,7 +16,7 @@ const CompetitionCountDown = ({
         const now = new Date();
         let targetDate: Date = new Date(); // Initialized to now
 
-        if (type === "7days") {
+        if (type === "week") {
             const day = now.getDay(); // 0 (Sunday) to 6 (Saturday)
             // Clone the current date into targetDate
             targetDate = new Date(now.getTime());
