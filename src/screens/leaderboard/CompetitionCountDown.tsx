@@ -24,18 +24,18 @@ const CompetitionCountDown = ({
             if (day === 0) {
                 // If today is Sunday, set the target to midnight tonight (i.e. start of Monday)
                 targetDate.setDate(now.getDate() + 1);
-                targetDate.setHours(0, 0, 0, 0);
+                targetDate.setHours(19, 0, 0, 0);
             } else {
                 // Otherwise, set the target to next Sunday at midnight
                 const daysUntilSunday = 7 - day;
                 targetDate.setDate(now.getDate() + daysUntilSunday);
-                targetDate.setHours(0, 0, 0, 0);
+                targetDate.setHours(19, 0, 0, 0);
             }
         } else if (type === "month") {
             // For "month", target is the last day of the current month at midnight.
             // new Date(year, month + 1, 0) gives the last day of the month.
             targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-            targetDate.setHours(0, 0, 0, 0);
+            targetDate.setHours(19, 0, 0, 0);
         }
 
         const timeDiff = targetDate.getTime() - now.getTime();
