@@ -72,6 +72,8 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
                 .from('users')
                 .update({
                     gem_count: currentUser?.gemCount + extraGemCount
+                    // gem_count: currentUser?.gemCount + 0
+
                 }).
                 eq('id', currentUser.id)
                 .select()
@@ -105,7 +107,7 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
             // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
             //methods that complete payment after a delay, like SEPA Debit and Sofort.
             allowsDelayedPaymentMethods: true,
-            returnURL: 'https://www.linkzyapp.com',
+            returnURL: 'https://www.linkzyapp.com/payment-complete.html',
             // defaultBillingDetails: {
             //     name: 'Jane Doe',
             // },

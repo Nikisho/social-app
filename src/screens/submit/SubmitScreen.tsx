@@ -56,7 +56,7 @@ const SubmitScreen = () => {
         const now = new Date();
         const day = now.getDay() === 0 ? 7 : now.getDay(); // Treat Sunday as 7
         const startOfWeek = new Date(now.setDate(now.getDate() - day + 1));        startOfWeek.setHours(0, 0, 0, 0);
-        const { data, error, count } = await supabase
+        const { error, count } = await supabase
             .from('meetup_events')
             .select('user_id', { count: 'exact' }) // Use 'exact' to get an accurate row count
             .eq('user_id', currentUser.id)
@@ -66,7 +66,7 @@ const SubmitScreen = () => {
             console.error('Error fetching post count:', error);
             return;
         }
-
+        // if (true) {
         if (count && count >= 1) {
             return false;
         }
