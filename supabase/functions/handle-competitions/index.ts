@@ -7,6 +7,7 @@ import { supabaseAdmin } from '../_utils/supabase.ts'
 
 type Prize = {
   rank: number;
+  event_period: string
   trophy_id: number;
   congratulation_title: string;
   congratulation_message: string;
@@ -24,17 +25,21 @@ type Winner = {
 type PrizeMap = {
   [rank: number]: {
     trophyId: number;
+    event_period: string;
     title: string;
     message: string;
     gem_reward: number;
+    
   };
 };
 
-Deno.serve(async () => {
+Deno.serve(async (req) => {
   try {
     // Fetch winners from the leaderboard
+    const { period } = await req.json();
+    console.log('The period is: ', period)
     const { data: winners, error: leaderboardError } = await supabaseAdmin.rpc("get_leaderboard", {
-      filter: "week",
+      filter: period,
       lmt: 3,
     });
 
@@ -52,8 +57,10 @@ Deno.serve(async () => {
         , congratulation_message
         , congratulation_title
         , gem_reward
+        , event_period
         `
-    );
+        )
+        .eq('event_period', period)
     if (prizeError) {
       console.error("Prize error:", prizeError.message);
       throw prizeError;
@@ -65,27 +72,34 @@ Deno.serve(async () => {
         trophyId: prize.trophy_id,
         title: prize.congratulation_title,
         message: prize.congratulation_message,
-        gem_reward: prize.gem_reward
+        gem_reward: prize.gem_reward,
+        event_period: prize.event_period
       };
       return acc;
     }, {});
 
     //Send the notifications.
-    for (const {rank, expo_push_token } of winners) {
+    for (const {rank, expo_push_token, name } of winners) {
         await sendWinnerNotification(
             'ExponentPushToken[1kcfbtMG-arjymKHbnzwzN]',
             prizeMap[rank].title,
-            prizeMap[rank].message
+            prizeMap[rank].message.replace("{name}", name)
         );
     }
 
     // Prepare data for insertion into the database
+    const today = new Date();
+    const extraDays = period === 'week' ? 7 : 30;
+    const trophyExpiryDate = new Date(today.setDate(today.getDate() + extraDays));
+
     const inserts = winners.map((winner: Winner) => ({
       rank: winner.rank,
       trophy_id: prizeMap[winner.rank].trophyId,
       user_id: winner.poster_id,
+      competition_period_type: prizeMap[winner.rank].event_period,
+      trophy_expiry_date: trophyExpiryDate
     }));
-    
+    // console.log('✅ Date is : ', inserts[0].trophy_expiry_date)
     const { error: insertError } = await supabaseAdmin
       .from("fact_user_competition_prizes")
     // .insert(inserts);

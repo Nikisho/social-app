@@ -14,6 +14,7 @@ const BoostEventModal: React.FC<BoostEventModalProps> = ({
     setModalVisible,
     boostEvent
 }) => {
+    
     return (
         <Modal
             animationType="slide"

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,6 +12,8 @@ import { selectCurrentUser } from '../../context/navSlice';
 import getAge from '../../utils/functions/getAge';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import UserBadges from './UserBadges';
+import { supabase } from '../../../supabase';
+import ordinal_suffix_of from '../../utils/functions/ordinal_suffix_of';
 
 interface UserDetailsProps {
     name: string;
@@ -26,6 +28,17 @@ interface UserDetailsProps {
     user_id: number;
     modalVisible: boolean;
     profilePictureModalVisible: boolean
+}
+
+interface trophyProps {
+    rank: number;
+    trophy_expiry_date: string;
+    competition_period_type: string;
+    trophy_id: string;
+    dim_competition_prizes: {
+        trophy_image: string;
+        trophy_name: string;
+    }
 }
 
 const UserDetails: React.FC<UserDetailsProps> = ({
@@ -45,7 +58,40 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-400' : 'bg-red-300')
+    const today = new Date('2025-04-05');
+    const [trophies, setTrophies] = useState<trophyProps[] | null>(null);
 
+    const fetchUserTropHies = async () => {
+        const { data, error } = await supabase
+            .from('fact_user_competition_prizes')
+            .select(
+                `*, 
+                    dim_competition_prizes(
+                        trophy_id,
+                        trophy_image,
+                        trophy_name
+                    )
+                `)
+            .eq('user_id', user_id)
+            .limit(2)
+            .filter('trophy_expiry_date', 'gte', new Date())
+
+        if (error) {
+            console.error(error)
+        }
+
+        if (data) {
+            setTrophies(data)
+        } else {
+            console.log('No data');
+            return;
+        }
+
+    };
+
+    useEffect(() => {
+        fetchUserTropHies();
+    }, [])
     return (
         <View className='h-[35%]'>
             <View className=' flex space-x-5 py-1 flex-row items-center'>
@@ -76,7 +122,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </TouchableOpacity>
-                <View className='flex items-start justify-between space-y-2 '>
+                <View className='flex items- justify-between space-y-2 '>
 
                     <View className='flex flex-row space-x-3'>
 
@@ -87,7 +133,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             dateOfBirth && (
                                 <View
                                     // style={{ backgroundColor: colours.secondaryColour }}
-                                    className={` flex flex-row rounded-xl px-2 ${genderColour}`}
+                                    className={` flex flex-row rounded-xl px-2 h-7 ${genderColour}`}
                                 >
 
                                     {sex !== 0 && (
@@ -103,9 +149,56 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 </View>
                             )
                         }
+                        <View className='flex items-end px-5'>
+                            {
+                                !isCurrentUserProfile ? (
+                                    <TouchableOpacity
+                                        onPress={handlePressChat}
+                                        style={styles.shadowButtonStyle}
+                                        className=' p-2 rounded-xl flex flex-row place-self-end'>
+                                        <Entypo name="chat" size={24} color="white" />
+                                    </TouchableOpacity>
+                                ) :
+                                    (
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate('settings')}
+                                            className='rounded-full p-1 bg-white'
+                                            style={styles.shadow}
+                                        >
+                                            <Fontisto name="player-settings" size={24} color="black" />
+                                        </TouchableOpacity>
+                                    )
+                            }
+                        </View>
+
                     </View>
+
+                    
+                    <ScrollView horizontal className=' w-[80%] flex flex-row space-x-2 scroll-x'>
+                        {
+                            // trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
+                            trophies?.map((trophy) => (
+                                <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2'>
+                                    <Text
+                                        style={{ fontFamily: 'American Typewriter' }}
+                                        className='font-semi text-lg'>
+                                        {ordinal_suffix_of(trophy.rank).toString()}
+                                    </Text>
+                                    <Text> of the {trophy.competition_period_type}</Text>
+                                    <Image
+                                        className='h-8 w-8 rounded-full'
+                                        source={{
+                                            uri: trophy.dim_competition_prizes.trophy_image
+                                        }}
+                                    />
+                                </View>
+                            )
+
+                            )
+                        }
+                    </ScrollView>
                 </View>
-                <View className='flex items-end grow px-5'>
+                {/* <View className='flex items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
                             <TouchableOpacity
@@ -125,7 +218,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 </TouchableOpacity>
                             )
                     }
-                </View>
+                </View> */}
             </View>
             <UserBadges
                 user_id={user_id}

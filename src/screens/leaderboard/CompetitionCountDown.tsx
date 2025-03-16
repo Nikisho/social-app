@@ -22,17 +22,17 @@ const CompetitionCountDown = ({
             targetDate = new Date(now.getTime());
 
             if (day === 0) {
-                // If today is Sunday, set the target to midnight tonight (i.e. start of Monday)
+                // If today is Sunday, set the target to 7pm tonight (i.e. start of Monday)
                 targetDate.setDate(now.getDate() + 1);
                 targetDate.setHours(19, 0, 0, 0);
             } else {
-                // Otherwise, set the target to next Sunday at midnight
+                // Otherwise, set the target to next Sunday at 7pm
                 const daysUntilSunday = 7 - day;
                 targetDate.setDate(now.getDate() + daysUntilSunday);
                 targetDate.setHours(19, 0, 0, 0);
             }
         } else if (type === "month") {
-            // For "month", target is the last day of the current month at midnight.
+            // For "month", target is the last day of the current month at 7pm.
             // new Date(year, month + 1, 0) gives the last day of the month.
             targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
             targetDate.setHours(19, 0, 0, 0);

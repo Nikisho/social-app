@@ -16,8 +16,8 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
 
     return (
         <View
-            style={styles.translucidViewStyle}
-            className='rounded-xl py-2 flex flex-row '>
+            style={styles.shadow}
+            className='rounded-xl py-2 flex flex-row bg-gray-100 '>
             <LikeHandler
                 user_id={user_id}
                 event_id={event_id}

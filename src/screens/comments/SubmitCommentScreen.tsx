@@ -1,11 +1,12 @@
 import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import styles from '../../utils/styles/shadow';
 import { supabase } from '../../../supabase';
 import { CommentScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
+import platformAlert from '../../utils/functions/platformAlert';
 
 const SubmitCommentScreen = () => {
   const route = useRoute<CommentScreenRouteProp>();
@@ -13,10 +14,12 @@ const SubmitCommentScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [comment, setComment] = useState<string>('');
   const navigation = useNavigation<RootStackNavigationProp>();
+  const commentGemBoost = 5;
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     if (comment === '' || comment === null) {
-      Alert.alert('Please enter a message');
+      platformAlert('Please enter a message');
       return;
     }
     const { error } = await supabase
@@ -28,6 +31,22 @@ const SubmitCommentScreen = () => {
       });
     if (error) {
       throw error.message;
+    } else {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          gem_count: currentUser.gemCount + commentGemBoost
+        })
+        .eq('id', currentUser.id)
+      if (error) {
+        throw error.message;
+      } else {
+        platformAlert(`🎉 You’ve earned ${commentGemBoost.toString()} extra gems!💎`)
+        dispatch(setCurrentUser({
+          ...currentUser,
+          gemCount: currentUser.gemCount + commentGemBoost
+        }))
+      }
     }
     navigation.navigate('event',
       { event_id: event_id }
