@@ -5,7 +5,7 @@ import Fontisto from '@expo/vector-icons/Fontisto';
 import { FontAwesome } from '@expo/vector-icons';
 import colours from '../../utils/styles/colours';
 import styles from '../../utils/styles/shadow';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
@@ -89,12 +89,14 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 
     };
 
-    useEffect(() => {
-        fetchUserTropHies();
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchUserTropHies();
+        }, [user_id])
+    );
     return (
         <View className='h-[35%]'>
-            <View className=' flex space-x-5 py-1 flex-row items-center'>
+            <View className='flex space-x-5 py-1 flex-row items-center'>
                 <TouchableOpacity
                     className='flex flex-row items-center space-x-3'
                     onPress={() => setProfilePictureModalVisible(!profilePictureModalVisible)}
@@ -122,9 +124,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </TouchableOpacity>
-                <View className='flex items- justify-between space-y-2 '>
+                <View className='flex justify-between space-y-2 '>
 
-                    <View className='flex flex-row space-x-3'>
+                    <View className='flex flex-row space-x-3 '>
 
                         <Text className='text-xl font-bold'>
                             {name}
@@ -149,7 +151,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 </View>
                             )
                         }
-                        <View className='flex items-end px-5'>
+                        {/* <View className='px-10 flex items-end bg-blue-200'>
                             {
                                 !isCurrentUserProfile ? (
                                     <TouchableOpacity
@@ -169,36 +171,14 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                         </TouchableOpacity>
                                     )
                             }
-                        </View>
+                        </View> */}
 
                     </View>
-
-                    
-                    <ScrollView horizontal className=' w-[80%] flex flex-row space-x-2 scroll-x'>
-                        {
-                            // trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
-                            trophies?.map((trophy) => (
-                                <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2'>
-                                    <Text
-                                        style={{ fontFamily: 'American Typewriter' }}
-                                        className='font-semi text-lg'>
-                                        {ordinal_suffix_of(trophy.rank).toString()}
-                                    </Text>
-                                    <Text> of the {trophy.competition_period_type}</Text>
-                                    <Image
-                                        className='h-8 w-8 rounded-full'
-                                        source={{
-                                            uri: trophy.dim_competition_prizes.trophy_image
-                                        }}
-                                    />
-                                </View>
-                            )
-
-                            )
-                        }
-                    </ScrollView>
+                    <UserBadges
+                        user_id={user_id}
+                    />
                 </View>
-                {/* <View className='flex items-end grow px-5'>
+                <View className='absolute top-0 right-0 items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
                             <TouchableOpacity
@@ -218,11 +198,33 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 </TouchableOpacity>
                             )
                     }
-                </View> */}
+                </View>
             </View>
-            <UserBadges
-                user_id={user_id}
-            />
+            <ScrollView horizontal className=' w- flex flex-row space-x-2 pt-1' >
+                {
+                    // trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
+                    trophies?.map((trophy) => (
+                        <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2'>
+                            <Text
+                                style={{ fontFamily: 'American Typewriter' }}
+                                className='font-semi text-lg'>
+                                {ordinal_suffix_of(trophy.rank).toString()}
+                            </Text>
+                            <Text> of the {trophy.competition_period_type}</Text>
+                            {/* <Text>{trophy.dim_competition_prizes.trophy_name}</Text> */}
+                            <Image
+                                className='h-10 w-9 rounded-full'
+                                source={{
+                                    uri: trophy.dim_competition_prizes.trophy_image
+                                }}
+                            />
+                        </View>
+                    )
+
+                    )
+                }
+            </ScrollView>
+
             <View className='flex flex-row items-center space-x-3'>
                 <Text className='text-lg font-semibold my-1'>About</Text>
                 {

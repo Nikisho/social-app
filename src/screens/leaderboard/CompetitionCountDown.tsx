@@ -23,7 +23,7 @@ const CompetitionCountDown = ({
 
             if (day === 0) {
                 // If today is Sunday, set the target to 7pm tonight (i.e. start of Monday)
-                targetDate.setDate(now.getDate() + 1);
+                targetDate.setDate(now.getDate() + 0);
                 targetDate.setHours(19, 0, 0, 0);
             } else {
                 // Otherwise, set the target to next Sunday at 7pm

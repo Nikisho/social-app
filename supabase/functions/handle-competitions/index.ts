@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
     // console.log('✅ Date is : ', inserts[0].trophy_expiry_date)
     const { error: insertError } = await supabaseAdmin
       .from("fact_user_competition_prizes")
-    // .insert(inserts);
+      .insert(inserts);
 
     if (insertError) {
       console.error("Insert error:", insertError.message);
@@ -112,12 +112,12 @@ Deno.serve(async (req) => {
     //Give gem rewards
     for (const { rank, poster_id, gem_count } of winners) {
         const newGemCount = gem_count + (prizeMap[rank]?.gem_reward || 0);
-        // const { error } = await supabaseAdmin
-        //   .from("users")
-        //   .update({ gem_count: newGemCount })
-        //   .eq("id", poster_id);
+        const { error } = await supabaseAdmin
+          .from("users")
+          .update({ gem_count: newGemCount })
+          .eq("id", poster_id);
       
-        // if (error) console.error(`Failed to update gems for user ${poster_id}:`, error.message);
+        if (error) console.error(`Failed to update gems for user ${poster_id}:`, error.message);
       }
 
     return new Response(JSON.stringify(winners), {

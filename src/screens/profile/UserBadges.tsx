@@ -50,23 +50,24 @@ const UserBadges: React.FC<UserBadgesProps> = ({
         <>
             <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}
-                style={styles.shadow}
-                className='p-2 my-3 bg-white rounded-xl w-1/3 flex-row 
-                 items-center space-x-2'>
+                // style={styles.shadow}
+                className=' my-2 bg-white rounded-xl flex flex-row 
+                            items-center space-x-2 '
+                >
                 {
                     badgeData && badgeData.length !== 0 ? 
                     (
-                        <>
+                        <View className='flex flex-row items-center'>
                             <Image
-                                className='w-7 h-7 rounded-full'
+                                className='w-10 h-10 rounded-full'
                                 source={{
                                     uri: badgeData[0]?.milestones.badge_image_url
                                 }}
                             />
-                            <Text className=''>
+                            <Text className='mb-1'>
                                 {badgeData?.length === 1 ? `${badgeData.length} badge` : `${badgeData.length} badges`  } 
                             </Text>
-                        </>
+                        </View>
                     ) :
                     (
                         <>

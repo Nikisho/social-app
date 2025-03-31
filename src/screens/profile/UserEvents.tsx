@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { supabase } from '../../../supabase';
 import Feed from '../../components/Feed';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,18 +10,6 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import { usePagination } from '../../hooks/usePagination';
 
-interface eventListProps {
-    user_name: string
-    key: number
-    event_description: string
-    event_title: string
-    event_date: string
-    user_photo: string
-    event_time: string
-    event_id: number
-    user_id: number;
-    event_type: string;
-}
 
 const UserEvents = ({ user_id }: { user_id: number }) => {
     const currentUser = useSelector(selectCurrentUser);
@@ -42,7 +30,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
             if (error) throw error;
             return data || [];
         },
-        [currentUser]
+        [user_id]
     );
     useEffect(() => {
         onRefresh();
