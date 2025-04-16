@@ -116,6 +116,8 @@ PODS:
   - hermes-engine (0.74.5):
     - hermes-engine/Pre-built (= 0.74.5)
   - hermes-engine/Pre-built (0.74.5)
+  - PurchasesHybridCommon (13.26.0):
+    - RevenueCat (= 5.20.0)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1278,6 +1280,7 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
+  - RevenueCat (5.20.0)
   - RNCAsyncStorage (1.23.1):
     - React-Core
   - RNGestureHandler (2.16.2):
@@ -1327,6 +1330,9 @@ PODS:
   - RNGoogleSignin (12.2.1):
     - GoogleSignIn (~> 7.1)
     - React-Core
+  - RNPurchases (8.9.1):
+    - PurchasesHybridCommon (= 13.26.0)
+    - React-Core
   - RNReanimated (3.10.1):
     - DoubleConversion
     - glog
@@ -1374,42 +1380,6 @@ PODS:
   - "sqlite3 (3.45.3+1)":
     - "sqlite3/common (= 3.45.3+1)"
   - "sqlite3/common (3.45.3+1)"
-  - Stripe (24.2.0):
-    - StripeApplePay (= 24.2.0)
-    - StripeCore (= 24.2.0)
-    - StripePayments (= 24.2.0)
-    - StripePaymentsUI (= 24.2.0)
-    - StripeUICore (= 24.2.0)
-  - stripe-react-native (0.41.0):
-    - React-Core
-    - Stripe (~> 24.2.0)
-    - StripeApplePay (~> 24.2.0)
-    - StripeFinancialConnections (~> 24.2.0)
-    - StripePayments (~> 24.2.0)
-    - StripePaymentSheet (~> 24.2.0)
-    - StripePaymentsUI (~> 24.2.0)
-  - StripeApplePay (24.2.0):
-    - StripeCore (= 24.2.0)
-  - StripeCore (24.2.0)
-  - StripeFinancialConnections (24.2.0):
-    - StripeCore (= 24.2.0)
-    - StripeUICore (= 24.2.0)
-  - StripePayments (24.2.0):
-    - StripeCore (= 24.2.0)
-    - StripePayments/Stripe3DS2 (= 24.2.0)
-  - StripePayments/Stripe3DS2 (24.2.0):
-    - StripeCore (= 24.2.0)
-  - StripePaymentSheet (24.2.0):
-    - StripeApplePay (= 24.2.0)
-    - StripeCore (= 24.2.0)
-    - StripePayments (= 24.2.0)
-    - StripePaymentsUI (= 24.2.0)
-  - StripePaymentsUI (24.2.0):
-    - StripeCore (= 24.2.0)
-    - StripePayments (= 24.2.0)
-    - StripeUICore (= 24.2.0)
-  - StripeUICore (24.2.0):
-    - StripeCore (= 24.2.0)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1496,9 +1466,9 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - "stripe-react-native (from `../node_modules/@stripe/stripe-react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1509,17 +1479,11 @@ SPEC REPOS:
     - GoogleUserMessagingPlatform
     - GTMAppAuth
     - GTMSessionFetcher
+    - PurchasesHybridCommon
     - ReachabilitySwift
+    - RevenueCat
     - SocketRocket
     - sqlite3
-    - Stripe
-    - StripeApplePay
-    - StripeCore
-    - StripeFinancialConnections
-    - StripePayments
-    - StripePaymentSheet
-    - StripePaymentsUI
-    - StripeUICore
 
 EXTERNAL SOURCES:
   boost:
@@ -1685,12 +1649,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-google-mobile-ads"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNPurchases:
+    :path: "../node_modules/react-native-purchases"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  stripe-react-native:
-    :path: "../node_modules/@stripe/stripe-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1729,6 +1693,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
+  PurchasesHybridCommon: fa166fc8b385cf80f581f923c91d8ccffe5dd7f8
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 3afceddffa65aee666dafd6f0116f1d975db1584
   RCTRequired: ec1239bc9d8bf63e10fb92bd8b26171a9258e0c1
@@ -1779,23 +1744,16 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cfbe85c3510c541ec6dc815c7729b41304b67961
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
+  RevenueCat: e47ff90dfd271fde155a4befe48e8fc02e8281e4
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNGoogleMobileAds: 00c3074374c8cb267dbd815c246d1758f0680ace
   RNGoogleSignin: 08dc4ba7eac2096c7fecfe109f0950fa4683c803
+  RNPurchases: 596c32adac473fe4c9aa6185defdaa1dbd3b68f9
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   sqlite3: 02d1f07eaaa01f80a1c16b4b31dfcbb3345ee01a
-  Stripe: be805dc0e80a7299de7b10ecbe01ce81412654c8
-  stripe-react-native: 01b57a63afbe42b57f24cebdde78eff3d602148b
-  StripeApplePay: 5233ecff535bb0772785d2d18d02b39ec24ecb71
-  StripeCore: e2f70fcaa82e5a9d44d18fe4534358384cdf4821
-  StripeFinancialConnections: 8c8e2273552d4567ec381ee2b0ff1745b8e11ab6
-  StripePayments: beb97f8061066532744ceaa03e59009c9716332e
-  StripePaymentSheet: 0d8ed5270037b1da3eb107c9876cec67b8b1fe43
-  StripePaymentsUI: 6486d8b86bf49b8932506807a8692ce16e9f109d
-  StripeUICore: b59aa9c9e202b6a03a556c3519eff578274f7598
   Yoga: 2246eea72aaf1b816a68a35e6e4b74563653ae09
 
 PODFILE CHECKSUM: b79398a28e3fe9c75ee88e18f07c05b9b9cc2aa0

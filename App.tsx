@@ -30,11 +30,10 @@ import SendResetLinkScreen from './src/screens/authentication/passwordReset/Send
 import ResetPasswordScreen from './src/screens/authentication/passwordReset/ResetPasswordScreen';
 import UserDetailsScreen from './src/screens/authentication/signup/UserDetailsScreen';
 import UpdateInterestsScreen from './src/screens/profile/UpdateInterestsScreen';
-import * as Linking from 'expo-linking';
 import React from 'react';
-import Constants from 'expo-constants';
 import LeaderboardScreen from './src/screens/leaderboard/LeaderboardScreen';
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import Purchases from 'react-native-purchases';
+import { setupRevenueCat } from './src/utils/functions/setupRevenueCat';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -48,15 +47,10 @@ const mainTheme = {
 // fix provider bug for redux
 export default function AppWrapper() {
 	return (
-		<StripeProvider
-			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
-			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
-			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
-		>
-			<Provider store={store}>
-				<App />
-			</Provider>
-		</StripeProvider>
+
+		<Provider store={store}>
+			<App />
+		</Provider>
 	)
 }
 
@@ -107,21 +101,9 @@ function App() {
 		setLoading(false);
 	};
 
-	// const handleDeepLink = useCallback(
-	//   async (url: string | null) => {
-	// 	if (url) {
-	// 	  const stripeHandled = await handleURLCallback(url);
-	// 	  if (stripeHandled) {
-	// 		// This was a Stripe URL - you can return or add extra handling here as you see fit
-	// 	  } else {
-	// 		// This was NOT a Stripe URL – handle as you normally would
-	// 	  }
-	// 	}
-	//   },
-	//   [handleURLCallback]
-	// );
 
 	useEffect(() => {
+		setupRevenueCat();
 		fetchSession();
 	}, []);
 

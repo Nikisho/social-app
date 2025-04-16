@@ -81,7 +81,8 @@ Deno.serve(async (req) => {
     //Send the notifications.
     for (const {rank, expo_push_token, name } of winners) {
         await sendWinnerNotification(
-            'ExponentPushToken[1kcfbtMG-arjymKHbnzwzN]',
+            //'ExponentPushToken[1kcfbtMG-arjymKHbnzwzN]',
+            expo_push_token,
             prizeMap[rank].title,
             prizeMap[rank].message.replace("{name}", name)
         );

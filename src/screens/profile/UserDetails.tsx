@@ -200,11 +200,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
                 </View>
             </View>
-            <ScrollView horizontal className=' w- flex flex-row space-x-2 pt-1' >
+            <View className=' w- flex flex-row space-x-2 pt-1' >
                 {
                     // trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
                     trophies?.map((trophy) => (
-                        <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2'>
+                        <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2 h-8'>
                             <Text
                                 style={{ fontFamily: 'American Typewriter' }}
                                 className='font-semi text-lg'>
@@ -223,7 +223,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 
                     )
                 }
-            </ScrollView>
+            </View>
 
             <View className='flex flex-row items-center space-x-3'>
                 <Text className='text-lg font-semibold my-1'>About</Text>

@@ -43,7 +43,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    
+
     return (
         <TouchableOpacity
             onPress={() => {

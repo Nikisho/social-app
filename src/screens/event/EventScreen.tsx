@@ -62,7 +62,7 @@ const EventScreen = () => {
     useFocusEffect(
         React.useCallback(() => {
             fetchData();
-        }, [])
+        }, [event_id])
     );
     return (
         <View className='mx-2 h-[90%]'>

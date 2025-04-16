@@ -69,6 +69,8 @@ const AppleSignIn = () => {
 
             }
         } catch (e: any) {
+            console.log(e.code)
+
             switch (e.code) {
                 case 'ERR_REQUEST_CANCELED':
                     console.log('User canceled the Apple sign-in flow.');
@@ -84,7 +86,7 @@ const AppleSignIn = () => {
                     break;
                 default:
                     console.error('Unknown Apple sign-in error:', e.message);
-                    Alert.alert('An unknown error occurred. Please try again later.');
+                    Alert.alert('Sign-in process cancelled. Please try again later.');
             }
         }
         finally {
