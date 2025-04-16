@@ -247,10 +247,10 @@ const SubmitScreen = () => {
                 )
             }
 
-            <View className='justify-center h-1/6 flex grow items-end '>
+            <View className='justify-center flex grow items-end '>
                 <TouchableOpacity
                     style={styles.shadowButtonStyle}
-                    className='bg-sky-600 py-3 px-3 rounded-xl w-full '
+                    className='bg-sky-600 mt-5 py-3 px-3 rounded-xl w-full '
                     onPress={handleSubmit}>
                     <Text className='text-white font-bold text-lg text-center'>Submit</Text>
                 </TouchableOpacity>

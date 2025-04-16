@@ -1,6 +1,7 @@
 import { View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import styles from '../../utils/styles/shadow';
 import LikeHandler from '../../components/LikeHandler';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +17,6 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
 
     return (
         <View
-            style={styles.shadow}
             className='rounded-xl py-2 flex flex-row bg-gray-100 '>
             <LikeHandler
                 user_id={user_id}
@@ -32,7 +32,8 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
                 <View className='p-2 rounded-full bg-white flex justify-center'
                     style={styles.shadow}
                 >
-                    <EvilIcons name="comment" size={30} color="black" />
+                    {/* <EvilIcons name="comment" size={30} color="black" /> */}
+                    <FontAwesome name="comment-o" size={25} color="black" />
                 </View>
             </TouchableOpacity>
         </View>

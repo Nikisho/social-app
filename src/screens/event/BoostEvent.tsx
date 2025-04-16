@@ -54,7 +54,6 @@ const BoostEvent: React.FC<BoostEventProps> = ({
         if (currentUser.gemCount < 50) {
             setModalVisible(false);
             setBuyGemsModalVisible(true);
-            console.log('first')
             return;
         }
 
@@ -91,9 +90,10 @@ const BoostEvent: React.FC<BoostEventProps> = ({
 
     return (
         <View
-            style={styles.shadow}
+            // style={styles.shadow}
             className='w-full my-3 flex flex-row justify-center'>
             <TouchableOpacity
+                style={styles.shadow}
                 onPress={() => setModalVisible(!modalVisible)}
                 className='p-2 rounded-full bg-white w-1/3 pl-5'>
                 <Text className='text-center text-lg'>
