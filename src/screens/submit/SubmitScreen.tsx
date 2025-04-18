@@ -156,6 +156,7 @@ const SubmitScreen = () => {
             <BuyGemsModal 
                 modalVisible={buyGemsModalVisible}
                 setModalVisible={setBuyGemsModalVisible}
+                message="You don't have enough gems"
             />
             <View >
                 <TextInput className='text-2xl bg-white p-4 rounded-xl ' placeholder='Title'

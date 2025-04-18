@@ -30,7 +30,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.2.3",
+    version: "1.2.4",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -44,7 +44,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.1.3'
+      buildNumber: '1.1.4'
     },
     android: {
       googleServicesFile: './google-services.json', // Set to path where file will be written

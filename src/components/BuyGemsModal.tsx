@@ -12,6 +12,7 @@ import { recordTransaction } from '../utils/functions/recordTransaction'
 interface BuyGamsModalProps {
     modalVisible: boolean
     setModalVisible: (bool: boolean) => void
+    message: string
 }
 const gemOptions = [
     {
@@ -43,7 +44,8 @@ const gemOptions = [
 ]
 const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
     modalVisible,
-    setModalVisible
+    setModalVisible,
+    message
 }) => {
     const [loading, setLoading] = useState(false);
     const currentUser = useSelector(selectCurrentUser);
@@ -108,7 +110,7 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
                         Top up?
                     </Text>
                     <Text className='text-xl'>
-                        You don't have enough gems
+                        {message}
                     </Text>
 
                     <View className='flex flex-row space-x-1 '>

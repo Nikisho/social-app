@@ -108,6 +108,7 @@ const BoostEvent: React.FC<BoostEventProps> = ({
             <BuyGemsModal
                 modalVisible={buyGemsModalVisible}
                 setModalVisible={setBuyGemsModalVisible}
+                message="You don't have enough gems"
             />
         </View>
     )
