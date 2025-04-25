@@ -79,7 +79,7 @@ const Comment: React.FC<CommentProps> = ({
                 </Text>
             </TouchableOpacity>
             <View 
-                className='flex flex-row '>
+                className='flex flex-row space-x-1 '>
                 {
                     parentCommentId && (
                         <TouchableOpacity
