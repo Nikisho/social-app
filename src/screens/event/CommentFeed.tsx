@@ -1,9 +1,8 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { ScrollView } from 'react-native'
 import React, {  useState } from 'react'
-import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../supabase';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { useFocusEffect } from '@react-navigation/native';
+import Comment from './Comment';
 
 interface CommentFeedProps {
     event_id: number
@@ -16,11 +15,11 @@ interface CommentsProps {
     }
     text: string;
     comment_id: number;
+    parent_comment_id: number;
 }
 const CommentFeed: React.FC<CommentFeedProps> = ({ event_id }) => {
 
     const [comments, setComments] = useState<CommentsProps[]>();
-    const navigation = useNavigation<RootStackNavigationProp>();
     const fetchComments = async () => {
         const { error, data } = await supabase
             .from('comments')
@@ -44,38 +43,15 @@ const CommentFeed: React.FC<CommentFeedProps> = ({ event_id }) => {
         <ScrollView className='space-y-1 mt-2 -mx-2 h-1/2'>
             {
                 comments?.map((comment) => (
-                    <View
+                    <Comment 
+                        comment={comment}
+                        event_id={event_id}
+                        //Warning this is the parent comment id of 
+                        //the comment the current one replied to, the one in the navigate in Comment.tsx is set to comment_id 
+                        //as we are replying to the current comment
+                        parentCommentId={comment.parent_comment_id}
                         key={comment.comment_id}
-                        className='bg-gray-100 
-                                    py-2 px-3  space-y-1'>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('profile',
-                                { user_id: comment.users.id }
-                            )}
-                            className='flex  flex-row space-x-3 items-center '>
-
-                            {
-                                comment.users.photo === null ?
-                                    <>
-                                        <FontAwesome name="user-circle" size={31} color="black" />
-                                    </> :
-                                    <>
-                                        <Image
-                                            className='w-8 h-8 rounded-full'
-                                            source={{
-                                                uri: comment.users.photo,
-                                            }}
-                                        />
-                                    </>
-                            }
-                            <Text>
-                                {comment.users.name}
-                            </Text>
-                        </TouchableOpacity>
-                        <Text>
-                            {comment.text}
-                        </Text>
-                    </View>
+                    />
                 ))
             }
 

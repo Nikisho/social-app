@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 // Define your screen names and their params
 export type RootStackParamList = {
   home: undefined; // No params;
-  comment: {event_id: number};
+  comment: {event_id: number, parent_comment_id?: number, parent_comment_user_name?: string };
   event: {event_id: number};
   profile: {user_id:number};
   chat: {user_id:number};

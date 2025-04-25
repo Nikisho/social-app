@@ -46,18 +46,18 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
     };
 
     const deleteUserFolder = async () => {
-        const { data , error:DeleteBucketFolderError } = await supabase
-        .storage
-        .from('users')
-        .remove([`${currentUserId}/profile_picture.jpg`])
+        const { data, error: DeleteBucketFolderError } = await supabase
+            .storage
+            .from('users')
+            .remove([`${currentUserId}/profile_picture.jpg`])
         if (DeleteBucketFolderError) {
             console.error(DeleteBucketFolderError)
         }
         if (data) {
-            const { error:DeleteEmptyBucket } = await supabase
-            .storage
-            .from('users')
-            .remove([`/${currentUserId}`]) 
+            const { error: DeleteEmptyBucket } = await supabase
+                .storage
+                .from('users')
+                .remove([`/${currentUserId}`])
             if (DeleteEmptyBucket) console.error(DeleteEmptyBucket.message)
         }
     };
@@ -73,25 +73,31 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
                     setModalVisible(!modalVisible);
                 }}>
                 <View className='flex-1 justify-center items-center mt-22 h-full shadow-xl' >
-                    <View className='bg-white rounded-xl m-20 h-auto w-[90%]  p-2 space-y-5 items-center'
+                    <View className='bg-white m-20 h-auto w-[90%]  p-2 space-y-5 items-center'
                         style={styles.shadow}
                     >
-                        <View className='flex w-full ' >
-                            <Text className='text-lg'>
+                        <View className='flex w-full space-y-3' >
+                            <Text className='text'
+                                style={{ fontSize: 18 }}
+                            >
                                 Are you sure you want to delete your account? This action is
-                                permanent and cannot be undone. All your data, including your profile, events, connections, and messages,
+                                permanent and cannot be undone.
+                            </Text>
+                            <Text className='text'
+                                style={{ fontSize: 18 }}
+                            >
+                                All your data, including your profile, events, connections, and messages,
                                 will be permanently deleted. If you're sure, please confirm.
                             </Text>
                         </View>
-                        <View className='flex flex-row w-full justify-between'>
-
+                        <View className='flex flex-row w-full justify-between '>
                             <TouchableOpacity
-                                className='rounded-lg p-2 bg-gray-500 '
+                                className='p-2 bg-gray-500 w-[48%] rounded-full space-x-2'
                                 onPress={() => setModalVisible(!modalVisible)}>
                                 <Text className='text-white text-center font-bold'>Cancel</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                className='rounded-lg p-2 bg-red-500'
+                                className='p-2 bg-red-500 w-[48%] rounded-full'
                                 onPress={deleteAccount}>
                                 <Text className='text-white text-center font-bold'>Delete my account</Text>
                             </TouchableOpacity>

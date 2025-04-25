@@ -10,13 +10,14 @@ import platformAlert from '../../utils/functions/platformAlert';
 
 const SubmitCommentScreen = () => {
   const route = useRoute<CommentScreenRouteProp>();
-  const { event_id } = route.params;
+  const { event_id, parent_comment_id, parent_comment_user_name } = route.params;
   const currentUser = useSelector(selectCurrentUser);
   const [comment, setComment] = useState<string>('');
   const navigation = useNavigation<RootStackNavigationProp>();
   const commentGemBoost = 5;
   const dispatch = useDispatch();
 
+  const placeholder = parent_comment_id? 'Reply to ' + parent_comment_user_name : 'Your comment'
   const handleSubmit = async () => {
     if (comment === '' || comment === null) {
       platformAlert('Please enter a message');
@@ -27,7 +28,8 @@ const SubmitCommentScreen = () => {
       .insert({
         user_id: currentUser.id,
         event_id: event_id,
-        text: comment
+        text: comment,
+        parent_comment_id: parent_comment_id
       });
     if (error) {
       throw error.message;
@@ -75,7 +77,7 @@ const SubmitCommentScreen = () => {
         <TextInput
           multiline={true} 
           maxLength={280}
-          placeholder='Your comment'
+          placeholder={placeholder}
           value={comment}
           onChangeText={(value) => { setComment(value) }}
         />
