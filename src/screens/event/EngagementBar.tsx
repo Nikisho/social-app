@@ -32,7 +32,6 @@ const EngagementBar: React.FC<EngagementBarProps> = ({ event_id, user_id }) => {
                 <View className='p-2 rounded-full bg-white flex justify-center'
                     style={styles.shadow}
                 >
-                    {/* <EvilIcons name="comment" size={30} color="black" /> */}
                     <FontAwesome name="comment-o" size={25} color="black" />
                 </View>
             </TouchableOpacity>

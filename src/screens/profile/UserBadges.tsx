@@ -51,7 +51,7 @@ const UserBadges: React.FC<UserBadgesProps> = ({
             <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}
                 // style={styles.shadow}
-                className=' my-2 bg-white rounded-xl flex flex-row 
+                className=' my-2 rounded-xl flex flex-row 
                             items-center space-x-2 '
                 >
                 {

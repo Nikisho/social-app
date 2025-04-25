@@ -5,6 +5,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 
 import { Platform } from "react-native";
+import { navigate } from "./navigationRef";
 
 export interface PushNotificationState {
     expoPushToken?: Notifications.ExpoPushToken;
@@ -79,6 +80,18 @@ export const usePushNotifications = (): PushNotificationState => {
         responseListener.current =
             Notifications.addNotificationResponseReceivedListener((response) => {
                 console.log(response);
+                {
+                    const data = response.notification.request.content.data;
+            
+                    console.log('Notification tapped with data:', data);
+            
+                    if (data?.screen === 'EventDetails' && data?.eventId) {
+                        navigate('event', { event_id: data.eventId });
+                    }
+                    if (data?.screen === 'ChatScreen' && data?.userId) {
+                        navigate('chat', { user_id: data.userId });
+                    }
+                }
             });
 
         return () => {

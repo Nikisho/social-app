@@ -3,8 +3,8 @@ export default function extractTimeFromDateSubmit(dateString: Date) {
     const date = new Date(dateString);
   
     // Extract hours, minutes, and seconds, ensuring two digits (e.g., 09 for single digit)
-    const hours = String(date.getUTCHours()).padStart(2, '0');
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const hours = String(date.getHours());
+    const minutes = String(date.getMinutes())
   
     // Return the formatted time string
     return `${hours}:${minutes}`;

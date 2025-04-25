@@ -140,10 +140,21 @@ const SubmitScreen = () => {
             title: '',
             description: ''
         });
+
+        const {data:newGems } = await supabase
+            .from('users')
+            .select('gem_count')
+            .eq('id', currentUser.id)
+            .single()
+
+        dispatch(setCurrentUser({
+            ...currentUser,
+            gemCount: newGems?.gem_count
+        })); 
+
         navigation.navigate('home');
         if (error) console.error(error.message);
     };
-
     return (
         <View className='flex space-y-2 mx-3 '>
             <SecondaryHeader

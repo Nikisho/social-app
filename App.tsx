@@ -34,6 +34,7 @@ import React from 'react';
 import LeaderboardScreen from './src/screens/leaderboard/LeaderboardScreen';
 import Purchases from 'react-native-purchases';
 import { setupRevenueCat } from './src/utils/functions/setupRevenueCat';
+import { navigationRef } from './src/utils/functions/navigationRef';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -122,7 +123,7 @@ function App() {
 
 	return (
 		<SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
-			<NavigationContainer theme={mainTheme} linking={linking} >
+			<NavigationContainer theme={mainTheme} linking={linking} ref={navigationRef} >
 				<Stack.Navigator screenOptions={{
 					headerShown: false
 				}} >

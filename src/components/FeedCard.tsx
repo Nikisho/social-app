@@ -11,6 +11,7 @@ import { RootStackNavigationProp } from '../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import FeedCardOptionsModal from './FeedCardOptionsModal';
 import styles from '../utils/styles/shadow';
+import colours from '../utils/styles/colours';
 
 interface FeedCardProps {
     name: string;
@@ -52,7 +53,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 });
             }}
             style={styles.shadow}
-            className={`rounded-xl bg-white p-2 my-3 space-y-4 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2 && currentUser.id !== 3) &&  'hidden' }` }
+            className={`rounded-xl bg-white p-2 my-3 space-y-2 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2 && currentUser.id !== 3) &&  'hidden' }` }
         >
             <View className=' flex flex-row justify-between'>
 
@@ -64,11 +65,11 @@ const FeedCard: React.FC<FeedCardProps> = ({
                     {
                         photo === null ?
                             <>
-                                <FontAwesome name="user-circle" size={31} color="black" />
+                                <FontAwesome name="user-circle" size={36} color="black" />
                             </> :
                             <>
                                 <Image
-                                    className='w-8 h-8 rounded-full'
+                                    className='w-10 h-10 rounded-full'
                                     source={{
                                         uri: photo,
                                     }}
@@ -105,15 +106,15 @@ const FeedCard: React.FC<FeedCardProps> = ({
                 </Text>
             </View>
 
-            <View className='space-x-3 flex flex-row items-center bg-white'>
-                <View className='space-x-2 flex-row flex p-2 rounded-xl bg-[#176b7d]' style={styles.shadow}>
+            <View className='space-x-3 flex flex-row items-center'>
+                <View className={`space-x-2 flex-row flex p-2 rounded-full px-3`} style={styles.shadowButtonStyle}>
 
-                    <View className='space-x-1 flex flex-row items-center '>
-                        <AntDesign name="calendar" size={24} color="white" />
+                    <View className='space-x-1 flex flex-row items-center'>
+                        <AntDesign name="calendar" size={20} color="white" />
                         <Text className=' text-white font-bold '> {formattedDate} </Text>
                     </View>
                     <View className='space-x-1 flex flex-row items-center '>
-                        <AntDesign name="clockcircleo" size={24} color="white" />
+                        <AntDesign name="clockcircleo" size={20} color="white" />
                         <Text className=' text-white font-bold '> {timeSliced} </Text>
                     </View>
                 </View>

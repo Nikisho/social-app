@@ -20,7 +20,10 @@ const UserInterestsForm: React.FC<UserPhotoFormProps> = ({
         <View style={styles.container}>
             <View className='flex mt-14 mb-6'>
                 <Text style={styles.headerText}>
-                    Help us match you with the right experiences!
+                    Help us match you with the right 
+                </Text>
+                <Text style={styles.headerText}>
+                    expiences!
                 </Text>
                 <Text style={styles.subHeaderText}>
                     Select ten interests to personalise your journey.

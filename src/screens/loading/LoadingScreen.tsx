@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, Text, StyleSheet, Easing } from 'react-native'; // Import Easing separately
+import colours from '../../utils/styles/colours';
 
 interface LoadingScreenProps {
     displayText: string;
@@ -77,7 +78,8 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         borderRadius: 60, // Circular shape
-        backgroundColor: 'rgba(71, 107, 125, 0.2)', // Light theme color with transparency
+        // backgroundColor: 'rgba(71, 107, 125, 0.2)', // Light theme color with transparency
+        backgroundColor: colours.primaryColour, // Light theme color with transparency
         shadowColor: '#476b7d',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.3,

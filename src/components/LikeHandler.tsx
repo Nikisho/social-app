@@ -71,7 +71,7 @@ const LikeHandler: React.FC<LikeHandlerProps> = ({
                         <View className='p-2 rounded-full bg-white flex flex-row items-center space-x-3'
                             style={styles.shadow}
                         >
-                            <Ionicons name="heart" size={25} color={colours.secondaryColour} />
+                            <Ionicons name="heart" size={25} color={colours.likeHandlerColour} />
                         <Text>
                             {likeNumber}
                         </Text>

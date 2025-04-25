@@ -35,7 +35,7 @@ const Feed:React.FC<FeedProps> = ({
       data={eventList}
       keyExtractor={(item) => item.event_id.toString()}
       renderItem={({ item, index }) => (
-        <View key={item.event_id} className="flex items-center w-full bg-white">
+        <View key={item.event_id} className="flex items-center w-full ">
           <FeedCard
             name={item.user_name}
             description={item.event_description}
