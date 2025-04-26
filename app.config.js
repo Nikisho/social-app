@@ -44,7 +44,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.1.5'
+      buildNumber: '1.1.6'
     },
     android: {
       googleServicesFile: './google-services.json', // Set to path where file will be written
