@@ -20,11 +20,10 @@ const UpdateAppModal = () => {
     const buildNumber = Constants.expoConfig?.ios?.buildNumber;
     const versionCode = Constants.expoConfig?.android?.versionCode;
     const { data, error } = await supabase
-      .from('app_version')
+      .from('app_versioning')
       .select()
       .eq('platform', Platform.OS)
       .order('created_at', { ascending: false });
-
     if (error) {
       console.error(error.message);
       setLoading(false);
@@ -32,9 +31,9 @@ const UpdateAppModal = () => {
     }
     if (data && data.length > 0) {
       if (Platform.OS === 'ios') {
-        setIsOutDated(data[0]?.build_number !== buildNumber);
+        setIsOutDated(data[0]?.build !== buildNumber);
       } else if (Platform.OS === 'android') {
-        setIsOutDated(data[0]?.version_code !== versionCode);
+        setIsOutDated(data[0]?.build !== versionCode?.toString());
       }
     }
     setLoading(false);
