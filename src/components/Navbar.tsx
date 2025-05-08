@@ -18,32 +18,36 @@ const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState<number | null>(null);
   const menuItems = [
+    // {
+    //   icon: <AntDesign name="search1" size={30} color="white" />,
+    //   navigation: 'search'
+    // },
     {
-      icon: <AntDesign name="search1" size={30} color="white" />,
-      navigation: 'search'
-    },
-    {
-      icon: <Entypo name="home" size={30} color="white" />,
-      navigation: 'home'
+      icon: <MaterialIcons name="leaderboard" size={24} color="white" />,
+      navigation: 'leaderboard'
     },
     {
       icon: <View>
         <Entypo name="message" size={30} color="white" />
-
         <Badge messageCount={unreadMessagesCount!} />
       </View>,
       navigation: 'chatlist'
     },
     {
+      icon: <Entypo name="home" size={30} color="white" />,
+      navigation: 'featuredEvents'
+    },
+    {
+      icon: <Entypo name="calendar" size={30} color="white" />,
+      navigation: 'meetups'
+    },
+    {
       icon: <Ionicons name="person" size={30} color="white" />,
       navigation: 'profile'
     },
-    {
-      icon: <MaterialIcons name="leaderboard" size={24} color="white" />,
-      navigation: 'leaderboard'
-    },
   ];
 
+  const screens = ['leaderboard', 'meetups', 'chat', 'chatlist', 'featuredEvents']
   const { expoPushToken } = usePushNotifications();
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
@@ -99,7 +103,8 @@ const Navbar = () => {
         menuItems.map((item) => (
           <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}
             onPress={() => {
-              if (item.navigation === 'search' || item.navigation === 'home' || item.navigation === 'chatlist' || item.navigation === 'leaderboard'  ) {
+              if (item.navigation === 'search' || item.navigation === 'meetups' || item.navigation === 'chatlist' || item.navigation === 'leaderboard' || item.navigation === 'featuredEvents'  ) {
+              // if ( screens.includes(item.navigation) ) {
                 navigation.navigate(item.navigation);
               } else if (item.navigation === 'profile') {
                 navigation.navigate('profile', {

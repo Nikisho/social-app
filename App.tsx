@@ -1,27 +1,27 @@
 import 'react-native-gesture-handler';
 import Navbar from './src/components/Navbar';
-import HomeScreen from './src/screens/home/HomeScreen';
+import MeetupsScreen from './src/screens/meetups/MeetupsScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer, useNavigationState } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
-import SubmitScreen from './src/screens/submit/SubmitScreen';
+import SubmitScreen from './src/screens/event/submit/SubmitScreen';
 import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
-import EventScreen from './src/screens/event/EventScreen';
+import EventScreen from './src/screens/event/eventscreen/EventScreen';
 import colours from './src/utils/styles/colours';
-import { Keyboard, Platform, SafeAreaView, View } from 'react-native';
+import { Keyboard } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
 import ChatScreen from './src/screens/chats/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
 import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 import SearchScreen from './src/screens/search/SearchScreen';
 import { supabase } from './supabase';
-import EditEventScreen from './src/screens/event/EditEventScreen';
+import EditEventScreen from './src/screens/event/edit/EditEventScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from './src/screens/loading/LoadingScreen';
 import EulaScreen from './src/screens/eula/EulaScreen';
@@ -32,9 +32,12 @@ import UserDetailsScreen from './src/screens/authentication/signup/UserDetailsSc
 import UpdateInterestsScreen from './src/screens/profile/UpdateInterestsScreen';
 import React from 'react';
 import LeaderboardScreen from './src/screens/leaderboard/LeaderboardScreen';
-import Purchases from 'react-native-purchases';
 import { setupRevenueCat } from './src/utils/functions/setupRevenueCat';
 import { navigationRef } from './src/utils/functions/navigationRef';
+import FeaturedEventsScreen from './src/screens/featuredEvents/featuredEvents/FeaturedEventsScreen';
+import FeaturedEventsEventScreen from './src/screens/featuredEvents/featuredEventsEvent/FeaturedEventsEventScreen';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import FeaturedEventsSubmitScreen from './src/screens/featuredEvents/featuredEventsSubmit/FeaturedEventsSubmitScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -122,59 +125,67 @@ function App() {
 	}
 
 	return (
-		<SafeAreaView className='h-full' style={{ backgroundColor: colours.primaryColour }}>
-			<NavigationContainer theme={mainTheme} linking={linking} ref={navigationRef} >
-				<Stack.Navigator screenOptions={{
-					headerShown: false
-				}} >
-					{currentUser.id === null ?
-						(
-							<>
-								{
-									inCompleteSignUp ? (
-										<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
-									) :
-										<>
-											<Stack.Screen name="signup" component={SignUpScreen} />
-											<Stack.Screen name="signin" component={SignInScreen} />
-											<Stack.Screen name="emailsignup" component={EmailSignUp} />
-											<Stack.Screen name="emailsignin" component={EmailSignIn} />
+		<SafeAreaProvider>
+			<SafeAreaView
+				edges={['top']}
+				className='h-full' style={{ backgroundColor: colours.primaryColour }}>
+				<NavigationContainer theme={mainTheme} linking={linking} ref={navigationRef} >
+					<Stack.Navigator screenOptions={{
+						headerShown: false
+					}} >
+						{currentUser.id === null ?
+							(
+								<>
+									{
+										inCompleteSignUp ? (
 											<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
-											<Stack.Screen name="eula" component={EulaScreen} />
-											<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
-											<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
-										</>
-								}
+										) :
+											<>
+												<Stack.Screen name="signup" component={SignUpScreen} />
+												<Stack.Screen name="signin" component={SignInScreen} />
+												<Stack.Screen name="emailsignup" component={EmailSignUp} />
+												<Stack.Screen name="emailsignin" component={EmailSignIn} />
+												<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
+												<Stack.Screen name="eula" component={EulaScreen} />
+												<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
+												<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
+											</>
+									}
 
-							</>
-						) : (
-							<>
-								<Stack.Screen name="home" component={HomeScreen} />
-								<Stack.Screen name="profile" component={ProfileScreen} />
-								<Stack.Screen name="submit" component={SubmitScreen} />
-								<Stack.Screen name="event" component={EventScreen} />
-								<Stack.Screen name="editevent" component={EditEventScreen} />
-								<Stack.Screen name="comment" component={SubmitCommentScreen} />
-								<Stack.Screen name="chatlist" component={ChatListScreen} />
-								<Stack.Screen name="chat" component={ChatScreen} />
-								<Stack.Screen name="search" component={SearchScreen} />
-								<Stack.Screen name="eula" component={EulaScreen} />
-								<Stack.Screen name="settings" component={SettingsScreen} />
-								<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
-								<Stack.Screen name="leaderboard" component={LeaderboardScreen} />
-							</>
-						)
+								</>
+							) : (
+								<>
+									<Stack.Screen name="featuredEvents" component={FeaturedEventsScreen} />
+									<Stack.Screen name="featuredEventsEvent" component={FeaturedEventsEventScreen} />
+									<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
+									<Stack.Screen name="meetups" component={MeetupsScreen} />
+									<Stack.Screen name="profile" component={ProfileScreen} />
+									<Stack.Screen name="submit" component={SubmitScreen} />
+									<Stack.Screen name="event" component={EventScreen} />
+									<Stack.Screen name="editevent" component={EditEventScreen} />
+									<Stack.Screen name="comment" component={SubmitCommentScreen} />
+									<Stack.Screen name="chatlist" component={ChatListScreen} />
+									<Stack.Screen name="chat" component={ChatScreen} />
+									<Stack.Screen name="search" component={SearchScreen} />
+									<Stack.Screen name="eula" component={EulaScreen} />
+									<Stack.Screen name="settings" component={SettingsScreen} />
+									<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
+									<Stack.Screen name="leaderboard" component={LeaderboardScreen} />
+								</>
+							)
+						}
+					</Stack.Navigator>
+
+					{/* Only show the conditional navbar if the user is logged in */}
+					{
+						currentUser.id &&
+						<ConditionalNavbar />
 					}
-				</Stack.Navigator>
 
-				{/* Only show the conditional navbar if the user is logged in */}
-				{
-					currentUser.id &&
-					<ConditionalNavbar />
-				}
+				</NavigationContainer>
+			</SafeAreaView>
+		</SafeAreaProvider>
 
-			</NavigationContainer>
-		</SafeAreaView>
 	);
 }
 
@@ -184,7 +195,8 @@ const ConditionalNavbar = () => {
 	const currentRouteName = useNavigationState(state => state?.routes[state.index]?.name);
 
 	// Determine whether to show the Navbar
-	const showNavbar = currentRouteName !== 'chat';
+	const showNavbar = currentRouteName !== 'chat'
+		&& currentRouteName !== 'featuredEventsEvent';
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener(

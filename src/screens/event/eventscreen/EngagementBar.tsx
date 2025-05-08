@@ -2,10 +2,10 @@ import { View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import styles from '../../utils/styles/shadow';
-import LikeHandler from '../../components/LikeHandler';
+import styles from '../../../utils/styles/shadow';
+import LikeHandler from '../../../components/LikeHandler';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 
 interface EngagementBarProps {
     event_id: number;

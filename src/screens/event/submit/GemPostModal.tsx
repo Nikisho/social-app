@@ -1,11 +1,11 @@
 import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import React from 'react';
-import styles from '../../utils/styles/shadow';
-import colours from '../../utils/styles/colours';
+import styles from '../../../utils/styles/shadow';
+import colours from '../../../utils/styles/colours';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
-import abbrNum from '../../utils/functions/abbrNum';
+import { selectCurrentUser } from '../../../context/navSlice';
+import abbrNum from '../../../utils/functions/abbrNum';
 
 interface GemPostModalProps {
     modalVisible: boolean;

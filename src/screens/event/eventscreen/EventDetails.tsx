@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Hyperlink from 'react-native-hyperlink'

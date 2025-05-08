@@ -1,6 +1,6 @@
 import { ScrollView } from 'react-native'
 import React, {  useState } from 'react'
-import { supabase } from '../../../supabase';
+import { supabase } from '../../../../supabase';
 import { useFocusEffect } from '@react-navigation/native';
 import Comment from './Comment';
 

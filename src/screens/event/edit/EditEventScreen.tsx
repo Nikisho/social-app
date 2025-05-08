@@ -1,14 +1,14 @@
 import { View, Text, TouchableOpacity, ToastAndroid, Platform, Alert, TextInput } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { EditEventScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types'
-import { supabase } from '../../../supabase'
+import { EditEventScreenRouteProp, RootStackNavigationProp } from '../../../utils/types/types'
+import { supabase } from '../../../../supabase'
 import DatePicker from 'react-native-date-picker'
-import styles from '../../utils/styles/shadow'
-import formatDate from '../../utils/functions/formatDate'
+import styles from '../../../utils/styles/shadow'
+import formatDate from '../../../utils/functions/formatDate'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import _ from 'lodash';
-import platformAlert from '../../utils/functions/platformAlert'
+import platformAlert from '../../../utils/functions/platformAlert'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface EventDataProps {
@@ -79,7 +79,7 @@ const EditEventScreen = () => {
 
         if (error) console.error(error.message);
         platformAlert('Your event has been deleted');
-        navigation.navigate('home')
+        navigation.navigate('meetups')
     };
 
 

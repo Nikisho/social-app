@@ -2,7 +2,7 @@
 const colours = {
     primaryColour: '#fffef4',
     // secondaryColour: '#476b7d',
-    secondaryColour: '#22badf',
+    secondaryColour: '#000000',
     likeHandlerColour: '#ff0000'
 
 }

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Modal } from 'react-native'
 import React from 'react'
-import styles from '../../utils/styles/shadow';
-import colours from '../../utils/styles/colours';
+import styles from '../../../utils/styles/shadow';
+import colours from '../../../utils/styles/colours';
 
 interface BoostEventModalProps {
     modalVisible: boolean;

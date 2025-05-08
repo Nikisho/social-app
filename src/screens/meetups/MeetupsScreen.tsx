@@ -19,7 +19,7 @@ interface HubProps {
   hub_code: number;
 }
 
-const HomeScreen = () => {
+const MeetupsScreen = () => {
   const [filterEventsModalVisible, setFilterEventsModalVisible] = useState<boolean>(false);
   const [chooseEventLocationModalVisible, setChooseEventLocationModalVisible] = useState<boolean>(false);
   const [sortingOption, setSortingOption] = useState<string>('event_date');
@@ -110,4 +110,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default MeetupsScreen;

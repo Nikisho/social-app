@@ -52,8 +52,8 @@ const FeedCard: React.FC<FeedCardProps> = ({
                     event_id: event_id,
                 });
             }}
-            style={styles.shadow}
-            className={`rounded-xl bg-white p-2 my-3 space-y-2 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2 && currentUser.id !== 3) &&  'hidden' }` }
+            // style={styles.shadow}
+            className={`rounded-xl border bg-white p-2 my-3 space-y-2 w-[93%] ${(event_type === 'women-only' && currentUser.sex !== 2 && currentUser.id !== 3) &&  'hidden' }` }
         >
             <View className=' flex flex-row justify-between'>
 

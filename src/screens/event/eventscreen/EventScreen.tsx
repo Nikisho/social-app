@@ -1,16 +1,16 @@
 import { Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { supabase } from '../../../supabase';
-import Header from '../../components/Header';
+import { supabase } from '../../../../supabase';
+import Header from '../../../components/Header';
 import EventDetails from './EventDetails';
 import EngagementBar from './EngagementBar';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { selectCurrentUser } from '../../../context/navSlice';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
-import CommentFeed from './CommentFeed';
-import { EventScreenRouteProp } from '../../utils/types/types';
-import BoostEvent from './BoostEvent';
-import styles from '../../utils/styles/shadow';
+import CommentFeed from '../comments/CommentFeed';
+import { EventScreenRouteProp } from '../../../utils/types/types';
+import BoostEvent from '../boost/BoostEvent';
+import styles from '../../../utils/styles/shadow';
 
 interface EventDataProps {
     name: string

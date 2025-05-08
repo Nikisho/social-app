@@ -3,6 +3,8 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../utils/types/types'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import styles from '../utils/styles/shadow';
 
 interface SecondaryHeaderType {
     displayText: string;
@@ -13,9 +15,12 @@ const SecondaryHeader:React.FC<SecondaryHeaderType> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>()
     return (
-        <View className='p-1 flex-row flex items-center'>
-            <TouchableOpacity className="py-3 pr-5 " onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
+        <View className='p-1 flex-row flex items-center space-x-5'>
+            <TouchableOpacity 
+                className="p-4 rounded-full justify-center items-center flex flex-r " 
+                style={styles.shadowButtonStyle}
+                onPress={() => navigation.goBack()}>
+                <AntDesign name="arrowleft" size={19} color="white" />
             </TouchableOpacity>
             <Text className='text-2xl font-semibold '>
                 {displayText}

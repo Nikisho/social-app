@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 // Define your screen names and their params
 export type RootStackParamList = {
-  home: undefined; // No params;
+  meetups: undefined; // No params;
   comment: {event_id: number, parent_comment_id?: number, parent_comment_user_name?: string };
   event: {event_id: number};
   profile: {user_id:number};
@@ -23,7 +23,10 @@ export type RootStackParamList = {
   userdetailsscreen: undefined;
   resetpassword:{access_token: string, refresh_token: string};
   updateinterests:{user_interests: {interest_code:number, interest_group_code:number, interests: { description: string}}[]};
-  leaderboard:undefined
+  leaderboard:undefined;
+  featuredEvents:undefined;
+  featuredEventsEvent:undefined;
+  featuredEventsSubmit:undefined;
 };
 
 // Define the navigation prop types

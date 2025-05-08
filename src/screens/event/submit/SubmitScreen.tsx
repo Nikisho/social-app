@@ -2,20 +2,20 @@ import { View, Text, TouchableOpacity, TextInput, Keyboard, Switch } from 'react
 import React, { useState } from 'react'
 import DatePicker from 'react-native-date-picker';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { supabase } from '../../../supabase';
+import { supabase } from '../../../../supabase';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
-import formatDate from '../../utils/functions/formatDate';
-import styles from '../../utils/styles/shadow';
+import { selectCurrentUser, setCurrentUser } from '../../../context/navSlice';
+import formatDate from '../../../utils/functions/formatDate';
+import styles from '../../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
-import platformAlert from '../../utils/functions/platformAlert';
-import ChooseEventLocationModal from '../../components/ChooseEventLocationModal';
-import extractTimeFromDateSubmit from '../../utils/functions/extractTimeFromDateSubmit';
-import SecondaryHeader from '../../components/SecondaryHeader';
+import platformAlert from '../../../utils/functions/platformAlert';
+import ChooseEventLocationModal from '../../../components/ChooseEventLocationModal';
+import extractTimeFromDateSubmit from '../../../utils/functions/extractTimeFromDateSubmit';
+import SecondaryHeader from '../../../components/SecondaryHeader';
 import GemPostModal from './GemPostModal';
-import BuyGemsModal from '../../components/BuyGemsModal';
+import BuyGemsModal from '../../../components/BuyGemsModal';
 
 interface eventDetailsProps {
     title: string;
@@ -152,7 +152,7 @@ const SubmitScreen = () => {
             gemCount: newGems?.gem_count
         })); 
 
-        navigation.navigate('home');
+        navigation.navigate('meetups');
         if (error) console.error(error.message);
     };
     return (

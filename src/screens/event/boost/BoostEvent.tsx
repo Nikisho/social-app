@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import styles from '../../utils/styles/shadow'
+import styles from '../../../utils/styles/shadow'
 import BoostEventModal from './BoostEventModal'
-import { supabase } from '../../../supabase'
+import { supabase } from '../../../../supabase'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentUser, setCurrentUser } from '../../context/navSlice'
-import platformAlert from '../../utils/functions/platformAlert'
-import BuyGemsModal from '../../components/BuyGemsModal'
+import { selectCurrentUser, setCurrentUser } from '../../../context/navSlice'
+import platformAlert from '../../../utils/functions/platformAlert'
+import BuyGemsModal from '../../../components/BuyGemsModal'
 
 
 

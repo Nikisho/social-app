@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 import { FontAwesome } from '@expo/vector-icons';
-import { supabase } from '../../../supabase';
+import { supabase } from '../../../../supabase';
 
 interface CommentProps {
     comment: {
