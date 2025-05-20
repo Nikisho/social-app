@@ -27,6 +27,14 @@ export default {
           iosAppId: "ca-app-pub-8692182271223423~4609656473"
         }
       ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": 'merchant.com.linkzy',
+          "enableGooglePay": true
+        }
+      ],
+      // ["react-native-svg"]
     ],
     name: "Linkzy",
     slug: "social-app",
@@ -44,7 +52,8 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.1.6'
+      buildNumber: '1.1.6',
+      deploymentTarget: "12.0"
     },
     android: {
       googleServicesFile: './google-services.json', // Set to path where file will be written

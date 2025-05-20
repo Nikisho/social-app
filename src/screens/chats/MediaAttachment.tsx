@@ -4,11 +4,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '../../../supabase';
 
-interface MediaAttachmentProops {
+interface MediaAttachmentProps {
     setMedia: (media: ImagePicker.ImagePickerAsset) => void;
 }
 
-const MediaAttachment:React.FC<MediaAttachmentProops> = ({setMedia}) => {
+const MediaAttachment:React.FC<MediaAttachmentProps> = ({setMedia}) => {
 
     const pickImage = async () => {
 

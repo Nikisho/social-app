@@ -42,9 +42,13 @@ const Navbar = () => {
       navigation: 'meetups'
     },
     {
-      icon: <Ionicons name="person" size={30} color="white" />,
-      navigation: 'profile'
-    },
+      icon: <Entypo name="ticket" size={30} color="white" />,
+      navigation: 'ticketfeed'
+    }
+    // {
+    //   icon: <Ionicons name="person" size={30} color="white" />,
+    //   navigation: 'profile'
+    // },
   ];
 
   const screens = ['leaderboard', 'meetups', 'chat', 'chatlist', 'featuredEvents']
@@ -103,7 +107,7 @@ const Navbar = () => {
         menuItems.map((item) => (
           <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}
             onPress={() => {
-              if (item.navigation === 'search' || item.navigation === 'meetups' || item.navigation === 'chatlist' || item.navigation === 'leaderboard' || item.navigation === 'featuredEvents'  ) {
+              if (item.navigation === 'search' || item.navigation === 'meetups' || item.navigation === 'chatlist' || item.navigation === 'leaderboard' || item.navigation === 'featuredEvents'  || item.navigation === 'ticketfeed'  ) {
               // if ( screens.includes(item.navigation) ) {
                 navigation.navigate(item.navigation);
               } else if (item.navigation === 'profile') {

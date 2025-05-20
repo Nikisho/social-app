@@ -11,6 +11,7 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import DropdownMenu from '../../../components/DropdownMenu';
 import { FontAwesome } from '@expo/vector-icons';
+import BecomeAnOrganizerModal from '../../organizerOnboarding/BecomeAnOrganizerModal';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 
@@ -19,6 +20,7 @@ const FeaturedEventsScreenHeader = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const [openMenu, setOpenMenu] = useState(false);
+    const [becomeAnOrganizerModalVisible, setBecomeAnOrganizerModalVisible] = useState<boolean>(false)
     const navigateProfile = () => {
         navigation.navigate('profile',
             { user_id: currentUser.id }
@@ -48,6 +50,26 @@ const FeaturedEventsScreenHeader = () => {
             console.error(error);
         }
     };
+
+    const createFeaturedEvent = async () => {
+        const { data, error } = await supabase
+            .from('users')
+            .select('is_organizer')
+            .eq('id', currentUser.id)
+            .single();
+
+        if (error) {
+            console.error('Error fetching organizer status:', error.message);
+            return;
+        }
+
+        if (!data?.is_organizer) {
+            setBecomeAnOrganizerModalVisible(true);
+            return;
+        }
+        navigation.navigate('featuredEventsSubmit')
+    };
+
     useFocusEffect(
         React.useCallback(() => {
             setOpenMenu(false);
@@ -59,7 +81,7 @@ const FeaturedEventsScreenHeader = () => {
             <TouchableOpacity
                 className='rounded-full p-3 w-12 h-12 bg-black flex flex-row items-center justify-center'
                 style={styles.shadow}
-                onPress={() => navigation.navigate('featuredEventsSubmit')}
+                onPress={createFeaturedEvent}
             >
                 <AntDesign name="plus" size={20} color="white" />
             </TouchableOpacity>
@@ -86,6 +108,10 @@ const FeaturedEventsScreenHeader = () => {
                             </>
                     }
                 </TouchableOpacity>
+                <BecomeAnOrganizerModal
+                    modalVisible={becomeAnOrganizerModalVisible}
+                    setModalVisible={setBecomeAnOrganizerModalVisible}
+                />
             </View>
             {
                 openMenu && (

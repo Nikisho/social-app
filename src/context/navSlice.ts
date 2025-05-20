@@ -7,7 +7,8 @@ const initialState = {
         photo:null,
         id: null,
         sex: null,
-        gemCount: null
+        gemCount: null,
+        isOrganizer: null
     }
 }
 

@@ -38,6 +38,11 @@ import FeaturedEventsScreen from './src/screens/featuredEvents/featuredEvents/Fe
 import FeaturedEventsEventScreen from './src/screens/featuredEvents/featuredEventsEvent/FeaturedEventsEventScreen';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import FeaturedEventsSubmitScreen from './src/screens/featuredEvents/featuredEventsSubmit/FeaturedEventsSubmitScreen';
+import OrganizerOnboardingScreen from './src/screens/organizerOnboarding/OrganizerOnboardingScreen';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
+import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
+
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -51,10 +56,15 @@ const mainTheme = {
 // fix provider bug for redux
 export default function AppWrapper() {
 	return (
-
-		<Provider store={store}>
-			<App />
-		</Provider>
+		<StripeProvider
+			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
+			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
+			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
+		>
+			<Provider store={store}>
+				<App />
+			</Provider>
+		</StripeProvider>
 	)
 }
 
@@ -78,10 +88,11 @@ function App() {
 	const fetchSession = async () => {
 		await setSession();
 		const { data: { session: user } } = await supabase.auth.getSession();
-		if (!user) {
+		if (!user) { 
 			setLoading(false);
 			return
 		};
+		// console.log(user.access_token)
 		const { data, error } = await supabase
 			.from('users')
 			.select()
@@ -95,7 +106,8 @@ function App() {
 				photo: data[0].photo,
 				id: data[0].id,
 				sex: data[0].sex,
-				gemCount: data[0].gem_count
+				gemCount: data[0].gem_count,
+				isOrganizer: data[0].is_organizer
 			}))
 			if (data.length === 0) {
 				setIncompleteSignUp(true);
@@ -158,6 +170,9 @@ function App() {
 									<Stack.Screen name="featuredEvents" component={FeaturedEventsScreen} />
 									<Stack.Screen name="featuredEventsEvent" component={FeaturedEventsEventScreen} />
 									<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
+									<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
+									<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
+									<Stack.Screen name="ticket" component={TicketScreen} />
 									<Stack.Screen name="meetups" component={MeetupsScreen} />
 									<Stack.Screen name="profile" component={ProfileScreen} />
 									<Stack.Screen name="submit" component={SubmitScreen} />

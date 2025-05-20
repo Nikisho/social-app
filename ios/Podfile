@@ -29,7 +29,6 @@ self.define_singleton_method(use_autolinking_method_symbol) do |*args|
 end
 
 platform :ios, podfile_properties['ios.deploymentTarget'] || '13.4'
-
 install! 'cocoapods',
   :deterministic_uuids => false
 
@@ -57,11 +56,7 @@ target 'Linkzy' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
     )
-    # installer.pods_project.targets.each do |target|
-    #   target.build_configurations.each do |config|
-    #    config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-    #   end
-    #  end
+
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.
     installer.target_installation_results.pod_target_installation_results
