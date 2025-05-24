@@ -31,12 +31,12 @@ Deno.serve(async (req) => {
       },
     });
 
-    // await saveOrganizerAccount(user.id, account.id);
+    await saveOrganizerAccount(user.id, account.id);
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
       refresh_url: "https://com.linkzy",
-      return_url: "https://com.linkzy",
+      return_url: "https://www.linkzyapp.com",
       type: "account_onboarding",
     });
 

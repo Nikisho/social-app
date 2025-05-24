@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../../utils/types/types'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
 import styles from '../../../utils/styles/shadow'
+import FastImage from 'react-native-fast-image'
 
 
 interface TicketsProps {
@@ -68,7 +69,7 @@ const TicketFeedScreen = () => {
         return (
             <TouchableOpacity
                 className={`my-2
-                        rounded-xl  p-2 
+                        rounded-xl  m-2 p-2
                         flex flex-row justify-between
                         bg-white
 
@@ -91,17 +92,15 @@ const TicketFeedScreen = () => {
                     </Text>
                 </View>
 
-                <Image
+                <FastImage
                     source={{
                         uri: item.featured_events.image_url
                     }}
                     className='h-24 w-24 rounded-xl'
                 />
-
             </TouchableOpacity>
         )
     };
-
     return (
         <View className='p-3'>
             <SecondaryHeader
@@ -109,7 +108,7 @@ const TicketFeedScreen = () => {
             />
 
             <FlatList
-                className='h-4/5 my-3 px-4 '
+                className='h-4/5 my-3 px-2 '
                 data={tickets}
                 keyExtractor={(item) => item.ticket_id.toString()}
                 renderItem={renderItem}

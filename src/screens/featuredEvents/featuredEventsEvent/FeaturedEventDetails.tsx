@@ -1,17 +1,11 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import SecondaryHeader from '../../../components/SecondaryHeader'
-import { ScrollView } from 'react-native-gesture-handler'
-import colours from '../../../utils/styles/colours'
 import Entypo from '@expo/vector-icons/Entypo';
 import Hyperlink from 'react-native-hyperlink'
-import { useRoute } from '@react-navigation/native'
-import { FeaturedEventsEventScreenRouteProps } from '../../../utils/types/types'
-import { supabase } from '../../../../supabase'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
+import FastImage from 'react-native-fast-image'
 
 interface EventDataProps {
-    title: string;
     description: string;
     price: string;
     time: string;
@@ -22,7 +16,6 @@ interface EventDataProps {
 
 }
 const FeaturedEventDetails: React.FC<EventDataProps> = ({
-    title,
     image_url,
     location,
     description,
@@ -38,15 +31,13 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
         setLengthMore(e.nativeEvent.lines.length >= 4);
     }, []);
 
+    const url = `${image_url.split('?')[0]}?t=${Date.now()}`;
+    
     return (
-
         <>
-            <SecondaryHeader
-                displayText={title!}
-            />
-            <Image
+            <FastImage
                 source={{
-                    uri: image_url
+                    uri: url
                 }}
                 className='w-full h-80 oversize-hidden mt-3 rounded-xl'
             />

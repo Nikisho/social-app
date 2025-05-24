@@ -1,11 +1,10 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp } from '../../../utils/types/types';
-import { supabase } from '../../../../supabase';
-import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
+import { RootStackNavigationProp } from '../../utils/types/types';
+import { supabase } from '../../../supabase';
+import formatDateShortWeekday from '../../utils/functions/formatDateShortWeekday';
 import FastImage from 'react-native-fast-image';
-
 
 interface FeaturedEventCard {
     image_url: string;
@@ -18,22 +17,39 @@ interface FeaturedEventCard {
     is_free: boolean;
 }
 
-const FeaturedEventsFeed = () => {
+const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [featuredEvents, setFeaturedEvents] = useState<any>();
-    
+
+    const fetchOrganizerId = async () => {
+        const { data, error } = await supabase
+            .from('organizers')
+            .select('organizer_id')
+            .eq('user_id', user_id)
+            .single()
+        if (data) {
+            return data.organizer_id;
+        }
+
+        if (error) {
+            throw error.message
+        }
+    }
     const fetchFeaturedEvents = async () => {
+        const organizer_id = await fetchOrganizerId();
         const { data, error } = await supabase
             .from('featured_events')
             .select()
             .order('date', { ascending: false })
+            .eq('organizer_id', organizer_id)
+
         if (data) {
             setFeaturedEvents(data);
         }
         if (error) {
             console.error(error.message);
         }
-    }; 
+    };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -41,8 +57,6 @@ const FeaturedEventsFeed = () => {
         }, [])
     );
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
-    const url = `${item.image_url.split('?')[0]}?t=${Date.now()}`;
-
         return (
             <TouchableOpacity
                 className='my-2
@@ -53,21 +67,22 @@ const FeaturedEventsFeed = () => {
                 })}
             >
                 <FastImage
-                    source={{ uri: url}}
+                    source={{ uri: item.image_url }}
                     className="w-full h-80 rounded-xl overflow-hidden justify-end"
                 >
-                    <View className="p-2 bg-black w-1/4 text-center mx-2 my-2 rounded-lg">
+                    <View className="p-2 w-1/4 bg-black text-center mx-2 my-4 rounded-lg">
                         {
                             item.is_free ?
-                                <Text className="text-lg text-center font-semibold text-white">
+                                <Text className="text-lg font-semibold text-center text-white">
                                     FREE
                                 </Text>
                                 :
-                                <Text className="text-lg text-center font-semibold text-white">
+                                <Text className="text-lg font-semibold text-center text-white">
                                     £{item.price}
                                 </Text>
                         }
                     </View>
+
                 </FastImage>
                 <View className='p-1'>
                     <Text
@@ -87,21 +102,31 @@ const FeaturedEventsFeed = () => {
     };
     return (
         <View className='p-2 px-4
-                h-[88%]
+                h-full
                 mx-[-8]
                 space-y-2
         '>
             {
-                featuredEvents &&
-                <FlatList
-                    data={featuredEvents}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.featured_event_id.toString()}
-                />
+                featuredEvents ?
+                    <FlatList
+                        data={featuredEvents}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.featured_event_id.toString()}
+                    /> :
+                    <View className="flex-1 bg-[#fffef4]  items-center justify-center px-6">
+                        <Text className="text-5xl mb-4 text-white">📭</Text>
+                        <Text className="text-xl font-semibold text-black mb-2">
+                            No Events Posted Yet
+                        </Text>
+                        <Text className="text-base text-black text-center">
+                            Featured events will appear here once available.
+                        </Text>
+                    </View>
             }
 
         </View>
     )
 }
 
-export default FeaturedEventsFeed
+
+export default FeaturedEventsUser

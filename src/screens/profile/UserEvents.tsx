@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useCallback, useEffect } from 'react'
+import { View, Text, TouchableOpacity, useWindowDimensions } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import Feed from '../../components/Feed';
 import { AntDesign } from '@expo/vector-icons';
@@ -9,7 +9,14 @@ import { RootStackNavigationProp } from '../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
 import { usePagination } from '../../hooks/usePagination';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import FeaturedEventsFeed from '../featuredEvents/featuredEvents/FeaturedEventsFeed';
+import FeaturedEventsUser from './FeaturedEventsUser';
 
+const routes = [
+    { key: 'first', title: 'Feed' },
+    { key: 'second', title: 'Second' },
+];
 
 const UserEvents = ({ user_id }: { user_id: number }) => {
     const currentUser = useSelector(selectCurrentUser);
@@ -45,11 +52,43 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
         onRefresh,
         onEndReached,
     } = usePagination(fetchEvents);
-    
+
+    const FirstRoute = () => (
+        <Feed
+            eventList={eventList}
+            loading={loading}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            onEndReached={onEndReached}
+        />
+    );
+
+    const SecondRoute = () => (
+        <FeaturedEventsUser
+            user_id={user_id}
+        />
+    );
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute
+    });
+
+    const layout = useWindowDimensions();
+    const [index, setIndex] = useState(0);
     return (
         <View className='h-[51%] mt-5 flex space-y-2'>
-            <View className=''>
-                <Text className='text-lg font-semibold'>Events</Text>
+            <View className='flex flex-row w-full'>
+                <TouchableOpacity 
+                    onPress={() => setIndex(0)}
+                    className='w-1/2 border-r'>
+                    <Text className='text-lg text-center font-semibold'>Events</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    onPress={() => setIndex(1)}
+                    className='w-1/2 '>
+                    <Text className='text-lg text-center font-semibold'>Featured</Text>
+                </TouchableOpacity>
             </View>
             {
                 eventList?.length === 0 ?
@@ -72,13 +111,21 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                             </View>
                     )
                     :
-                    <Feed
-                        eventList={eventList}
-                        loading={loading}
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                        onEndReached={onEndReached}
+                    // <Feed
+                    //     eventList={eventList}
+                    //     loading={loading}
+                    //     refreshing={refreshing}
+                    //     onRefresh={onRefresh}
+                    //     onEndReached={onEndReached}
+                    // />
+                    <TabView
+                        navigationState={{ index, routes }}
+                        renderScene={renderScene}
+                        onIndexChange={setIndex}
+                        initialLayout={{ width: layout.width }}
+                        renderTabBar={() => null} 
                     />
+
             }
 
         </View>

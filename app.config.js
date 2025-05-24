@@ -30,11 +30,10 @@ export default {
       [
         "@stripe/stripe-react-native",
         {
-          "merchantIdentifier": 'merchant.com.linkzy',
-          "enableGooglePay": true
+          merchantIdentifier: 'merchant.com.linkzy',
+          enableGooglePay: true
         }
       ],
-      // ["react-native-svg"]
     ],
     name: "Linkzy",
     slug: "social-app",

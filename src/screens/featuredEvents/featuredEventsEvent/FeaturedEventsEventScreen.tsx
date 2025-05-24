@@ -1,10 +1,15 @@
-import { Image, ScrollView, Text, View } from 'react-native'
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useRoute } from '@react-navigation/native'
-import { FeaturedEventsEventScreenRouteProps } from '../../../utils/types/types'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { FeaturedEventsEventScreenRouteProps, RootStackNavigationProp } from '../../../utils/types/types'
 import { supabase } from '../../../../supabase'
 import BookEvent from './BookEvent'
 import FeaturedEventDetails from './FeaturedEventDetails'
+import PromoterDetails from './PromoterDetails'
+import FeaturedEventsEventHeader from './FeaturedEventsEventHeader'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '../../../context/navSlice'
+import colours from '../../../utils/styles/colours'
 
 interface EventDataProps {
     title: string;
@@ -20,6 +25,7 @@ interface EventDataProps {
     date: Date;
     max_tickets: number;
     organizers: {
+        user_id: number
         users: {
             name: string
             photo: string
@@ -27,11 +33,14 @@ interface EventDataProps {
     }
 
 }
+
 const FeaturedEventsEventScreen = () => {
     const [eventData, setEventData] = useState<EventDataProps | null>(null);
     const route = useRoute<FeaturedEventsEventScreenRouteProps>();
     const { featured_event_id } = route.params;
-
+    const currentUser = useSelector(selectCurrentUser);
+    const isOwnEvent = currentUser.id === eventData?.organizers.user_id;
+    const navigation = useNavigation<RootStackNavigationProp>();
     const fetchEventData = async () => {
         const { data, error } = await supabase
             .from('featured_events')
@@ -44,7 +53,6 @@ const FeaturedEventsEventScreen = () => {
             .eq('featured_event_id', featured_event_id)
             .single()
         if (data) {
-            console.log(data.organizers.users)
             setEventData(data)
         }
 
@@ -54,39 +62,51 @@ const FeaturedEventsEventScreen = () => {
     useEffect(() => {
         fetchEventData();
     }, []);
-
     return (
         <>
             <View>
-
                 <ScrollView className='h-[89%] p-2'>
-                    <FeaturedEventDetails
-                        {...eventData!}
-                    />
-                    <View className='p-2'>
-                        <Text className='text-xl font-bold'>
-                            Promoter
-                        </Text>
-
-                        <View className='flex flex-row border items-center  space-x-5 rounded-xl p-2 my-3'>
-                            <Image
-                                className='w-10 h-10 rounded-full'
-                                source={{
-                                    uri: eventData?.organizers.users.photo
-                                }}
-                            />
-
-                            <Text className='text-xl'>
-                                {eventData?.organizers.users.name}
-                            </Text>
-                        </View>
-                    </View>
+                    {
+                        eventData && (
+                            <>
+                                <FeaturedEventsEventHeader
+                                    {...eventData!}
+                                />
+                                <FeaturedEventDetails
+                                    {...eventData!}
+                                />
+                                <PromoterDetails
+                                    {...eventData!}
+                                />
+                            </>
+                        )
+                    }
                 </ScrollView>
             </View>
 
-            <BookEvent
-                {...eventData!}
-            />
+            {
+                isOwnEvent ?
+                    <View
+                        style={{
+                            backgroundColor: colours.secondaryColour,
+                        }}
+                        className='absolute inset-x-0 bottom-0 h-[10%] flex justify-center flex-row items-center px-6'>
+                            <TouchableOpacity 
+                                onPress={() => navigation.navigate('editfeaturedevent', {
+                                    featured_event_id: featured_event_id
+                                })}
+                                className='bg-white p-3 px-4 rounded-full  '>
+                                <Text className='text- font-semibold'>
+                                    MANAGE
+                                </Text>
+                            </TouchableOpacity>
+                    </View>
+                    :
+
+                    <BookEvent
+                        {...eventData!}
+                    />
+            }
         </>
     )
 }

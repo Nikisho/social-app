@@ -42,6 +42,7 @@ import OrganizerOnboardingScreen from './src/screens/organizerOnboarding/Organiz
 import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
 import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
+import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
 
 
 const Stack = createStackNavigator();
@@ -170,6 +171,7 @@ function App() {
 									<Stack.Screen name="featuredEvents" component={FeaturedEventsScreen} />
 									<Stack.Screen name="featuredEventsEvent" component={FeaturedEventsEventScreen} />
 									<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
+									<Stack.Screen name="editfeaturedevent" component={EditFeaturedEventScreen} />
 									<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
 									<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
 									<Stack.Screen name="ticket" component={TicketScreen} />

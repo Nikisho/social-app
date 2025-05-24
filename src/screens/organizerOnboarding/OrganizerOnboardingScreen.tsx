@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, AppState, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, AppState } from 'react-native'
+import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import * as WebBrowser from 'expo-web-browser';
 import LoadingScreen from '../loading/LoadingScreen';
@@ -12,8 +12,7 @@ const OrganizerOnboardingScreen = () => {
     setLoading(true);
     const session = await supabase.auth.getSession();
     const token = session.data.session?.access_token;
-    console.log(token)
-    const forwardurl = 'https://8b2d-81-105-240-100.ngrok-free.app'
+    const forwardurl = 'https://wffeinvprpdyobervinr.supabase.co'
     try {
       const response = await fetch(`${forwardurl}/functions/v1/onboard-organizer-stripe`, {
         method: 'POST',
@@ -40,6 +39,8 @@ const OrganizerOnboardingScreen = () => {
       setLoading(false);
     }
   }
+
+  if (loading) return <LoadingScreen displayText='Redirecting you to Stripe' />
   return (
     <>
       <View className='p-3'>

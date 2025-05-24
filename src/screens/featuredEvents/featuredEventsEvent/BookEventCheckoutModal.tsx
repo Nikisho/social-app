@@ -1,7 +1,7 @@
 import { View, Text, Modal, TouchableOpacity, TouchableWithoutFeedback, Alert } from 'react-native'
 import React from 'react'
 import { supabase } from '../../../../supabase';
-import { initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native';
+import { initPaymentSheet, isPlatformPaySupported, presentPaymentSheet } from '@stripe/stripe-react-native';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
@@ -78,6 +78,12 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
       
     
     const initializePaymentSheet = async (amount: number) => {
+        if (!(await isPlatformPaySupported({ googlePay: {testEnv: true} }))) {
+            Alert.alert('Google Pay is not supported.');
+            return;
+          } else {
+            console.log('google pay supported')
+          }
         const {
             paymentIntent,
             ephemeralKey,
@@ -98,7 +104,8 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
             },
             googlePay: {
                 merchantCountryCode: 'GB',
-                testEnv: true, // use test environment
+                testEnv: true, // use test environment,
+                currencyCode: 'gbp',
             },
         });
         if (error) {

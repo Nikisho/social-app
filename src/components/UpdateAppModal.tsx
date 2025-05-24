@@ -16,6 +16,7 @@ const UpdateAppModal = () => {
   };
 
   const checkAppVersion = async () => {
+  if (__DEV__) return;
     setLoading(true);
     const buildNumber = Constants.expoConfig?.ios?.buildNumber;
     const versionCode = Constants.expoConfig?.android?.versionCode;
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#000000',
     padding: 15,
     borderRadius: 25,
     width: '100%',
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   },
   dismissText: {
     marginTop: 15,
-    color: '#007BFF',
+    color: '#000000',
     textDecorationLine: 'underline',
   },
 });

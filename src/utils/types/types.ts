@@ -30,6 +30,7 @@ export type RootStackParamList = {
   organizerOnboarding:undefined;
   ticket: {ticket_id: number};
   ticketfeed: undefined;
+  editfeaturedevent: {featured_event_id: number};
 };
 
 // Define the navigation prop types
@@ -44,7 +45,7 @@ export type ResetPasswordScreenRouteProps = RouteProp<RootStackParamList, 'reset
 export type UpdateInterestsScreenRouteProps = RouteProp<RootStackParamList, 'updateinterests'>;
 export type FeaturedEventsEventScreenRouteProps = RouteProp<RootStackParamList, 'featuredEventsEvent'>;
 export type TicketScreenRouteProps = RouteProp<RootStackParamList, 'ticket'>;
-
+export type EditFeaturedEventScreenRouteProps = RouteProp<RootStackParamList, 'editfeaturedevent'>;
 
 
 
