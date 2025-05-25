@@ -65,18 +65,21 @@ const FeaturedEventsEventScreen = () => {
     return (
         <>
             <View>
-                <ScrollView className='h-[89%] p-2'>
+                <ScrollView
+                    className='p-2'
+                    contentContainerStyle={{ paddingBottom: 100 }}
+                    >
                     {
                         eventData && (
                             <>
                                 <FeaturedEventsEventHeader
-                                    {...eventData!}
+                                    {...eventData}
                                 />
                                 <FeaturedEventDetails
-                                    {...eventData!}
+                                    {...eventData}
                                 />
                                 <PromoterDetails
-                                    {...eventData!}
+                                    {...eventData}
                                 />
                             </>
                         )
@@ -91,15 +94,15 @@ const FeaturedEventsEventScreen = () => {
                             backgroundColor: colours.secondaryColour,
                         }}
                         className='absolute inset-x-0 bottom-0 h-[10%] flex justify-center flex-row items-center px-6'>
-                            <TouchableOpacity 
-                                onPress={() => navigation.navigate('editfeaturedevent', {
-                                    featured_event_id: featured_event_id
-                                })}
-                                className='bg-white p-3 px-4 rounded-full  '>
-                                <Text className='text- font-semibold'>
-                                    MANAGE
-                                </Text>
-                            </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('editfeaturedevent', {
+                                featured_event_id: featured_event_id
+                            })}
+                            className='bg-white p-3 px-4 rounded-full  '>
+                            <Text className='text- font-semibold'>
+                                MANAGE
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                     :
 

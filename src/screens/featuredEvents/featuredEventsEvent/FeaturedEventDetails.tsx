@@ -37,7 +37,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
         <>
             <FastImage
                 source={{
-                    uri: url
+                    uri: image_url
                 }}
                 className='w-full h-80 oversize-hidden mt-3 rounded-xl'
             />

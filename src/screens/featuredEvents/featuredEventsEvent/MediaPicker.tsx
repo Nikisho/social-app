@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Alert, Image, ImageBackground, Text } from 'react-native'
+import { View, TouchableOpacity, Alert, Text } from 'react-native'
 import React from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -41,7 +41,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ setEventData, eventData }) =>
             {eventData
                 ? <FastImage 
                         style={{borderRadius: 50}}
-                        source={typeof eventData.image_url === 'string' ? { uri: eventData?.image_url } : { uri: eventData?.image_url.uri }}
+                        source={typeof eventData.image_url === 'string' ? { uri: eventData?.image_url} : { uri: eventData?.image_url.uri }}
                         className="h-64 w-full rounded-xl mt-2 flex items-center justify-center">
                     <View 
                         style={styles.shadow}

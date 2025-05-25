@@ -53,7 +53,7 @@ const FeaturedEventsFeed = () => {
                 })}
             >
                 <FastImage
-                    source={{ uri: url}}
+                    source={{ uri: item.image_url}}
                     className="w-full h-80 rounded-xl overflow-hidden justify-end"
                 >
                     <View className="p-2 bg-black w-1/4 text-center mx-2 my-2 rounded-lg">

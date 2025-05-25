@@ -52,7 +52,7 @@ export default {
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
       buildNumber: '1.1.6',
-      deploymentTarget: "12.0"
+      // deploymentTarget: "12.0"
     },
     android: {
       googleServicesFile: './google-services.json', // Set to path where file will be written

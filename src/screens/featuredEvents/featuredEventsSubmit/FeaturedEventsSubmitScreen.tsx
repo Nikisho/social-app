@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Switch, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useState } from 'react'
 import SecondaryHeader from '../../../components/SecondaryHeader'
 import { TextInput } from 'react-native-gesture-handler';
@@ -81,7 +81,7 @@ const FeaturedEventsSubmitScreen = () => {
         }
     }
     const submitEvent = async () => {
-        setLoading(true); 
+        setLoading(true);
         if (
             !eventData?.title?.trim() ||
             !eventData.description?.trim() ||
@@ -125,13 +125,20 @@ const FeaturedEventsSubmitScreen = () => {
 
     return (
 
-        <View className='h-[87%]'>
+        <KeyboardAvoidingView className=''
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            // keyboardVerticalOffset={Platform.OS === 'ios' ?  47 : 0}
+            style={{ flex: 1 }}
+        >
             <View className='p-3'>
                 <SecondaryHeader
                     displayText='Create an event'
                 />
             </View>
-            <ScrollView className='px-3 '>
+            <ScrollView className='px-3 '
+                contentContainerStyle={{ paddingBottom: 100 }}
+
+            >
                 <MediaPicker
                     setMedia={setMedia}
                     media={media}
@@ -172,7 +179,7 @@ const FeaturedEventsSubmitScreen = () => {
                     </Text>
                 </TouchableOpacity>
             </ScrollView>
-        </View>
+        </KeyboardAvoidingView>
 
     )
 }
