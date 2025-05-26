@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../context/navSlice'
@@ -41,8 +41,8 @@ const TicketFeedScreen = () => {
                 )
                 `)
             .eq('user_id', currentUser.id)
-            .order('featured_events(date)', { 
-                ascending: false 
+            .order('featured_events(date)', {
+                ascending: false
             })
 
         if (error) { console.error(error.message) }
@@ -57,10 +57,9 @@ const TicketFeedScreen = () => {
         const now = new Date();
         const endOfEventDay = new Date(event);
         endOfEventDay.setHours(23, 59, 59, 999);
-        
+
         return now > endOfEventDay;
     };
-
     useEffect(() => {
         fetchTickets()
     }, []);
@@ -72,7 +71,6 @@ const TicketFeedScreen = () => {
                         rounded-xl  m-2 p-2
                         flex flex-row justify-between
                         bg-white
-
                         ${isTicketExpired(item.featured_events.date) === true ? 'opacity-50' : ''}
                     `}
                 style={styles.shadow}
@@ -82,7 +80,7 @@ const TicketFeedScreen = () => {
                 })}
             >
                 <View className='  w-2/3'>
-                    <Text 
+                    <Text
                         numberOfLines={1}
                         className='text-2xl font-bold '>
                         {item.featured_events.title}
@@ -91,7 +89,6 @@ const TicketFeedScreen = () => {
                         {formatDateShortWeekday(item.featured_events.date)}
                     </Text>
                 </View>
-
                 <FastImage
                     source={{
                         uri: item.featured_events.image_url
@@ -106,13 +103,30 @@ const TicketFeedScreen = () => {
             <SecondaryHeader
                 displayText='My tickets'
             />
+            {
+                true?
+                    <FlatList
+                        className='h-4/5 my-3 px-2 '
+                        data={tickets}
+                        keyExtractor={(item) => item.ticket_id.toString()}
+                        renderItem={renderItem}
+                    /> :
+                    <View className="h-5/6 justify-center items-center p-6">
+                        <Text className="text-black text-2xl font-bold mb-4 text-center">
+                            No tickets yet
+                        </Text>
+                        <Text className="text-black text-base text-center mb-6">
+                            You haven’t purchased any tickets yet. Explore featured events and grab your spot!
+                        </Text>
 
-            <FlatList
-                className='h-4/5 my-3 px-2 '
-                data={tickets}
-                keyExtractor={(item) => item.ticket_id.toString()}
-                renderItem={renderItem}
-            />
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('featuredEvents')}
+                            className="bg-black px-6 py-3 rounded-full"
+                        >
+                            <Text className="text-white font-semibold text-base">Browse Events</Text>
+                        </TouchableOpacity>
+                    </View>
+            }
         </View>
     )
 }

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import colours from '../../../utils/styles/colours'
 import { supabase } from '../../../../supabase';
 import { useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ interface BookEventProps {
     tickets_sold: number;
     max_tickets: number;
     date: Date;
-    organizer_id:number;
+    organizer_id: number;
 
 }
 const BookEvent: React.FC<BookEventProps> = ({
@@ -32,7 +32,7 @@ const BookEvent: React.FC<BookEventProps> = ({
     const isSoldOut = tickets_sold >= max_tickets;
     const [checkoutModalVisible, setCheckoutModalVisible] = useState<boolean>(false);
     const navigation = useNavigation<RootStackNavigationProp>();
-    
+
     const canBook = async () => {
         if (__DEV__) {
             return true;
@@ -47,7 +47,7 @@ const BookEvent: React.FC<BookEventProps> = ({
             console.error('Error checking bookings:', error.message);
             return;
         }
-        if (count && count >= 2) {
+        if (count && count >= 1) {
             return false;
         } else {
             return true;
@@ -61,7 +61,7 @@ const BookEvent: React.FC<BookEventProps> = ({
         const now = new Date();
         const event = new Date(eventDate)
         const eventEndOfDay = new Date(event)
-        eventEndOfDay.setHours(23,59,59,999);
+        eventEndOfDay.setHours(23, 59, 59, 999);
         return now > eventEndOfDay;
     };
 
@@ -75,7 +75,6 @@ const BookEvent: React.FC<BookEventProps> = ({
     }
 
     const handleBookEvent = async () => {
-
         const canPost = await canBook();
         if (canPost === false) {
             platformAlert("You've already booked tickets for this event");
@@ -100,6 +99,24 @@ const BookEvent: React.FC<BookEventProps> = ({
             if (error)
                 console.error(error.message);
         }
+        //generate the ticket is the event is free as for paid events
+        //it is generated in the backend
+        if (is_free) {
+            const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
+            const eventDate = new Date(date)
+            const { error } = await supabase
+                .from('tickets')
+                .insert({
+                    user_id: currentUser.id,
+                    featured_event_id: featured_event_id,
+                    qr_code_link: qrValue,
+                    expiry_date: new Date(eventDate.setDate(eventDate.getDate() + 1))
+                })
+            if (error) {
+                throw error.message;
+            }
+        };
+
         platformAlert('Purchase successful! 💫');
         navigation.navigate('ticketfeed');
         setCheckoutModalVisible(!checkoutModalVisible)
@@ -121,7 +138,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                         </Text>
                     </View>
                     :
-                    
+
                     <TouchableOpacity
                         onPress={showBookingModal}
                         disabled={isEventExpired(date)}
@@ -152,7 +169,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                 featured_event_id={featured_event_id}
                 handleBookEvent={handleBookEvent}
                 date={date}
-                />
+            />
         </View>
     )
 }
