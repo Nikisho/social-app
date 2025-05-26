@@ -63,8 +63,8 @@ const EditFeaturedEventScreen = () => {
 
   useEffect(() => {
     fetchEventData()
-  }, [])
-
+  }, []);
+  
   useEffect(() => {
     if (eventData?.image_url && typeof eventData.image_url === 'string') {
       const match = eventData.image_url.match(/featured-events\/\d+\/([^\/]+)\.[a-zA-Z0-9]+$/)
@@ -88,7 +88,7 @@ const EditFeaturedEventScreen = () => {
 
     const newUniqueFileIdentifier = uuidv4(9)
     const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/featured-events/${eventData?.organizer_id}/${newUniqueFileIdentifier}.jpg`
-    const oldPath = `featured-events/${eventData?.organizer_id}/${oldUniqueFileIdentifier}.jpg`;
+    const oldPath = `${eventData?.organizer_id}/${oldUniqueFileIdentifier}.jpg`;
 
     try {
       if (
@@ -109,7 +109,6 @@ const EditFeaturedEventScreen = () => {
           eventData.organizer_id
         )
       }
-
       const { error } = await supabase
         .from('featured_events')
         .update({ description: eventData!.description, image_url: mediaUrl })
