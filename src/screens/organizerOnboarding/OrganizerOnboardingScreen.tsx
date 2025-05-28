@@ -22,6 +22,8 @@ const OrganizerOnboardingScreen = () => {
         }
       });
       const { url, accountId } = await response.json();
+
+
       console.log("Stripe link created: ", url, ' for ', accountId);
       WebBrowser.dismissBrowser()
       if (AppState.currentState === 'active') {
@@ -31,6 +33,16 @@ const OrganizerOnboardingScreen = () => {
         console.error('App is in the background, cannot open browser.');
       }
 
+      const verify = await fetch(`${forwardurl}/functions/v1/verify-onboarding`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accountId: `${accountId}`  // Replace with the actual value
+        }),
+      });
 
     } catch (error: any) {
       console.error(error.message);
@@ -48,8 +60,8 @@ const OrganizerOnboardingScreen = () => {
           displayText='Become an organiser'
         />
       </View>
-      <View className='flex items-center h-3/4 justify-center bg-[#fffef4]  space-y'>
-        <Text className='text-2xl font-bold  my-2' >🎉 Ready to Host Your Own Events?</Text>
+      <View className='flex items-center h-3/4 justify-center bg-[#fffef4]  px-5 space-y'>
+        <Text className='text-2xl font-bold my-5  text-center' >🎉 Ready to Host Your Own Events?</Text>
         <Text className=' mb-10 text-lg'>Become an organizer and unlock powerful tools:</Text>
 
         <View className='space-y-4'>
@@ -60,10 +72,10 @@ const OrganizerOnboardingScreen = () => {
           <Text className=' text-lg font-semibold'>📥 Manage RSVPs and event analytics</Text>
         </View>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.shadowButtonStyle}
           className='rounded-full p-3 bg-black my-14 px-4' onPress={handleOnboarding}>
-          <Text className='text-xl font-bold text-[#fffef4]'>Become an Organizer 🚀</Text>
+          <Text className='text-lg font-bold text-[#fffef4]'>Become an Organizer 🚀</Text>
         </TouchableOpacity>
       </View>
     </>

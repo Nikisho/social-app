@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Switch } from 'react-native'
+import { View, Text, TextInput, Switch, Platform } from 'react-native'
 import React from 'react'
 
 interface EventDataProps {
@@ -28,7 +28,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
                 <Text className='text-xl font-bold m-2'>
                     Price
                 </Text>
-                <View className='border rounded-xl h-14 w-2/3 flex flex-row justify-center space-x-2 items-center px-5'>
+                <View className='border rounded-xl h-14 w-2/3 flex flex-row justify-center space-x-2 items-center px-3'>
                     <Text className='text-xl'>£</Text>
                     <TextInput
                         editable={!isFree}
@@ -41,7 +41,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
                                 price: value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
                             }))
                         }}
-                        className='w-1/3 text-xl pb-1'
+                        className={` text-xl ${Platform.OS === 'ios' && 'pb-1'}`}
                     />
                 </View>
             </View>

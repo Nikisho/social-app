@@ -18,7 +18,8 @@ export const saveOrganizerAccount = async (uid: string, stripe_account_id: strin
         .from('organizers')
         .insert({
             user_id: user.id,
-            stripe_account_id: stripe_account_id
+            stripe_account_id: stripe_account_id,
+            status: 'pending'
         })
     if (error) {
         console.error('Something went wrong: ', error.message)

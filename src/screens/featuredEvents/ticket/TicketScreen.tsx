@@ -57,7 +57,7 @@ const TicketScreen = ({ }) => {
             style={{ backgroundColor: colours.primaryColour }}
             className='h-3/4 p-3 '>
             <View className='pb-4'>
-                <SecondaryHeader displayText='' />
+                <SecondaryHeader displayText='Your ticket' />
             </View>
             {
                 ticket && (

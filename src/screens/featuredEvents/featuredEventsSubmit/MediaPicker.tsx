@@ -41,7 +41,7 @@ const MediaPicker: React.FC<MediaPickerProps> = ({ setMedia, media }) => {
 
                     <Image
                         source={media}
-                        className='h-64 bg-red-200  w-3/4 rounded-xl mt-3 '
+                        className='h-64 w-3/4 rounded-xl mt-3 '
                     />
                     :
                     <View>

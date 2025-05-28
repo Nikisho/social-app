@@ -40,17 +40,6 @@ Deno.serve(async (req) => {
       type: "account_onboarding",
     });
 
-    const { error } = await supabaseAdmin
-      .from("users")
-      .update({
-        is_organizer: true,
-      })
-      .eq("uid", user.id);
-
-    if (error) {
-      console.error(error.message);
-    }
-
     console.log("account set up ✅ ", account);
     return new Response(
       JSON.stringify({ url: accountLink.url, accountId: account.id }),

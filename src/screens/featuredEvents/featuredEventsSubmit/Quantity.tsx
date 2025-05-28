@@ -23,7 +23,7 @@ const Quantity:React.FC<QuantityProps> = ({
             <Text className='text-xl font-bold m-2'>
                 Quantity
             </Text>
-            <View className='border rounded-xl h-14 w-1/3 flex flex-row justify-center space-x-2 items-center px-5'>
+            <View className='border rounded-xl h-14 w-1/3 flex flex-row justify-center space-x-2 items-center px-2'>
                 <TextInput
                     value={quantity!}
                     maxLength={3}
