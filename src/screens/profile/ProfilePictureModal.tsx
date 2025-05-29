@@ -55,7 +55,7 @@ const ProfilePictureModal: React.FC<ProfilePictureModalTypes> = ({
                         }
                         {
                             currentUser.id === user_id && (
-                                <View className='py-2 px-10 bg-blue-100 flex flex-row space-x-20 justify-center rounded-b-xl'>
+                                <View className='py-2 px-10 bg-gray-100 flex flex-row space-x-20 justify-center rounded-b-xl'>
                                     <TouchableOpacity
                                         onPress={clearImage}
                                     >

@@ -1,13 +1,39 @@
-import { View, Text, TouchableOpacity, AppState } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, AppState, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import * as WebBrowser from 'expo-web-browser';
 import LoadingScreen from '../loading/LoadingScreen';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import styles from '../../utils/styles/shadow';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../context/navSlice';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { RootStackNavigationProp } from '../../utils/types/types';
+import platformAlert from '../../utils/functions/platformAlert';
 
 const OrganizerOnboardingScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const currentUser = useSelector(selectCurrentUser);
+
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const checkIfOrganizer = async () => {
+    const { error, data } = await supabase
+      .from('users')
+      .select('is_organizer')
+      .eq('id', currentUser.id)
+      .single()
+
+    if (data?.is_organizer) {
+      console.log(data.is_organizer);
+      navigation.navigate('featuredEvents')
+    }
+
+    if (error) {
+      console.error(error.message)
+    }
+  };
+
   const handleOnboarding = async () => {
     setLoading(true);
     const session = await supabase.auth.getSession();
@@ -22,7 +48,6 @@ const OrganizerOnboardingScreen = () => {
         }
       });
       const { url, accountId } = await response.json();
-
 
       console.log("Stripe link created: ", url, ' for ', accountId);
       WebBrowser.dismissBrowser()
@@ -43,14 +68,28 @@ const OrganizerOnboardingScreen = () => {
           accountId: `${accountId}`  // Replace with the actual value
         }),
       });
+      const result = await verify.json();
+      if (result?.success) {
+        navigation.navigate('featuredEvents');
+        platformAlert('Congratulations! You are now an organizer ✨')
+      } else {
+        Alert.alert('Verification Failed', 'Please complete onboarding.');
+      }
 
     } catch (error: any) {
       console.error(error.message);
     }
     finally {
       setLoading(false);
+      // navigation.navigate('featuredEvents');
     }
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      checkIfOrganizer();
+    }, [])
+  );
 
   if (loading) return <LoadingScreen displayText='Redirecting you to Stripe' />
   return (

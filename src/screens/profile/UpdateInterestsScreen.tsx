@@ -76,15 +76,15 @@ const UpdateInterestsScreen = () => {
             <View className='flex flex-row w-full py-10 justify-center space-x-20'>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
-                    className='bg-red-400 rounded-full  p-3 w-1/3'>
-                    <Text className='font-bold text-center'>
+                    className='bg-red-500 rounded-full  p-3 w-1/3'>
+                    <Text className='text-white font-bold text-center'>
                         Cancel
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={updateinterests}
-                    className='bg-blue-400 rounded-full p-3 w-1/3'>
-                    <Text className='text-center font-bold'>
+                    className='bg-black rounded-full p-3 w-1/3'>
+                    <Text className='text-center text-white font-bold'>
                         Save
                     </Text>
                 </TouchableOpacity>

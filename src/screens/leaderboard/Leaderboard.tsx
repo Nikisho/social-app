@@ -35,7 +35,7 @@ const Leaderboard = () => {
         <>
         <View className='flex flex-row bg-gray-200 rounded-xl items-center justify-between'>
             <TouchableOpacity
-                className={`${filter==='week' && 'bg-blue-300'} flex items-center w-1/3 p-3 rounded-l-xl`}
+                className={`${filter==='week' && 'bg-amber-300'} flex items-center w-1/3 p-3 rounded-l-xl`}
                 onPress={()=> setFilter('week')}
             >
                 <Text>
@@ -43,7 +43,7 @@ const Leaderboard = () => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                className={`${filter==='month' && 'bg-blue-300'}  flex items-center w-1/3 p-3 `}
+                className={`${filter==='month' && 'bg-amber-300'}  flex items-center w-1/3 p-3 `}
                 onPress={()=> setFilter('month')}
             >
                 <Text>
@@ -51,7 +51,7 @@ const Leaderboard = () => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                className={`${filter==='alltime' && 'bg-blue-300'} flex items-center  w-1/3 p-3 rounded-r-xl`}
+                className={`${filter==='alltime' && 'bg-amber-300'} flex items-center  w-1/3 p-3 rounded-r-xl`}
                 onPress={()=> setFilter('alltime')}
             >
                 <Text>

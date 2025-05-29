@@ -31,24 +31,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f4f4f4', // Light background color
+        // backgroundColor: '#f4f4f4', // Light background color
         padding: 20,
     },
     message: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#476b7d', // Your theme color
+        color: 'black', 
         textAlign: 'center',
         marginBottom: 8,
     },
     subMessage: {
         fontSize: 14,
-        color: '#777', // Grey for subtlety
+        color: '#777',
         textAlign: 'center',
         marginBottom: 20,
     },
     button: {
-        backgroundColor: '#1E90FF', // Bright action color
+        backgroundColor: '#000000', // Bright action color
         paddingVertical: 12,
         paddingHorizontal: 30,
         borderRadius: 25,

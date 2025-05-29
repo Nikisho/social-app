@@ -151,28 +151,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 </View>
                             )
                         }
-                        {/* <View className='px-10 flex items-end bg-blue-200'>
-                            {
-                                !isCurrentUserProfile ? (
-                                    <TouchableOpacity
-                                        onPress={handlePressChat}
-                                        style={styles.shadowButtonStyle}
-                                        className=' p-2 rounded-xl flex flex-row place-self-end'>
-                                        <Entypo name="chat" size={24} color="white" />
-                                    </TouchableOpacity>
-                                ) :
-                                    (
-                                        <TouchableOpacity
-                                            onPress={() => navigation.navigate('settings')}
-                                            className='rounded-full p-1 bg-white'
-                                            style={styles.shadow}
-                                        >
-                                            <Fontisto name="player-settings" size={24} color="black" />
-                                        </TouchableOpacity>
-                                    )
-                            }
-                        </View> */}
-
                     </View>
                     <UserBadges
                         user_id={user_id}

@@ -68,8 +68,7 @@ const Header = () => {
                 <Text className='text-whie font-bold' >New post</Text>
             </TouchableOpacity>
             <View className='flex flex-row space--2 items-center'>
-                <View className='flex flex-row space-x-1 p-2 rounded-l-lg bg-blue-100'
-
+                <View className='flex flex-row space-x-1 p-2 rounded-l-lg bg-amber-100'
                 >
                     <Text className='font-bold '>
 
@@ -80,7 +79,7 @@ const Header = () => {
                     </Text>
 
                 </View>
-                <TouchableOpacity className='bg-gray-100 p-2 mr-2 rounded-r-lg'
+                <TouchableOpacity className='bg-amber-200 p-2 mr-2 rounded-r-lg'
                     onPress={() => setBuyGemsModalVisible(!buyGemsModalVisible)}
                     >
                     <FontAwesome name="plus" size={17} color="black" />

@@ -183,8 +183,8 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
     },
     selectedInterest: {
-        backgroundColor: '#1E90FF', // Highlighted background color for selected interests
-        borderColor: '#388e3c',
+        backgroundColor: 'rgb(253 230 138);', // Highlighted background color for selected interests
+        borderColor: 'rgb(252 211 77);',
     },
     interestText: {
         color: '#000',

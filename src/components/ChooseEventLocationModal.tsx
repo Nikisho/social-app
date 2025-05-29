@@ -94,7 +94,7 @@ const ChooseEventLocationModal: React.FC<ChooseEventLocationModalProps> = ({
                                 <TouchableOpacity
                                     // onPress={() => setTempSelectedHub({hub_code: hub.hub_code, hub_name: hub.hub_name})}
                                     onPress={() => handleSelectTempHub(hub)}
-                                    className={`w-full flex flex-row justify-center p-1 my-1 rounded-xl ${tempSelectedHub?.hub_name === hub.hub_name ? 'bg-blue-400' : 'bg-gray-200'}`}
+                                    className={`w-full flex flex-row justify-center p-1 my-1 rounded-xl ${tempSelectedHub?.hub_name === hub.hub_name ? 'bg-amber-400' : 'bg-gray-200'}`}
                                     key={hub.hub_code}>
                                     <Text className='text-xl'>
                                         {hub.hub_name}

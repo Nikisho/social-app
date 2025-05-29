@@ -76,7 +76,7 @@ const ResetPasswordScreen = () => {
             <TouchableOpacity
                 onPress={handlePasswordReset}
                 disabled={!isPasswordValid}
-                className={`py-5 bg-blue-500 flex flex-row justify-center my-5 rounded-lg ${!isPasswordValid && 'opacity-40'}`}>
+                className={`py-5 bg-black flex flex-row justify-center my-5 rounded-lg ${!isPasswordValid && 'opacity-40'}`}>
                 <Text className='text-white font-bold'>
                     Confirm
                 </Text>

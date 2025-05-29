@@ -42,13 +42,13 @@ const FilterEventsModal: React.FC<FilterEventsModalProps> = ({
                     <View className='space-y-1'>
                         <TouchableOpacity
                             onPress={() => setSortingOption('event_date')}
-                            className={`p-3 bg-gray-100 rounded-full flex flex-row items-center space-x-3 ${sortingOption === 'event_date' ? 'bg-blue-400' : ''}`}>
+                            className={`p-3 bg-gray-100 rounded-full flex flex-row items-center space-x-3 ${sortingOption === 'event_date' ? 'bg-amber-400' : ''}`}>
                             <Entypo name="calendar" size={24} color="black" />
                             <Text>Event date</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => setSortingOption('created_at')}
-                            className={`p-3 bg-gray-100 rounded-full flex flex-row items-center space-x-3 ${sortingOption === 'created_at' ? 'bg-blue-400' : ''}`}>
+                            className={`p-3 bg-gray-100 rounded-full flex flex-row items-center space-x-3 ${sortingOption === 'created_at' ? 'bg-amber-400' : ''}`}>
                             <Entypo name="new" size={24} color="black" />                           
                              <Text>New</Text>
                         </TouchableOpacity>

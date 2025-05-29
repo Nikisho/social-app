@@ -118,7 +118,7 @@ const BuyGemsModal: React.FC<BuyGamsModalProps> = ({
                             gemOptions.map((gemOption) => (
                                 <TouchableOpacity key={gemOption.id}
                                     onPress={() => fetchPaymentSheetParams(gemOption.revenue_cat_identifier, gemOption.quantity)}
-                                    className='w-1/3 flex items-center bg-teal-500 p-3 rounded-xl space-y-4'>
+                                    className='w-1/3 flex items-center bg-amber-400 p-3 rounded-xl space-y-4'>
                                     <Text
                                         className=' px-2 text-xl text-white font-bold'>
                                         {gemOption.quantity}

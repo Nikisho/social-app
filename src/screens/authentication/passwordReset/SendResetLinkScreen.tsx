@@ -67,7 +67,7 @@ const SendResetLinkScreen = () => {
             />
             <TouchableOpacity
                 onPress={sendResetLink}
-                className='py-5 bg-blue-500 flex flex-row justify-center my-5 rounded-lg'>
+                className='py-5 bg-black flex flex-row justify-center my-5 rounded-lg'>
                 <Text className='text-white font-bold'>
                     Send link
                 </Text>
