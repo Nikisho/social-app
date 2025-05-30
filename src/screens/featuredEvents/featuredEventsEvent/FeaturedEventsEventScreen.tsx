@@ -10,6 +10,7 @@ import FeaturedEventsEventHeader from './FeaturedEventsEventHeader'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../context/navSlice'
 import colours from '../../../utils/styles/colours'
+import * as Linking from 'expo-linking';
 
 interface EventDataProps {
     title: string;
@@ -41,6 +42,11 @@ const FeaturedEventsEventScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const isOwnEvent = currentUser.id === eventData?.organizers.user_id;
     const navigation = useNavigation<RootStackNavigationProp>();
+    const shareableLink: string = Linking.createURL("/featuredeventsevent", {
+        queryParams: { featured_event_id: featured_event_id.toString() },
+    });
+    console.log(shareableLink);
+
     const fetchEventData = async () => {
         const { data, error } = await supabase
             .from('featured_events')
@@ -55,10 +61,8 @@ const FeaturedEventsEventScreen = () => {
         if (data) {
             setEventData(data)
         }
-
         if (error) console.error(error.message);
     }
-
     useEffect(() => {
         fetchEventData();
     }, []);
@@ -68,7 +72,7 @@ const FeaturedEventsEventScreen = () => {
                 <ScrollView
                     className='p-2'
                     contentContainerStyle={{ paddingBottom: 100 }}
-                    >
+                >
                     {
                         eventData && (
                             <>

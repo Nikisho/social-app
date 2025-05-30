@@ -65,7 +65,7 @@ const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
                 className='my-2
                     rounded-xl border bg-white p-2
                 '
-                onPress={() => navigation.navigate('featuredEventsEvent', {
+                onPress={() => navigation.navigate('featuredeventsevent', {
                     featured_event_id: item.featured_event_id
                 })}
             >

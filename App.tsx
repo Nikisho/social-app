@@ -128,7 +128,13 @@ function App() {
 		prefixes: ['com.linkzy://', 'https://com.linkzy'],
 		config: {
 			screens: {
-				resetpassword: 'resetpassword'
+				resetpassword: 'resetpassword',
+				featuredeventsevent: {
+					path: 'featuredeventsevent',
+					parse: {
+						featured_event_id: (id: number) => `${id}`,
+					},
+				},
 			},
 		},
 	};
@@ -170,7 +176,7 @@ function App() {
 							) : (
 								<>
 									<Stack.Screen name="featuredEvents" component={FeaturedEventsScreen} />
-									<Stack.Screen name="featuredEventsEvent" component={FeaturedEventsEventScreen} />
+									<Stack.Screen name="featuredeventsevent" component={FeaturedEventsEventScreen} />
 									<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
 									<Stack.Screen name="editfeaturedevent" component={EditFeaturedEventScreen} />
 									<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />

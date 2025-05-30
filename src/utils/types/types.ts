@@ -25,7 +25,7 @@ export type RootStackParamList = {
   updateinterests:{user_interests: {interest_code:number, interest_group_code:number, interests: { description: string}}[]};
   leaderboard:undefined;
   featuredEvents:undefined;
-  featuredEventsEvent:{featured_event_id: number};
+  featuredeventsevent:{featured_event_id: number};
   featuredEventsSubmit:undefined;
   organizerOnboarding:undefined;
   ticket: {ticket_id: number};
@@ -43,7 +43,7 @@ export type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'profile'>;
 export type EditEventScreenRouteProp = RouteProp<RootStackParamList, 'editevent'>;
 export type ResetPasswordScreenRouteProps = RouteProp<RootStackParamList, 'resetpassword'>;
 export type UpdateInterestsScreenRouteProps = RouteProp<RootStackParamList, 'updateinterests'>;
-export type FeaturedEventsEventScreenRouteProps = RouteProp<RootStackParamList, 'featuredEventsEvent'>;
+export type FeaturedEventsEventScreenRouteProps = RouteProp<RootStackParamList, 'featuredeventsevent'>;
 export type TicketScreenRouteProps = RouteProp<RootStackParamList, 'ticket'>;
 export type EditFeaturedEventScreenRouteProps = RouteProp<RootStackParamList, 'editfeaturedevent'>;
 

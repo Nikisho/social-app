@@ -88,7 +88,7 @@ const TicketScreen = ({ }) => {
                         </View>
                         <TouchableOpacity 
                             style={styles.shadow}
-                            onPress={() => navigation.navigate('featuredEventsEvent', {
+                            onPress={() => navigation.navigate('featuredeventsevent', {
                                 featured_event_id: ticket.featured_event_id
                             })}
                             className='bg-black p-2 w-1/3 rounded-full my-10'>
