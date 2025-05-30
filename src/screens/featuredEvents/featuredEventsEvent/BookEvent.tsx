@@ -34,9 +34,9 @@ const BookEvent: React.FC<BookEventProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
 
     const canBook = async () => {
-        // if (__DEV__) {
-        //     return true;
-        // }
+        if (__DEV__) {
+            return true;
+        }
         const { count, error } = await supabase
             .from('featured_event_bookings')
             .select('user_id', { count: 'exact' })
@@ -55,9 +55,9 @@ const BookEvent: React.FC<BookEventProps> = ({
     };
 
     const isEventExpired = (eventDate: Date) => {
-        // if (__DEV__) {
-        //     return false;
-        // }
+        if (__DEV__) {
+            return false;
+        }
         const now = new Date();
         const event = new Date(eventDate)
         const eventEndOfDay = new Date(event)

@@ -19,7 +19,7 @@ interface FeaturedEventCard {
 
 const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
-    const [featuredEvents, setFeaturedEvents] = useState<any>();
+    const [featuredEvents, setFeaturedEvents] = useState<FeaturedEventCard[] | null>(null);
 
     const fetchOrganizerId = async () => {
         const { data, error } = await supabase
@@ -30,13 +30,16 @@ const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
         if (data) {
             return data.organizer_id;
         }
-
         if (error) {
-            throw error.message
+            console.error(error.message)
         }
+        return null;
     }
     const fetchFeaturedEvents = async () => {
         const organizer_id = await fetchOrganizerId();
+        if (!organizer_id) {
+            return;
+        }
         const { data, error } = await supabase
             .from('featured_events')
             .select()

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, AppState, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import * as WebBrowser from 'expo-web-browser';
 import LoadingScreen from '../loading/LoadingScreen';
@@ -14,7 +14,6 @@ import platformAlert from '../../utils/functions/platformAlert';
 const OrganizerOnboardingScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const currentUser = useSelector(selectCurrentUser);
-
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const checkIfOrganizer = async () => {
@@ -28,7 +27,6 @@ const OrganizerOnboardingScreen = () => {
       console.log(data.is_organizer);
       navigation.navigate('featuredEvents')
     }
-
     if (error) {
       console.error(error.message)
     }
@@ -57,7 +55,6 @@ const OrganizerOnboardingScreen = () => {
       } else {
         console.error('App is in the background, cannot open browser.');
       }
-
       const verify = await fetch(`${forwardurl}/functions/v1/verify-onboarding`, {
         method: 'POST',
         headers: {
@@ -65,7 +62,7 @@ const OrganizerOnboardingScreen = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          accountId: `${accountId}`  // Replace with the actual value
+          accountId: `${accountId}`  
         }),
       });
       const result = await verify.json();
@@ -81,7 +78,6 @@ const OrganizerOnboardingScreen = () => {
     }
     finally {
       setLoading(false);
-      // navigation.navigate('featuredEvents');
     }
   }
 

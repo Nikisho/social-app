@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import styles from '../../../utils/styles/shadow';
 
 type TicketStatsBannerProps = {
@@ -12,8 +12,8 @@ const TicketStatsBanner: React.FC<TicketStatsBannerProps> = ({ sold, max }) => {
 
   return (
     <View 
-        style={styles.shadow}
-        className="bg-white/80 mx- mt-4 rounded-2xl p-4 flex-row items-center justify-between">
+        style={Platform.OS === 'ios' ? styles.shadow : {borderWidth: 1}}
+        className="bg-white mt-4 rounded-2xl p-4 flex-row items-center justify-between">
       <View>
         <Text className="text-black/70 text-base font-semibold">Tickets Sold</Text>
         <Text className="text-black text-lg font-bold">

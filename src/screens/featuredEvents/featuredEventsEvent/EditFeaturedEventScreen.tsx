@@ -133,6 +133,7 @@ const EditFeaturedEventScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      className=''
       // keyboardVerticalOffset={Platform.OS === 'ios' ? 80 + 47 : 0}
       style={{ flex: 1 }}
     >
@@ -151,7 +152,7 @@ const EditFeaturedEventScreen = () => {
         >
           <Ionicons name="warning-outline" size={28} color="#D97706" />
           <Text className="flex-1 text-amber-800 text-base leading-6">
-            You can only amend the image and description of featured events.
+            You can only edit the image and description of featured events.
           </Text>
         </View>
 

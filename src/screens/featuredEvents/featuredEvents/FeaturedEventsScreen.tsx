@@ -6,7 +6,7 @@ import UpdateAppModal from '../../../components/UpdateAppModal'
 
 const FeaturedEventsScreen = () => {
   return (
-    <View className=''>
+    <View className='pb-10'>
       <UpdateAppModal />
       <FeaturedEventsScreenHeader/>
       <FeaturedEventsFeed />

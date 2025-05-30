@@ -104,7 +104,7 @@ const TicketFeedScreen = () => {
                 displayText='My tickets'
             />
             {
-                true?
+                tickets && tickets?.length != 0 ?
                     <FlatList
                         className='h-4/5 my-3 px-2 '
                         data={tickets}

@@ -43,7 +43,7 @@ import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
 import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
 import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
-
+import { StatusBar } from 'react-native';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -89,7 +89,7 @@ function App() {
 	const fetchSession = async () => {
 		await setSession();
 		const { data: { session: user } } = await supabase.auth.getSession();
-		if (!user) { 
+		if (!user) {
 			setLoading(false);
 			return
 		};
@@ -142,6 +142,7 @@ function App() {
 			<SafeAreaView
 				edges={['top']}
 				className='h-full' style={{ backgroundColor: colours.primaryColour }}>
+				<StatusBar hidden={false} barStyle="dark-content" translucent={false} />
 				<NavigationContainer theme={mainTheme} linking={linking} ref={navigationRef} >
 					<Stack.Navigator screenOptions={{
 						headerShown: false
