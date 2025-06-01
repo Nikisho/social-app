@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -23,26 +23,26 @@ const Navbar = () => {
     //   navigation: 'search'
     // },
     {
-      icon: <MaterialIcons name="leaderboard" size={24} color="white" />,
+      icon: <MaterialIcons name="leaderboard" size={26} color="white" />,
       navigation: 'leaderboard'
     },
     {
       icon: <View>
-        <Entypo name="message" size={30} color="white" />
+        <Entypo name="message" size={26} color="white" />
         <Badge messageCount={unreadMessagesCount!} />
       </View>,
       navigation: 'chatlist'
     },
     {
-      icon: <Entypo name="home" size={30} color="white" />,
+      icon: <Entypo name="home" size={26} color="white" />,
       navigation: 'featuredEvents'
     },
     {
-      icon: <Entypo name="calendar" size={30} color="white" />,
+      icon: <Entypo name="calendar" size={26} color="white" />,
       navigation: 'meetups'
     },
     {
-      icon: <Entypo name="ticket" size={30} color="white" />,
+      icon: <Entypo name="ticket" size={26} color="white" />,
       navigation: 'ticketfeed'
     }
     // {
@@ -101,8 +101,7 @@ const Navbar = () => {
   return (
     <View
       style={{ backgroundColor: colours.secondaryColour }}
-      className=' absolute inset-x-0 bottom-0 h-[10%] flex justify-between flex-row'>
-
+      className={`absolute inset-x-0 bottom-0 flex items-center justify-between flex-row ${Platform.OS === 'ios' ? 'h-[10%]' : 'h-[8%]'}`}>
       {
         menuItems.map((item) => (
           <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import colours from '../../../utils/styles/colours'
 import { supabase } from '../../../../supabase';
@@ -66,12 +66,17 @@ const BookEvent: React.FC<BookEventProps> = ({
     };
 
     const showBookingModal = async () => {
-        const canPost = await canBook();
-        if (canPost === false) {
-            platformAlert("You've already booked tickets for this event");
-            return;
+        try {
+            const canPost = await canBook();
+            if (canPost === false) {
+                platformAlert("You've already booked tickets for this event");
+                return;
+            }
+            setCheckoutModalVisible(!checkoutModalVisible)
+        } catch (error:any) {
+            Alert.alert(error.message)
         }
-        setCheckoutModalVisible(!checkoutModalVisible)
+
     }
 
     const handleBookEvent = async () => {

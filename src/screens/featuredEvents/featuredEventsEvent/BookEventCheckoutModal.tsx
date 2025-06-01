@@ -151,6 +151,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
             platformAlert(error.message)
         }
     };
+
     return (
         <Modal
             transparent
