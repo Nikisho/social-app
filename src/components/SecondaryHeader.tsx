@@ -22,7 +22,7 @@ const SecondaryHeader:React.FC<SecondaryHeaderType> = ({
                 onPress={() => navigation.goBack()}>
                 <AntDesign name="arrowleft" size={19} color="white" />
             </TouchableOpacity>
-            <Text className='text-2xl font-semibold '>
+            <Text className='text-2xl font-semibold w-4/5 '>
                 {displayText}
             </Text>
         </View>

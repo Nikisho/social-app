@@ -1,9 +1,11 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, Share } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
 import Hyperlink from 'react-native-hyperlink'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
 import FastImage from 'react-native-fast-image'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 interface EventDataProps {
     description: string;
@@ -13,6 +15,7 @@ interface EventDataProps {
     image_url: string;
     is_free: boolean;
     date: Date;
+    featured_event_id: number;
 
 }
 const FeaturedEventDetails: React.FC<EventDataProps> = ({
@@ -20,7 +23,8 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
     location,
     description,
     date,
-    time
+    time,
+    featured_event_id
 }) => {
     const [textShown, setTextShown] = useState(false); //To show ur remaining Text
     const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
@@ -31,16 +35,44 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
         setLengthMore(e.nativeEvent.lines.length >= 4);
     }, []);
 
-    const url = `${image_url.split('?')[0]}?t=${Date.now()}`;
-    
+    const handleShareEventLink = async () => {
+        try {
+
+            const result = await Share.share({
+                message: `https://linkzyapp.com/event.html?featured_event_id=${featured_event_id}`
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+
+        } catch (error: any) {
+            platformAlert(error.message);
+        }
+    };
+
     return (
         <>
             <FastImage
                 source={{
                     uri: image_url
                 }}
-                className='w-full h-80 oversize-hidden mt-3 rounded-xl'
-            />
+                className='
+                    flex items-end
+                    justify-end
+                    w-full h-80 oversize-hidden mt-3 rounded-xl'
+            >
+                <TouchableOpacity 
+                    onPress={() => handleShareEventLink()}
+                    className='bg-white m-5 rounded-full justify-center flex'>
+                    <MaterialCommunityIcons name="share-circle" size={40} color="black" />
+                </TouchableOpacity>
+            </FastImage>
 
             <Text className='px-3 my-2 text-amber-800 text-lg font-semibold' >
                 {
