@@ -182,7 +182,7 @@ function App() {
 									<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
 									<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
 									<Stack.Screen name="ticket" component={TicketScreen} />
-									<Stack.Screen name="meetups" component={MeetupsScreen} />
+									{/* <Stack.Screen name="meetups" component={MeetupsScreen} /> */}
 									<Stack.Screen name="profile" component={ProfileScreen} />
 									<Stack.Screen name="submit" component={SubmitScreen} />
 									<Stack.Screen name="event" component={EventScreen} />
@@ -190,11 +190,11 @@ function App() {
 									<Stack.Screen name="comment" component={SubmitCommentScreen} />
 									<Stack.Screen name="chatlist" component={ChatListScreen} />
 									<Stack.Screen name="chat" component={ChatScreen} />
-									<Stack.Screen name="search" component={SearchScreen} />
+									{/* <Stack.Screen name="search" component={SearchScreen} /> */}
 									<Stack.Screen name="eula" component={EulaScreen} />
 									<Stack.Screen name="settings" component={SettingsScreen} />
 									<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
-									<Stack.Screen name="leaderboard" component={LeaderboardScreen} />
+									{/* <Stack.Screen name="leaderboard" component={LeaderboardScreen} /> */}
 								</>
 							)
 						}

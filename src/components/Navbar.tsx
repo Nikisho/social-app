@@ -22,10 +22,10 @@ const Navbar = () => {
     //   icon: <AntDesign name="search1" size={30} color="white" />,
     //   navigation: 'search'
     // },
-    {
-      icon: <MaterialIcons name="leaderboard" size={26} color="white" />,
-      navigation: 'leaderboard'
-    },
+    // {
+    //   icon: <MaterialIcons name="leaderboard" size={26} color="white" />,
+    //   navigation: 'leaderboard'
+    // },
     {
       icon: <View>
         <Entypo name="message" size={26} color="white" />
@@ -37,18 +37,18 @@ const Navbar = () => {
       icon: <Entypo name="home" size={26} color="white" />,
       navigation: 'featuredEvents'
     },
-    {
-      icon: <Entypo name="calendar" size={26} color="white" />,
-      navigation: 'meetups'
-    },
+    // {
+    //   icon: <Entypo name="calendar" size={26} color="white" />,
+    //   navigation: 'meetups'
+    // },
     {
       icon: <Entypo name="ticket" size={26} color="white" />,
       navigation: 'ticketfeed'
-    }
-    // {
-    //   icon: <Ionicons name="person" size={30} color="white" />,
-    //   navigation: 'profile'
-    // },
+    },
+    {
+      icon: <Ionicons name="person" size={30} color="white" />,
+      navigation: 'profile'
+    },
   ];
 
   const screens = ['leaderboard', 'meetups', 'chat', 'chatlist', 'featuredEvents']

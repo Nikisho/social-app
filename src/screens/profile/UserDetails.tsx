@@ -152,9 +152,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             )
                         }
                     </View>
-                    <UserBadges
+                    {/* <UserBadges
                         user_id={user_id}
-                    />
+                    /> */}
                 </View>
                 <View className='absolute top-0 right-0 items-end grow px-5'>
                     {

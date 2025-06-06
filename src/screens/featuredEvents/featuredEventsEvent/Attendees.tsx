@@ -1,0 +1,81 @@
+import { View, Text, FlatList, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { supabase } from '../../../../supabase'
+import styles from '../../../utils/styles/shadow';
+import { FontAwesome } from '@expo/vector-icons';
+
+
+const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
+
+    const [attendees, setAttendees] = useState<{id: number, users: {name: string, photo:string}}[]>();
+
+    const fetchAttendees = async () => {
+        const { data, error } = await supabase
+            .from('featured_event_bookings')
+            .select(` *,
+                users(
+                    name,
+                    photo
+                )
+            `)
+            .eq('featured_event_id', featured_event_id)
+
+        if (data) {
+            console.log(data);
+            setAttendees(data);
+        }
+
+        if (error) {
+            throw error.message;
+        }
+    };
+
+
+    useEffect(() => {
+        fetchAttendees();
+    }, [])
+
+
+    const renderItem = ({ item }: { item: any }) => {
+
+        return (
+            <View className='m-2 mr-[-15]'>
+                {item.users.photo ?
+                    <Image
+                        source={{
+                            uri: item.users.photo
+                        }}
+                        className='h-11 w-11 rounded-full border'
+                    />
+                    :
+                    <View className='bg-white rounded-full'
+                        style={styles.shadow}
+                    >
+                        <FontAwesome name="user-circle" size={40} color="black" />
+                    </View>
+                }
+
+
+                {/* <Text>
+                    {item.users.name}
+                </Text> */}
+            </View>)
+    }
+
+    return (
+        <View className='p-2'>
+            <Text className='text-xl font-bold'>
+                Going { '  ' + attendees?.length.toString()}
+            </Text>
+            <FlatList
+                horizontal
+                data={attendees}
+                renderItem={renderItem}
+                keyExtractor={item => item.id.toString()}
+            />
+
+        </View>
+    )
+}
+
+export default Attendees

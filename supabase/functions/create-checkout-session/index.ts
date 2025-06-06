@@ -71,7 +71,7 @@ serve(async (req: Request) => {
         user_id: String(user_id),
         featured_event_id: String(featured_event_id),
         organizer_id: String(organizer_id),
-        date: String(date)
+        date: String(date),
       },
     });
 

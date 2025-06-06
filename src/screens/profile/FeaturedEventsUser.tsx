@@ -57,7 +57,7 @@ const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
     useFocusEffect(
         React.useCallback(() => {
             fetchFeaturedEvents()
-        }, [])
+        }, [user_id])
     );
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
         return (

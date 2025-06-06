@@ -45,6 +45,7 @@ const FeaturedEventsFeed = () => {
 
         return (
             <TouchableOpacity
+                
                 className='my-2
                     rounded-xl border bg-white p-2
                 '

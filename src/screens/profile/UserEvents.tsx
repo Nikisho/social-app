@@ -79,7 +79,7 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     return (
         <View className='h-[51%] mt-5 flex space-y-2'>
             <View className='flex flex-row w-full'>
-                <TouchableOpacity 
+                {/* <TouchableOpacity 
                     onPress={() => setIndex(0)}
                     className='w-1/2 border-r'>
                     <Text className='text-lg text-center font-semibold'>Events</Text>
@@ -88,7 +88,12 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                     onPress={() => setIndex(1)}
                     className='w-1/2 '>
                     <Text className='text-lg text-center font-semibold'>Featured</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <View>
+                    <Text className='text-lg font-bold'>
+                        Events
+                    </Text>
+                </View>
             </View>
             {
                 eventList?.length === 0 ?
@@ -118,13 +123,17 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                     //     onRefresh={onRefresh}
                     //     onEndReached={onEndReached}
                     // />
-                    <TabView
-                        navigationState={{ index, routes }}
-                        renderScene={renderScene}
-                        onIndexChange={setIndex}
-                        initialLayout={{ width: layout.width }}
-                        renderTabBar={() => null} 
-                    />
+                    // <TabView
+                    //     navigationState={{ index, routes }}
+                    //     renderScene={renderScene}
+                    //     onIndexChange={setIndex}
+                    //     initialLayout={{ width: layout.width }}
+                    //     renderTabBar={() => null} 
+                    // />
+
+                    <FeaturedEventsUser 
+                        user_id={user_id}
+                    /> 
 
             }
 

@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../../context/navSlice'
 import colours from '../../../utils/styles/colours'
 import * as Linking from 'expo-linking';
+import Attendees from './Attendees'
 
 interface EventDataProps {
     title: string;
@@ -42,10 +43,6 @@ const FeaturedEventsEventScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const isOwnEvent = currentUser.id === eventData?.organizers.user_id;
     const navigation = useNavigation<RootStackNavigationProp>();
-    const shareableLink: string = Linking.createURL("/featuredeventsevent", {
-        queryParams: { featured_event_id: featured_event_id.toString() },
-    });
-    console.log(shareableLink);
 
     const fetchEventData = async () => {
         const { data, error } = await supabase
@@ -84,6 +81,9 @@ const FeaturedEventsEventScreen = () => {
                                 />
                                 <PromoterDetails
                                     {...eventData}
+                                />
+                                <Attendees 
+                                    featured_event_id={eventData?.featured_event_id}
                                 />
                             </>
                         )
