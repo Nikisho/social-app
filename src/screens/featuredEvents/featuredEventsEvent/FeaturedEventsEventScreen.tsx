@@ -31,6 +31,7 @@ interface EventDataProps {
         users: {
             name: string
             photo: string
+            id: number;
         }
     }
 

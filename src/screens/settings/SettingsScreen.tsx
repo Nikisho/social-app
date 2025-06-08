@@ -44,7 +44,7 @@ const SettingsScreen = () => {
 
   return (
     <View className="h-full">
-      <View className='px-2'>
+      <View className=''>
 
       <SecondaryHeader
         displayText='Account settings'

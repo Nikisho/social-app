@@ -38,7 +38,7 @@ const ChatListScreen = () => {
 		/>
 	);
 	return (
-		<View className='mx-2'>
+		<View className=''>
 			<SecondaryHeader
 				displayText='My chats'
 			/>

@@ -22,9 +22,9 @@ const UserInterests: React.FC<UserInterestsProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     return (
-        <View>
-            <View className='flex flex-row items-center space-x-3'>
-                <Text className='text-lg font-semibold my-1'>Interests</Text>
+        <View className='py-3'>
+            <View className='flex flex-row items-center space-x-3 mb-4 '>
+                <Text className='text-lg font-semibold'>Interests</Text>
                 {
                     isCurrentUserProfile && (
                         <TouchableOpacity
@@ -45,18 +45,18 @@ const UserInterests: React.FC<UserInterestsProps> = ({
                         </Text>
                     </View>
                     :
-                    <ScrollView
-                        horizontal
-                        className=''
+                    <View
+                        // horizontal
+                        className='flex-row flex-wrap'
                     >
                         {
                             userInterests?.map((interest) => (
-                                <View style={styles.interestButton} key={interest.interest_code}>
+                                <View style={styles.interestButton} className='w-1/' key={interest.interest_code}>
                                     <Text>{interest.interests.description}</Text>
                                 </View>
                             ))
                         }
-                    </ScrollView>
+                    </View>
             }
 
         </View>
@@ -66,11 +66,6 @@ const UserInterests: React.FC<UserInterestsProps> = ({
 export default UserInterests
 
 const styles = StyleSheet.create({
-    interestsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-    },
     interestButton: {
         backgroundColor: '#f0f0f0',
         padding: 8,

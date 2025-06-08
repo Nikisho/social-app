@@ -57,7 +57,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
-    const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-400' : 'bg-red-300')
+    const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-600' : 'bg-red-300')
     const today = new Date('2025-04-05');
     const [trophies, setTrophies] = useState<trophyProps[] | null>(null);
 
@@ -95,24 +95,24 @@ const UserDetails: React.FC<UserDetailsProps> = ({
         }, [user_id])
     );
     return (
-        <View className='h-[35%]'>
-            <View className='flex space-x-5 py-1 flex-row items-center'>
+        <View className=''>
+            <View className='flex space-x-5 py-1 items-center'>
                 <TouchableOpacity
-                    className='flex flex-row items-center space-x-3'
+                    className='flex flex-items-center space-x-3 border  rounded-full'
                     onPress={() => setProfilePictureModalVisible(!profilePictureModalVisible)}
                 >
                     {
                         photo ?
                             (
                                 <Image
-                                    className='w-20 h-20 rounded-full'
+                                    className='w-36 h-36 rounded-full'
                                     source={{
                                         uri: `${photo}`,
                                     }}
                                 />
                             ) :
                             <>
-                                <FontAwesome name="user-circle" size={70} color="black" />
+                                <FontAwesome name="user-circle" size={150} color="black" />
                             </>
                     }
                     {
@@ -124,38 +124,38 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </TouchableOpacity>
-                <View className='flex justify-between space-y-2 '>
+                {/* <View className='flex justify-between space-y'> */}
 
-                    <View className='flex flex-row space-x-3 '>
+                <View className='flex flex-row space-x-5 mt-5 '>
 
-                        <Text className='text-xl font-bold'>
-                            {name}
-                        </Text>
-                        {
-                            dateOfBirth && (
-                                <View
-                                    // style={{ backgroundColor: colours.secondaryColour }}
-                                    className={` flex flex-row rounded-xl px-2 h-7 ${genderColour}`}
-                                >
+                    <Text className='text-xl font-bold'>
+                        {name}
+                    </Text>
+                    {
+                        dateOfBirth && (
+                            <View
+                                // style={{ backgroundColor: colours.secondaryColour }}
+                                className={` flex flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
+                            >
 
-                                    {sex !== 0 && (
-                                        <Text className="text-lg font-semibold text-white">
-                                            {sex === 1 ? "♂" : "♀"}
-                                        </Text>
-                                    )}
-
-                                    <Text
-                                        className='text-lg font-semibold text-white'>
-                                        {getAge(dateOfBirth)}
+                                {sex !== 0 && (
+                                    <Text className="text-lg font-semibold  text-white">
+                                        {sex === 1 ? "♂" : "♀"}
                                     </Text>
-                                </View>
-                            )
-                        }
-                    </View>
-                    {/* <UserBadges
+                                )}
+
+                                <Text
+                                    className='text-lg font-semibold text-white'>
+                                    {getAge(dateOfBirth)}
+                                </Text>
+                            </View>
+                        )
+                    }
+                </View>
+                {/* <UserBadges
                         user_id={user_id}
                     /> */}
-                </View>
+                {/* </View> */}
                 <View className='absolute top-0 right-0 items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
@@ -203,8 +203,25 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                 }
             </View>
 
-            <View className='flex flex-row items-center space-x-3'>
-                <Text className='text-lg font-semibold my-1'>About</Text>
+            {/* Following banner */}
+            <View className='flex-row justify-center space-x-20'>
+                <View className='p-3 b justify-center flex'>
+                    <Text className='text-center font-bold text-lg'>20</Text>
+                    <Text className='text-center text-sm'>
+                        Following
+                    </Text>
+                </View>
+                <View className='p-3 '>
+                    <Text className='text-center font-bold text-lg '>34</Text>
+                    <Text className='text-center'>
+                        Followers
+                    </Text>
+                </View>
+            </View>
+
+
+            <View className='flex flex-row items-center space-x-3 mb-3'>
+                <Text className='text-lg font-semibold '>About</Text>
                 {
                     isCurrentUserProfile && (
                         <TouchableOpacity className=' flex flex-row ' onPress={() => setModalVisible(!modalVisible)}>
@@ -217,7 +234,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
             <ScrollView>
                 {
                     bio ?
-                        <Text className='text-sm'
+                        <Text className='text-lg'
                         >
                             {bio}
                         </Text> :

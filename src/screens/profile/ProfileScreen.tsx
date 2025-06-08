@@ -1,6 +1,5 @@
-import { View, Text, Image, Alert, TouchableOpacity, ToastAndroid, Platform, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import UserEvents from './UserEvents';
+import { Text, Alert, ToastAndroid, Platform, View } from 'react-native'
+import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
@@ -13,6 +12,8 @@ import UserInterests from './UserInterests';
 import UpdateBioModal from './UpdateBioModal';
 import ProfilePictureModal from './ProfilePictureModal';
 import platformAlert from '../../utils/functions/platformAlert';
+import FeaturedEventsUser from './FeaturedEventsUser';
+import SecondaryHeader from '../../components/SecondaryHeader';
 
 interface UserDataProps {
 	name: string;
@@ -202,25 +203,39 @@ const ProfileScreen = () => {
 	);
 
 	return (
-		<View className='mx-2 h-[92%]'>
-			{
-				userData && (
-					<UserDetails
-						name={userData.name}
-						dateOfBirth={userData.date_of_birth}
-						photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
-						bio={userData.bio}
-						sex={userData.sex}
-						handlePressChat={handlePressChat}
-						setModalVisible={setModalVisible}
-						isCurrentUserProfile={isCurrentUserProfile}
-						user_id={user_id}
-						modalVisible={modalVisible}
-						setProfilePictureModalVisible={setProfilePictureModalVisible}
-						profilePictureModalVisible={profilePictureModalVisible}
-					/>
-				)
-			}
+		<>
+			<SecondaryHeader 
+				displayText={userData.name}
+			/>
+			<FeaturedEventsUser
+				UserDetails={
+					<>
+						<UserDetails
+							name={userData.name}
+							dateOfBirth={userData.date_of_birth}
+							photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
+							bio={userData.bio}
+							sex={userData.sex}
+							handlePressChat={handlePressChat}
+							setModalVisible={setModalVisible}
+							isCurrentUserProfile={isCurrentUserProfile}
+							user_id={user_id}
+							modalVisible={modalVisible}
+							setProfilePictureModalVisible={setProfilePictureModalVisible}
+							profilePictureModalVisible={profilePictureModalVisible}
+						/>
+						<UserInterests
+							user_id={user_id}
+							userInterests={userInterests!}
+							isCurrentUserProfile={isCurrentUserProfile}
+
+						/>
+						<Text className='text-lg font-semibold mb-2'>Events</Text>
+					</>
+
+				}
+				user_id={user_id}
+			/>
 			<UpdateBioModal
 				setModalVisible={setModalVisible}
 				closeModal={closeModal}
@@ -228,14 +243,6 @@ const ProfileScreen = () => {
 				setUserData={setUserData}
 				modalVisible={modalVisible}
 				updateUserDescription={updateUserDescription}
-			/>
-			<UserInterests
-				user_id={user_id}
-				userInterests={userInterests!}
-				isCurrentUserProfile={isCurrentUserProfile}
-			/>
-			<UserEvents
-				user_id={user_id}
 			/>
 			<ProfilePictureModal
 				setModalVisible={setProfilePictureModalVisible}
@@ -245,7 +252,8 @@ const ProfileScreen = () => {
 				pickImage={pickImage}
 				clearImage={clearImage}
 			/>
-		</View>
+		</>
+
 	)
 }
 export default ProfileScreen

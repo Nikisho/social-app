@@ -6,7 +6,7 @@ import SecondaryHeader from '../../components/SecondaryHeader'
 const LeaderboardScreen = () => {
 
   return (
-    <View className='flex space-y-2 mx-3 '>
+    <View className='flex space-y-2 '>
       <SecondaryHeader
         displayText='Leaderboard'
       />

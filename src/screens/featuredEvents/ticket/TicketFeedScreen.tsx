@@ -99,7 +99,7 @@ const TicketFeedScreen = () => {
         )
     };
     return (
-        <View className='p-3'>
+        <View className=''>
             <SecondaryHeader
                 displayText='My tickets'
             />

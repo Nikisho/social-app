@@ -64,9 +64,10 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
     );
 
     const SecondRoute = () => (
-        <FeaturedEventsUser
-            user_id={user_id}
-        />
+        // <FeaturedEventsUser
+        //     user_id={user_id}
+        // />
+        <></>
     );
 
     const renderScene = SceneMap({
@@ -74,21 +75,9 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
         second: SecondRoute
     });
 
-    const layout = useWindowDimensions();
-    const [index, setIndex] = useState(0);
     return (
         <View className='h-[51%] mt-5 flex space-y-2'>
             <View className='flex flex-row w-full'>
-                {/* <TouchableOpacity 
-                    onPress={() => setIndex(0)}
-                    className='w-1/2 border-r'>
-                    <Text className='text-lg text-center font-semibold'>Events</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={() => setIndex(1)}
-                    className='w-1/2 '>
-                    <Text className='text-lg text-center font-semibold'>Featured</Text>
-                </TouchableOpacity> */}
                 <View>
                     <Text className='text-lg font-bold'>
                         Events
@@ -131,9 +120,10 @@ const UserEvents = ({ user_id }: { user_id: number }) => {
                     //     renderTabBar={() => null} 
                     // />
 
-                    <FeaturedEventsUser 
-                        user_id={user_id}
-                    /> 
+                    // <FeaturedEventsUser 
+                    //     user_id={user_id}
+                    // /> 
+                    <></>
 
             }
 

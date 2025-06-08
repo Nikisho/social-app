@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../utils/types/types'
-import Ionicons from '@expo/vector-icons/Ionicons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import styles from '../utils/styles/shadow';
 
@@ -15,12 +14,12 @@ const SecondaryHeader:React.FC<SecondaryHeaderType> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>()
     return (
-        <View className='p-1 flex-row flex items-center space-x-5'>
+        <View className='flex-row flex items-center space-x-5 m-3'>
             <TouchableOpacity 
-                className="p-4 rounded-full justify-center items-center flex flex-r " 
+                className="p-3 rounded-full w-10 h-10 justify-center items-center flex flex-r " 
                 style={styles.shadowButtonStyle}
                 onPress={() => navigation.goBack()}>
-                <AntDesign name="arrowleft" size={19} color="white" />
+                <AntDesign name="arrowleft" size={18} color="white" />
             </TouchableOpacity>
             <Text className='text-2xl font-semibold w-4/5 '>
                 {displayText}

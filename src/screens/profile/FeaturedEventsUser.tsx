@@ -17,7 +17,7 @@ interface FeaturedEventCard {
     is_free: boolean;
 }
 
-const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
+const FeaturedEventsUser = ({ user_id, UserDetails }: { user_id: number, UserDetails: any }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [featuredEvents, setFeaturedEvents] = useState<FeaturedEventCard[] | null>(null);
 
@@ -104,29 +104,26 @@ const FeaturedEventsUser = ({ user_id }: { user_id: number }) => {
         )
     };
     return (
-        <View className='p-2 px-4
-                h-full
-                mx-[-8]
-                space-y-2
+        <View className='
+                px-3
+                pb-40
         '>
-            {
-                featuredEvents ?
-                    <FlatList
-                        data={featuredEvents}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.featured_event_id.toString()}
-                    /> :
-                    <View className="flex-1 bg-[#fffef4]  items-center justify-center px-6">
-                        <Text className="text-5xl mb-4 text-white">📭</Text>
-                        <Text className="text-xl font-semibold text-black mb-2">
-                            No Events Posted Yet
-                        </Text>
-                        <Text className="text-base text-black text-center">
-                            Featured events will appear here once available.
-                        </Text>
-                    </View>
-            }
-
+            <FlatList
+                data={featuredEvents}
+                ListHeaderComponent={UserDetails}
+                renderItem={renderItem}
+                ListEmptyComponent={
+                <View className="flex-1 bg-[#fffef4] items-center justify-center px-6">
+                    <Text className="text-5xl mb-4 text-white">📭</Text>
+                    <Text className="text-xl font-semibold text-black mb-2">
+                        No Events Posted Yet
+                    </Text>
+                    <Text className="text-base text-black text-center">
+                        Featured events will appear here once available.
+                    </Text>
+                </View>}
+                keyExtractor={item => item.featured_event_id.toString()}
+            />
         </View>
     )
 }

@@ -1,13 +1,16 @@
-import { View, Text, FlatList, Image } from 'react-native'
+import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../../supabase'
 import styles from '../../../utils/styles/shadow';
 import { FontAwesome } from '@expo/vector-icons';
 
+interface AttendeeProps {
+    id: number, users: {name: string, photo:string}
+}
 
 const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
 
-    const [attendees, setAttendees] = useState<{id: number, users: {name: string, photo:string}}[]>();
+    const [attendees, setAttendees] = useState<AttendeeProps[]>();
 
     const fetchAttendees = async () => {
         const { data, error } = await supabase
@@ -19,6 +22,7 @@ const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
                 )
             `)
             .eq('featured_event_id', featured_event_id)
+            
 
         if (data) {
             console.log(data);
@@ -30,13 +34,12 @@ const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
         }
     };
 
-
     useEffect(() => {
         fetchAttendees();
     }, [])
 
 
-    const renderItem = ({ item }: { item: any }) => {
+    const renderItem = ({ item }: { item: AttendeeProps }) => {
 
         return (
             <View className='m-2 mr-[-15]'>
@@ -54,16 +57,11 @@ const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
                         <FontAwesome name="user-circle" size={40} color="black" />
                     </View>
                 }
-
-
-                {/* <Text>
-                    {item.users.name}
-                </Text> */}
             </View>)
     }
 
     return (
-        <View className='p-2'>
+        <TouchableOpacity className='p-2'>
             <Text className='text-xl font-bold'>
                 Going { '  ' + attendees?.length.toString()}
             </Text>
@@ -74,7 +72,7 @@ const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
                 keyExtractor={item => item.id.toString()}
             />
 
-        </View>
+        </TouchableOpacity>
     )
 }
 

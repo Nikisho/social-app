@@ -130,7 +130,7 @@ const FeaturedEventsSubmitScreen = () => {
             // keyboardVerticalOffset={Platform.OS === 'ios' ?  47 : 0}
             style={{ flex: 1 }}
         >
-            <View className='p-3'>
+            <View className=''>
                 <SecondaryHeader
                     displayText='Create an event'
                 />

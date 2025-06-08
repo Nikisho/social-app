@@ -79,11 +79,11 @@ const FeaturedEventsScreenHeader = () => {
     return (
         <View className='p-3 flex flex-row items-center space-x-5 z-20'>
             <TouchableOpacity
-                className='rounded-full p-3 w-12 h-12 bg-black flex flex-row items-center justify-center'
+                className='rounded-full p-2 w-10 h-10 bg-black flex flex-row items-center justify-center'
                 style={styles.shadow}
                 onPress={createFeaturedEvent}
             >
-                <AntDesign name="plus" size={20} color="white" />
+                <AntDesign name="plus" size={25} color="white" />
             </TouchableOpacity>
 
             <Text className='text-2xl font-semibold '>
