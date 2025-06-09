@@ -16,7 +16,6 @@ const UpdateAppModal = () => {
   };
 
   const checkAppVersion = async () => {
-  // if (__DEV__) return;
     setLoading(true);
     const buildNumber = Constants.expoConfig?.ios?.buildNumber;
     const versionCode = Constants.expoConfig?.android?.versionCode;

@@ -23,7 +23,7 @@ const InputBox: React.FC<InputBoxProps> = ({ onSendMessage, setMedia }) => {
     };
 
     return (
-        <KeyboardAvoidingView className='flex justify-start flex-row px-3 my-2 space-x-3 items-center'
+        <KeyboardAvoidingView className='flex justify-start flex-row px-5 my-3 mb-10 space-x-3 items-center'
             behavior='padding'
             keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
         >

@@ -4,6 +4,7 @@ import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
 import Stripe from "npm:stripe@^11.16";
 import { supabaseAdmin } from '../_utils/supabase.ts'
 import { generateTicket } from '../_utils/generateTicket.ts'
+import { bookFeaturedEvent } from '../_utils/bookFeaturedEvent.tsx'
 // @ts-ignore
 const stripe = Stripe(Deno.env.get("STRIPE_API_KEY"));
 const server = Deno.listen({ port: 8080 });
@@ -36,8 +37,9 @@ async function handler(request: Request) {
         session.metadata.date,
       )
 
-      console.log(' ✅ Session received: ', session)
-      const { error } = await supabaseAdmin
+      console.log(' ✅ Session received: ', session);
+      
+      const { error, data } = await supabaseAdmin
         .from("ticket_transactions")
         .insert({
           stripe_payment_id: session.id,
@@ -48,10 +50,20 @@ async function handler(request: Request) {
           ticket_id: ticket_id,
           user_id: session.metadata.user_id,
           organizer_id: session.metadata.organizer_id
-        });
+        })
+        .select('ticket_transaction_id')
+        .single()
 
       if (error) throw error;
 
+      if (data) {
+        bookFeaturedEvent(
+          session.metadata.user_id,
+          session.metadata.featured_event_id,
+          session.metadata.tickets_sold,
+          data.ticket_transaction_id
+        )
+      }
       return new Response(JSON.stringify({ status: "success" }), {
         status: 200,
       });

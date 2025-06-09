@@ -8,7 +8,8 @@ interface UserDataProps {
     date_of_birth: Date | null;
     photo: string;
     bio: string;
-    sex: number | null
+    sex: number | null;
+    is_organizer: boolean | null
 }
 
 interface UpdateBioModalProps {

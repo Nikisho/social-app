@@ -17,7 +17,7 @@ interface FeaturedEventCard {
     is_free: boolean;
 }
 
-const FeaturedEventsUser = ({ user_id, UserDetails }: { user_id: number, UserDetails: any }) => {
+const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, HeaderContent: any }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [featuredEvents, setFeaturedEvents] = useState<FeaturedEventCard[] | null>(null);
 
@@ -110,18 +110,18 @@ const FeaturedEventsUser = ({ user_id, UserDetails }: { user_id: number, UserDet
         '>
             <FlatList
                 data={featuredEvents}
-                ListHeaderComponent={UserDetails}
+                ListHeaderComponent={HeaderContent}
                 renderItem={renderItem}
-                ListEmptyComponent={
-                <View className="flex-1 bg-[#fffef4] items-center justify-center px-6">
-                    <Text className="text-5xl mb-4 text-white">📭</Text>
-                    <Text className="text-xl font-semibold text-black mb-2">
-                        No Events Posted Yet
-                    </Text>
-                    <Text className="text-base text-black text-center">
-                        Featured events will appear here once available.
-                    </Text>
-                </View>}
+                // ListEmptyComponent={
+                // <View className="flex-1 bg-[#fffef4] items-center justify-center px-6">
+                //     <Text className="text-5xl mb-4 text-white">📭</Text>
+                //     <Text className="text-xl font-semibold text-black mb-2">
+                //         No Events Posted Yet
+                //     </Text>
+                //     <Text className="text-base text-black text-center">
+                //         Featured events will appear here once available.
+                //     </Text>
+                // </View>}
                 keyExtractor={item => item.featured_event_id.toString()}
             />
         </View>

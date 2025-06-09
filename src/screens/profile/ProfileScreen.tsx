@@ -21,6 +21,7 @@ interface UserDataProps {
 	photo: string;
 	bio: string;
 	sex: number | null
+	is_organizer: boolean | null
 
 }
 interface Interests {
@@ -39,7 +40,8 @@ const ProfileScreen = () => {
 		bio: '',
 		photo: '',
 		name: '',
-		sex: null
+		sex: null,
+		is_organizer: null
 	});
 	const currentUser = useSelector(selectCurrentUser);
 	const navigation = useNavigation<RootStackNavigationProp>();
@@ -204,11 +206,11 @@ const ProfileScreen = () => {
 
 	return (
 		<>
-			<SecondaryHeader 
+			<SecondaryHeader
 				displayText={userData.name}
 			/>
 			<FeaturedEventsUser
-				UserDetails={
+				HeaderContent={
 					<>
 						<UserDetails
 							name={userData.name}
@@ -230,7 +232,9 @@ const ProfileScreen = () => {
 							isCurrentUserProfile={isCurrentUserProfile}
 
 						/>
-						<Text className='text-lg font-semibold mb-2'>Events</Text>
+						{userData?.is_organizer &&
+							<Text className='text-lg font-semibold mb-2'>Events</Text>
+						}
 					</>
 
 				}

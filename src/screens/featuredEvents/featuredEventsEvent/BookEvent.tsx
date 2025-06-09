@@ -85,31 +85,32 @@ const BookEvent: React.FC<BookEventProps> = ({
             platformAlert("You've already booked tickets for this event");
             return;
         }
-        const { error } = await supabase
-            .from('featured_event_bookings')
-            .insert({
-                user_id: currentUser.id,
-                featured_event_id: featured_event_id,
-            })
-        if (error) {
-            console.error(error.message);
-        } else {
-            const { error } = await supabase
-                .from('featured_events')
-                .update({
-                    tickets_sold: tickets_sold + 1
-                })
-                .eq('featured_event_id', featured_event_id)
 
-            if (error)
-                console.error(error.message);
-        }
-        //generate the ticket is the event is free as for paid events
-        //it is generated in the backend
         if (is_free) {
+            const { error } = await supabase
+                .from('featured_event_bookings')
+                .insert({
+                    user_id: currentUser.id,
+                    featured_event_id: featured_event_id,
+                })
+            if (error) {
+                console.error(error.message);
+            } else {
+                const { error } = await supabase
+                    .from('featured_events')
+                    .update({
+                        tickets_sold: tickets_sold + 1
+                    })
+                    .eq('featured_event_id', featured_event_id)
+
+                if (error)
+                    console.error(error.message);
+            }
+            //generate the ticket is the event is free as for paid events
+            //it is generated in the backend
             const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
             const eventDate = new Date(date)
-            const { error } = await supabase
+            const { error:TicketsError } = await supabase
                 .from('tickets')
                 .insert({
                     user_id: currentUser.id,
@@ -117,8 +118,8 @@ const BookEvent: React.FC<BookEventProps> = ({
                     qr_code_link: qrValue,
                     expiry_date: new Date(eventDate.setDate(eventDate.getDate() + 1))
                 })
-            if (error) {
-                throw error.message;
+            if (TicketsError) {
+                throw TicketsError.message;
             }
         };
 
@@ -174,6 +175,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                 featured_event_id={featured_event_id}
                 handleBookEvent={handleBookEvent}
                 date={date}
+                tickets_sold={tickets_sold}
             />
         </View>
     )

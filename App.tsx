@@ -44,6 +44,7 @@ import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
 import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
 import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
 import { StatusBar } from 'react-native';
+import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -184,6 +185,7 @@ function App() {
 									<Stack.Screen name="ticket" component={TicketScreen} />
 									{/* <Stack.Screen name="meetups" component={MeetupsScreen} /> */}
 									<Stack.Screen name="profile" component={ProfileScreen} />
+									<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
 									<Stack.Screen name="submit" component={SubmitScreen} />
 									<Stack.Screen name="event" component={EventScreen} />
 									<Stack.Screen name="editevent" component={EditEventScreen} />
