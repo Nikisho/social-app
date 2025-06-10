@@ -16,6 +16,8 @@ interface BookEventCheckoutModalProps {
     featured_event_id: number;
     organizer_id: number
     date: Date
+    tickets_sold: number;
+    chat_room_id: number;
 }
 
 const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
@@ -26,12 +28,14 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     is_free,
     handleBookEvent,
     featured_event_id,
-    organizer_id
+    organizer_id,
+    chat_room_id,
+    tickets_sold
 }) => {
 
     const priceStripeAmount = Math.round(parseFloat(price) * 100);
     const currentUser = useSelector(selectCurrentUser);
-
+    console.log(chat_room_id)
     const fetchPaymentSheetParams = async (amount: number) => {
         const { data, error } = await supabase.functions.invoke(
             "create-checkout-session", {
@@ -40,7 +44,9 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 featured_event_id: featured_event_id,
                 organizer_id: organizer_id,
                 user_id: currentUser.id,
-                date: date
+                date: date,
+                tickets_sold: tickets_sold,
+                chat_room_id: chat_room_id
             },
         }
         );

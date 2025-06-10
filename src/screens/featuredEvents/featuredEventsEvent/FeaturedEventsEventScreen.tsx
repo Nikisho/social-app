@@ -26,6 +26,7 @@ interface EventDataProps {
     tickets_sold: number;
     date: Date;
     max_tickets: number;
+    chat_room_id: number
     organizers: {
         user_id: number
         users: {
@@ -84,7 +85,7 @@ const FeaturedEventsEventScreen = () => {
                                     {...eventData}
                                 />
                                 <Attendees 
-                                    featured_event_id={eventData?.featured_event_id}
+                                    {...eventData}
                                 />
                             </>
                         )

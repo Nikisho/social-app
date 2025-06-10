@@ -6,6 +6,7 @@ import styles from '../../../utils/styles/shadow';
 import SecondaryHeader from '../../../components/SecondaryHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AttendeeListScreenProps, RootStackNavigationProp } from '../../../utils/types/types';
+import Entypo from '@expo/vector-icons/Entypo';
 
 interface AttendeeProps {
     id: number;
@@ -17,7 +18,7 @@ const AttendeeListScreen = () => {
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
     const navigation = useNavigation<RootStackNavigationProp>();
     const route = useRoute<AttendeeListScreenProps>()
-    const { featured_event_id } = route.params
+    const { featured_event_id, chat_room_id } = route.params
 
     const fetchAttendees = async () => {
         const { data, error } = await supabase
@@ -76,11 +77,19 @@ const AttendeeListScreen = () => {
             <SecondaryHeader
                 displayText='Attendees'
             />
+            <View className='flex items-center'>
 
-            <View className=' my-4 self-center flex-row justify-center p-3 rounded-full bg-black'>
-                <Text className='text-lg text-white font-bold'>
-                    Chat with participants
-                </Text>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('featuredeventgroupchat', {
+                        chat_room_id: chat_room_id
+                    })}
+                    style={styles.shadow}
+                    className='p-3 my-5 w-1/3 rounded-full bg-black flex-row justify-center space-x-3 items-center'>
+                    <Entypo name="chat" size={24} color="white" />
+                    <Text className='text-lg text-white text-center font-bold'>
+                        Chat
+                    </Text>
+                </TouchableOpacity>
             </View>
 
             <FlatList

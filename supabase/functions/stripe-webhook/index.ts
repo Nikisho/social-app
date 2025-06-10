@@ -61,7 +61,8 @@ async function handler(request: Request) {
           session.metadata.user_id,
           session.metadata.featured_event_id,
           session.metadata.tickets_sold,
-          data.ticket_transaction_id
+          data.ticket_transaction_id,
+          session.metadata.chat_room_id,
         )
       }
       return new Response(JSON.stringify({ status: "success" }), {

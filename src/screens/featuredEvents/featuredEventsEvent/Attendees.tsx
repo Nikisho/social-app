@@ -10,7 +10,7 @@ interface AttendeeProps {
     id: number, users: {name: string, photo:string}
 }
 
-const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
+const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: number, chat_room_id:number}) => {
 
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
 
@@ -67,7 +67,8 @@ const Attendees = ({ featured_event_id }: { featured_event_id: number }) => {
     return (
         <TouchableOpacity 
             onPress={() => navigation.navigate('attendeelist', {
-                featured_event_id: featured_event_id
+                featured_event_id: featured_event_id,
+                chat_room_id: chat_room_id
             })}
             className='p-2'>
             <Text className='text-xl font-bold'>

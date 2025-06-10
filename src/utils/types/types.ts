@@ -31,7 +31,8 @@ export type RootStackParamList = {
   ticket: {ticket_id: number};
   ticketfeed: undefined;
   editfeaturedevent: {featured_event_id: number};
-  attendeelist: {featured_event_id: number};
+  attendeelist: {featured_event_id: number,chat_room_id: number};
+  featuredeventgroupchat: { chat_room_id: number};
 };
 
 // Define the navigation prop types
@@ -48,6 +49,7 @@ export type FeaturedEventsEventScreenRouteProps = RouteProp<RootStackParamList, 
 export type TicketScreenRouteProps = RouteProp<RootStackParamList, 'ticket'>;
 export type EditFeaturedEventScreenRouteProps = RouteProp<RootStackParamList, 'editfeaturedevent'>;
 export type AttendeeListScreenProps = RouteProp<RootStackParamList, 'attendeelist'>;
+export type FeaturedEventGroupChatScreenProps = RouteProp<RootStackParamList, 'featuredeventgroupchat'>;
 
 
 

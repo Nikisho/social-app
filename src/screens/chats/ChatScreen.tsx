@@ -59,7 +59,9 @@ const ChatScreen = () => {
       //No data returned so the room does not exist. We can make one 
       const { data: newChatRoom, error } = await supabase
         .from('chat_rooms')
-        .insert({})
+        .insert({
+          type: 'private'
+        })
         .select();
 
       const chatRoomId = newChatRoom![0].chat_room_id

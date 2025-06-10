@@ -45,6 +45,7 @@ import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScre
 import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
+import FeaturedEventGroupChatScreen from './src/screens/featuredEvents/featuredEventGroupChat/FeaturedEventGroupChatScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -192,6 +193,7 @@ function App() {
 									<Stack.Screen name="comment" component={SubmitCommentScreen} />
 									<Stack.Screen name="chatlist" component={ChatListScreen} />
 									<Stack.Screen name="chat" component={ChatScreen} />
+									<Stack.Screen name="featuredeventgroupchat" component={FeaturedEventGroupChatScreen} />
 									{/* <Stack.Screen name="search" component={SearchScreen} /> */}
 									<Stack.Screen name="eula" component={EulaScreen} />
 									<Stack.Screen name="settings" component={SettingsScreen} />

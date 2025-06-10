@@ -99,6 +99,18 @@ const FeaturedEventsSubmitScreen = () => {
         if (media) {
             await uploadEventMediaToStorageBucket(media.base64!, unique_file_identifier, organizer_id);
         }
+
+        const { data:chatRoomData, error:chatRoomError } = await supabase
+            .from('chat_rooms')
+            .insert({
+                type: 'group'
+            })
+            .select('chat_room_id')
+            .single();
+
+        if (chatRoomError) throw chatRoomError.message
+
+
         const { error } = await supabase
             .from('featured_events')
             .insert({
@@ -111,7 +123,8 @@ const FeaturedEventsSubmitScreen = () => {
                 time: extractTimeFromDateSubmit(eventData?.date),
                 organizer_id: organizer_id,
                 is_free: isFree,
-                max_tickets: eventData?.quantity
+                max_tickets: eventData?.quantity,
+                chat_room_id: chatRoomData?.chat_room_id
             })
         if (error) {
             console.error(error.message)

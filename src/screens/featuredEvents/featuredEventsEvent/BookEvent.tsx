@@ -17,6 +17,7 @@ interface BookEventProps {
     max_tickets: number;
     date: Date;
     organizer_id: number;
+    chat_room_id: number;
 
 }
 const BookEvent: React.FC<BookEventProps> = ({
@@ -26,7 +27,8 @@ const BookEvent: React.FC<BookEventProps> = ({
     organizer_id,
     tickets_sold,
     max_tickets,
-    date
+    date,
+    chat_room_id
 }) => {
     const currentUser = useSelector(selectCurrentUser);
     const isSoldOut = tickets_sold >= max_tickets;
@@ -108,6 +110,17 @@ const BookEvent: React.FC<BookEventProps> = ({
             }
             //generate the ticket is the event is free as for paid events
             //it is generated in the backend
+
+            const { error:participantsError } = await supabase
+                .from('participants')
+                .insert({
+                    user_id: currentUser.id,
+                    chat_room_id: chat_room_id
+                })
+            if (participantsError) {
+                console.error(participantsError.message);
+            }
+
             const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
             const eventDate = new Date(date)
             const { error:TicketsError } = await supabase
@@ -176,6 +189,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                 handleBookEvent={handleBookEvent}
                 date={date}
                 tickets_sold={tickets_sold}
+                chat_room_id={chat_room_id}
             />
         </View>
     )
