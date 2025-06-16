@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../../supabase';
 import { FontAwesome } from '@expo/vector-icons';
@@ -20,6 +20,7 @@ const AttendeeListScreen = () => {
     const route = useRoute<AttendeeListScreenProps>()
     const { featured_event_id, chat_room_id } = route.params
 
+    console.log(featured_event_id)
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
@@ -45,25 +46,25 @@ const AttendeeListScreen = () => {
         fetchAttendees();
     }, [])
 
-    const renderItem = ({ item }: { item: AttendeeProps }) => {
+    const RenderItem = ({ item }: { item: AttendeeProps }) => {
 
         return (
             <TouchableOpacity
                 onPress={() => navigation.navigate('profile', { user_id: item.user_id })}
                 style={styles.shadow}
-                className='mx-3 my-2  bg-white flex-row items-center space-x-5  p-2 rounded-xl'>
+                className='mx-3  bg-white my-2 items-center rounded-xl flex justify-between p-3 w-1/4 h-32'>
                 {item.users.photo ?
                     <Image
                         source={{
                             uri: item.users.photo
                         }}
-                        className='h-11 w-11 rounded-full'
+                        className='h-16 w-16 rounded-full '
                     />
                     :
                     <View className='bg-white rounded-full'
                         style={styles.shadow}
                     >
-                        <FontAwesome name="user-circle" size={40} color="black" />
+                        <FontAwesome name="user-circle" size={50} color="black" />
                     </View>
                 }
 
@@ -73,15 +74,16 @@ const AttendeeListScreen = () => {
             </TouchableOpacity>)
     }
     return (
-        <View>
+        <ScrollView className=''>
             <SecondaryHeader
                 displayText='Attendees'
             />
-            <View className='flex items-center'>
+            <View className='flex items-center my-5'>
 
                 <TouchableOpacity
                     onPress={() => navigation.navigate('featuredeventgroupchat', {
-                        chat_room_id: chat_room_id
+                        chat_room_id: chat_room_id,
+                        featured_event_id: featured_event_id
                     })}
                     style={styles.shadow}
                     className='p-3 my-5 w-1/3 rounded-full bg-black flex-row justify-center space-x-3 items-center'>
@@ -92,12 +94,18 @@ const AttendeeListScreen = () => {
                 </TouchableOpacity>
             </View>
 
-            <FlatList
-                data={attendees}
-                renderItem={renderItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </View>
+            <View className='flex flex-row flex-wrap justify-center '>
+                {
+                    attendees?.map((item) => (
+                        <RenderItem
+                            key={item.user_id}
+                            item={item}
+                        />
+                    ))
+                }
+            </View>
+
+        </ScrollView>
     )
 }
 

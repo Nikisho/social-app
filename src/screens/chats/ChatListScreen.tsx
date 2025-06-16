@@ -14,7 +14,10 @@ interface ChatDataProps {
 	receiver_name: string
 	content: string;
 	last_message_time: string;
-	room_id: number
+	room_id: number;
+	unique_key: string;
+	chat_room_id: number;
+	type: string
 };
 
 const ChatListScreen = () => {
@@ -22,7 +25,7 @@ const ChatListScreen = () => {
 	const currentUser = useSelector(selectCurrentUser);
 	const fetchReceivers = async () => {
 		const { error, data } = await supabase
-			.rpc('fetch_receivers', { current_user_id: currentUser.id });
+			.rpc('fetch_receivers_test_v2', { current_user_id: currentUser.id });
 		if (data) { setReceivers(data); }
 		if (error) { console.error(error.message); }
 	};
@@ -48,7 +51,7 @@ const ChatListScreen = () => {
 						className={`-mx-2 ${'h-[83%]'}`}
 						data={receivers}
 						renderItem={renderItem}
-						keyExtractor={(item: ChatDataProps) => item.receiver_id.toString()}
+						keyExtractor={(item: ChatDataProps) => item.unique_key}
 					/> :
 					<View className='h-full'>
 						<NoMessagesView/>

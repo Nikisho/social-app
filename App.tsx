@@ -224,7 +224,8 @@ const ConditionalNavbar = () => {
 
 	// Determine whether to show the Navbar
 	const showNavbar = currentRouteName !== 'chat'
-		&& currentRouteName !== 'featuredeventsevent';
+		&& currentRouteName !== 'featuredeventsevent'
+		&& currentRouteName !== 'featuredeventgroupchat';
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener(

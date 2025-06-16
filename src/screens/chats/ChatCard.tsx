@@ -16,7 +16,9 @@ interface ChatCardProps {
         receiver_name: string
         content: string
         last_message_time: string
-        room_id: number
+        room_id: number;
+        	chat_room_id: number;
+	type: string
     }
     currentUser: {
         id: number
@@ -40,6 +42,22 @@ const ChatCard: React.FC<ChatCardProps> = ({
         if (error) { throw error.message }
     };
 
+
+    const handleNavigate = () => {
+        if (item.type === 'group') {
+            navigation.navigate('featuredeventgroupchat',
+                { 
+                    featured_event_id: item.receiver_id,
+                    chat_room_id: item.room_id
+                 }
+            );
+        } else {
+            navigation.navigate('chat',
+                { user_id: item.receiver_id }
+            );
+        }
+    };
+
     useFocusEffect(
         React.useCallback(() => {
             fetchMessageCount()
@@ -47,11 +65,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
     );
     return (
         <TouchableOpacity
-            onPress={() => {
-                navigation.navigate('chat',
-                    { user_id: item.receiver_id }
-                );
-            }}
+            onPress={handleNavigate}
             className='flex flex-row px-4  py-3 items-center space-x-3'>
             {
                 item.receiver_photo ?

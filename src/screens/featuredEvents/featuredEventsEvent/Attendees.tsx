@@ -5,16 +5,20 @@ import styles from '../../../utils/styles/shadow';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../context/navSlice';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 interface AttendeeProps {
-    id: number, users: {name: string, photo:string}
+    id: number, users: { name: string, photo: string }
 }
 
-const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: number, chat_room_id:number}) => {
+const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: number, chat_room_id: number }) => {
 
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
 
     const navigation = useNavigation<RootStackNavigationProp>();
+    const currentUser = useSelector(selectCurrentUser);
 
     const fetchAttendees = async () => {
         const { data, error } = await supabase
@@ -22,11 +26,11 @@ const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: num
             .select(` *,
                 users(
                     name,
-                    photo
+                    photo,
+                    id
                 )
             `)
             .eq('featured_event_id', featured_event_id)
-            
 
         if (data) {
             console.log(data);
@@ -37,6 +41,18 @@ const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: num
             throw error.message;
         }
     };
+
+    const handleNavigate = async () => {
+        const attendeeIds = attendees?.map(attendee => attendee.id)
+        // if (!attendeeIds?.includes(currentUser.id )) {
+        //     platformAlert("Join the event to see who's going and chat with them!")
+        //     return;
+        // }
+        navigation.navigate('attendeelist', {
+            featured_event_id: featured_event_id,
+            chat_room_id: chat_room_id
+        })
+    }
 
     useEffect(() => {
         fetchAttendees();
@@ -65,18 +81,15 @@ const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: num
     }
 
     return (
-        <TouchableOpacity 
-            onPress={() => navigation.navigate('attendeelist', {
-                featured_event_id: featured_event_id,
-                chat_room_id: chat_room_id
-            })}
+        <TouchableOpacity
+            onPress={handleNavigate}
             className='p-2'>
             <Text className='text-xl font-bold'>
-                Going { '  ' + attendees?.length.toString()}
+                Going {'  ' + attendees?.length.toString()}
             </Text>
             <FlatList
                 horizontal
-                data={attendees}
+                data={attendees?.slice(0, 3)}
                 renderItem={renderItem}
                 keyExtractor={item => item.id.toString()}
             />
