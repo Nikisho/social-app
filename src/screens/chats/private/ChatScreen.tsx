@@ -1,17 +1,17 @@
 import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { ChatScreenRouteProp, RootStackNavigationProp } from '../../utils/types/types';
-import { supabase } from '../../../supabase';
+import { ChatScreenRouteProp, RootStackNavigationProp } from '../../../utils/types/types';
+import { supabase } from '../../../../supabase';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { selectCurrentUser } from '../../../context/navSlice';
 import ChatHeader from './ChatHeader';
 import InputBox from './InputBox';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ChatBody from './ChatBody';
-import SendMedia from './SendMedia';
+import SendMedia from '../SendMedia';
 import { decode } from 'base64-arraybuffer';
-import { uuidv4 } from '../../utils/functions/uuidv4';
+import { uuidv4 } from '../../../utils/functions/uuidv4';
 import { ImagePickerAsset } from 'expo-image-picker';
 
 interface UserDataProps {
@@ -47,39 +47,55 @@ const ChatScreen = () => {
     if (data) setUserData(data[0]);
     if (error) console.error(error.message);
   };
-  
+
   const fetchChatData = async () => {
-    //check if chat room exists
-    const { data, error } = await supabase
-      .rpc('fetch_chat_room', { user_id_1: user_id, user_id_2: currentUser.id });
-    if (data) {
-      setChatRoomIdState(data)
-      setMessagesRead(data)
+
+    const { data:existingChat, error:existingChatError } = await supabase
+      .from('private_chats')
+      .select()
+      .or(`and(user1_id.eq.${user_id},user2_id.eq.${currentUser.id}),and(user1_id.eq.${currentUser.id},user2_id.eq.${user_id})`)
+      .single();
+    if (existingChatError) {console.error( existingChatError.message)};
+
+    if (existingChat) {
+        setChatRoomIdState(existingChat.chat_room_id);
+        return existingChat.chat_room_id;
     } else {
-      //No data returned so the room does not exist. We can make one 
-      const { data: newChatRoom, error } = await supabase
-        .from('chat_rooms')
-        .insert({
-          type: 'private'
-        })
-        .select();
 
-      const chatRoomId = newChatRoom![0].chat_room_id
-      setMessagesRead(chatRoomId)
+        const { data: newChatRoom, error:newChatRoomError } = await supabase
+          .from('chat_rooms')
+          .insert({
+            type: 'private'
+          })
+          .select()
+          .single();
 
-      setChatRoomIdState(newChatRoom![0].chat_room_id);
-      //Now that we have inserted a row in the chat_rooms table, we can add two rows corresponding 
-      //To the participants with the chat_room_id
-      const { error: participantError } = await supabase.from('participants').insert([
-        { chat_room_id: chatRoomId, user_id: user_id },
-        { chat_room_id: chatRoomId, user_id: currentUser.id },
-      ]);
+        setChatRoomIdState(newChatRoom.chat_room_id);
+        if(newChatRoomError) {
+          console.error('Error adding chat room:', newChatRoomError);
+          return;
+        }
+        
+        const {error:privateChatError} =  await supabase.from('private_chats').insert({
+            user1_id: user_id,
+            user2_id: currentUser.id,
+            chat_room_id: newChatRoom.chat_room_id,
+          });
+        if(privateChatError) {
+          console.error('Error adding private chat:', privateChatError);
+          return;
+        }
 
-      if (participantError) {
-        console.error('Error adding participants:', participantError);
-        return;
-      }
+        const { error: participantError } = await supabase.from('participants').insert([
+          { chat_room_id: newChatRoom.chat_room_id, user_id: user_id },
+          { chat_room_id: newChatRoom.chat_room_id, user_id: currentUser.id },
+        ]);
+        if (participantError) {
+          console.error('Error adding participants:', participantError);
+          return;
+        }
     }
+
   };
   //When the user opens a chat here we set the unread messages to read in the DB
   //This is done in the chat screen directly to update no matter where the user opens the chat from
@@ -93,6 +109,7 @@ const ChatScreen = () => {
     if (error) { console.error(error.message) }
   }
   const fetchMessages = async () => {
+    // console.log(chatRoomIdState)
     //The room ID constant does not update right away, 
     // on the first render it has value undefined
     // so we return here, then once it updates the second render

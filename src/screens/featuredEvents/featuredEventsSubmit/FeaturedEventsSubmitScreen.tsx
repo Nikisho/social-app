@@ -1,7 +1,6 @@
-import { View, Text, TouchableOpacity, ScrollView, Switch, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useState } from 'react'
 import SecondaryHeader from '../../../components/SecondaryHeader'
-import { TextInput } from 'react-native-gesture-handler';
 import { ImagePickerAsset } from 'expo-image-picker';
 import MediaPicker from './MediaPicker';
 import { supabase } from '../../../../supabase';
@@ -10,10 +9,7 @@ import { uuidv4 } from '../../../utils/functions/uuidv4';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import LoadingScreen from '../../loading/LoadingScreen';
-import formatDate from '../../../utils/functions/formatDate';
 import extractTimeFromDateSubmit from '../../../utils/functions/extractTimeFromDateSubmit';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import DatePicker from 'react-native-date-picker';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
@@ -69,6 +65,8 @@ const FeaturedEventsSubmitScreen = () => {
             console.error('Conversion or upload error:', error);
         }
     };
+
+
     const fetchOrganizerId = async () => {
         const { error, data } = await supabase
             .from('organizers')
@@ -110,6 +108,14 @@ const FeaturedEventsSubmitScreen = () => {
 
         if (chatRoomError) throw chatRoomError.message
 
+        const {error:participantError } = await supabase
+            .from('participants')
+            .insert({
+                chat_room_id: chatRoomData.chat_room_id,
+                user_id: currentUser.id
+            })
+        if (participantError) throw participantError.message;
+        
 
         const { error } = await supabase
             .from('featured_events')

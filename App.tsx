@@ -16,7 +16,7 @@ import { Keyboard } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
-import ChatScreen from './src/screens/chats/ChatScreen';
+import ChatScreen from './src/screens/chats/private/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
 import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 import SearchScreen from './src/screens/search/SearchScreen';
@@ -45,7 +45,7 @@ import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScre
 import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
-import FeaturedEventGroupChatScreen from './src/screens/featuredEvents/featuredEventGroupChat/FeaturedEventGroupChatScreen';
+import GroupChatScreen from './src/screens/chats/group/GroupChatScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -193,7 +193,7 @@ function App() {
 									<Stack.Screen name="comment" component={SubmitCommentScreen} />
 									<Stack.Screen name="chatlist" component={ChatListScreen} />
 									<Stack.Screen name="chat" component={ChatScreen} />
-									<Stack.Screen name="featuredeventgroupchat" component={FeaturedEventGroupChatScreen} />
+									<Stack.Screen name="groupchat" component={GroupChatScreen} />
 									{/* <Stack.Screen name="search" component={SearchScreen} /> */}
 									<Stack.Screen name="eula" component={EulaScreen} />
 									<Stack.Screen name="settings" component={SettingsScreen} />
@@ -225,7 +225,7 @@ const ConditionalNavbar = () => {
 	// Determine whether to show the Navbar
 	const showNavbar = currentRouteName !== 'chat'
 		&& currentRouteName !== 'featuredeventsevent'
-		&& currentRouteName !== 'featuredeventgroupchat';
+		&& currentRouteName !== 'groupchat';
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener(

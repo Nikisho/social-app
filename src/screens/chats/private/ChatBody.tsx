@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
 import React from 'react';
-import colours from '../../utils/styles/colours';
-import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
+import colours from '../../../utils/styles/colours';
+import extractTimeFromDate from '../../../utils/functions/extractTimeFromDate';
 import Hyperlink from 'react-native-hyperlink';
 
 interface Message {
@@ -19,6 +19,7 @@ interface ChatProps {
 }
 
 const ChatBody: React.FC<ChatProps> = ({ currentUser, messages }) => {
+    console.log(messages)
     const renderItem = ({ item }: { item: Message }) => {
         const isCurrentUser = currentUser.id === item.sender_id;
         const formattedTime = extractTimeFromDate(item.created_at);

@@ -8,17 +8,18 @@ import colours from '../../utils/styles/colours';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
+import { getColorFromName } from '../../utils/functions/getColorFromName';
 
 interface ChatCardProps {
     item: {
-        receiver_id: number
-        receiver_photo: string
-        receiver_name: string
-        content: string
-        last_message_time: string
-        room_id: number;
-        	chat_room_id: number;
-	type: string
+        user_id: number;
+        featured_event_id:number;
+        title: string;
+        photo: string;
+        last_message_content: string;
+        last_message_time: string;
+        chat_room_id: number;
+        type: string;
     }
     currentUser: {
         id: number
@@ -35,25 +36,24 @@ const ChatCard: React.FC<ChatCardProps> = ({
         const { error, data } = await supabase
             .from('messages')
             .select('*', { count: 'exact' })
-            .eq('chat_room_id', item.room_id)
+            .eq('chat_room_id', item.chat_room_id)
             .eq('read_by_recipient', false)
             .neq('sender_id', currentUser.id)
         if (data) { setUnreadMessageCount(data.length) }
         if (error) { throw error.message }
     };
 
-
     const handleNavigate = () => {
+
         if (item.type === 'group') {
-            navigation.navigate('featuredeventgroupchat',
-                { 
-                    featured_event_id: item.receiver_id,
-                    chat_room_id: item.room_id
-                 }
+            navigation.navigate('groupchat',
+                {
+                    featured_event_id: item.featured_event_id,
+                }
             );
         } else {
             navigation.navigate('chat',
-                { user_id: item.receiver_id }
+                { user_id: item.user_id }
             );
         }
     };
@@ -66,9 +66,9 @@ const ChatCard: React.FC<ChatCardProps> = ({
     return (
         <TouchableOpacity
             onPress={handleNavigate}
-            className='flex flex-row px-4  py-3 items-center space-x-3'>
+            className='flex flex-row px-5 py-3 items-center space-x-3'>
             {
-                item.receiver_photo ?
+                item.photo ?
                     <View
                         style={styles.shadow}
                         className='bg-white rounded-full'
@@ -77,45 +77,62 @@ const ChatCard: React.FC<ChatCardProps> = ({
                         <Image
                             className='w-12 h-12 rounded-full'
                             source={{
-                                uri: item.receiver_photo,
+                                uri: item.photo,
                             }}
                         />
                     </View>
 
                     :
-                    <View className='bg-white rounded-full'
-                        style={styles.shadow}
+                    <View
+                        style={{
+                            backgroundColor: getColorFromName(item.title),
+                            width: 45,
+                            height: 45,
+                            borderRadius: 30,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: 5,
+                            borderWidth: 1
+                        }}
                     >
-                        <FontAwesome name="user-circle" size={50} color="black" />
+                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                            {item.title.charAt(0).toUpperCase()}
+                        </Text>
                     </View>
             }
             <View className='flex flex-row justify-between grow' >
                 <View>
 
                     <Text>
-                        {item.receiver_name}
+                        {item.title}
                     </Text>
                     {
-                        item.content ?
+                        item.last_message_content ?
                             <Text
                                 numberOfLines={1}
 
                                 style={{ fontSize: 12, width: 220 }}
-                                className={`text-gray-600 ${!item.content && 'italic'}`}
+                                className={`text-gray-600 ${!item.last_message_content && 'italic'}`}
                             >
-                                {item.content}
+                                {item.last_message_content}
                             </Text>
                             :
-                            <MaterialIcons name="insert-photo" size={24} color="black" />}
+                            <></>
+                        // <MaterialIcons name="insert-photo" size={24} color="black" />
+                    }
                 </View>
 
 
             </View>
             <View>
 
-                <Text style={{ fontSize: 10 }}>
-                    {extractTimeFromDate(item.last_message_time)}
-                </Text>
+                {
+                    item.last_message_time && (
+                        <Text style={{ fontSize: 10 }}>
+                            {extractTimeFromDate(item.last_message_time)}
+                        </Text>
+                    )
+                }
                 {
                     unreadMessageCount !== 0 && (
                         <View className='flex flex-row items-center justify-end grow '

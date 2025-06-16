@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 
 interface ChatHeaderProps {
     title: string;
@@ -18,13 +19,13 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
     featured_event_id,
 }) => {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<RootStackNavigationProp>();
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
 
     return (
         <View className='flex flex-row justify-between items-center bg-gray-200'>
 
-            <TouchableOpacity
+            <View
 
                 // style={{backgroundColor: colours.secondaryColour}}
                 className='p-2 py-3 flex  flex-row space-x-3 items-center '>
@@ -36,20 +37,23 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
                         <>
                             <FontAwesome name="user-circle" size={40} color="black" />
                         </> :
-                        <>
+                        <TouchableOpacity onPress={() => navigation.navigate('featuredeventsevent', {
+                            featured_event_id: featured_event_id
+                        })}>
+
                             <Image
                                 className='w-12 h-12 rounded-full'
                                 source={{
                                     uri: image_url,
                                 }}
-                            />
-                        </>
+                                />
+                        </TouchableOpacity>
                 }
                 <Text className='text-black text-lg'>
                     {title}
                 </Text>
 
-            </TouchableOpacity>
+            </View>
             {/* <TouchableOpacity onPress={() => setOpenDropDown(!openDropDown)}>
                 <Entypo name="dots-three-vertical" size={24} color="black" />
             </TouchableOpacity> */}

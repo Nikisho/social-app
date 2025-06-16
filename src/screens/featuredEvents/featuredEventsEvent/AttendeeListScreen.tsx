@@ -81,8 +81,7 @@ const AttendeeListScreen = () => {
             <View className='flex items-center my-5'>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('featuredeventgroupchat', {
-                        chat_room_id: chat_room_id,
+                    onPress={() => navigation.navigate('groupchat', {
                         featured_event_id: featured_event_id
                     })}
                     style={styles.shadow}

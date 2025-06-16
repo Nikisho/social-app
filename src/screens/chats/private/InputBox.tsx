@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MediaAttachment from './MediaAttachment';
+import MediaAttachment from '../MediaAttachment';
 import { ImagePickerAsset } from 'expo-image-picker';
 
 interface InputBoxProps {

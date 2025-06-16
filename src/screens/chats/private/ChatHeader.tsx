@@ -2,9 +2,9 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import { RootStackNavigationProp } from '../../utils/types/types';
+import { RootStackNavigationProp } from '../../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
-import styles from '../../utils/styles/shadow';
+import styles from '../../../utils/styles/shadow';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface ChatHeaderProps {
