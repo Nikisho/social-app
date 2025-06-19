@@ -28,8 +28,8 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
             <View
 
                 // style={{backgroundColor: colours.secondaryColour}}
-                className='p-2 py-3 flex  flex-row space-x-3 items-center '>
-                <TouchableOpacity className='mr-4' onPress={() => {navigation.goBack()}}>
+                className='p-2 py-3 flex flex-row space-x-3 items-center '>
+                <TouchableOpacity className='mr-1' onPress={() => {navigation.goBack()}}>
                     <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
                 </TouchableOpacity>
                 {
@@ -49,7 +49,9 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
                                 />
                         </TouchableOpacity>
                 }
-                <Text className='text-black text-lg'>
+                <Text 
+                    numberOfLines={1} style={{ width: 200 }}
+                    className='text-black text-lg'>
                     {title}
                 </Text>
 

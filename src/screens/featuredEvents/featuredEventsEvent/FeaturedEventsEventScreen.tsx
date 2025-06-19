@@ -64,7 +64,7 @@ const FeaturedEventsEventScreen = () => {
     }
     useEffect(() => {
         fetchEventData();
-    }, []);
+    }, [featured_event_id]);
     return (
         <>
             <View>

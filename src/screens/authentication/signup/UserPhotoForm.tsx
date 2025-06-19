@@ -44,7 +44,7 @@ const UserPhotoForm: React.FC<UserPhotoFormProps> = ({
                     Let's make your profile stand out!
                 </Text>
                 <Text className=' py-1'>
-                    Add a profile picture so others can recognise you.
+                    Add a picture of yourself so others can recognise you.
                 </Text>
             </View>
             <TouchableOpacity 

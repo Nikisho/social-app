@@ -9,11 +9,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
 import { getColorFromName } from '../../utils/functions/getColorFromName';
+import platformAlert from '../../utils/functions/platformAlert';
+import checkProfilePicture from '../../utils/functions/checkProfilePicture';
 
 interface ChatCardProps {
     item: {
         user_id: number;
-        featured_event_id:number;
+        featured_event_id: number;
         title: string;
         photo: string;
         last_message_content: string;
@@ -43,14 +45,19 @@ const ChatCard: React.FC<ChatCardProps> = ({
         if (error) { throw error.message }
     };
 
-    const handleNavigate = () => {
+    const handleNavigate = async () => {
 
         if (item.type === 'group') {
-            navigation.navigate('groupchat',
-                {
-                    featured_event_id: item.featured_event_id,
-                }
-            );
+
+            const userHasPhoto = await checkProfilePicture(currentUser.id);
+            if (!userHasPhoto) {
+                platformAlert('Add a profile picture to chat with attendees!');
+                return;
+            }
+            navigation.navigate('groupchat', {
+                featured_event_id: item.featured_event_id
+            })
+
         } else {
             navigation.navigate('chat',
                 { user_id: item.user_id }
@@ -103,8 +110,10 @@ const ChatCard: React.FC<ChatCardProps> = ({
             <View className='flex flex-row justify-between grow' >
                 <View>
 
-                    <Text>
-                        {item.title}
+                    <Text
+                        numberOfLines={1} style={{ width: 220 }}
+                    >
+                        {item.title} 
                     </Text>
                     {
                         item.last_message_content ?
@@ -114,11 +123,21 @@ const ChatCard: React.FC<ChatCardProps> = ({
                                 style={{ fontSize: 12, width: 220 }}
                                 className={`text-gray-600 ${!item.last_message_content && 'italic'}`}
                             >
-                                {item.last_message_content}
+                                {item.last_message_content} 
                             </Text>
                             :
-                            <></>
-                        // <MaterialIcons name="insert-photo" size={24} color="black" />
+                            <>
+                                {item.type === 'group' && (
+                                    <Text className='text-gray-600 italic'>
+                                        Start connecting with fellow attendees!
+                                    </Text>
+                                )}
+
+                                {item.type === 'private' && (
+                                    <MaterialIcons name="insert-photo" size={24} color="black" />
+                                )}
+
+                            </>
                     }
                 </View>
 

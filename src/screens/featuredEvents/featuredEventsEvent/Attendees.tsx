@@ -8,18 +8,22 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import platformAlert from '../../../utils/functions/platformAlert';
+import { getColorFromName } from '../../../utils/functions/getColorFromName';
 
 interface AttendeeProps {
-    id: number, users: { name: string, photo: string }
+    id: number;
+    users: { name: string, photo: string, id: number }
 }
 
-const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: number, chat_room_id: number }) => {
+const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_event_id: number, chat_room_id: number, organizers: { user_id: number } }) => {
 
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
 
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
+    const isOrganizer = currentUser.id === organizers.user_id;
 
+    console.log(isOrganizer)
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
@@ -42,12 +46,15 @@ const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: num
         }
     };
 
+
     const handleNavigate = async () => {
-        const attendeeIds = attendees?.map(attendee => attendee.id)
-        // if (!attendeeIds?.includes(currentUser.id )) {
-        //     platformAlert("Join the event to see who's going and chat with them!")
-        //     return;
-        // }
+        await fetchAttendees();
+        const attendeeIds = attendees?.map(attendee => attendee.users.id)
+        // console.log(attendeeIds)
+        if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
+            platformAlert("Join the event to see who's going and chat with them!")
+            return;
+        }
         navigation.navigate('attendeelist', {
             featured_event_id: featured_event_id,
             chat_room_id: chat_room_id
@@ -62,7 +69,7 @@ const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: num
     const renderItem = ({ item }: { item: AttendeeProps }) => {
 
         return (
-            <View className='m-2 mr-[-15]'>
+            <View className='m-1'>
                 {item.users.photo ?
                     <Image
                         source={{
@@ -71,10 +78,21 @@ const Attendees = ({ featured_event_id, chat_room_id }: { featured_event_id: num
                         className='h-11 w-11 rounded-full border'
                     />
                     :
-                    <View className='bg-white rounded-full'
-                        style={styles.shadow}
+                    <View
+                        style={{
+                            backgroundColor: getColorFromName(item.users.name),
+                            width: 45,
+                            height: 45,
+                            borderRadius: 30,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: 5,
+                            borderWidth: 1
+                        }}
                     >
-                        <FontAwesome name="user-circle" size={40} color="black" />
+                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                            {item.users.name.charAt(0).toUpperCase()}
+                        </Text>
                     </View>
                 }
             </View>)

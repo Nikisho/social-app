@@ -114,8 +114,8 @@ android {
         applicationId 'com.linkzy'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "1.2.6"
+        versionCode 21
+        versionName "1.2.7"
     }
     signingConfigs {
         debug {

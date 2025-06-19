@@ -12,6 +12,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import DropdownMenu from '../../../components/DropdownMenu';
 import { FontAwesome } from '@expo/vector-icons';
 import BecomeAnOrganizerModal from '../../organizerOnboarding/BecomeAnOrganizerModal';
+import StripePendingModal from '../../organizerOnboarding/StripePendingModal';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 
@@ -20,6 +21,7 @@ const FeaturedEventsScreenHeader = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const [openMenu, setOpenMenu] = useState(false);
+    const [stripePendingModalVisible, setStripePendingModalVisible] = useState<boolean>(false);
     const [becomeAnOrganizerModalVisible, setBecomeAnOrganizerModalVisible] = useState<boolean>(false)
     const navigateProfile = () => {
         navigation.navigate('profile',
@@ -51,6 +53,35 @@ const FeaturedEventsScreenHeader = () => {
         }
     };
 
+    const checkOrganiserChargeEnabled = async () => {
+        const forwardurl = 'https://wffeinvprpdyobervinr.supabase.co';
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
+        const { data, error } = await supabase
+            .from('organizers')
+            .select('stripe_account_id')
+            .eq('user_id', currentUser.id)
+            .single()
+        if (error) {
+            console.error(error.message);
+        }
+
+        if (data) {
+            const response = await fetch(`${forwardurl}/functions/v1/check-charges-enabled`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    stripe_account_id: `${data.stripe_account_id}`
+                }),
+            });
+            const result = await response.json();
+            return result;
+        }
+    };
+
     const createFeaturedEvent = async () => {
         const { data, error } = await supabase
             .from('users')
@@ -67,7 +98,19 @@ const FeaturedEventsScreenHeader = () => {
             setBecomeAnOrganizerModalVisible(true);
             return;
         }
-        navigation.navigate('featuredEventsSubmit')
+
+        if (data.is_organizer) {
+            const isChargeEnabled =  await checkOrganiserChargeEnabled();
+            console.log(isChargeEnabled)
+             if (isChargeEnabled.success) {
+                navigation.navigate('featuredEventsSubmit')
+             } 
+
+             if (!isChargeEnabled.success) {
+                setStripePendingModalVisible(true);
+                return;
+             }
+        }
     };
 
     useFocusEffect(
@@ -111,6 +154,11 @@ const FeaturedEventsScreenHeader = () => {
                 <BecomeAnOrganizerModal
                     modalVisible={becomeAnOrganizerModalVisible}
                     setModalVisible={setBecomeAnOrganizerModalVisible}
+                />
+                <StripePendingModal
+                    modalVisible={stripePendingModalVisible}
+                    setModalVisible={setStripePendingModalVisible}
+                    onRetry={createFeaturedEvent}
                 />
             </View>
             {

@@ -204,7 +204,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                 style={{
                                     width: '100%',
                                     height: 50,
-                                    borderColor: 'white',
+                                    borderColor: Platform.OS === 'ios' ? 'white' : '',
                                     borderWidth: 1,
                                     borderRadius: 100
                     

@@ -204,7 +204,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
             </View>
 
             {/* Following banner */}
-            <View className='flex-row justify-center space-x-20'>
+            {/* <View className='flex-row justify-center space-x-20'>
                 <View className='p-3 b justify-center flex'>
                     <Text className='text-center font-bold text-lg'>20</Text>
                     <Text className='text-center text-sm'>
@@ -217,7 +217,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                         Followers
                     </Text>
                 </View>
-            </View>
+            </View> */}
 
 
             <View className='flex flex-row items-center space-x-3 mb-3'>

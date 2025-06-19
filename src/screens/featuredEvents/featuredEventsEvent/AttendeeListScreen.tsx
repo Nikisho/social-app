@@ -7,6 +7,10 @@ import SecondaryHeader from '../../../components/SecondaryHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AttendeeListScreenProps, RootStackNavigationProp } from '../../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
+import checkProfilePicture from '../../../utils/functions/checkProfilePicture';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../context/navSlice';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 interface AttendeeProps {
     id: number;
@@ -19,8 +23,8 @@ const AttendeeListScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const route = useRoute<AttendeeListScreenProps>()
     const { featured_event_id, chat_room_id } = route.params
+    const currentUser = useSelector(selectCurrentUser);
 
-    console.log(featured_event_id)
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
@@ -41,6 +45,17 @@ const AttendeeListScreen = () => {
             throw error.message;
         }
     };
+
+    const handleNavigate = async () => {
+        const userHasPhoto = await checkProfilePicture(currentUser.id);
+        if (!userHasPhoto) {
+            platformAlert('Add a profile picture to chat with attendees!');
+            return;
+        }
+        navigation.navigate('groupchat', {
+            featured_event_id: featured_event_id
+        })
+    }
 
     useEffect(() => {
         fetchAttendees();
@@ -81,9 +96,7 @@ const AttendeeListScreen = () => {
             <View className='flex items-center my-5'>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('groupchat', {
-                        featured_event_id: featured_event_id
-                    })}
+                    onPress={handleNavigate}
                     style={styles.shadow}
                     className='p-3 my-5 w-1/3 rounded-full bg-black flex-row justify-center space-x-3 items-center'>
                     <Entypo name="chat" size={24} color="white" />

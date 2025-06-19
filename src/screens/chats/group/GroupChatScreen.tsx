@@ -45,7 +45,6 @@ const GroupChatScreen = () => {
     const { featured_event_id } = route.params;
     const [messages, setMessages] = useState<ArrayLike<Message>>([]);
     const [eventData, setEventData] = useState<EventDataProps | null>(null)
-
     
     const fetchEventData = async () => {
         const { data, error } = await supabase
@@ -56,10 +55,8 @@ const GroupChatScreen = () => {
 
         if (error) {
             console.error(error.message)
-            return;
         }
         if (data) {
-            console.log(data)
             setEventData(data)
         }
     };
@@ -93,7 +90,6 @@ const GroupChatScreen = () => {
 
         if (data) {
             setMessages(data);
-            console.log(data)
             setMessagesRead(eventData?.chat_room_id)
         }
         if (error) console.error(error.message);

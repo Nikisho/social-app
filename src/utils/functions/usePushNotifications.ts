@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
 import Constants from "expo-constants";
 
 import { Platform } from "react-native";
-import { navigate } from "./navigationRef";
+import { navigate, navigationRef } from "./navigationRef";
+import { CommonActions } from "@react-navigation/native";
 
 export interface PushNotificationState {
     expoPushToken?: Notifications.ExpoPushToken;
     notification?: Notifications.Notification;
 }
-
 
 export const usePushNotifications = (): PushNotificationState => {
     Notifications.setNotificationHandler({
@@ -32,16 +32,18 @@ export const usePushNotifications = (): PushNotificationState => {
 
     const notificationListener = useRef<Notifications.Subscription>();
     const responseListener = useRef<Notifications.Subscription>();
+    const hasNavigated = useRef(false);
 
     async function registerForPushNotificationsAsync() {
         let token;
         if (Device.isDevice) {
-            const { status: existingStatus } =
-                await Notifications.getPermissionsAsync();
+            const { status: existingStatus } = await Notifications
+                .getPermissionsAsync();
             let finalStatus = existingStatus;
 
             if (existingStatus !== "granted") {
-                const { status } = await Notifications.requestPermissionsAsync();
+                const { status } = await Notifications
+                    .requestPermissionsAsync();
                 finalStatus = status;
             }
             if (finalStatus !== "granted") {
@@ -50,7 +52,8 @@ export const usePushNotifications = (): PushNotificationState => {
             }
 
             token = await Notifications.getExpoPushTokenAsync({
-                projectId: Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId,
+                projectId: Constants?.expoConfig?.extra?.eas?.projectId ??
+                    Constants?.easConfig?.projectId,
             });
         } else {
             //alert("Must be using a physical device for Push notifications");
@@ -72,34 +75,39 @@ export const usePushNotifications = (): PushNotificationState => {
             setExpoPushToken(token);
         });
 
-        notificationListener.current =
-            Notifications.addNotificationReceivedListener((notification) => {
+        notificationListener.current = Notifications
+            .addNotificationReceivedListener((notification) => {
                 setNotification(notification);
             });
 
-        responseListener.current =
-            Notifications.addNotificationResponseReceivedListener((response) => {
+        responseListener.current = Notifications
+            .addNotificationResponseReceivedListener((response) => {
+
                 console.log(response);
                 {
+                    if (hasNavigated.current) return;
+
                     const data = response.notification.request.content.data;
-            
-                    console.log('Notification tapped with data:', data);
-            
-                    if (data?.screen === 'EventDetails' && data?.eventId) {
-                        navigate('event', { event_id: data.eventId });
+
+                    if (data?.screen === "ChatScreen" && data?.userId) {
+                        hasNavigated.current = true;
+                        navigate("chat", { user_id: data.userId });
                     }
-                    if (data?.screen === 'ChatScreen' && data?.userId) {
-                        navigate('chat', { user_id: data.userId });
+                    if (data?.screen === "GroupChatScreen" && data?.featuredEventId) {
+                        hasNavigated.current = true;
+                        navigate("groupchat", { featured_event_id: data.featuredEventId });
                     }
                 }
             });
 
         return () => {
             Notifications.removeNotificationSubscription(
-                notificationListener.current!
+                notificationListener.current!,
             );
 
-            Notifications.removeNotificationSubscription(responseListener.current!);
+            Notifications.removeNotificationSubscription(
+                responseListener.current!,
+            );
         };
     }, []);
 

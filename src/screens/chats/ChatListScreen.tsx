@@ -29,7 +29,6 @@ const ChatListScreen = () => {
 			supabase.rpc('fetch_private_chats', { current_user_id: currentUser.id }),
 			supabase.rpc('fetch_group_chats', { current_user_id: currentUser.id })
 		]);
-
 		if (privateRes.error) console.error('Private chat error:', privateRes.error.message);
 		if (groupRes.error) console.error('Group chat error:', groupRes.error.message);
 

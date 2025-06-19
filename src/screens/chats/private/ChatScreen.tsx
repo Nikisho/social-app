@@ -1,6 +1,6 @@
-import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
+import { Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { ChatScreenRouteProp, RootStackNavigationProp } from '../../../utils/types/types';
 import { supabase } from '../../../../supabase';
 import { useSelector } from 'react-redux';

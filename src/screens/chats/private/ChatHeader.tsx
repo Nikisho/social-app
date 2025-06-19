@@ -33,7 +33,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                 )}
                 // style={{backgroundColor: colours.secondaryColour}}
                 className='p-2 py-3 flex  flex-row space-x-3 items-center '>
-                <TouchableOpacity className='mr-4' onPress={() => {navigation.goBack()}}>
+                <TouchableOpacity className='mr-2' onPress={() => {navigation.goBack()}}>
                     <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
                 </TouchableOpacity>
                 {
@@ -50,7 +50,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                             />
                         </>
                 }
-                <Text className='text-black text-lg'>
+                <Text 
+                    numberOfLines={1} style={{ width: 200 }}
+                    className='text-black text-lg'>
                     {name}
                 </Text>
 
