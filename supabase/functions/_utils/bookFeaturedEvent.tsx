@@ -23,7 +23,7 @@ export const bookFeaturedEvent = async (
             const { error } = await supabaseAdmin
                 .from('featured_events')
                 .update({
-                    tickets_sold: tickets_sold + 1
+                    tickets_sold: Number(tickets_sold) + 1
                 })
                 .eq('featured_event_id', featured_event_id)
 

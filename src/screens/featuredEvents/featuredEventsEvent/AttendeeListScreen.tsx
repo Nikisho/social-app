@@ -67,7 +67,7 @@ const AttendeeListScreen = () => {
             <TouchableOpacity
                 onPress={() => navigation.navigate('profile', { user_id: item.user_id })}
                 style={styles.shadow}
-                className='mx-3  bg-white my-2 items-center rounded-xl flex justify-between p-3 w-1/4 h-32'>
+                className='mx-3  bg-white my-2 items-center rounded-xl flex justify-between p-3 w-1/3 h-32'>
                 {item.users.photo ?
                     <Image
                         source={{
@@ -83,7 +83,10 @@ const AttendeeListScreen = () => {
                     </View>
                 }
 
-                <Text className='text-lg'>
+                <Text 
+                    numberOfLines={1} 
+                    style={{width: 100}}
+                    className='text-lg text-center'>
                     {item.users.name}
                 </Text>
             </TouchableOpacity>)
@@ -106,16 +109,17 @@ const AttendeeListScreen = () => {
                 </TouchableOpacity>
             </View>
 
-            <View className='flex flex-row flex-wrap justify-center '>
+            <View className='flex flex-row flex-wrap justify-center'>
+
                 {
                     attendees?.map((item) => (
                         <RenderItem
-                            key={item.user_id}
-                            item={item}
+                        key={item.user_id}
+                        item={item}
                         />
                     ))
                 }
-            </View>
+                </View>
 
         </ScrollView>
     )

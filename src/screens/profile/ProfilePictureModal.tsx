@@ -45,7 +45,7 @@ const ProfilePictureModal: React.FC<ProfilePictureModalTypes> = ({
                                     <Image
                                         className='w-full h-full'
                                         source={{
-                                            uri: `${photo}`,
+                                            uri: `${photo}t=${new Date()}`,
                                         }}
                                     />
                                 ) :

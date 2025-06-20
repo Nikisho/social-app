@@ -1,8 +1,6 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../../supabase'
-import styles from '../../../utils/styles/shadow';
-import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import { useSelector } from 'react-redux';
@@ -23,7 +21,6 @@ const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_e
     const currentUser = useSelector(selectCurrentUser);
     const isOrganizer = currentUser.id === organizers.user_id;
 
-    console.log(isOrganizer)
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
@@ -37,19 +34,28 @@ const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_e
             .eq('featured_event_id', featured_event_id)
 
         if (data) {
-            console.log(data);
             setAttendees(data);
+            return data;
         }
 
         if (error) {
             throw error.message;
         }
+
+        return null;
     };
 
 
     const handleNavigate = async () => {
-        await fetchAttendees();
-        const attendeeIds = attendees?.map(attendee => attendee.users.id)
+        // const attendeeIds = data?.map(attendee => attendee.users.id);
+        const response  =  await fetchAttendees();
+        const attendeeIds = response?.map(attendee => attendee.users.id);
+
+        if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
+            platformAlert("Join the event to see who's going and chat with them!");
+            return;
+        }
+        // const attendeeIds = attendees?.map(attendee => attendee.users.id)
         // console.log(attendeeIds)
         if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
             platformAlert("Join the event to see who's going and chat with them!")

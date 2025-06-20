@@ -5,7 +5,7 @@ import { selectCurrentUser } from '../../../context/navSlice'
 import SecondaryHeader from '../../../components/SecondaryHeader'
 import { supabase } from '../../../../supabase'
 import { FlatList } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../../utils/types/types'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
 import styles from '../../../utils/styles/shadow'
@@ -63,6 +63,12 @@ const TicketFeedScreen = () => {
     useEffect(() => {
         fetchTickets()
     }, []);
+
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         fetchTickets()
+    //     }, [])
+    // );
 
     const renderItem = ({ item }: { item: any }) => {
         return (
