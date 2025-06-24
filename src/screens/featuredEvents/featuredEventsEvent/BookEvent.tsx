@@ -82,12 +82,6 @@ const BookEvent: React.FC<BookEventProps> = ({
     }
 
     const handleBookEvent = async () => {
-        const canPost = await canBook();
-        if (canPost === false) {
-            platformAlert("You've already booked tickets for this event");
-            return;
-        }
-
         if (is_free) {
             const { error } = await supabase
                 .from('featured_event_bookings')
