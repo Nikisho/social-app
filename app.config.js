@@ -37,7 +37,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.2.7",
+    version: "1.2.8",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -51,7 +51,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.2.1',
+      buildNumber: '1.2.2',
       // deploymentTarget: "12.0"
     },
     android: {
