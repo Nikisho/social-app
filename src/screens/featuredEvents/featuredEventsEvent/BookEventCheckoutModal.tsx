@@ -1,5 +1,5 @@
 import { View, Text, Modal, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { supabase } from '../../../../supabase';
 import { confirmPlatformPayPayment, initPaymentSheet, isPlatformPaySupported, PlatformPay, presentPaymentSheet } from '@stripe/stripe-react-native';
 import platformAlert from '../../../utils/functions/platformAlert';
@@ -36,6 +36,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     const priceStripeAmount = Math.round(parseFloat(price) * 100);
     const currentUser = useSelector(selectCurrentUser);
     console.log(chat_room_id)
+    const [loading, setLoading] = useState<boolean>(false);
     const fetchPaymentSheetParams = async (amount: number) => {
         const { data, error } = await supabase.functions.invoke(
             "create-checkout-session", {
@@ -84,42 +85,51 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     };
 
     const handlePlatformPay = async (amount: number) => {
-        const { paymentIntent } = await fetchPaymentSheetParams(amount);
-        const { error } = await confirmPlatformPayPayment(
-            paymentIntent,
-            {
-                googlePay: {
-                    testEnv: true,
-                    merchantName: 'Linkzy',
-                    merchantCountryCode: 'GB',
-                    currencyCode: 'GBP',
-                    billingAddressConfig: {
-                        format: PlatformPay.BillingAddressFormat.Full,
-                        isPhoneNumberRequired: true,
-                        isRequired: true,
+        setLoading(true);
+        try {
+            const { paymentIntent } = await fetchPaymentSheetParams(amount);
+            const { error } = await confirmPlatformPayPayment(
+                paymentIntent,
+                {
+                    googlePay: {
+                        testEnv: true,
+                        merchantName: 'Linkzy',
+                        merchantCountryCode: 'GB',
+                        currencyCode: 'GBP',
+                        billingAddressConfig: {
+                            format: PlatformPay.BillingAddressFormat.Full,
+                            isPhoneNumberRequired: true,
+                            isRequired: true,
+                        },
                     },
-                },
-                applePay: {
-                    cartItems: [
-                    {
-                        label: 'Admission Fee',
-                        amount: price,
-                        paymentType: PlatformPay.PaymentType.Immediate,
+                    applePay: {
+                        cartItems: [
+                            {
+                                label: 'Admission Fee',
+                                amount: price,
+                                paymentType: PlatformPay.PaymentType.Immediate,
+                            }
+                        ],
+                        merchantCountryCode: 'GB',
+                        currencyCode: 'GBP',
+                        requiredBillingContactFields: [PlatformPay.ContactField.PhoneNumber],
                     }
-                ],
-                    merchantCountryCode: 'GB',
-                    currencyCode: 'GBP',
-                    requiredBillingContactFields: [PlatformPay.ContactField.PhoneNumber],
                 }
+            );
+            if (error) {
+                Alert.alert(error.code, error.message);
+                // Update UI to prompt user to retry payment (and possibly another payment method)
+                return;
             }
-        );
+            handleBookEvent();
 
-        if (error) {
-            Alert.alert(error.code, error.message);
-            // Update UI to prompt user to retry payment (and possibly another payment method)
-            return;
+        } catch (error) {
+            console.error(error)
         }
-        handleBookEvent();
+
+        finally {
+            setLoading(false);
+        }
     };
 
     const initializePaymentSheet = async (amount: number) => {
@@ -197,20 +207,21 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                 onPress={() => openPaymentSheet(priceStripeAmount)}>
                                 <Text className='text-lg text-center  font-bold'>PURCHASE</Text>
                             </TouchableOpacity>
-                            {!is_free && 
-                            <PlatformPayButton
-                                type={PlatformPay.ButtonType.Pay}
-                                onPress={() => handlePlatformPay(priceStripeAmount)}
-                                style={{
-                                    width: '100%',
-                                    height: 50,
-                                    borderColor: Platform.OS === 'ios' ? 'white' : '',
-                                    borderWidth: 1,
-                                    borderRadius: 100
-                    
-                                }}
-                                borderRadius={100}
-                            />
+                            {!is_free &&
+                                <PlatformPayButton
+                                    disabled={loading}
+                                    type={PlatformPay.ButtonType.Pay}
+                                    onPress={() => handlePlatformPay(priceStripeAmount)}
+                                    style={{
+                                        width: '100%',
+                                        height: 50,
+                                        borderColor: Platform.OS === 'ios' ? 'white' : '',
+                                        borderWidth: 1,
+                                        borderRadius: 100
+
+                                    }}
+                                    borderRadius={100}
+                                />
                             }
                         </View>
                     </View>
