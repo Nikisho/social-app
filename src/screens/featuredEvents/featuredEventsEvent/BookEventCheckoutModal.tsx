@@ -105,7 +105,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                     applePay: {
                         cartItems: [
                             {
-                                label: 'Admission Fee',
+                                label: 'Linkzy',
                                 amount: price,
                                 paymentType: PlatformPay.PaymentType.Immediate,
                             }

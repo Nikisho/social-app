@@ -51,7 +51,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.2.2',
+      buildNumber: '1.2.3',
       // deploymentTarget: "12.0"
     },
     android: {
