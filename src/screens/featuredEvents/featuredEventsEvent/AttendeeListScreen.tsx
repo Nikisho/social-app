@@ -11,6 +11,7 @@ import checkProfilePicture from '../../../utils/functions/checkProfilePicture';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import platformAlert from '../../../utils/functions/platformAlert';
+import { getColorFromName } from '../../../utils/functions/getColorFromName';
 
 interface AttendeeProps {
     id: number;
@@ -76,16 +77,27 @@ const AttendeeListScreen = () => {
                         className='h-16 w-16 rounded-full '
                     />
                     :
-                    <View className='bg-white rounded-full'
-                        style={styles.shadow}
+                    <View
+                        style={{
+                            backgroundColor: getColorFromName(item.users.name),
+                            width: 65,
+                            height: 65,
+                            borderRadius: 50,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: 5,
+                            borderWidth: 1
+                        }}
                     >
-                        <FontAwesome name="user-circle" size={50} color="black" />
+                        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize:20 }}>
+                            {item.users.name.charAt(0).toUpperCase()}
+                        </Text>
                     </View>
                 }
 
-                <Text 
-                    numberOfLines={1} 
-                    style={{width: 100}}
+                <Text
+                    numberOfLines={1}
+                    style={{ width: 100 }}
                     className='text-lg text-center'>
                     {item.users.name}
                 </Text>
@@ -114,12 +126,12 @@ const AttendeeListScreen = () => {
                 {
                     attendees?.map((item) => (
                         <RenderItem
-                        key={item.user_id}
-                        item={item}
+                            key={item.user_id}
+                            item={item}
                         />
                     ))
                 }
-                </View>
+            </View>
 
         </ScrollView>
     )

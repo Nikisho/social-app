@@ -7,6 +7,16 @@ export default {
     runtimeVersion: "1.0.0",
     scheme: 'com.linkzy',
     plugins: [
+      [
+        'expo-build-properties',
+        {
+          android: {
+            compileSdkVersion: 35,
+            targetSdkVersion: 35,
+            buildToolsVersion: '35.0.0',
+          }
+        },
+      ],
       "expo-apple-authentication",
       [
         "@react-native-google-signin/google-signin",
@@ -37,7 +47,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.2.8",
+    version: "1.2.9",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -51,7 +61,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.2.3',
+      buildNumber: '1.2.4',
       // deploymentTarget: "12.0"
     },
     android: {

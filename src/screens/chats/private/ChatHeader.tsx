@@ -6,6 +6,7 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from '../../../utils/styles/shadow';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { getColorFromName } from '../../../utils/functions/getColorFromName';
 
 interface ChatHeaderProps {
     name: string;
@@ -33,14 +34,29 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                 )}
                 // style={{backgroundColor: colours.secondaryColour}}
                 className='p-2 py-3 flex  flex-row space-x-3 items-center '>
-                <TouchableOpacity className='mr-2' onPress={() => {navigation.goBack()}}>
+                <TouchableOpacity className='mr-2' onPress={() => { navigation.goBack() }}>
                     <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
                 </TouchableOpacity>
                 {
                     photo === null ?
-                        <>
-                            <FontAwesome name="user-circle" size={40} color="black" />
-                        </> :
+                        <View
+                            style={{
+                                backgroundColor: getColorFromName(name),
+                                width: 45,
+                                height: 45,
+                                borderRadius: 30,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginRight: 5,
+                                borderWidth: 1
+                            }}
+                        >
+                            <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                                {name.charAt(0).toUpperCase()}
+                            </Text>
+                        </View>
+
+                        :
                         <>
                             <Image
                                 className='w-12 h-12 rounded-full'
@@ -50,7 +66,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                             />
                         </>
                 }
-                <Text 
+                <Text
                     numberOfLines={1} style={{ width: 200 }}
                     className='text-black text-lg'>
                     {name}

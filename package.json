@@ -51,7 +51,8 @@
     "react-native-svg": "15.2.0",
     "react-native-tab-view": "^4.1.0",
     "react-redux": "^9.1.2",
-    "supabase": "^2.9.6"
+    "supabase": "^2.9.6",
+    "expo-build-properties": "~0.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

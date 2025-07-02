@@ -64,6 +64,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     };
 
     const openPaymentSheet = async (amount: number) => {
+        setLoading(true);
         try {
             if (is_free === true) {
                 handleBookEvent();
@@ -81,6 +82,9 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
 
         } catch (error) {
             console.error(error);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -203,7 +207,8 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                         </View>
                         <View className='flex items-center p-5 space-y-5'>
                             <TouchableOpacity
-                                className=' bg-white w-full p-2 rounded-full'
+                                disabled={loading}
+                                className={`bg-white w-full p-2 rounded-full ${loading && 'opacity-30'}`}
                                 onPress={() => openPaymentSheet(priceStripeAmount)}>
                                 <Text className='text-lg text-center  font-bold'>PURCHASE</Text>
                             </TouchableOpacity>
