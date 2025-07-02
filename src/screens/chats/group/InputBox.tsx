@@ -25,7 +25,8 @@ const InputBox: React.FC<InputBoxProps> = ({ onSendMessage }) => {
     return (
         <KeyboardAvoidingView className='flex justify-start flex-row px-5 my-3 mb-10 space-x-3 items-center'
             behavior='padding'
-            keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+            // keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 60}
+            keyboardVerticalOffset={60}
         >
             <View className={`bg-gray-200 px-5 py-2 w-5/6 flex flex-row items-center justify-between ${inputHeight > 40 ? 'rounded-2xl' : 'rounded-full'}`}>
                 <TextInput
