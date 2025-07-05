@@ -3,14 +3,12 @@
 // This enables autocomplete, go to definition, etc.
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import Stripe from "npm:stripe@^11.16";
 import { saveOrganizerAccount } from "../_utils/saveOrganizerAccount.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
+import { stripe } from "../_utils/stripe.ts";
 
 // @ts-ignore
-const stripe = Stripe(Deno.env.get("STRIPE_API_KEY"), {
-  httpClient: Stripe.createFetchHttpClient(),
-});
+
 
 Deno.serve(async (req) => {
   try {

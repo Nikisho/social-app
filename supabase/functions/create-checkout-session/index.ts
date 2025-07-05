@@ -1,14 +1,9 @@
-import Stripe from "npm:stripe@^11.16";
 import { createOrRetrieveCustomer } from "../_utils/createOrRetrieveCustomer.ts";
 import { serve } from "https://deno.land/std@0.132.0/http/server.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
+import { stripe } from "../_utils/stripe.ts";
 
 // @ts-ignore
-const stripe = Stripe(Deno.env.get("STRIPE_API_KEY"), {
-  // This is needed to use the Fetch API rather than relying on the Node http
-  // package.
-  httpClient: Stripe.createFetchHttpClient(),
-});
 
 const server = Deno.listen({ port: 8080 });
 console.log(`HTTP webserver running.  Access it at:  http://localhost:8080/`);
