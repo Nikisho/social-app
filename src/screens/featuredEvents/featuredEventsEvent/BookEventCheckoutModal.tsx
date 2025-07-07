@@ -53,6 +53,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
         );
         if (!data || error) {
             Alert.alert(`Error: ${error?.message ?? "no data"}`);
+            setLoading(false);
             return {};
         }
         const { paymentIntent, ephemeralKey, customer, stripe_pk } = data;
@@ -96,7 +97,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 paymentIntent,
                 {
                     googlePay: {
-                        testEnv: true,
+                        testEnv: false,
                         merchantName: 'Linkzy',
                         merchantCountryCode: 'GB',
                         currencyCode: 'GBP',
@@ -122,6 +123,8 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
             );
             if (error) {
                 Alert.alert(error.code, error.message);
+                setLoading(false);
+
                 // Update UI to prompt user to retry payment (and possibly another payment method)
                 return;
             }

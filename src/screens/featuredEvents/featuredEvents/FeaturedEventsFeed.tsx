@@ -16,6 +16,7 @@ interface FeaturedEventCard {
     date: Date;
     time: string;
     is_free: boolean;
+    test: boolean;
 }
 
 const FeaturedEventsFeed = () => {
@@ -41,14 +42,13 @@ const FeaturedEventsFeed = () => {
         }, [])
     );
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
-    const url = `${item.image_url.split('?')[0]}?t=${Date.now()}`;
 
         return (
             <TouchableOpacity
-                
-                className='my-2
+                className={`my-2
                     rounded-xl border bg-white p-2
-                '
+                    ${item.test === true && !__DEV__? 'hidden' : ''}
+                `}
                 onPress={() => navigation.navigate('featuredeventsevent', {
                     featured_event_id: item.featured_event_id
                 })}

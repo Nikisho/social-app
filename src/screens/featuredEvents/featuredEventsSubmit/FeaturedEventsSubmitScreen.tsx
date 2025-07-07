@@ -130,7 +130,8 @@ const FeaturedEventsSubmitScreen = () => {
                 organizer_id: organizer_id,
                 is_free: isFree,
                 max_tickets: eventData?.quantity,
-                chat_room_id: chatRoomData?.chat_room_id
+                chat_room_id: chatRoomData?.chat_room_id,
+                test: __DEV__ ? true : false
             })
         if (error) {
             console.error(error.message)

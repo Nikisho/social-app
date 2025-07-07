@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import platformAlert from '../../../utils/functions/platformAlert';
 import BookEventCheckoutModal from './BookEventCheckoutModal';
+import { delay } from '../../../utils/functions/delay';
 
 interface BookEventProps {
     is_free: boolean;
@@ -131,6 +132,7 @@ const BookEvent: React.FC<BookEventProps> = ({
         };
 
         platformAlert('Purchase successful! 💫');
+        await delay(3000);
         navigation.navigate('ticketfeed');
         setCheckoutModalVisible(!checkoutModalVisible)
     };

@@ -2,6 +2,7 @@ import { createOrRetrieveCustomer } from "../_utils/createOrRetrieveCustomer.ts"
 import { serve } from "https://deno.land/std@0.132.0/http/server.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
 import { stripe } from "../_utils/stripe.ts";
+import { PaymentIntentParamsProps } from "../_utils/db_types.ts";
 
 // @ts-ignore
 
@@ -53,17 +54,14 @@ serve(async (req: Request) => {
     console.log('🎉stripe account ID :', stripe_account_id);
 
     const platformFee = Math.round(amount * 0.03);
-    const paymentIntent = await stripe.paymentIntents.create({
+
+    const paymentIntentParams: PaymentIntentParamsProps = {
       amount: amount,
       currency: "gbp",
       customer: customer,
       automatic_payment_methods: {
         enabled: true,
       },
-      transfer_data: {
-        destination: stripe_account_id,
-      },
-      application_fee_amount: platformFee,
       metadata: {
         user_id: String(user_id),
         featured_event_id: String(featured_event_id),
@@ -72,12 +70,21 @@ serve(async (req: Request) => {
         tickets_sold: String(tickets_sold),
         chat_room_id: String(chat_room_id)
       },
-    });
+    }
+
+    const PLATFORM_ORGANIZER_ID = 1;
+    if (organizer_id !== PLATFORM_ORGANIZER_ID ) {
+      paymentIntentParams.transfer_data = {
+        destination: stripe_account_id,
+      };
+      paymentIntentParams.application_fee_amount = platformFee;
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
 
     console.log("✅ Payment intent created: ", paymentIntent);
-    // Return the customer details as well as teh Stripe publishable key which we have set in our secrets.
     const res = {
-      stripe_pk: Deno.env.get("STRIPE_PUBLISHABLE_KEY"),
+      stripe_pk: Deno.env.get("STRIPE_PUBLISHABLE_KEY_PROD"),
       paymentIntent: paymentIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,
       customer: customer,

@@ -36,3 +36,24 @@ export interface Database {
     }
   }
 }
+
+export interface PaymentIntentParamsProps {
+      amount: string,
+      currency: string,
+      customer: string,
+      automatic_payment_methods: {
+        enabled: boolean,
+      },
+      transfer_data?: {
+        destination: string,
+      },
+      application_fee_amount?: number,
+      metadata: {
+        user_id: string,
+        featured_event_id: string,
+        organizer_id: string,
+        date: string,
+        tickets_sold: string,
+        chat_room_id: string
+      },
+}
