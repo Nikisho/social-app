@@ -97,7 +97,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 paymentIntent,
                 {
                     googlePay: {
-                        testEnv: false,
+                        testEnv: true,
                         merchantName: 'Linkzy',
                         merchantCountryCode: 'GB',
                         currencyCode: 'GBP',
