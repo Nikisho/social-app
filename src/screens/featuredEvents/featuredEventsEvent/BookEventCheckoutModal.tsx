@@ -220,7 +220,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                     disabled={loading}
                                     type={PlatformPay.ButtonType.Pay}
                                     onPress={() => handlePlatformPay(priceStripeAmount)}
-                                    appearance={PlatformPay.ButtonStyle.White}
+                                    appearance={Platform.OS === 'ios'? PlatformPay.ButtonStyle.Black : PlatformPay.ButtonStyle.White}
                                     style={{
                                         width: '100%',
                                         height: 50,
