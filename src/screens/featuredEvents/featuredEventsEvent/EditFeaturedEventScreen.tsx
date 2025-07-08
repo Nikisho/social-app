@@ -21,7 +21,7 @@ interface EventDataProps {
   price: string
   time: string
   location: string
-  image_url: string | { base64: Base64<'jpg'> }
+  image_url: string | { base64: Base64<'jpg'>, uri: string }
   is_free: boolean
   featured_event_id: number
   tickets_sold: number
@@ -98,10 +98,10 @@ const EditFeaturedEventScreen = () => {
         oldUniqueFileIdentifier
       ) {
 
-      const { error: deleteError } = await supabase.storage
-        .from('featured-events')
-        .remove([oldPath]);
-      if (deleteError) {console.error(deleteError?.message)}
+        const { error: deleteError } = await supabase.storage
+          .from('featured-events')
+          .remove([oldPath]);
+        if (deleteError) {console.error(deleteError?.message)}
 
         await uploadEventMediaToStorageBucket(
           eventData.image_url.base64,
@@ -111,7 +111,7 @@ const EditFeaturedEventScreen = () => {
       }
       const { error } = await supabase
         .from('featured_events')
-        .update({ description: eventData!.description, image_url: mediaUrl })
+        .update({ description: eventData!.description, image_url: typeof eventData?.image_url !== 'string' ? mediaUrl : eventData.image_url})
         .eq('featured_event_id', featured_event_id)
 
       if (error) throw new Error(error.message)
