@@ -7,7 +7,9 @@ import FastImage from 'react-native-fast-image';
 
 interface MediaPickerProps {
     setEventData: any;
-    eventData: any
+    eventData: {
+        image_url: string | {uri: string}
+    }
 }
 
 const MediaPicker: React.FC<MediaPickerProps> = ({ setEventData, eventData }) => {

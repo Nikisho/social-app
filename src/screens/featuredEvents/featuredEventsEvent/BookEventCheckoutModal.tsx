@@ -97,7 +97,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 paymentIntent,
                 {
                     googlePay: {
-                        testEnv: false,
+                        testEnv: __DEV__ ? true : false,
                         merchantName: 'Linkzy',
                         merchantCountryCode: 'GB',
                         currencyCode: 'GBP',
@@ -220,15 +220,16 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                     disabled={loading}
                                     type={PlatformPay.ButtonType.Pay}
                                     onPress={() => handlePlatformPay(priceStripeAmount)}
+                                    appearance={Platform.OS === 'ios'? PlatformPay.ButtonStyle.Black : PlatformPay.ButtonStyle.White}
                                     style={{
                                         width: '100%',
                                         height: 50,
                                         borderColor: Platform.OS === 'ios' ? 'white' : '',
                                         borderWidth: 1,
                                         borderRadius: 100
-
                                     }}
                                     borderRadius={100}
+                                    
                                 />
                             }
                         </View>
