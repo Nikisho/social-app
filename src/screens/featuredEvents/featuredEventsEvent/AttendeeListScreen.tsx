@@ -26,6 +26,7 @@ const AttendeeListScreen = () => {
     const { featured_event_id, chat_room_id } = route.params
     const currentUser = useSelector(selectCurrentUser);
 
+    
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
@@ -104,7 +105,10 @@ const AttendeeListScreen = () => {
             </TouchableOpacity>)
     }
     return (
-        <ScrollView className=''>
+        <ScrollView className=''
+                    contentContainerStyle={{ paddingBottom: 100 }}
+
+        >
             <SecondaryHeader
                 displayText='Attendees'
             />
