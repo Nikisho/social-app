@@ -6,10 +6,8 @@ import ProfileScreen from './src/screens/profile/ProfileScreen';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
-import SubmitScreen from './src/screens/event/submit/SubmitScreen';
 import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
-import EventScreen from './src/screens/event/eventscreen/EventScreen';
 import colours from './src/utils/styles/colours';
 import { Keyboard, Platform, View } from 'react-native';
 import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
@@ -19,8 +17,6 @@ import ChatScreen from './src/screens/chats/private/ChatScreen';
 import EmailSignUp from './src/screens/authentication/signup/EmailSignUp';
 import EmailSignIn from './src/screens/authentication/signin/EmailSignIn';
 import { supabase } from './supabase';
-import EditEventScreen from './src/screens/event/edit/EditEventScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from './src/screens/loading/LoadingScreen';
 import EulaScreen from './src/screens/eula/EulaScreen';
 import SettingsScreen from './src/screens/settings/SettingsScreen';
@@ -29,21 +25,19 @@ import ResetPasswordScreen from './src/screens/authentication/passwordReset/Rese
 import UserDetailsScreen from './src/screens/authentication/signup/UserDetailsScreen';
 import UpdateInterestsScreen from './src/screens/profile/UpdateInterestsScreen';
 import React from 'react';
-import { setupRevenueCat } from './src/utils/functions/setupRevenueCat';
 import { navigationRef } from './src/utils/functions/navigationRef';
 import FeaturedEventsScreen from './src/screens/featuredEvents/featuredEvents/FeaturedEventsScreen';
 import FeaturedEventsEventScreen from './src/screens/featuredEvents/featuredEventsEvent/FeaturedEventsEventScreen';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import FeaturedEventsSubmitScreen from './src/screens/featuredEvents/featuredEventsSubmit/FeaturedEventsSubmitScreen';
 import OrganizerOnboardingScreen from './src/screens/organizerOnboarding/OrganizerOnboardingScreen';
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import { StripeProvider } from '@stripe/stripe-react-native';
 import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
 import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
 import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
 import GroupChatScreen from './src/screens/chats/group/GroupChatScreen';
-import { useTranslation } from 'react-i18next';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -108,10 +102,7 @@ function AppSafeAreaWrapper() {
 		setLoading(false);
 	};
 
-
 	useEffect(() => {
-		// setupRevenueCat();
-		// i18n.changeLanguage('fr');
 		fetchSession();
 	}, []);
 
@@ -135,9 +126,7 @@ function AppSafeAreaWrapper() {
 	}
 
 	return (
-		// <SafeAreaProvider>
 			<View
-				// edges={['top']}
 				className={`${Platform.OS === 'android' && insets.bottom > 20? 'h-[95%]':'h-full'}`} 
 				style={{ backgroundColor: colours.primaryColour }}>
 				<StatusBar hidden={false} barStyle="dark-content" translucent={false} />
@@ -202,8 +191,6 @@ function AppSafeAreaWrapper() {
 
 				</NavigationContainer>
 			</View>
-		// </SafeAreaProvider>
-
 	);
 }
 
