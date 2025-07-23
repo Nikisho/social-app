@@ -30,9 +30,6 @@ const DeleteProfileModal: React.FC<DeleteProfileModalProps> = ({
             .eq('id', currentUserId);
         if (DeleteUserError) { throw DeleteUserError.message };
 
-        //Remove user info from redux.//
-        await AsyncStorage.removeItem('userAccessToken');
-        await AsyncStorage.removeItem('userRefreshToken');
         dispatch(setCurrentUser({
             name: null,
             email: null,

@@ -54,8 +54,6 @@ const EmailSignUp = () => {
 				}
 			}
 			if (session) {
-				await AsyncStorage.setItem('userAccessToken', session.access_token);
-				await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
 
 				navigation.navigate('userdetailsscreen');
 				if (!session) Alert.alert('Sorry, we could not sign you up');

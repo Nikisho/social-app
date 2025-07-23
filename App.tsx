@@ -43,6 +43,7 @@ import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEvents
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
 import GroupChatScreen from './src/screens/chats/group/GroupChatScreen';
+import { useTranslation } from 'react-i18next';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -69,24 +70,15 @@ export default function AppWrapper() {
 }
 
 function AppSafeAreaWrapper() {
+
 	const insets = useSafeAreaInsets();
 	const currentUser = useSelector(selectCurrentUser);
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
-	const setSession = async () => {
-		const accessToken = await AsyncStorage.getItem('userAccessToken');
-		const refreshToken = await AsyncStorage.getItem('userRefreshToken');
-
-		if (accessToken && refreshToken) {
-			await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
-		} else {
-			setLoading(false);
-		}
-	};
 
 	const fetchSession = async () => {
-		await setSession();
+		// await setSession();
 		const { data: { session: user } } = await supabase.auth.getSession();
 		if (!user) {
 			setLoading(false);
@@ -118,7 +110,8 @@ function AppSafeAreaWrapper() {
 
 
 	useEffect(() => {
-		setupRevenueCat();
+		// setupRevenueCat();
+		// i18n.changeLanguage('fr');
 		fetchSession();
 	}, []);
 
@@ -184,9 +177,9 @@ function AppSafeAreaWrapper() {
 									{/* <Stack.Screen name="meetups" component={MeetupsScreen} /> */}
 									<Stack.Screen name="profile" component={ProfileScreen} />
 									<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
-									<Stack.Screen name="submit" component={SubmitScreen} />
-									<Stack.Screen name="event" component={EventScreen} />
-									<Stack.Screen name="editevent" component={EditEventScreen} />
+									{/* <Stack.Screen name="submit" component={SubmitScreen} /> */}
+									{/* <Stack.Screen name="event" component={EventScreen} /> */}
+									{/* <Stack.Screen name="editevent" component={EditEventScreen} /> */}
 									<Stack.Screen name="comment" component={SubmitCommentScreen} />
 									<Stack.Screen name="chatlist" component={ChatListScreen} />
 									<Stack.Screen name="chat" component={ChatScreen} />

@@ -39,8 +39,6 @@ const GoogleSignUp = ({
                     });
 
                     if (session) {
-                        await AsyncStorage.setItem('userAccessToken', session.access_token);
-                        await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
                         navigation.navigate('userdetailsscreen');
                     }
                     if (AuthUserError) console.error(AuthUserError.message);

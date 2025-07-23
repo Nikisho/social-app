@@ -45,8 +45,6 @@ const AppleSignUp = (
                 if (AuthUserError) { throw AuthUserError.message };
 
                 if (session) {
-                    await AsyncStorage.setItem('userAccessToken', session.access_token);
-                    await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
                     navigation.navigate('userdetailsscreen');
                 }
 
