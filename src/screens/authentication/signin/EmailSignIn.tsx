@@ -35,8 +35,6 @@ const EmailSignIn = () => {
 		})
 		//If the sign up is successful, insert a row to public.users
 		if (session) {
-			await AsyncStorage.setItem('userAccessToken', session.access_token);
-			await AsyncStorage.setItem('userRefreshToken', session.refresh_token);
 			const { error, data } = await supabase
 				.from('users')
 				.select()

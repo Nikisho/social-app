@@ -6,9 +6,11 @@ import GoogleSignIn from './GoogleSignIn'
 import { RootStackNavigationProp } from '../../../utils/types/types'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AppleSignIn from './AppleSignIn'
+import { useTranslation } from 'react-i18next'
 
 const SignInScreen = () => {
-    const navigation = useNavigation<RootStackNavigationProp>()
+    const navigation = useNavigation<RootStackNavigationProp>();
+    const { t } = useTranslation();
     return (
         <View className='flex items-center space-y-5 h-full'>
             <View className='w-full flex  space-y-3 h-1/2 justify-center'>
@@ -26,8 +28,8 @@ const SignInScreen = () => {
                         style={styles.shadowButtonStyle} className='px-5 py-4 self-center w-5/6 flex flex-row items-center rounded-full'>
 
                         <MaterialIcons name="email" size={24} color="white" />
-                        <Text className='text-lg font-bold text-white ml-8'>
-                            Use email and password
+                        <Text className='text-lg font-bold text-white ml-5'>
+                            {t('email_login_button')}
                         </Text>
                     </TouchableOpacity>
                     <GoogleSignIn />

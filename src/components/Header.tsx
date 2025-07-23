@@ -36,10 +36,6 @@ const Header = () => {
             const { error } = await supabase.auth.signOut();
             if (error) throw error.message;
 
-            //Remove access and refresh tokens from local storage.//
-            await AsyncStorage.removeItem('userAccessToken');
-            await AsyncStorage.removeItem('userRefreshToken');
-
             //Remove user info from redux.//
             dispatch(setCurrentUser({
                 name: null,

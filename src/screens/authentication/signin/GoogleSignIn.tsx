@@ -8,9 +8,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../../utils/styles/shadow'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import platformAlert from '../../../utils/functions/platformAlert'
+import { useTranslation } from 'react-i18next'
 
 const GoogleSignIn = () => {
-
+    const { t } = useTranslation();
     GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
     const [loading, setLoading] = useState(false);
 
@@ -26,11 +27,6 @@ const GoogleSignIn = () => {
                     provider: 'google',
                     token: userInfo.idToken,
                 })
-                //Add access token to Async Storageto persist login.
-                if (AuthUserData.session) {
-                    await AsyncStorage.setItem('userAccessToken', AuthUserData.session.access_token);
-                    await AsyncStorage.setItem('userRefreshToken', AuthUserData.session.refresh_token);
-                }
 
                 if (AuthUserError) {
                     console.error(AuthUserError.message);
@@ -107,8 +103,8 @@ const GoogleSignIn = () => {
                 disabled={loading}
             >
                 <AntDesign name="google" size={24} color="red" />
-                <Text className=' font-semibold text-lg ml-12'>
-                    Continue with Google
+                <Text className=' font-semibold text-lg ml-5'>
+                    {t('google_login_button')}
                 </Text>
             </TouchableOpacity>
         </View>
