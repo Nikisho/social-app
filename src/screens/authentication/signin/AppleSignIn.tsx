@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { useState } from 'react';
 import platformAlert from '../../../utils/functions/platformAlert';
+import { t } from 'i18next';
 
 const AppleSignIn = () => {
 
@@ -100,7 +101,9 @@ const AppleSignIn = () => {
                 className='w-full bg-black px-5 py-4 rounded-full flex flex-row 
                    items-center'>
                 <AntDesign name="apple1" size={24} color="white" />
-                <Text className='text-white font-bold text-lg ml-12'>Continue with apple</Text>
+                <Text className='text-white font-bold text-lg ml-12'>
+                    {t('apple_login_button')}
+                </Text>
             </TouchableOpacity>
         </View>)
 }

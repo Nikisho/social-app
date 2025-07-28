@@ -2,10 +2,10 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { supabase } from '../../../../supabase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import { t } from 'i18next';
 
 
 const AppleSignUp = (
@@ -81,7 +81,9 @@ const AppleSignUp = (
                 className={`w-full bg-black px-5 py-4 rounded-full flex flex-row 
                            items-center ${!isChecked && 'opacity-50'}`}>
                 <AntDesign name="apple1" size={24} color="white" />
-                <Text className='text-white font-bold text-lg ml-12'>Continue with apple</Text>
+                <Text className='text-white font-bold text-lg ml-12'>
+                    {t('apple_sign_up_button')}
+                </Text>
             </TouchableOpacity>
         </View>
     )

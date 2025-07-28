@@ -9,6 +9,7 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 import platformAlert from '../../../utils/functions/platformAlert';
 import BookEventCheckoutModal from './BookEventCheckoutModal';
 import { delay } from '../../../utils/functions/delay';
+import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 
 interface BookEventProps {
     is_free: boolean;
@@ -19,6 +20,9 @@ interface BookEventProps {
     date: Date;
     organizer_id: number;
     chat_room_id: number;
+    location: string;
+    title: string;
+    time: string;
 
 }
 const BookEvent: React.FC<BookEventProps> = ({
@@ -29,7 +33,11 @@ const BookEvent: React.FC<BookEventProps> = ({
     tickets_sold,
     max_tickets,
     date,
-    chat_room_id
+    chat_room_id,
+    location,
+    title,
+    time
+
 }) => {
     const currentUser = useSelector(selectCurrentUser);
     const isSoldOut = tickets_sold >= max_tickets;
@@ -76,7 +84,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                 return;
             }
             setCheckoutModalVisible(!checkoutModalVisible)
-        } catch (error:any) {
+        } catch (error: any) {
             Alert.alert(error.message)
         }
 
@@ -106,7 +114,7 @@ const BookEvent: React.FC<BookEventProps> = ({
             //generate the ticket is the event is free as for paid events
             //it is generated in the backend
 
-            const { error:participantsError } = await supabase
+            const { error: participantsError } = await supabase
                 .from('participants')
                 .insert({
                     user_id: currentUser.id,
@@ -118,7 +126,7 @@ const BookEvent: React.FC<BookEventProps> = ({
 
             const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
             const eventDate = new Date(date)
-            const { error:TicketsError } = await supabase
+            const { error: TicketsError } = await supabase
                 .from('tickets')
                 .insert({
                     user_id: currentUser.id,
@@ -132,10 +140,44 @@ const BookEvent: React.FC<BookEventProps> = ({
         };
 
         platformAlert('Purchase successful! 💫');
-        await delay(3000);
+        await delay(2000);
         navigation.navigate('ticketfeed');
-        setCheckoutModalVisible(!checkoutModalVisible)
+        setCheckoutModalVisible(!checkoutModalVisible);
+        emailUserUponPurchase();
     };
+
+    const emailUserUponPurchase = async () => {
+        try {
+            const edge_function_base_url = 'https://wffeinvprpdyobervinr.supabase.co/functions/v1/ticket-purchase-email'
+
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
+
+            const accessToken = session?.access_token;
+            const response = await fetch(edge_function_base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    title: title,
+                    location: location,
+                    date: date && time && (formatDateShortWeekday(date) + ', ' + (time).slice(0, -3)),
+                }),
+            });
+
+            const data = await response.json();
+            console.log("✅ Function response:", data);
+        } catch (error: any) {
+            console.error('Error booking event:', error.message);
+            platformAlert('An error occurred while booking the event. Please try again later.');
+
+        }
+    }
 
     return (
         <View

@@ -1,5 +1,22 @@
 {
-  "email_login_button": "Connexion par e-mail",
-  "google_login_button": "Connexion avec Google",
-  "logout_button": "Se déconnecter"
+    "_screen_sign_up": "sign_up",
+    "sign_up_screen_title": "Créer un compte",
+    "sign_up_screen_subtitle": "Choisissez une option",
+    "email_sign_up_button": "S'inscrire avec e-mail",
+    "google_sign_up_button": "S'inscrire avec Google",
+    "apple_sign_up_button": "S'inscrire avec Apple",
+    "eula_checkbox_label": "J'accepte les conditions d'utilisation et la politique de confidentialité",
+    "already_have_account": "Vous avez déjà un compte ?",
+    "sign_in_button": "Se connecter",
+
+
+
+    "_screen_sign_in": "sign_in",
+    "sign_in_screen_title": "Se connecter 🚀",
+    "sign_in_screen_subtitle": "Choisissez une option",
+    "email_login_button": "Connexion par e-mail",
+    "google_login_button": "Connexion avec Google",
+    "apple_login_button": "Connexion avec Apple",
+    "dont_have_account": "Vous n'avez pas de compte ?",
+    "sign_up_button": "S'inscrire"
 }

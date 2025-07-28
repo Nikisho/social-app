@@ -2,11 +2,11 @@ import { View, Text, Alert, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import { supabase } from '../../../../supabase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../../utils/styles/shadow';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import { t } from 'i18next';
 
 
 const GoogleSignUp = ({
@@ -86,7 +86,7 @@ const GoogleSignUp = ({
             >
                 <AntDesign name="google" size={24} color="red" />
                 <Text className=' font-semibold text-lg ml-12'>
-                    Continue with Google
+                    {t('google_sign_up_button')}
                 </Text>
             </TouchableOpacity>
         </View>

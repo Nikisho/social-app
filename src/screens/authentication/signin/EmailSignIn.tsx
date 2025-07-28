@@ -5,7 +5,6 @@ import { supabase } from '../../../../supabase';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import validateEmail from '../../../utils/functions/validateEmail';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import platformAlert from '../../../utils/functions/platformAlert';

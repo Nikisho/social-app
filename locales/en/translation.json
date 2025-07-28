@@ -1,6 +1,20 @@
 {
+  "_screen_sign_up": "sign_up",
+  "sign_up_screen_title": "Sign Up To Linkzy Now 🚀",
+  "sign_up_screen_subtitle": "Please choose on of the options below",
+  "email_sign_up_button": "Use email and password",
+  "google_sign_up_button": "Sign up with Google",
+  "apple_sign_up_button": "Sign up with Apple",
+  "eula_checkbox_label": "I agree to Linkzy's End User License Agreement (EULA).",
+  "already_have_account": "Already have an account?",
+  "sign_in_button": "Sign in",
+
+  "_screen_sign_in": "sign_in",
+  "sign_in_screen_title": "Sign In to Your Account 🚀",
+  "sign_in_screen_subtitle": "Please choose one of the options below",
   "email_login_button": "Use email and password",
   "google_login_button": "Continue with Google",
-  "logout_button": "Sign out"
-  
+  "apple_login_button": "Continue with Apple",
+  "dont_have_account": "Don't have an account?",
+  "sign_up_button": "Sign up"
 }
