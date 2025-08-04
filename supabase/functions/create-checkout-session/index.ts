@@ -84,7 +84,7 @@ serve(async (req: Request) => {
 
     console.log("✅ Payment intent created: ", paymentIntent);
     const res = {
-      stripe_pk: Deno.env.get("STRIPE_PUBLISHABLE_KEY"),
+      stripe_pk: Deno.env.get("STRIPE_PUBLISHABLE_KEY_PROD"),
       paymentIntent: paymentIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,
       customer: customer,
