@@ -13,6 +13,7 @@ import DropdownMenu from '../../../components/DropdownMenu';
 import { FontAwesome } from '@expo/vector-icons';
 import BecomeAnOrganizerModal from '../../organizerOnboarding/BecomeAnOrganizerModal';
 import StripePendingModal from '../../organizerOnboarding/StripePendingModal';
+import { useTranslation } from 'react-i18next';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 
@@ -21,6 +22,7 @@ const FeaturedEventsScreenHeader = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const [openMenu, setOpenMenu] = useState(false);
+    const { t } = useTranslation();
     const [stripePendingModalVisible, setStripePendingModalVisible] = useState<boolean>(false);
     const [becomeAnOrganizerModalVisible, setBecomeAnOrganizerModalVisible] = useState<boolean>(false)
     const navigateProfile = () => {
@@ -133,7 +135,7 @@ const FeaturedEventsScreenHeader = () => {
             </TouchableOpacity>
 
             <Text className='text-2xl font-semibold '>
-                Featured
+                {t('featured_events.title')}
             </Text>
 
             <View className=' grow flex flex-row items-end justify-end'>

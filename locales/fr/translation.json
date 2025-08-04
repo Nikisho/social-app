@@ -8,9 +8,6 @@
     "eula_checkbox_label": "J'accepte les conditions d'utilisation et la politique de confidentialité",
     "already_have_account": "Vous avez déjà un compte ?",
     "sign_in_button": "Se connecter",
-
-
-
     "_screen_sign_in": "sign_in",
     "sign_in_screen_title": "Se connecter 🚀",
     "sign_in_screen_subtitle": "Choisissez une option",
@@ -18,5 +15,99 @@
     "google_login_button": "Connexion avec Google",
     "apple_login_button": "Connexion avec Apple",
     "dont_have_account": "Vous n'avez pas de compte ?",
-    "sign_up_button": "S'inscrire"
+    "sign_up_button": "S'inscrire",
+    "eula": {
+        "title": "Contrat de Licence Utilisateur Final (CLUF)",
+        "section1": {
+            "heading": "1. Acceptation des conditions",
+            "text": "En téléchargeant ou en utilisant l'application Linkzy, vous acceptez ce Contrat de Licence Utilisateur Final (CLUF). Ce CLUF est un accord légal entre vous et Linkzy régissant votre utilisation de l'application."
+        },
+        "section2": {
+            "heading": "2. Condition d'âge",
+            "text": "Linkzy est strictement réservé aux utilisateurs âgés de 18 ans et plus. En acceptant ce CLUF, vous confirmez que vous avez au moins 18 ans. Les utilisateurs de moins de 18 ans verront leur compte supprimé immédiatement."
+        },
+        "section3": {
+            "heading": "3. Contenu généré par les utilisateurs",
+            "text": "Linkzy permet aux utilisateurs de créer, publier et partager du contenu. Cependant, vous vous engagez à ne pas publier de contenu illégal, offensant, discriminatoire, nuisible ou autrement répréhensible. Linkzy n’a aucune tolérance envers les comportements abusifs ou le contenu inapproprié."
+        },
+        "section4": {
+            "heading": "4. Comportement interdit",
+            "intro": "Vous ne pouvez pas utiliser l'application pour :",
+            "list": {
+                "0": "Harceler, intimider ou abuser d'autres utilisateurs.",
+                "1": "Publier ou partager du contenu inapproprié, offensant ou illégal.",
+                "2": "Participer à des pratiques frauduleuses ou trompeuses.",
+                "3": "Violer toute loi ou réglementation applicable."
+            }
+        },
+        "section5": {
+            "heading": "5. Suspension ou suppression de compte",
+            "text": "Linkzy se réserve le droit de suspendre ou de supprimer les comptes qui violent cet accord ou qui adoptent un comportement abusif ou illégal."
+        },
+        "section6": {
+            "heading": "6. Tolérance zéro pour le contenu répréhensible",
+            "intro": "Aucune tolérance pour tout contenu répréhensible, y compris mais sans s'y limiter :",
+            "list": {
+                "0": "Discours de haine, racisme ou discrimination.",
+                "1": "Contenu sexuel explicite ou inapproprié.",
+                "2": "Violence ou menaces de violence."
+            }
+        },
+        "section7": {
+            "heading": "7. Limitation de responsabilité",
+            "text": "Linkzy n'est pas responsable des actions des utilisateurs sur l'application. Nous faisons de notre mieux pour modérer et supprimer le contenu inapproprié, mais l’utilisation de l’application se fait à vos propres risques."
+        },
+        "section8": {
+            "heading": "8. Modifications de cet accord",
+            "text": "Linkzy se réserve le droit de modifier ce CLUF à tout moment. Les changements seront publiés dans l'application et prendront effet immédiatement."
+        },
+        "backButton": "Retour"
+    },
+    "featured_events": {
+        "title": "Découvrir",
+        "free": "Gratuit",
+        "currency": "€"
+    },
+    "featured_event_screen": {
+        "event_info": "Détails",
+        "promoter": "Organisateur",
+        "going": "Participants",
+        "book": "Réserver",
+        "closed": "FERMÉ",
+        "free": "GRATUIT"
+    },
+    "attendee_list_screen": {
+        "title": "Participants"
+    },
+    "chat_list_screen": {
+        "title": "Conversations"
+    },
+    "ticket_list_screen": {
+        "title": "Mes billets"
+    },
+    "ticket_screen": {
+        "title": "Votre billet",
+        "details": "Détails"
+    },
+    "drop_down_menu": {
+        "profile": "Profil",
+        "settings": "Paramètres",
+        "signout": "Déconnexion"
+    },
+    "profile_screen": {
+        "about": "À propos",
+        "interests": "Centres d’intérêt",
+        "events": "Événements",
+        "add_description_prompt": "Ajoutez une description pour aider les autres à mieux vous connaître !",
+        "no_description": "Cet utilisateur n’a pas ajouté de description.",
+        "no_interests": "Aucun centre d’intérêt ajouté pour le moment."
+    },
+    "settings_screen": {
+        "title": "Paramètres",
+        "privacy_policy": "Politique de confidentialité",
+        "eula": "Conditions d'utilisation",
+        "contact_us": "Contactez-nous",
+        "about": "À propos de Linkzy",
+        "deleteaccount": "Supprimer le compte"
+    }
 }

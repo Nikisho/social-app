@@ -16,5 +16,99 @@
   "google_login_button": "Continue with Google",
   "apple_login_button": "Continue with Apple",
   "dont_have_account": "Don't have an account?",
-  "sign_up_button": "Sign up"
+  "sign_up_button": "Sign up",
+  "eula": {
+    "title": "End User License Agreement (EULA)",
+    "section1": {
+      "heading": "1. Acceptance of Terms",
+      "text": "By downloading or using the Linkzy app, you agree to this End User License Agreement (EULA). This EULA is a legal agreement between you and Linkzy, governing your use of the application."
+    },
+    "section2": {
+      "heading": "2. Age Requirement",
+      "text": "Linkzy is strictly for users aged 18 and older. By agreeing to this EULA, you confirm that you are at least 18 years old. Users found to be under the age of 18 will have their accounts terminated immediately."
+    },
+    "section3": {
+      "heading": "3. User-Generated Content",
+      "text": "Linkzy allows users to create, post, and share content. However, you agree not to post any content that is illegal, offensive, discriminatory, harmful, or otherwise objectionable. Linkzy has no tolerance for objectionable content or abusive behavior."
+    },
+    "section4": {
+      "heading": "4. Prohibited Conduct",
+      "intro": "You may not use the app to:",
+      "list": [
+        "Harass, bully, or abuse other users.",
+        "Post or share inappropriate, offensive, or illegal content.",
+        "Engage in fraudulent or deceptive practices.",
+        "Violate any applicable laws or regulations."
+      ]
+    },
+    "section5": {
+      "heading": "5. Account Suspension or Termination",
+      "text": "Linkzy reserves the right to suspend or terminate accounts that violate this agreement or participate in abusive or illegal behavior."
+    },
+    "section6": {
+      "heading": "6. No Tolerance for Objectionable Content",
+      "intro": "There is zero tolerance for any objectionable content, including but not limited to:",
+      "list": [
+        "Hate speech, racism, or discrimination.",
+        "Explicit or inappropriate sexual content.",
+        "Violence or threats of violence."
+      ]
+    },
+    "section7": {
+      "heading": "7. Limitation of Liability",
+      "text": "Linkzy is not responsible for the actions of users on the app. We do our best to moderate and remove inappropriate content, but users engage with the app at their own risk."
+    },
+    "section8": {
+      "heading": "8. Changes to this Agreement",
+      "text": "Linkzy reserves the right to modify this EULA at any time. Changes will be posted within the app and take effect immediately."
+    },
+    "backButton": "Back"
+  },
+  "featured_events": {
+    "title": "Discover",
+    "free": "FREE",
+    "currency": "£"
+  },
+  "featured_event_screen": {
+    "event_info": "Info",
+    "promoter": "Promoter",
+    "going": "going",
+    "book": "BOOK",
+    "closed": "CLOSED",
+    "free":"FREE"
+  },
+  "attendee_list_screen": {
+    "title": "Attendees"
+  },
+  "chat_list_screen": {
+    "title": "My Chats"
+  },
+  "ticket_list_screen": {
+    "title": "My Tickets"
+  },
+  "ticket_screen": {
+    "title": "Your ticket",
+    "details": "Details"
+  },
+  "drop_down_menu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "signout": "Sign out"
+  },
+    "profile_screen": {
+    "about": "About",
+    "interests": "Interests",
+    "events": "Events",
+    "add_description_prompt": "Add a description to help others get to know you better!",
+    "no_description": "No description provided",
+    "no_interests": "No interests added yet"
+  },
+  "settings_screen": {
+    "title": "Account settings",
+    "privacy_policy": "Privacy Policy",
+    "eula": "End User License Agreement (EULA)",
+    "contact_us": "Contact Us",
+    "about": "About Linkzy",
+    "deleteaccount": "Delete your account"
+  }
 }

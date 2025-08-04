@@ -14,6 +14,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import UserBadges from './UserBadges';
 import { supabase } from '../../../supabase';
 import ordinal_suffix_of from '../../utils/functions/ordinal_suffix_of';
+import { useTranslation } from 'react-i18next';
 
 interface UserDetailsProps {
     name: string;
@@ -60,7 +61,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-600' : 'bg-red-300')
     const today = new Date('2025-04-05');
     const [trophies, setTrophies] = useState<trophyProps[] | null>(null);
-
+    const { t } = useTranslation();
     const fetchUserTropHies = async () => {
         const { data, error } = await supabase
             .from('fact_user_competition_prizes')
@@ -178,9 +179,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
                 </View>
             </View>
-            <View className=' w- flex flex-row space-x-2 pt-1' >
+            {/* <View className=' w- flex flex-row space-x-2 pt-1' >
                 {
-                    // trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
+                    trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
                     trophies?.map((trophy) => (
                         <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2 h-8'>
                             <Text
@@ -189,7 +190,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 {ordinal_suffix_of(trophy.rank).toString()}
                             </Text>
                             <Text> of the {trophy.competition_period_type}</Text>
-                            {/* <Text>{trophy.dim_competition_prizes.trophy_name}</Text> */}
+                            <Text>{trophy.dim_competition_prizes.trophy_name}</Text>
                             <Image
                                 className='h-10 w-9 rounded-full'
                                 source={{
@@ -201,7 +202,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 
                     )
                 }
-            </View>
+            </View> */}
 
             {/* Following banner */}
             {/* <View className='flex-row justify-center space-x-20'>
@@ -221,7 +222,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
 
 
             <View className='flex flex-row items-center space-x-3 mb-3'>
-                <Text className='text-lg font-semibold '>About</Text>
+                <Text className='text-lg font-semibold '>
+                    {t('profile_screen.about')}
+                </Text>
                 {
                     isCurrentUserProfile && (
                         <TouchableOpacity className=' flex flex-row ' onPress={() => setModalVisible(!modalVisible)}>
@@ -240,11 +243,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                         </Text> :
                         <View className='w-full flex items-center justify-center'>
                             {currentUser.id === user_id ?
-                                <Text>
-                                    Add a description to help others know you better!
+                                <Text className='italic text-center'>
+                                    {t('profile_screen.add_description_prompt')}
                                 </Text> :
-                                <Text className='italic'>
-                                    This user has not added a description
+                                <Text className='italic text-center'>
+                                    {t('profile_screen.no_description')}
                                 </Text>
                             }
                         </View>

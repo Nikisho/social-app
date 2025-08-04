@@ -5,10 +5,12 @@ import { selectCurrentUser } from '../../../context/navSlice'
 import SecondaryHeader from '../../../components/SecondaryHeader'
 import { supabase } from '../../../../supabase'
 import { FlatList } from 'react-native-gesture-handler'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../../utils/types/types'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
 import styles from '../../../utils/styles/shadow'
+import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import FastImage from 'react-native-fast-image'
 
 
@@ -28,6 +30,7 @@ const TicketFeedScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const [tickets, setTickets] = useState<TicketsProps[] | null>(null);
     const navigation = useNavigation<RootStackNavigationProp>();
+    const { t } = useTranslation();
     const fetchTickets = async () => {
         const { error, data } = await supabase
             .from('tickets')
@@ -63,12 +66,6 @@ const TicketFeedScreen = () => {
     useEffect(() => {
         fetchTickets()
     }, []);
-
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         fetchTickets()
-    //     }, [])
-    // );
 
     const renderItem = ({ item }: { item: any }) => {
         return (
@@ -107,7 +104,7 @@ const TicketFeedScreen = () => {
     return (
         <View className=''>
             <SecondaryHeader
-                displayText='My tickets'
+                displayText={t('ticket_list_screen.title')}
             />
             {
                 tickets && tickets?.length != 0 ?

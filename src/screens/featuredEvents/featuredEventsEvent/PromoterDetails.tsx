@@ -2,6 +2,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
+import { useTranslation } from 'react-i18next';
 
 interface PromoterDetailsProps {
     organizers : {
@@ -16,10 +17,11 @@ const PromoterDetails:React.FC<PromoterDetailsProps> = ({
     organizers,
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const { t } = useTranslation();
     return (
         <View className='p-2'>
             <Text className='text-xl font-bold'>
-                Promoter
+                {t('featured_event_screen.promoter')}
             </Text>
             <TouchableOpacity 
                 onPress={() => navigation.navigate('profile', {

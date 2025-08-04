@@ -10,6 +10,7 @@ import platformAlert from '../../../utils/functions/platformAlert';
 import BookEventCheckoutModal from './BookEventCheckoutModal';
 import { delay } from '../../../utils/functions/delay';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
+import { t } from 'i18next';
 
 interface BookEventProps {
     is_free: boolean;
@@ -202,14 +203,14 @@ const BookEvent: React.FC<BookEventProps> = ({
                         className={`p-3 rounded-full bg-white w-1/4 ${isEventExpired(date) && 'opacity-60'}`}
                     >
                         <Text className='text-center font-bold'>
-                            {isEventExpired(date) ? 'CLOSED' : 'BOOK'}
+                            {isEventExpired(date) ? `${t('featured_event_screen.closed')}`: `${t('featured_event_screen.book')}`}
                         </Text>
                     </TouchableOpacity>
             }
             {
                 is_free ?
                     <Text className='text-3xl text-white font-bold'>
-                        FREE
+                        {t('featured_event_screen.free')}
                     </Text>
                     :
                     <Text className='text-3xl text-white font-bold'>

@@ -2,15 +2,14 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { supabase } from '../../../../supabase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../../context/navSlice';
 import { useState } from 'react';
 import platformAlert from '../../../utils/functions/platformAlert';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const AppleSignIn = () => {
-
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const handleSignIn = async () => {

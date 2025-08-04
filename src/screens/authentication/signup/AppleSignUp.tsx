@@ -5,12 +5,13 @@ import { supabase } from '../../../../supabase';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const AppleSignUp = (
     {isChecked}: {isChecked: boolean}
 ) => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation<RootStackNavigationProp>();
     const handleSignIn = async () => {

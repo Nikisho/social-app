@@ -3,10 +3,11 @@ import { ScrollView, Text, StyleSheet, View, Button, TouchableOpacity } from 're
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useTranslation } from 'react-i18next';
 
 const EulaScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <TouchableOpacity className="py-5 " onPress={() => navigation.goBack()}>
@@ -15,61 +16,45 @@ const EulaScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
   
 
-        <Text style={styles.heading}>End User License Agreement (EULA)</Text>
+      <Text style={styles.heading}>{t('eula.title')}</Text>
 
-        <Text style={styles.sectionHeading}>1. Acceptance of Terms</Text>
-        <Text style={styles.text}>
-          By downloading or using the Linkzy app, you agree to this End User License Agreement (EULA). This EULA is a legal agreement between you and Linkzy, governing your use of the application.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section1.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section1.text')}</Text>
 
-        <Text style={styles.sectionHeading}>2. Age requirement</Text>
-        <Text style={styles.text}>
-          Linkzy is strictly for users aged 18 and older. By agreeing to this EULA, you confirm that you are at least 18 years old. Users found to be under the age of 18 will have their accounts terminated immediately.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section2.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section2.text')}</Text>
 
-        <Text style={styles.sectionHeading}>3. User-Generated Content</Text>
-        <Text style={styles.text}>
-          Linkzy allows users to create, post, and share content. However, you agree not to post any content that is illegal, offensive, discriminatory, harmful, or otherwise objectionable. Linkzy has no tolerance for objectionable content or abusive behavior.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section3.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section3.text')}</Text>
 
-        <Text style={styles.sectionHeading}>4. Prohibited Conduct</Text>
-        <Text style={styles.text}>
-          You may not use the app to:
-        </Text>
-        <Text style={styles.text}>
-          - Harass, bully, or abuse other users.{'\n'}
-          - Post or share inappropriate, offensive, or illegal content.{'\n'}
-          - Engage in fraudulent or deceptive practices.{'\n'}
-          - Violate any applicable laws or regulations.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section4.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section4.intro')}</Text>
+      <Text style={styles.text}>
+        {t('eula.section4.list.0') + '\n'}
+        {t('eula.section4.list.1') + '\n'}
+        {t('eula.section4.list.2') + '\n'}
+        {t('eula.section4.list.3')}
+      </Text>
 
-        <Text style={styles.sectionHeading}>5. Account Suspension or Termination</Text>
-        <Text style={styles.text}>
-          Linkzy reserves the right to suspend or terminate accounts that violate this agreement or participate in abusive or illegal behavior.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section5.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section5.text')}</Text>
 
-        <Text style={styles.sectionHeading}>6. No Tolerance for Objectionable Content</Text>
-        <Text style={styles.text}>
-          There is zero tolerance for any objectionable content, including but not limited to:
-        </Text>
-        <Text style={styles.text}>
-          - Hate speech, racism, or discrimination.{'\n'}
-          - Explicit or inappropriate sexual content.{'\n'}
-          - Violence or threats of violence.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section6.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section6.intro')}</Text>
+      <Text style={styles.text}>
+        {t('eula.section6.list.0') + '\n'}
+        {t('eula.section6.list.1') + '\n'}
+        {t('eula.section6.list.2')}
+      </Text>
 
-        <Text style={styles.sectionHeading}>7. Limitation of Liability</Text>
-        <Text style={styles.text}>
-          Linkzy is not responsible for the actions of users on the app. We do our best to moderate and remove inappropriate content, but users engage with the app at their own risk.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section7.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section7.text')}</Text>
 
-        <Text style={styles.sectionHeading}>8. Changes to this Agreement</Text>
-        <Text style={styles.text}>
-          Linkzy reserves the right to modify this EULA at any time. Changes will be posted within the app and take effect immediately.
-        </Text>
+      <Text style={styles.sectionHeading}>{t('eula.section8.heading')}</Text>
+      <Text style={styles.text}>{t('eula.section8.text')}</Text>
 
         <Button
-          title="Back"
+          title={t('eula.backButton')}
           onPress={() => navigation.goBack()}
           color="#000000"
         />

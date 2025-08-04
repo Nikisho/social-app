@@ -6,13 +6,13 @@ import styles from '../../../utils/styles/shadow';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const GoogleSignUp = ({
     isChecked
 }: {isChecked: boolean}) => {
-
+    const { t } = useTranslation();
     GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
     const navigation = useNavigation<RootStackNavigationProp>();
     const [loading, setLoading] = useState<boolean>(false);
