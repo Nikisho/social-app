@@ -7,6 +7,7 @@ import ChatCard from './ChatCard';
 import { useFocusEffect } from '@react-navigation/native';
 import NoMessagesView from './NoMessageView';
 import SecondaryHeader from '../../components/SecondaryHeader';
+import { useTranslation } from 'react-i18next';
 
 interface ChatDataProps {
 	user_id: number;
@@ -24,6 +25,7 @@ interface ChatDataProps {
 const ChatListScreen = () => {
 	const [chats, setChats] = useState<Array<ChatDataProps>>();
 	const currentUser = useSelector(selectCurrentUser);
+	const { t } = useTranslation();
 	const fetchChats = async () => {
 		const [privateRes, groupRes] = await Promise.all([
 			supabase.rpc('fetch_private_chats', { current_user_id: currentUser.id }),
@@ -66,7 +68,7 @@ const ChatListScreen = () => {
 	return (
 		<View className=''>
 			<SecondaryHeader
-				displayText='My chats'
+				displayText={t('chat_list_screen.title')}
 			/>
 			{
 				chats && chats?.length !== 0 ?

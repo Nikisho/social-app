@@ -14,6 +14,7 @@ import ProfilePictureModal from './ProfilePictureModal';
 import platformAlert from '../../utils/functions/platformAlert';
 import FeaturedEventsUser from './FeaturedEventsUser';
 import SecondaryHeader from '../../components/SecondaryHeader';
+import { useTranslation } from 'react-i18next';
 
 interface UserDataProps {
 	name: string;
@@ -50,7 +51,7 @@ const ProfileScreen = () => {
 	const [profilePictureModalVisible, setProfilePictureModalVisible] = useState(false);
 	const [originalBio, setOriginalBio] = useState('');
 	const [userInterests, setUserInterests] = useState<Interests[]>();
-
+	const { t } = useTranslation();
 	const dispatch = useDispatch();
 
 	const fetchUserData = async () => {
@@ -233,7 +234,7 @@ const ProfileScreen = () => {
 
 						/>
 						{userData?.is_organizer &&
-							<Text className='text-lg font-semibold mb-2'>Events</Text>
+							<Text className='text-lg font-semibold mb-2'> {t('profile_screen.events')} </Text>
 						}
 					</>
 

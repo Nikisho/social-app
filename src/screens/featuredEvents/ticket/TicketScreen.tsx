@@ -8,6 +8,7 @@ import colours from '../../../utils/styles/colours';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import SecondaryHeader from '../../../components/SecondaryHeader';
 import styles from '../../../utils/styles/shadow';
+import { useTranslation } from 'react-i18next';
 
 interface TicketProps {
     ticket_id: number;
@@ -26,6 +27,7 @@ const TicketScreen = ({ }) => {
     const { ticket_id } = route.params;
     const [ticket, setTicket] = useState<TicketProps>();
     const navigation = useNavigation<RootStackNavigationProp>();
+    const { t } = useTranslation();     
     const fetchTicket = async () => {
         const { data, error } = await supabase
             .from('tickets')
@@ -57,7 +59,7 @@ const TicketScreen = ({ }) => {
             style={{ backgroundColor: colours.primaryColour }}
             className='h-3/4 p-3 '>
             <View className='pb-4'>
-                <SecondaryHeader displayText='Your ticket' />
+                <SecondaryHeader displayText={t('ticket_screen.title')} />
             </View>
             {
                 ticket && (
@@ -93,7 +95,7 @@ const TicketScreen = ({ }) => {
                             })}
                             className='bg-black p-2 w-1/3 rounded-full my-10'>
                             <Text className='text-center text-white font-bold text-lg'>
-                                Details
+                                {t('ticket_screen.details')}
                             </Text>
                         </TouchableOpacity>
                     </View>

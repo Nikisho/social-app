@@ -6,6 +6,7 @@ import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeek
 import FastImage from 'react-native-fast-image'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import platformAlert from '../../../utils/functions/platformAlert';
+import { useTranslation } from 'react-i18next';
 
 interface EventDataProps {
     description: string;
@@ -26,6 +27,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
     time,
     featured_event_id
 }) => {
+    const { t } = useTranslation();
     const [textShown, setTextShown] = useState(false); //To show ur remaining Text
     const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
     const toggleNumberOfLines = () => { //To toggle the show text or hide it
@@ -91,7 +93,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                 </View>
 
                 <Text className='text-2xl font-bold mt-3 mb-2'>
-                    Event info
+                    {t('featured_event_screen.event_info')}
                 </Text>
                 <Hyperlink
                     linkDefault={true}

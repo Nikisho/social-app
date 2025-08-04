@@ -103,7 +103,7 @@ const GoogleSignIn = () => {
                 disabled={loading}
             >
                 <AntDesign name="google" size={24} color="red" />
-                <Text className=' font-semibold text-lg ml-5'>
+                <Text className=' font-semibold text-lg ml-12'>
                     {t('google_login_button')}
                 </Text>
             </TouchableOpacity>

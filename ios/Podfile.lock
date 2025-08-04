@@ -104,13 +104,10 @@ PODS:
   - FBLazyVector (0.76.9)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - Google-Mobile-Ads-SDK (11.5.0):
-    - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleSignIn (7.1.0):
     - AppAuth (< 2.0, >= 1.7.3)
     - GTMAppAuth (< 5.0, >= 4.1.1)
     - GTMSessionFetcher/Core (~> 3.3)
-  - GoogleUserMessagingPlatform (2.4.0)
   - GTMAppAuth (4.1.1):
     - AppAuth/Core (~> 1.7)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
@@ -130,8 +127,6 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - PurchasesHybridCommon (13.26.0):
-    - RevenueCat (= 5.20.0)
   - RCT-Folly (2024.10.14.00):
     - boost
     - DoubleConversion
@@ -1708,7 +1703,6 @@ PODS:
     - React-logger
     - React-perflogger
     - React-utils (= 0.76.9)
-  - RevenueCat (5.20.0)
   - RNCAsyncStorage (1.23.1):
     - React-Core
   - RNFastImage (8.6.3):
@@ -1736,34 +1730,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGoogleMobileAds (14.0.0):
-    - DoubleConversion
-    - glog
-    - Google-Mobile-Ads-SDK (= 11.5.0)
-    - GoogleUserMessagingPlatform (= 2.4.0)
-    - hermes-engine
-    - RCT-Folly (= 2024.10.14.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNGoogleSignin (12.2.1):
     - GoogleSignIn (~> 7.1)
-    - React-Core
-  - RNPurchases (8.9.1):
-    - PurchasesHybridCommon (= 13.26.0)
     - React-Core
   - RNReanimated (3.16.7):
     - DoubleConversion
@@ -2016,9 +1984,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
-  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2028,15 +1994,11 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AppAuth
-    - Google-Mobile-Ads-SDK
     - GoogleSignIn
-    - GoogleUserMessagingPlatform
     - GTMAppAuth
     - GTMSessionFetcher
     - libwebp
-    - PurchasesHybridCommon
     - ReachabilitySwift
-    - RevenueCat
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
@@ -2235,12 +2197,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNGoogleMobileAds:
-    :path: "../node_modules/react-native-google-mobile-ads"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
-  RNPurchases:
-    :path: "../node_modules/react-native-purchases"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2283,14 +2241,11 @@ SPEC CHECKSUMS:
   FBLazyVector: 7605ea4810e0e10ae4815292433c09bf4324ba45
   fmt: 01b82d4ca6470831d1cc0852a1af644be019e8f6
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
-  Google-Mobile-Ads-SDK: 7db2098033ad3bfcd72a11e7503b49700a93029e
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
-  GoogleUserMessagingPlatform: f131fa7978d2ba88d7426702b057c2cc318e6595
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 9e868dc7be781364296d6ee2f56d0c1a9ef0bb11
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  PurchasesHybridCommon: fa166fc8b385cf80f581f923c91d8ccffe5dd7f8
   RCT-Folly: 7b4f73a92ad9571b9dbdb05bb30fad927fa971e1
   RCTDeprecation: ebe712bb05077934b16c6bf25228bdec34b64f83
   RCTRequired: ca91e5dd26b64f577b528044c962baf171c6b716
@@ -2351,13 +2306,10 @@ SPEC CHECKSUMS:
   React-utils: 54df9ada708578c8ad40d92895d6fed03e0e8a9e
   ReactCodegen: 21a52ccddc6479448fc91903a437dd23ddc7366c
   ReactCommon: bfd3600989d79bc3acbe7704161b171a1480b9fd
-  RevenueCat: e47ff90dfd271fde155a4befe48e8fc02e8281e4
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNGestureHandler: 783a0ed6c92de677e2346d4250c5de028a1db698
-  RNGoogleMobileAds: 9164dc4d5c6722abf5321f4b70825674653c656a
   RNGoogleSignin: 08dc4ba7eac2096c7fecfe109f0950fa4683c803
-  RNPurchases: 596c32adac473fe4c9aa6185defdaa1dbd3b68f9
   RNReanimated: 3cdb86c3a93fd28e76b497f0ead4019fc502c1c1
   RNScreens: 02c4adf5b4820807807b1d7d4f8bc27eeaed8e11
   RNSVG: 8b1a777d54096b8c2a0fd38fc9d5a454332bbb4d

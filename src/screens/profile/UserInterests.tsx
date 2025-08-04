@@ -3,6 +3,7 @@ import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
+import { useTranslation } from 'react-i18next';
 
 interface UserInterestsProps {
     user_id: number;
@@ -21,10 +22,11 @@ const UserInterests: React.FC<UserInterestsProps> = ({
     userInterests
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const { t } = useTranslation();
     return (
         <View className='py-3'>
             <View className='flex flex-row items-center space-x-3 mb-4 '>
-                <Text className='text-lg font-semibold'>Interests</Text>
+                <Text className='text-lg font-semibold'> {t('profile_screen.interests')} </Text>
                 {
                     isCurrentUserProfile && (
                         <TouchableOpacity
@@ -41,7 +43,7 @@ const UserInterests: React.FC<UserInterestsProps> = ({
                 userInterests?.length === 0 ?
                     <View>
                         <Text className='italic py-3'>
-                            No interests added yet
+                            {t('profile_screen.no_interests')} 
                         </Text>
                     </View>
                     :

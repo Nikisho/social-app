@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { getColorFromName } from '../../../utils/functions/getColorFromName';
+import { useTranslation } from 'react-i18next';
 
 interface AttendeeProps {
     id: number;
@@ -16,7 +17,7 @@ interface AttendeeProps {
 const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_event_id: number, chat_room_id: number, organizers: { user_id: number } }) => {
 
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
-
+    const { t } = useTranslation();
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const isOrganizer = currentUser.id === organizers.user_id;
@@ -109,7 +110,7 @@ const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_e
             onPress={handleNavigate}
             className='p-2'>
             <Text className='text-xl font-bold'>
-                Going {'  ' + attendees?.length.toString()}
+                {t('featured_event_screen.going')} {'  ' + attendees?.length.toString()}
             </Text>
             <FlatList
                 horizontal

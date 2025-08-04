@@ -5,6 +5,7 @@ import { RootStackNavigationProp } from '../../../utils/types/types';
 import { supabase } from '../../../../supabase';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import FastImage from 'react-native-fast-image';
+import { t } from 'i18next';
 
 
 interface FeaturedEventCard {
@@ -61,11 +62,11 @@ const FeaturedEventsFeed = () => {
                         {
                             item.is_free ?
                                 <Text className="text-lg text-center font-semibold text-white">
-                                    FREE
+                                    {t('featured_events.free')}
                                 </Text>
                                 :
                                 <Text className="text-lg text-center font-semibold text-white">
-                                    £{item.price}
+                                    {t('featured_events.currency')} {item.price}
                                 </Text>
                         }
                     </View>

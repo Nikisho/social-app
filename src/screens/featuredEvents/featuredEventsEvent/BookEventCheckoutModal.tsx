@@ -142,7 +142,6 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     const initializePaymentSheet = async (amount: number) => {
         if (!(await isPlatformPaySupported({ googlePay: { testEnv: true } }))) {
             console.log('Google Pay is not supported.');
-            // return;
         } else {
             console.log('google pay supported')
         }
@@ -165,7 +164,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
             },
             googlePay: {
                 merchantCountryCode: 'GB',
-                testEnv: true, // use test environment,
+                testEnv: __DEV__ ? true : false, // use test environment,
                 currencyCode: 'gbp',
             },
         });

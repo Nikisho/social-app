@@ -5,38 +5,38 @@ import { selectCurrentUser } from '../../context/navSlice';
 import DeleteProfileModal from './DeleteProfileModal';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import SecondaryHeader from '../../components/SecondaryHeader';
+import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const navigation = useNavigation<RootStackNavigationProp>();
-
+  const { t } = useTranslation();
   const openURL = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("Failed to open URL:", err));
   };
 
   const menuItems = [
     {
-      title: 'Privacy Policy',
+      title: `${t('settings_screen.privacy_policy')}`,
       icon: <MaterialIcons name="privacy-tip" size={24} color="black" />,
       onPress: () => openURL('https://www.linkzyapp.com/privacypolicy.html'),
     },
     {
-      title: 'End-User License Agreement',
+      title: `${t('settings_screen.eula')}`,
       icon: <AntDesign name="filetext1" size={24} color="black" />,
       onPress: () => navigation.navigate('eula'),
     },
     {
-      title: 'Contact Support',
+      title: `${t('settings_screen.contact_us')}`,
       icon: <MaterialIcons name="headphones" size={24} color="black" />,
       onPress: () => openURL('https://www.linkzyapp.com/contactus.html'),
     },
     {
-      title: 'About Linkzy',
+      title: `${t('settings_screen.about')}`,
       icon: <AntDesign name="questioncircle" size={24} color="black" />,
       onPress: () => openURL('https://www.linkzyapp.com'),
     },
@@ -47,7 +47,7 @@ const SettingsScreen = () => {
       <View className=''>
 
       <SecondaryHeader
-        displayText='Account settings'
+        displayText={t('settings_screen.title')}
         />
         </View>
       <View className="w-full flex flex-row justify-center pb-5">
@@ -69,7 +69,7 @@ const SettingsScreen = () => {
           onPress={() => setDeleteModalVisible(!deleteModalVisible)}
           className="w-full bg-red-500 py-5 flex flex-row justify-center"
         >
-          <Text className="font-semibold text-white">Delete your account</Text>
+          <Text className="font-semibold text-white">{t('settings_screen.deleteaccount')}</Text>
         </TouchableOpacity>
         <DeleteProfileModal
           modalVisible={deleteModalVisible}

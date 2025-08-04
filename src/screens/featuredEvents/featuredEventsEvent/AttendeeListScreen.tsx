@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { getColorFromName } from '../../../utils/functions/getColorFromName';
+import { useTranslation } from 'react-i18next';
 
 interface AttendeeProps {
     id: number;
@@ -25,8 +26,7 @@ const AttendeeListScreen = () => {
     const route = useRoute<AttendeeListScreenProps>()
     const { featured_event_id, chat_room_id } = route.params
     const currentUser = useSelector(selectCurrentUser);
-
-    
+    const { t } = useTranslation();
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
@@ -110,7 +110,7 @@ const AttendeeListScreen = () => {
 
         >
             <SecondaryHeader
-                displayText='Attendees'
+                displayText={t('attendee_list_screen.title')}
             />
             <View className='flex items-center my-5'>
 

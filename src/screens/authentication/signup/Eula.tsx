@@ -3,6 +3,7 @@ import React from 'react'
 import Checkbox from 'expo-checkbox'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../../utils/types/types'
+import { t } from 'i18next'
 
 interface EulaProps {
     isChecked: boolean,
@@ -21,8 +22,8 @@ const Eula:React.FC<EulaProps> = ({
                 className='mt-1'
             />
             <View>
-                <Text onPress={() => navigation.navigate('eula')} className='w-4/5 ml-2 text-blue-600 underline'>
-                    I agree to Linkzy's End User License Agreement (EULA).
+                <Text onPress={() => navigation.navigate('eula')} className='w-3/5 ml-2 text-blue-600 underline'>
+                    {t('eula_checkbox_label')}
                 </Text>
             </View>
         </View>
