@@ -8,6 +8,7 @@ import validateEmail from '../../../utils/functions/validateEmail';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import platformAlert from '../../../utils/functions/platformAlert';
+import { updateCurrentUser } from '../../../utils/functions/updateCurrentUser';
 
 const EmailSignIn = () => {
 
@@ -37,7 +38,7 @@ const EmailSignIn = () => {
 			const { error, data } = await supabase
 				.from('users')
 				.select()
-				.eq('uid', session.user.id)
+				.eq('uid', session.user.id);
 			if (data?.length === 0) {
 				platformAlert("Let's finalise your signup.")
 				setLoading(false);
@@ -46,15 +47,17 @@ const EmailSignIn = () => {
 			}
 			//Fetch data once user is retrieved, and add to context
 			if (data) {
-				dispatch(setCurrentUser({
-					name: data[0].name,
-					email: email,
-					photo: data[0].photo,
-					id: data[0].id,
-					sex: data[0].sex,
-					gemCount: data[0].gem_count
+					// dispatch(setCurrentUser({
+					//     name: data[0].name,
+					//     email: data[0].email,
+					//     photo: data[0].photo,
+					//     id: data[0].id,
+					//     sex: data[0].sex,
+					//     gemCount: data[0].gem_count,
+					//     isOrganizer: data[0].is_organizer
 
-				}))
+					// }))
+					updateCurrentUser(dispatch, data[0]);
 			}
 		}
 

@@ -4,7 +4,7 @@ import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
 import { stripe } from "../_utils/stripe.ts";
 import { supabaseAdmin } from '../_utils/supabase.ts'
 import { generateTicket } from '../_utils/generateTicket.ts'
-import { bookFeaturedEvent } from '../_utils/bookFeaturedEvent.tsx'
+import { bookFeaturedEvent } from '../_utils/bookFeaturedEvent.ts'
 // @ts-ignore
 const server = Deno.listen({ port: 8080 });
 async function handler(request: Request) {

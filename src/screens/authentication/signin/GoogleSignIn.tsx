@@ -9,6 +9,8 @@ import styles from '../../../utils/styles/shadow'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import platformAlert from '../../../utils/functions/platformAlert'
 import { useTranslation } from 'react-i18next'
+import { update } from 'lodash'
+import { updateCurrentUser } from '../../../utils/functions/updateCurrentUser'
 
 const GoogleSignIn = () => {
     const { t } = useTranslation();
@@ -40,7 +42,7 @@ const GoogleSignIn = () => {
                 const { error, data } = await supabase
                     .from('users')
                     .select()
-                    .eq('email', userInfo?.user.email);
+                    .eq('email', userInfo?.user.email)
 
                 if (error) { throw new Error(error.message); }
 
@@ -51,15 +53,17 @@ const GoogleSignIn = () => {
                         await GoogleSignin.signOut();
                         return;
                     }
-                    dispatch(setCurrentUser({
-                        name: data[0].name,
-                        email: data[0].email,
-                        photo: data[0].photo,
-                        id: data[0].id,
-                        sex: data[0].sex,
-				        gemCount: data[0].gem_count
+                    // dispatch(setCurrentUser({
+                    //     name: data[0].name,
+                    //     email: data[0].email,
+                    //     photo: data[0].photo,
+                    //     id: data[0].id,
+                    //     sex: data[0].sex,
+				    //     gemCount: data[0].gem_count,
+                    //     isOrganizer: data[0].is_organizer
 
-                    }))
+                    // }))
+                    updateCurrentUser(dispatch, data[0]);
                 }
             } else {
                 throw new Error('no ID token present!')

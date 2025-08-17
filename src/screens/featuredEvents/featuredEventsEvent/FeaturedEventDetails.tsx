@@ -4,9 +4,10 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Hyperlink from 'react-native-hyperlink'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
 import FastImage from 'react-native-fast-image'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { useTranslation } from 'react-i18next';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import styles from '../../../utils/styles/shadow';
 
 interface EventDataProps {
     description: string;
@@ -71,8 +72,9 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
             >
                 <TouchableOpacity 
                     onPress={() => handleShareEventLink()}
-                    className='bg-white m-5 rounded-full justify-center flex'>
-                    <MaterialCommunityIcons name="share-circle" size={40} color="black" />
+                    style={styles.shadowButtonStyle}
+                    className='bg-black p-3 m-5 rounded-full justify-center flex'>
+                    <Ionicons name="share-social-outline" size={25} color="white" />
                 </TouchableOpacity>
             </FastImage>
 
@@ -111,7 +113,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                 {
                     lengthMore ? <Text
                         onPress={toggleNumberOfLines}
-                        style={{ lineHeight: 21, marginTop: 10, fontSize: 15 }}>{textShown ? 'Read less...' : 'Read more...'}</Text>
+                        style={{ lineHeight: 21, marginTop: 10, fontSize: 15 }}>{textShown ? `${t('featured_event_screen.read_less')}...` :` ${t('featured_event_screen.read_more')}...`}</Text>
                         : null
                 }
             </View>

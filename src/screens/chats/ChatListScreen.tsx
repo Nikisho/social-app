@@ -8,6 +8,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import NoMessagesView from './NoMessageView';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { useTranslation } from 'react-i18next';
+import LoadingScreen from '../loading/LoadingScreen';
 
 interface ChatDataProps {
 	user_id: number;
@@ -26,32 +27,40 @@ const ChatListScreen = () => {
 	const [chats, setChats] = useState<Array<ChatDataProps>>();
 	const currentUser = useSelector(selectCurrentUser);
 	const { t } = useTranslation();
+	const [loading, setLoading] = useState<boolean>(false);
 	const fetchChats = async () => {
-		const [privateRes, groupRes] = await Promise.all([
-			supabase.rpc('fetch_private_chats', { current_user_id: currentUser.id }),
-			supabase.rpc('fetch_group_chats', { current_user_id: currentUser.id })
-		]);
-		if (privateRes.error) console.error('Private chat error:', privateRes.error.message);
-		if (groupRes.error) console.error('Group chat error:', groupRes.error.message);
+		setLoading(true);
+		try {
+			const [privateRes, groupRes] = await Promise.all([
+				supabase.rpc('fetch_private_chats', { current_user_id: currentUser.id }),
+				supabase.rpc('fetch_group_chats', { current_user_id: currentUser.id })
+			]);
+			if (privateRes.error) console.error('Private chat error:', privateRes.error.message);
+			if (groupRes.error) console.error('Group chat error:', groupRes.error.message);
 
-		if (privateRes.data || groupRes.data) {
-			// Tag chats so your UI knows which is which
-			const taggedPrivate = (privateRes.data || []).map((chat: ChatDataProps) => ({
-				...chat,
-				type: 'private'
-			}));
+			if (privateRes.data || groupRes.data) {
+				// Tag chats so your UI knows which is which
+				const taggedPrivate = (privateRes.data || []).map((chat: ChatDataProps) => ({
+					...chat,
+					type: 'private'
+				}));
 
-			const taggedGroup = (groupRes.data || []).map((chat: ChatDataProps) => ({
-				...chat,
-				type: 'group'
-			}));
+				const taggedGroup = (groupRes.data || []).map((chat: ChatDataProps) => ({
+					...chat,
+					type: 'group'
+				}));
 
-			// Combine and sort by latest message
-			const combined = [...taggedPrivate, ...taggedGroup].sort(
-				(a, b) => Number(new Date(b.last_message_time)) - Number(new Date(a.last_message_time))
-			);
-
-			setChats(combined);
+				// Combine and sort by latest message
+				const combined = [...taggedPrivate, ...taggedGroup].sort(
+					(a, b) => Number(new Date(b.last_message_time)) - Number(new Date(a.last_message_time))
+				);
+				setChats(combined);
+			}
+		} catch (error) {
+			console.error(error)
+		}
+		finally {
+			setLoading(false);
 		}
 	};
 
@@ -65,6 +74,10 @@ const ChatListScreen = () => {
 			currentUser={currentUser}
 		/>
 	);
+
+	if (loading) {
+		return <LoadingScreen displayText='Getting your chats...' />
+	}
 	return (
 		<View className=''>
 			<SecondaryHeader

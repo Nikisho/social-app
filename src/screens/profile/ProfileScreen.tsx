@@ -15,6 +15,7 @@ import platformAlert from '../../utils/functions/platformAlert';
 import FeaturedEventsUser from './FeaturedEventsUser';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { useTranslation } from 'react-i18next';
+import getAge from '../../utils/functions/getAge';
 
 interface UserDataProps {
 	name: string;
@@ -53,7 +54,7 @@ const ProfileScreen = () => {
 	const [userInterests, setUserInterests] = useState<Interests[]>();
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
-
+    const genderColour = userData.sex === 0 ? 'bg-green-400' : (userData.sex === 1 ? 'bg-sky-600' : 'bg-red-300')
 	const fetchUserData = async () => {
 		const { error, data } = await supabase
 			.from('users')
@@ -207,9 +208,34 @@ const ProfileScreen = () => {
 
 	return (
 		<>
-			<SecondaryHeader
-				displayText={userData.name}
-			/>
+			<View className='flex flex-row items-center'>
+
+				<SecondaryHeader
+					displayText={userData.name}
+				/>
+				{/* <Text>hi</Text> */}
+				{
+					userData?.date_of_birth && (
+						<View
+							// style={{ backgroundColor: colours.secondaryColour }}
+							className={` flex flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
+						>
+
+							{userData.sex !== 0 && (
+								<Text className="text-lg font-semibold  text-white">
+									{userData.sex  === 1 ? "♂" : "♀"}
+								</Text>
+							)}
+
+							<Text
+								className='text-lg font-semibold text-white'>
+								{getAge(userData.date_of_birth)}
+							</Text>
+						</View>
+					)
+				}
+			</View>
+ 
 			<FeaturedEventsUser
 				HeaderContent={
 					<>
@@ -219,6 +245,7 @@ const ProfileScreen = () => {
 							photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
 							bio={userData.bio}
 							sex={userData.sex}
+							isOrganizer={userData.is_organizer}
 							handlePressChat={handlePressChat}
 							setModalVisible={setModalVisible}
 							isCurrentUserProfile={isCurrentUserProfile}

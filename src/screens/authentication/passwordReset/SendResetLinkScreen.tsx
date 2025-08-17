@@ -8,6 +8,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import { handleUrl } from '../../../utils/functions/handleUrl';
+import platformAlert from '../../../utils/functions/platformAlert';
 
 const SendResetLinkScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
@@ -25,11 +26,8 @@ const SendResetLinkScreen = () => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: 'com.linkzy://resetpassword', 
         });
-        if (error) throw error.message;
-        Platform.OS === 'android' ?
-            ToastAndroid.show("We've send you a link to reset your password.", ToastAndroid.SHORT)
-            :
-            Alert.alert("We've send you a link to reset your password.")
+        if (error)  console.error(error.message);
+        platformAlert("We've sent you a link to reset your password.")
     };
  
     useEffect(() => {
@@ -50,7 +48,7 @@ const SendResetLinkScreen = () => {
             <View className='w-full flex items-center space-y-5'>
                 <FontAwesome name="lock" size={44} color="black" />
                 <Text className='text-2xl font-semibold'>
-                    Touble loggin in?
+                    Trouble loggin in?
                 </Text>
             </View>
             <View className='w-full flex flex-row justify-center my-5'>

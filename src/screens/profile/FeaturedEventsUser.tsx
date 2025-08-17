@@ -38,6 +38,7 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
     const fetchFeaturedEvents = async () => {
         const organizer_id = await fetchOrganizerId();
         if (!organizer_id) {
+            setFeaturedEvents(null);
             return;
         }
         const { data, error } = await supabase
@@ -56,7 +57,7 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
 
     useFocusEffect(
         React.useCallback(() => {
-            fetchFeaturedEvents()
+            fetchFeaturedEvents();
         }, [user_id])
     );
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {

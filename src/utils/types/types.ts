@@ -33,6 +33,7 @@ export type RootStackParamList = {
   editfeaturedevent: {featured_event_id: number};
   attendeelist: {featured_event_id: number,chat_room_id: number};
   groupchat:{featured_event_id: number};
+  dashboard: undefined;
 };
 
 // Define the navigation prop types

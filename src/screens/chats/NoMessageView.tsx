@@ -10,12 +10,14 @@ const NoMessagesView = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View 
+            style={styles.container}
+            >
             <Text style={styles.message}>
                 You haven't received any messages yet.
             </Text>
             <Text style={styles.subMessage}>
-                Start connecting with others to receive messages!
+                Join an event to connect with others!
             </Text>
             <TouchableOpacity style={styles.button} onPress={handleConnect}>
                 <Text style={styles.buttonText}>Start Connecting</Text>
@@ -28,10 +30,10 @@ export default NoMessagesView;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        height: '70%',
+        // flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: '#f4f4f4', // Light background color
         padding: 20,
     },
     message: {
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
     },
     subMessage: {
         fontSize: 14,
-        color: '#777',
+        color: '#',
         textAlign: 'center',
         marginBottom: 20,
     },

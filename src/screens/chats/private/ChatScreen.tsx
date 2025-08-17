@@ -21,6 +21,9 @@ interface UserDataProps {
 }
 
 interface Message {
+      message_reactions: {
+        reactions: { reaction_emoji: string }
+    }[];
   message_id: number;
   chat_room_id: number;
   sender_id: number;
@@ -117,7 +120,17 @@ const ChatScreen = () => {
     if (!chatRoomIdState) return;
     const { error, data } = await supabase
       .from('messages')
-      .select()
+      .select(`*, 
+                users(
+                    photo,
+                    name,
+                    id
+                ),
+                message_reactions (
+                reaction_id,
+                reactions (reaction_emoji)
+            )
+                `)
       .eq('chat_room_id', chatRoomIdState)
       .order('created_at', { ascending: false })
 
@@ -232,6 +245,7 @@ const ChatScreen = () => {
             <ChatBody
               messages={messages}
               currentUser={currentUser}
+              fetchMessages={fetchMessages}
             />
             <InputBox
               onSendMessage={sendMessage}

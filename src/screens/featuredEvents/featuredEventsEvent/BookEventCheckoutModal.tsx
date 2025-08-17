@@ -6,6 +6,7 @@ import platformAlert from '../../../utils/functions/platformAlert';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import { PlatformPayButton, usePlatformPay } from '@stripe/stripe-react-native';
+import { useTranslation } from 'react-i18next';
 
 interface BookEventCheckoutModalProps {
     modalVisible: boolean;
@@ -33,6 +34,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     tickets_sold
 }) => {
 
+    const { t } = useTranslation();
     const priceStripeAmount = Math.round(parseFloat(price) * 100);
     const currentUser = useSelector(selectCurrentUser);
     console.log(chat_room_id)
@@ -188,22 +190,23 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                     <View className='bg-black w-full p-1 space-y-3 h-80' >
                         <View className='p-2'>
                             <Text className='text-white text-xl'>
-                                Order summary
+                                {t('event_checkout.order_summary')}
                             </Text>
                         </View>
 
                         <View className='p-2 py-3  border-y border-white flex flex-row justify-between'>
                             <Text className='text-white text-lg'>
-                                General Admission
+                                {t('event_checkout.general_admission')}
                             </Text>
                             {
                                 is_free ?
                                     <Text className='text-lg text-white font-bold'>
-                                        FREE
+                                        {t('event_checkout.free')}
                                     </Text>
                                     :
                                     <Text className=' text-lg text-white font-bold'>
-                                        £{price}
+                                        {/* £{price} */}
+                                        {t('event_checkout.currency')} {price}
                                     </Text>
                             }
                         </View>
@@ -212,7 +215,9 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                 disabled={loading}
                                 className={`bg-white w-full p-2 rounded-full ${loading && 'opacity-30'}`}
                                 onPress={() => openPaymentSheet(priceStripeAmount)}>
-                                <Text className='text-lg text-center  font-bold'>PURCHASE</Text>
+                                <Text className='text-lg text-center  font-bold'> 
+                                    {t('event_checkout.purchase')}
+                                </Text>
                             </TouchableOpacity>
                             {!is_free &&
                                 <PlatformPayButton

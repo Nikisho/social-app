@@ -70,11 +70,20 @@
     },
     "featured_event_screen": {
         "event_info": "Détails",
+        "read_more": "Lire la suite",
+        "read_less": "Réduire",
         "promoter": "Organisateur",
         "going": "Participants",
         "book": "Réserver",
         "closed": "FERMÉ",
         "free": "GRATUIT"
+    },
+    "event_checkout": {
+        "order_summary": "Récapitulatif de la commande",
+        "general_admission": "Entrée générale",
+        "free": "GRATUIT",
+        "purchase": "ACHETER",
+        "currency": "€"
     },
     "attendee_list_screen": {
         "title": "Participants"

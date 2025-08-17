@@ -50,7 +50,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
         if (item.type === 'group') {
 
             const userHasPhoto = await checkProfilePicture(currentUser.id);
-            if (!userHasPhoto) {
+            if (!userHasPhoto && !__DEV__) {
                 platformAlert('Add a profile picture to chat with attendees!');
                 return;
             }

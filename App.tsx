@@ -38,6 +38,8 @@ import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEvents
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
 import GroupChatScreen from './src/screens/chats/group/GroupChatScreen';
+import DashboardScreen from './src/screens/featuredEvents/dashboard/DashboardScreen';
+import { updateCurrentUser } from './src/utils/functions/updateCurrentUser';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -72,7 +74,6 @@ function AppSafeAreaWrapper() {
 	const [inCompleteSignUp, setIncompleteSignUp] = useState<boolean>(false);
 
 	const fetchSession = async () => {
-		// await setSession();
 		const { data: { session: user } } = await supabase.auth.getSession();
 		if (!user) {
 			setLoading(false);
@@ -84,16 +85,9 @@ function AppSafeAreaWrapper() {
 			.eq('uid', user.user.id);
 
 		if (error) throw error.message;
+
 		if (data && data.length > 0) {
-			dispatch(setCurrentUser({
-				name: data[0].name,
-				email: data[0].email,
-				photo: data[0].photo,
-				id: data[0].id,
-				sex: data[0].sex,
-				gemCount: data[0].gem_count,
-				isOrganizer: data[0].is_organizer
-			}))
+			updateCurrentUser(dispatch, data[0]);
 			if (data.length === 0) {
 				setIncompleteSignUp(true);
 				setLoading(false);
@@ -126,71 +120,66 @@ function AppSafeAreaWrapper() {
 	}
 
 	return (
-			<View
-				className={`${Platform.OS === 'android' && insets.bottom > 20? 'h-[95%]':'h-full'}`} 
-				style={{ backgroundColor: colours.primaryColour }}>
-				<StatusBar hidden={false} barStyle="dark-content" translucent={false} />
-				<NavigationContainer theme={mainTheme} linking={linking} ref={navigationRef} >
-					<Stack.Navigator screenOptions={{
-						headerShown: false
-					}} >
-						{currentUser.id === null ?
-							(
-								<>
-									{
-										inCompleteSignUp ? (
+		<View
+			className={`${Platform.OS === 'android' && insets.bottom > 20 ? 'h-[95%]' : 'h-full'}`}
+			style={{ backgroundColor: colours.primaryColour }}>
+			<StatusBar hidden={false} barStyle="dark-content" translucent={false} />
+			<NavigationContainer theme={mainTheme} linking={linking} ref={navigationRef} >
+				<Stack.Navigator screenOptions={{
+					headerShown: false
+				}} >
+					{currentUser.id === null ?
+						(
+							<>
+								{
+									inCompleteSignUp ? (
+										<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
+									) :
+										<>
+											<Stack.Screen name="signup" component={SignUpScreen} />
+											<Stack.Screen name="signin" component={SignInScreen} />
+											<Stack.Screen name="emailsignup" component={EmailSignUp} />
+											<Stack.Screen name="emailsignin" component={EmailSignIn} />
 											<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
-										) :
-											<>
-												<Stack.Screen name="signup" component={SignUpScreen} />
-												<Stack.Screen name="signin" component={SignInScreen} />
-												<Stack.Screen name="emailsignup" component={EmailSignUp} />
-												<Stack.Screen name="emailsignin" component={EmailSignIn} />
-												<Stack.Screen name="userdetailsscreen" component={UserDetailsScreen} />
-												<Stack.Screen name="eula" component={EulaScreen} />
-												<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
-												<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
-											</>
-									}
+											<Stack.Screen name="eula" component={EulaScreen} />
+											<Stack.Screen name="sendresetlink" component={SendResetLinkScreen} />
+											<Stack.Screen name="resetpassword" component={ResetPasswordScreen} />
+										</>
+								}
 
-								</>
-							) : (
-								<>
-									<Stack.Screen name="featuredEvents" component={FeaturedEventsScreen} />
-									<Stack.Screen name="featuredeventsevent" component={FeaturedEventsEventScreen} />
-									<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
-									<Stack.Screen name="editfeaturedevent" component={EditFeaturedEventScreen} />
-									<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
-									<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
-									<Stack.Screen name="ticket" component={TicketScreen} />
-									{/* <Stack.Screen name="meetups" component={MeetupsScreen} /> */}
-									<Stack.Screen name="profile" component={ProfileScreen} />
-									<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
-									{/* <Stack.Screen name="submit" component={SubmitScreen} /> */}
-									{/* <Stack.Screen name="event" component={EventScreen} /> */}
-									{/* <Stack.Screen name="editevent" component={EditEventScreen} /> */}
-									<Stack.Screen name="comment" component={SubmitCommentScreen} />
-									<Stack.Screen name="chatlist" component={ChatListScreen} />
-									<Stack.Screen name="chat" component={ChatScreen} />
-									<Stack.Screen name="groupchat" component={GroupChatScreen} />
-									{/* <Stack.Screen name="search" component={SearchScreen} /> */}
-									<Stack.Screen name="eula" component={EulaScreen} />
-									<Stack.Screen name="settings" component={SettingsScreen} />
-									<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
-									{/* <Stack.Screen name="leaderboard" component={LeaderboardScreen} /> */}
-								</>
-							)
-						}
-					</Stack.Navigator>
-
-					{/* Only show the conditional navbar if the user is logged in */}
-					{
-						currentUser.id &&
-						<ConditionalNavbar />
+							</>
+						) : (
+							<>
+								<Stack.Screen name="featuredEvents" component={FeaturedEventsScreen} />
+								<Stack.Screen name="featuredeventsevent" component={FeaturedEventsEventScreen} />
+								<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
+								<Stack.Screen name="editfeaturedevent" component={EditFeaturedEventScreen} />
+								<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
+								<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
+								<Stack.Screen name="ticket" component={TicketScreen} />
+								<Stack.Screen name="dashboard" component={DashboardScreen} />
+								<Stack.Screen name="profile" component={ProfileScreen} />
+								<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
+								<Stack.Screen name="comment" component={SubmitCommentScreen} />
+								<Stack.Screen name="chatlist" component={ChatListScreen} />
+								<Stack.Screen name="chat" component={ChatScreen} />
+								<Stack.Screen name="groupchat" component={GroupChatScreen} />
+								<Stack.Screen name="eula" component={EulaScreen} />
+								<Stack.Screen name="settings" component={SettingsScreen} />
+								<Stack.Screen name="updateinterests" component={UpdateInterestsScreen} />
+							</>
+						)
 					}
+				</Stack.Navigator>
 
-				</NavigationContainer>
-			</View>
+				{/* Only show the conditional navbar if the user is logged in */}
+				{
+					currentUser.id &&
+					<ConditionalNavbar />
+				}
+
+			</NavigationContainer>
+		</View>
 	);
 }
 

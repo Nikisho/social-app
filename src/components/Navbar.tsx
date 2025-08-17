@@ -18,14 +18,6 @@ const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState<number | null>(null);
   const menuItems = [
-    // {
-    //   icon: <AntDesign name="search1" size={30} color="white" />,
-    //   navigation: 'search'
-    // },
-    // {
-    //   icon: <MaterialIcons name="leaderboard" size={26} color="white" />,
-    //   navigation: 'leaderboard'
-    // },
     {
       icon: <View>
         <Entypo name="message" size={26} color="white" />
@@ -50,8 +42,15 @@ const Navbar = () => {
       navigation: 'profile'
     },
   ];
+  
 
-  const screens = ['leaderboard', 'meetups', 'chat', 'chatlist', 'featuredEvents']
+  // console.log(currentUser.isOrganizer);
+  if (currentUser.isOrganizer === true) {
+    menuItems.splice(2, 0, {
+      icon: <Entypo name="calendar" size={30} color="white" />,
+      navigation: 'dashboard'
+    });
+  } 
   const { expoPushToken } = usePushNotifications();
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
@@ -106,8 +105,7 @@ const Navbar = () => {
         menuItems.map((item) => (
           <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}
             onPress={() => {
-              if (item.navigation === 'search' || item.navigation === 'meetups' || item.navigation === 'chatlist' || item.navigation === 'leaderboard' || item.navigation === 'featuredEvents'  || item.navigation === 'ticketfeed'  ) {
-              // if ( screens.includes(item.navigation) ) {
+              if (item.navigation === 'search' || item.navigation === 'meetups' || item.navigation === 'chatlist' || item.navigation === 'leaderboard' || item.navigation === 'featuredEvents'  || item.navigation === 'ticketfeed' || item.navigation === 'dashboard') {
                 navigation.navigate(item.navigation);
               } else if (item.navigation === 'profile') {
                 navigation.navigate('profile', {
