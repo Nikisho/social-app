@@ -70,7 +70,7 @@ const FeaturedEventsEventScreen = () => {
             <View>
                 <ScrollView
                     className='p-2'
-                    contentContainerStyle={{ paddingBottom: 100 }}
+                    contentContainerStyle={{ paddingBottom: 200 }}
                 >
                     {
                         eventData && (
@@ -99,14 +99,14 @@ const FeaturedEventsEventScreen = () => {
                         style={{
                             backgroundColor: colours.secondaryColour,
                         }}
-                        className='absolute inset-x-0 bottom-0 h-[10%] flex justify-center flex-row items-center px-6'>
+                        className='absolute inset-x-0 bottom-20 h-[10%] flex justify-center flex-row items-center px-6'>
                         <TouchableOpacity
                             onPress={() => navigation.navigate('editfeaturedevent', {
                                 featured_event_id: featured_event_id
                             })}
-                            className='bg-white p-3 px-4 rounded-full  '>
-                            <Text className='text- font-semibold'>
-                                MANAGE
+                            className='bg-white p-2 px-4 rounded-full  '>
+                            <Text className='text-lg font-semibold text-center'>
+                                Manage event
                             </Text>
                         </TouchableOpacity>
                     </View>

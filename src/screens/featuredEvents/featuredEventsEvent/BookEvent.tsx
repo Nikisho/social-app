@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, Alert, Animated } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import colours from '../../../utils/styles/colours'
 import { supabase } from '../../../../supabase';
 import { useSelector } from 'react-redux';
@@ -179,58 +179,70 @@ const BookEvent: React.FC<BookEventProps> = ({
 
         }
     }
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
+    useEffect(() => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 800, // half a second fade in
+            useNativeDriver: true,
+        }).start();
+    }, []);
     return (
-        <View
-            style={{
-                backgroundColor: colours.secondaryColour,
-            }}
-            className='absolute inset-x-0 bottom-0 h-[10%] flex justify-between flex-row items-center px-6'>
-            {
-                isSoldOut ?
-                    <View
-                        className='p-3 rounded-full bg-white opacity-60'
-                    >
-                        <Text className='text-center font-bold'>
-                            SOLD OUT
-                        </Text>
-                    </View>
-                    :
+        // <Animated.View style={{ opacity: fadeAnim }}>
 
-                    <TouchableOpacity
-                        onPress={showBookingModal}
-                        disabled={isEventExpired(date)}
-                        className={`p-3 rounded-full bg-white w-1/4 ${isEventExpired(date) && 'opacity-60'}`}
-                    >
-                        <Text className='text-center font-bold'>
-                            {isEventExpired(date) ? `${t('featured_event_screen.closed')}`: `${t('featured_event_screen.book')}`}
-                        </Text>
-                    </TouchableOpacity>
-            }
-            {
-                is_free ?
-                    <Text className='text-3xl text-white font-bold'>
-                        {t('featured_event_screen.free')}
-                    </Text>
-                    :
-                    <Text className='text-3xl text-white font-bold'>
-                        £{price}
-                    </Text>
-            }
+            <Animated.View
+                style={{
+                    // backgroundColor: colours.secondaryColour,
+                    opacity: fadeAnim
+                }}
+                className='absolute bg-green-100 border-green-800 border-y-2 inset-x-0 bottom-20 py-3 flex justify-between flex-row items-center px-6'>
+                {
+                    isSoldOut ?
+                        <View
+                            className='p-3 rounded-lg bg-green-800 opacity-60'
+                        >
+                            <Text className='text-center text-white font-bold'>
+                                SOLD OUT
+                            </Text>
+                        </View>
+                        :
 
-            <BookEventCheckoutModal
-                modalVisible={checkoutModalVisible}
-                setModalVisible={setCheckoutModalVisible}
-                price={price}
-                is_free={is_free}
-                organizer_id={organizer_id}
-                featured_event_id={featured_event_id}
-                handleBookEvent={handleBookEvent}
-                date={date}
-                tickets_sold={tickets_sold}
-                chat_room_id={chat_room_id}
-            />
-        </View>
+                        <TouchableOpacity
+                            onPress={showBookingModal}
+                            disabled={isEventExpired(date)}
+                            className={`p-3 rounded-lg bg-green-700 w-1/4 ${isEventExpired(date) && 'opacity-60'}`}
+                        >
+                            <Text className='text-center text-white font-bold'>
+                                {isEventExpired(date) ? `${t('featured_event_screen.closed')}` : `${t('featured_event_screen.book')}`}
+                            </Text>
+                        </TouchableOpacity>
+                }
+                {
+                    is_free ?
+                        <Text className='text-2xl text-green-800 font-bold'>
+                            {t('featured_event_screen.free')}
+                        </Text>
+                        :
+                        <Text className='text-2xl text-green-800 font-bold'>
+                            £{price}
+                        </Text>
+                }
+
+                <BookEventCheckoutModal
+                    modalVisible={checkoutModalVisible}
+                    setModalVisible={setCheckoutModalVisible}
+                    price={price}
+                    is_free={is_free}
+                    organizer_id={organizer_id}
+                    featured_event_id={featured_event_id}
+                    handleBookEvent={handleBookEvent}
+                    date={date}
+                    tickets_sold={tickets_sold}
+                    chat_room_id={chat_room_id}
+                />
+            </Animated.View>
+
     )
 }
 

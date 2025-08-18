@@ -1,9 +1,13 @@
-import { View, Text, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity, Pressable, Modal } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import colours from '../../../utils/styles/colours';
 import extractTimeFromDate from '../../../utils/functions/extractTimeFromDate';
 import Hyperlink from 'react-native-hyperlink';
 import { supabase } from '../../../../supabase';
+import { handleReact } from '../../../utils/functions/handleReact';
+import EmptyChat from './EmptyChat';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../context/navSlice';
 
 interface Message {
     message_reactions: {
@@ -18,14 +22,14 @@ interface Message {
 }
 
 interface ChatProps {
-    currentUser: { id: number };
     messages: ArrayLike<Message>;
     fetchMessages: () => void;
 }
 
-const ChatBody: React.FC<ChatProps> = ({ currentUser, messages, fetchMessages }) => {
+const ChatBody: React.FC<ChatProps> = ({ messages, fetchMessages }) => {
 
     const [reactionEmojis, setReactionEmojis] = useState<{ reaction_emoji: string, reaction_id: number }[]>();
+    const currentUser = useSelector(selectCurrentUser)
     const fetchReactionEmojis = async () => {
         const { error, data } = await supabase
             .from('reactions')
@@ -45,46 +49,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages, fetchMessages })
         const formattedTime = extractTimeFromDate(item.created_at);
 
         const [reactionBannerVisible, setReactionBannerVisible] = useState<boolean>(false);
-        const handleReact = async (message_id: number, reaction_id: number) => {
-            const { error } = await supabase
-                .from('message_reactions')
-                .insert({
-                    message_id,
-                    reaction_id,
-                    user_id: currentUser.id
-                });
 
-            setReactionBannerVisible(false);
-
-            if (error?.code === '23505') {
-                // Fetch existing reaction for this message + user
-                const { data: existing } = await supabase
-                    .from('message_reactions')
-                    .select('*')
-                    .eq('message_id', message_id)
-                    .eq('user_id', currentUser.id)
-                    .single();
-                if (existing?.reaction_id === reaction_id) {
-                    // Same emoji → remove it
-                    const { error: deleteError } = await supabase
-                        .from('message_reactions')
-                        .delete()
-                        .eq('message_id', message_id)
-                        .eq('user_id', currentUser.id);
-                    if (deleteError) console.error(deleteError)
-                } else {
-                    // Different emoji → swap it
-                    await supabase
-                        .from('message_reactions')
-                        .update({ reaction_id })
-                        .eq('message_id', message_id)
-                        .eq('user_id', currentUser.id);
-                }
-            } else if (error) {
-                console.error(error);
-            }
-            fetchMessages();
-        };
 
         return (
             <View>
@@ -100,31 +65,51 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages, fetchMessages })
                 >
                     {
                         reactionBannerVisible && (
-                            <View
-                                style={{
-                                    right: isCurrentUser ? 10 : 'auto',
-                                }}
-                                className='absolute z-10 top-[-] bg-gray-400 rounded-full p-2 px-4 flex flex-row space-x-2'>
-                                {
-                                    reactionEmojis?.map((emoji) => (
-                                        <TouchableOpacity
-                                            key={emoji.reaction_id}
-                                            onPress={() => handleReact(item.message_id, emoji.reaction_id)}
-                                        >
-                                            <Text>
-                                                {emoji.reaction_emoji}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))
-                                }
-                            </View>
+
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={reactionBannerVisible}
+                                onRequestClose={() => setReactionBannerVisible(false)}
+                            >
+                                <TouchableOpacity
+                                    onPress={() => setReactionBannerVisible(false)}
+                                    className='flex-1 items-center justify-center' >
+                                    <View
+
+                                        className='absolute bg-gray-400 rounded-full p-2 px-5 flex flex-row space-x-3'>
+                                        {
+                                            reactionEmojis?.map((emoji) => (
+
+                                                <TouchableOpacity
+                                                    key={emoji.reaction_id}
+                                                    onPress={() => {
+                                                        handleReact(
+                                                            item.message_id,
+                                                            emoji.reaction_id,
+                                                            currentUser.id,
+                                                            item.chat_room_id,
+                                                            setReactionBannerVisible,
+                                                            fetchMessages
+                                                        )
+                                                    }}                                        >
+                                                    <Text className='text-2xl'>
+                                                        {emoji.reaction_emoji}
+                                                    </Text>
+                                                </TouchableOpacity>
+
+                                            ))
+                                        }
+
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
                         )
                     }
 
                     <Pressable
                         style={({ pressed }) => [{
                             backgroundColor: isCurrentUser ? (pressed ? '#404040' : 'black') : (pressed ? '#d9e2eb' : '#edf2f7'),
-                            // padding: 10,
                             borderRadius: 10,
                         }]}
                         onPress={() => { setReactionBannerVisible(!reactionBannerVisible) }}
@@ -196,7 +181,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages, fetchMessages })
                         }
                     </View>
                 }
-            </View>
+            </View >
 
         );
     };
@@ -207,8 +192,7 @@ const ChatBody: React.FC<ChatProps> = ({ currentUser, messages, fetchMessages })
                 <View style={styles.container}>
                     <FlatList
                         data={messages}
-                        renderItem={({ item, index }) => {
-
+                        renderItem={({ item }) => {
                             return (
                                 <MessageBubble
                                     item={item}

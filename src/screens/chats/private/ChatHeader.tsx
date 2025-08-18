@@ -1,7 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome } from '@expo/vector-icons';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import Entypo from '@expo/vector-icons/Entypo';
 import styles from '../../../utils/styles/shadow';
@@ -13,13 +12,15 @@ interface ChatHeaderProps {
     photo: string;
     user_id: number;
     blockAndReportUser: () => void;
+    onlineStatus: string;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
     name,
     photo,
     user_id,
-    blockAndReportUser
+    blockAndReportUser,
+    onlineStatus
 }) => {
 
     const navigation = useNavigation<RootStackNavigationProp>();
@@ -66,11 +67,16 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                             />
                         </>
                 }
-                <Text
-                    numberOfLines={1} style={{ width: 200 }}
-                    className='text-black text-lg'>
-                    {name}
-                </Text>
+                <View>
+                    <Text
+                        numberOfLines={1} style={{ width: 200 }}
+                        className='text-black text-lg'>
+                        {name}
+                    </Text>
+                    <Text>
+                        {onlineStatus}
+                    </Text>
+                </View>
 
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setOpenDropDown(!openDropDown)}>

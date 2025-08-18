@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { supabase } from '../../../../supabase';
@@ -19,6 +19,7 @@ interface TicketProps {
         date: string;
         time: string;
         chat_room_id: number;
+        location: string;
 
     }
 }
@@ -40,7 +41,8 @@ const TicketScreen = ({ }) => {
                     date,
                     time,
                     description,
-                    chat_room_id
+                    chat_room_id,
+                    location
                 )`)
             .eq('ticket_id', ticket_id)
             .single()
@@ -58,18 +60,21 @@ const TicketScreen = ({ }) => {
     }, []);
 
     return (
-        <View
+        <ScrollView
             style={{ backgroundColor: colours.primaryColour }}
-            className='h-3/4 p-3 '>
+            contentContainerStyle={{ paddingBottom: 150 }}
+            className='h-3/4 p-3 '
+
+        >
             <View className='mb-2'>
                 <SecondaryHeader displayText={t('ticket_screen.title')} />
             </View>
             {
                 ticket && (
                     <>
-                        <View className='flex p-10  bg-white rounded-2xl mx-5 border border-dashed'>
+                        <View className='flex p-5  bg-white rounded-2xl mx-5 border border-dashed space-y-1'>
 
-                            <View className='flex mb-10 items-center p-3 bg-white'>
+                            <View className='flex mb-5 items-center p-3 bg-white'>
                                 <QRCode
                                     value={ticket.qr_code_link}
                                     size={250}
@@ -77,20 +82,22 @@ const TicketScreen = ({ }) => {
                                     backgroundColor="white"
                                 />
                             </View>
-                            <View className='flex flex-row mb-5 justify-between mx-1'>
-                                <Text className='text-lg font-semibold'>
-                                    Event
-                                </Text>
-                                <Text className='text-lg font-semibold'>
+                            <View className='flex flex-row space-x-2 mx-2'>
+                                <Entypo name="megaphone" size={24} color="black" />
+                                <Text className='text-lg font-semibold text-wrap'>
                                     {ticket.featured_events.title}
                                 </Text>
                             </View>
-                            <View className='flex flex-row justify-between mx-1'>
-                                <Text className='text-lg font-semibold'>
-                                    Date & Time
-                                </Text>
+                            <View className='flex flex-row items-center mx-1 space-x-2'>
+                                <Entypo name="calendar" size={23} color="black" />
                                 <Text className='text-lg font-semibold'>
                                     {formatDateShortWeekday(ticket.featured_events.date)} ({ticket.featured_events.time.slice(0, -3)})
+                                </Text>
+                            </View>
+                            <View className='flex flex-row items-center mx-1 space-x-2'>
+                                <Entypo name="location-pin" size={24} color="black" />
+                                <Text className='text-lg font-semibold'>
+                                    {ticket.featured_events.location}
                                 </Text>
                             </View>
 
@@ -98,12 +105,13 @@ const TicketScreen = ({ }) => {
 
                         <View className='flex space-y-2 mt-5 mx-5'>
                             <TouchableOpacity
+                                onPress={() => navigation.navigate('featuredeventsevent', {
+                                    featured_event_id: ticket.featured_event_id
+                                })}
                                 className='py-4 px-5 rounded-full bg-black flex flex-row space-x-3 pl-24'>
                                 <Entypo name="calendar" size={26} color="white" />
                                 <Text
-                                    onPress={() => navigation.navigate('featuredeventsevent', {
-                                        featured_event_id: ticket.featured_event_id
-                                    })}
+
                                     className='text-lg text-center text-white font-semibold'>
                                     View event
                                 </Text>
@@ -135,7 +143,7 @@ const TicketScreen = ({ }) => {
 
                 )
             }
-        </View>
+        </ScrollView>
     )
 }
 

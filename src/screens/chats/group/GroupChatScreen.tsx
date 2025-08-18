@@ -131,10 +131,33 @@ const GroupChatScreen = () => {
                 // mediaUrl: media ? mediaUrl : null,
                 content: newMessage
             });
+
+        const { error: ChatRoomError } = await supabase
+            .from('chat_rooms')
+            .update({
+                updated_at: new Date()
+            })
+            .eq('chat_room_id', eventData?.chat_room_id);
         await fetchMessages();
         if (error) console.error(error.message);
+        if (ChatRoomError) console.error(ChatRoomError.message);
     };
 
+    const subscription = supabase
+        .channel('chat_rooms')
+        .on('postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'chat_rooms',
+                filter: `chat_room_id=eq.${eventData?.chat_room_id}`
+            },
+            (payload) => {
+                console.log('Change detected:', payload);
+                fetchMessages();  // Re-fetch unread messages count when data changes
+            }
+        )
+        .subscribe();
 
     useEffect(() => {
         fetchEventData();
@@ -161,10 +184,10 @@ const GroupChatScreen = () => {
                             fetchMessages={fetchMessages}
                         />
 
-                        { 
-                           eventDatePlus24Hours &&  eventDatePlus24Hours < today  ?
-                                <ChatClosed 
-                                    message={`This event ended on ${formatDateShortWeekday(eventData.date)}`} 
+                        {
+                            eventDatePlus24Hours && eventDatePlus24Hours < today ?
+                                <ChatClosed
+                                    message={`This event ended on ${formatDateShortWeekday(eventData.date)}`}
                                 />
                                 :
                                 <InputBox

@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import colours from '../utils/styles/colours';
@@ -11,7 +10,6 @@ import { RootStackNavigationProp } from '../utils/types/types';
 import { supabase } from '../../supabase';
 import Badge from './Badge';
 import { usePushNotifications } from '../utils/functions/usePushNotifications';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Navbar = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -29,10 +27,6 @@ const Navbar = () => {
       icon: <Entypo name="home" size={26} color="white" />,
       navigation: 'featuredEvents'
     },
-    // {
-    //   icon: <Entypo name="calendar" size={26} color="white" />,
-    //   navigation: 'meetups'
-    // },
     {
       icon: <Entypo name="ticket" size={26} color="white" />,
       navigation: 'ticketfeed'
@@ -43,8 +37,6 @@ const Navbar = () => {
     },
   ];
   
-
-  // console.log(currentUser.isOrganizer);
   if (currentUser.isOrganizer === true) {
     menuItems.splice(2, 0, {
       icon: <Entypo name="calendar" size={30} color="white" />,

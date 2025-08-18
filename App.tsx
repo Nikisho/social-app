@@ -4,13 +4,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer, useNavigationState } from '@react-navigation/native';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser, setCurrentUser } from './src/context/navSlice';
+import { selectCurrentUser } from './src/context/navSlice';
 import { store } from './src/context/store';
 import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import colours from './src/utils/styles/colours';
 import { Keyboard, Platform, View } from 'react-native';
-import SubmitCommentScreen from './src/screens/comments/SubmitCommentScreen';
+import SubmitCommentScreen from './Archive/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
 import ChatScreen from './src/screens/chats/private/ChatScreen';
@@ -120,6 +120,7 @@ function AppSafeAreaWrapper() {
 	}
 
 	return (
+
 		<View
 			className={`${Platform.OS === 'android' && insets.bottom > 20 ? 'h-[95%]' : 'h-full'}`}
 			style={{ backgroundColor: colours.primaryColour }}>
@@ -204,7 +205,7 @@ const ConditionalNavbar = () => {
 
 	// Determine whether to show the Navbar
 	const showNavbar = currentRouteName !== 'chat'
-		&& currentRouteName !== 'featuredeventsevent'
+		// && currentRouteName !== 'featuredeventsevent'
 		&& currentRouteName !== 'groupchat';
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 	useEffect(() => {
