@@ -16,6 +16,7 @@ import FeaturedEventsUser from './FeaturedEventsUser';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { useTranslation } from 'react-i18next';
 import getAge from '../../utils/functions/getAge';
+import CompletionTracker from './CompletionTracker';
 
 interface UserDataProps {
 	name: string;
@@ -54,7 +55,7 @@ const ProfileScreen = () => {
 	const [userInterests, setUserInterests] = useState<Interests[]>();
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
-    const genderColour = userData.sex === 0 ? 'bg-green-400' : (userData.sex === 1 ? 'bg-sky-600' : 'bg-red-300')
+	const genderColour = userData.sex === 0 ? 'bg-green-400' : (userData.sex === 1 ? 'bg-sky-600' : 'bg-red-300')
 	const fetchUserData = async () => {
 		const { error, data } = await supabase
 			.from('users')
@@ -209,11 +210,12 @@ const ProfileScreen = () => {
 	return (
 		<>
 			<View className='flex flex-row items-center'>
-
 				<SecondaryHeader
 					displayText={userData.name}
 				/>
-				{/* <Text>hi</Text> */}
+
+				{/* Profile completion tracket */}
+
 				{
 					userData?.date_of_birth && (
 						<View
@@ -223,7 +225,7 @@ const ProfileScreen = () => {
 
 							{userData.sex !== 0 && (
 								<Text className="text-lg font-semibold  text-white">
-									{userData.sex  === 1 ? "♂" : "♀"}
+									{userData.sex === 1 ? "♂" : "♀"}
 								</Text>
 							)}
 
@@ -235,10 +237,17 @@ const ProfileScreen = () => {
 					)
 				}
 			</View>
- 
+
 			<FeaturedEventsUser
 				HeaderContent={
 					<>
+						{
+							isCurrentUserProfile &&
+							<CompletionTracker
+								{...userData}
+								interests={userInterests}
+							/>
+						}
 						<UserDetails
 							name={userData.name}
 							dateOfBirth={userData.date_of_birth}

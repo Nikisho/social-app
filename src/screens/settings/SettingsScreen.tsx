@@ -23,7 +23,9 @@ const SettingsScreen = () => {
     {
       title: `${t('settings_screen.privacy_policy')}`,
       icon: <MaterialIcons name="privacy-tip" size={24} color="black" />,
-      onPress: () => openURL('https://www.linkzyapp.com/privacypolicy.html'),
+      // onPress: () => openURL('https://www.linkzyapp.com/privacypolicy.html'),
+      onPress: () => navigation.navigate('privacypolicy'),
+
     },
     {
       title: `${t('settings_screen.eula')}`,
@@ -38,7 +40,7 @@ const SettingsScreen = () => {
     {
       title: `${t('settings_screen.about')}`,
       icon: <AntDesign name="questioncircle" size={24} color="black" />,
-      onPress: () => openURL('https://www.linkzyapp.com'),
+      onPress: () => navigation.navigate('about'),
     },
   ];
 

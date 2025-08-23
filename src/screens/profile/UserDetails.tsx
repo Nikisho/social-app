@@ -93,7 +93,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </TouchableOpacity>
-                {/* <View className='flex justify-between space-y'> */}
 
                 <View className='flex flex-row  mt-3 '>
 
@@ -134,11 +133,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             </View>
                     }
                 </View>
-
-                {/* <UserBadges
-                        user_id={user_id}
-                    /> */}
-                {/* </View> */}
                 <View className='absolute top-0 right-0 items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
@@ -161,30 +155,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
                 </View>
             </View>
-            {/* <View className=' w- flex flex-row space-x-2 pt-1' >
-                {
-                    trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
-                    trophies?.map((trophy) => (
-                        <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2 h-8'>
-                            <Text
-                                style={{ fontFamily: 'American Typewriter' }}
-                                className='font-semi text-lg'>
-                                {ordinal_suffix_of(trophy.rank).toString()}
-                            </Text>
-                            <Text> of the {trophy.competition_period_type}</Text>
-                            <Text>{trophy.dim_competition_prizes.trophy_name}</Text>
-                            <Image
-                                className='h-10 w-9 rounded-full'
-                                source={{
-                                    uri: trophy.dim_competition_prizes.trophy_image
-                                }}
-                            />
-                        </View>
-                    )
-
-                    )
-                }
-            </View> */}
 
             {/* Following banner */}
             {/* <View className='flex-row justify-center space-x-20'>
@@ -224,11 +194,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             {bio}
                         </Text> :
                         <View className='w-full flex items-center justify-center'>
-                            {currentUser.id === user_id ?
-                                <Text className='italic text-center'>
+                            {currentUser.id == user_id ?
+                                <Text className='italic text-center text-lg'>
                                     {t('profile_screen.add_description_prompt')}
                                 </Text> :
-                                <Text className='italic text-center'>
+                                <Text className='italic text-lg text-center'>
                                     {t('profile_screen.no_description')}
                                 </Text>
                             }

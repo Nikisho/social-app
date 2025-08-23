@@ -83,8 +83,8 @@ const DashboardScreen = () => {
                     onPress={() => navigation.navigate('featuredeventsevent', { featured_event_id: item.featured_event_id })}
                     style={styles.shadow}
                     className={` bg-gray-100 my-1 flex-row flex p-4 space-x-5 
-                ${isUpcoming && new Date(item.date) <= today && 'hidden'}
-                ${!isUpcoming && new Date(item.date) > today && 'hidden'}
+                    ${isUpcoming && new Date(item.date) <= today && 'hidden'}
+                    ${!isUpcoming && new Date(item.date) > today && 'hidden'}
                 `} >
                     <FastImage
                         source={{ uri: item.image_url }}
@@ -159,15 +159,15 @@ const DashboardScreen = () => {
                     </Text>
                 </TouchableOpacity>
             </View>
-
-            <FlatList
-                data={events}
-                // renderItem={FadeInItem}
-                renderItem={({ item, index }) => (
-                    <FadeInItem item={item} index={index} />
-                )}
-                keyExtractor={(item) => item.featured_event_id.toString()}
-            />
+                <FlatList
+                    data={events}
+                    contentContainerStyle={{ paddingBottom: 200 }}
+    
+                    renderItem={({ item, index }) => (
+                        <FadeInItem item={item} index={index} />
+                    )}
+                    keyExtractor={(item) => item.featured_event_id.toString()}
+                /> 
             <TouchableOpacity
                 onPress={() => navigation.navigate('featuredEventsSubmit')}
                 style={styles.shadowButtonStyle}

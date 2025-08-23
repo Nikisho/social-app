@@ -43,8 +43,9 @@ const UpdateBioModal: React.FC<UpdateBioModalProps> = ({
                 <View className='flex-1 justify-center items-center mt-22' >
                     <View className='bg-white rounded-xl m-20 h-1/2 w-4/5 p-5 space-y-5' style={styles.shadow} >
                         <TextInput className='mb-15 border rounded-lg p-2'
-                            maxLength={300}
+                            maxLength={150}
                             value={userData.bio}
+                            placeholder='Tell us about yourself so others can get to know you.'
                             multiline={true}
                             onChangeText={(value) => (setUserData((prevData) => ({
                                 ...prevData,

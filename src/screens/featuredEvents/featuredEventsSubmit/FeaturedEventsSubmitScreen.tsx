@@ -19,6 +19,7 @@ import PriceInput from './PriceInput';
 import Quantity from './Quantity';
 import AddressInput from './AddressInput';
 import DateTimeInput from './DateTimeInput';
+import InterestsInput from './InterestsInput';
 
 
 interface EventDataProps {
@@ -28,6 +29,10 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
+    userInterests?: {
+        interestCode: number
+        interestGroupCode:number
+    }[]
 
 }
 const FeaturedEventsSubmitScreen = () => {
@@ -37,8 +42,11 @@ const FeaturedEventsSubmitScreen = () => {
         price: '',
         location: '',
         quantity: null,
-        date: new Date((new Date()).setHours(12, 0, 0, 0))
+        date: new Date((new Date()).setHours(12, 0, 0, 0)),
+        userInterests: []
     });
+
+    console.log(eventData);
 
     const [media, setMedia] = useState<ImagePickerAsset | null>(null);
     const currentUser = useSelector(selectCurrentUser);
@@ -78,6 +86,21 @@ const FeaturedEventsSubmitScreen = () => {
             return data.organizer_id;
         }
     }
+    console.log(eventData.userInterests);
+    
+    const createInterests = async (featured_event_id: number) => {
+        const userInterestsData = eventData?.userInterests!.map((interest) => ({
+            featured_event_id: featured_event_id,
+            interest_code: interest.interestCode,
+            interest_group_code: interest.interestGroupCode,
+        }));
+        const { error } = await supabase
+            .from('featured_event_interests')
+            .insert(userInterestsData)
+        if (error) { console.error(error.message) }
+    };
+
+
     const submitEvent = async () => {
         setLoading(true);
         if (
@@ -91,6 +114,12 @@ const FeaturedEventsSubmitScreen = () => {
             setLoading(false);
             return;
         }
+
+        if (eventData.userInterests?.length === 0) {
+            platformAlert('Please select topics & interests for the event.');
+            setLoading(false);
+            return;
+        }
         const organizer_id = await fetchOrganizerId();
         const unique_file_identifier = uuidv4(9);
         const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/featured-events/${organizer_id}/${unique_file_identifier}.jpg`
@@ -98,7 +127,7 @@ const FeaturedEventsSubmitScreen = () => {
             await uploadEventMediaToStorageBucket(media.base64!, unique_file_identifier, organizer_id);
         }
 
-        const { data:chatRoomData, error:chatRoomError } = await supabase
+        const { data: chatRoomData, error: chatRoomError } = await supabase
             .from('chat_rooms')
             .insert({
                 type: 'group'
@@ -108,16 +137,15 @@ const FeaturedEventsSubmitScreen = () => {
 
         if (chatRoomError) throw chatRoomError.message
 
-        const {error:participantError } = await supabase
+        const { error: participantError } = await supabase
             .from('participants')
             .insert({
                 chat_room_id: chatRoomData.chat_room_id,
                 user_id: currentUser.id
             })
         if (participantError) throw participantError.message;
-        
 
-        const { error } = await supabase
+        const { error, data } = await supabase
             .from('featured_events')
             .insert({
                 title: eventData?.title,
@@ -133,11 +161,18 @@ const FeaturedEventsSubmitScreen = () => {
                 chat_room_id: chatRoomData?.chat_room_id,
                 test: __DEV__ ? true : false
             })
+            .select('featured_event_id')
+            .single()
+        if (data) {
+            createInterests(data.featured_event_id)
+        }
         if (error) {
             console.error(error.message)
         }
         setLoading(false);
-        navigation.navigate('featuredEvents');
+        navigation.navigate('featuredEvents', {
+            
+        });
     }
     if (loading) {
         return <LoadingScreen displayText='Loading...' />
@@ -157,7 +192,6 @@ const FeaturedEventsSubmitScreen = () => {
             </View>
             <ScrollView className='px-3 '
                 contentContainerStyle={{ paddingBottom: 100 }}
-
             >
                 <MediaPicker
                     setMedia={setMedia}
@@ -190,6 +224,10 @@ const FeaturedEventsSubmitScreen = () => {
                 <AddressInput
                     address={eventData?.location}
                     setEventData={setEventData}
+                />
+                <InterestsInput
+                    setEventData={setEventData}
+                    userInterests={eventData.userInterests}
                 />
                 <TouchableOpacity
                     onPress={() => submitEvent()}

@@ -76,7 +76,7 @@
     "promoter": "Promoter",
     "going": "Going",
     "book": "BOOK",
-    "closed": "CLOSED",
+    "closed": "Event ended",
     "free":"FREE"
   },
   "event_checkout": {

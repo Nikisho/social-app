@@ -12,6 +12,7 @@ import { selectCurrentUser } from '../../../context/navSlice'
 import colours from '../../../utils/styles/colours'
 import * as Linking from 'expo-linking';
 import Attendees from './Attendees'
+import EventInterests from './EventInterests'
 
 interface EventDataProps {
     title: string;
@@ -38,6 +39,14 @@ interface EventDataProps {
 
 }
 
+interface Interests {
+	interest_code: number;
+	interest_group_code: number;
+	interests: {
+		description: string;
+	}
+}
+
 const FeaturedEventsEventScreen = () => {
     const [eventData, setEventData] = useState<EventDataProps | null>(null);
     const route = useRoute<FeaturedEventsEventScreenRouteProps>();
@@ -45,6 +54,7 @@ const FeaturedEventsEventScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const isOwnEvent = currentUser.id === eventData?.organizers.user_id;
     const navigation = useNavigation<RootStackNavigationProp>();
+    const [interests, setInterests] = useState<Interests[]>();
 
     const fetchEventData = async () => {
         const { data, error } = await supabase
@@ -61,9 +71,28 @@ const FeaturedEventsEventScreen = () => {
             setEventData(data)
         }
         if (error) console.error(error.message);
-    }
+    };
+
+    const fetchEventInterests = async () => {
+        const { error, data } = await supabase
+            .from('featured_event_interests')
+            .select(`*,
+                interests(
+                    interest_code,
+                    description
+                )
+                `)
+            .eq('featured_event_id', featured_event_id)
+
+        if (data) {
+            setInterests(data)
+        }
+        if (error) console.error(error.message);
+    };
+
     useEffect(() => {
         fetchEventData();
+        fetchEventInterests();
     }, [featured_event_id]);
     return (
         <>
@@ -84,8 +113,11 @@ const FeaturedEventsEventScreen = () => {
                                 <PromoterDetails
                                     {...eventData}
                                 />
-                                <Attendees 
+                                <Attendees
                                     {...eventData}
+                                />
+                                <EventInterests
+                                    interests={interests}
                                 />
                             </>
                         )

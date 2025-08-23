@@ -24,7 +24,7 @@ export type RootStackParamList = {
   resetpassword:{access_token: string, refresh_token: string};
   updateinterests:{user_interests: {interest_code:number, interest_group_code:number, interests: { description: string}}[]};
   leaderboard:undefined;
-  featuredEvents:undefined;
+  featuredEvents:{interest?: {interest_code:number, interests: {description:string}}};
   featuredeventsevent:{featured_event_id: number};
   featuredEventsSubmit:undefined;
   organizerOnboarding:undefined;
@@ -34,6 +34,8 @@ export type RootStackParamList = {
   attendeelist: {featured_event_id: number,chat_room_id: number};
   groupchat:{featured_event_id: number};
   dashboard: undefined;
+  privacypolicy: undefined;
+  about:undefined
 };
 
 // Define the navigation prop types
@@ -51,6 +53,8 @@ export type TicketScreenRouteProps = RouteProp<RootStackParamList, 'ticket'>;
 export type EditFeaturedEventScreenRouteProps = RouteProp<RootStackParamList, 'editfeaturedevent'>;
 export type AttendeeListScreenProps = RouteProp<RootStackParamList, 'attendeelist'>;
 export type GroupChatScreenProps = RouteProp<RootStackParamList, 'groupchat'>;
+export type FeaturedEventsScreenRouteProps = RouteProp<RootStackParamList, 'featuredEvents'>;
+
 
 
 

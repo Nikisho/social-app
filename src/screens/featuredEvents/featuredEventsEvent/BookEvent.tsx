@@ -11,6 +11,7 @@ import BookEventCheckoutModal from './BookEventCheckoutModal';
 import { delay } from '../../../utils/functions/delay';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import { t } from 'i18next';
+import RenderActionButton from './RenderActionButton';
 
 interface BookEventProps {
     is_free: boolean;
@@ -46,9 +47,9 @@ const BookEvent: React.FC<BookEventProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
 
     const canBook = async () => {
-        if (__DEV__) {
-            return true;
-        }
+        // if (__DEV__) {
+        //     return true;
+        // }
         const { count, error } = await supabase
             .from('featured_event_bookings')
             .select('user_id', { count: 'exact' })
@@ -67,15 +68,16 @@ const BookEvent: React.FC<BookEventProps> = ({
     };
 
     const isEventExpired = (eventDate: Date) => {
-        if (__DEV__) {
-            return false;
-        }
+        // if (__DEV__) {
+        //     return false;
+        // }
         const now = new Date();
         const event = new Date(eventDate)
         const eventEndOfDay = new Date(event)
         eventEndOfDay.setHours(23, 59, 59, 999);
         return now > eventEndOfDay;
     };
+    const isExpired = isEventExpired(date);
 
     const showBookingModal = async () => {
         try {
@@ -189,59 +191,35 @@ const BookEvent: React.FC<BookEventProps> = ({
         }).start();
     }, []);
     return (
-        // <Animated.View style={{ opacity: fadeAnim }}>
+        <Animated.View
+            style={{
+                opacity: fadeAnim
+            }}
+            className='absolute bg-green-100 border-green-800 border-y-2 inset-x-0 bottom-20 py-3 flex justify-between flex-row items-center px-6'>
+            <RenderActionButton
+                isExpired={isExpired}
+                isSoldOut={isSoldOut}
+                showBookingModal={showBookingModal}
+            />
+            {(!isExpired && !isSoldOut) && (
+                <Text className="text-2xl text-green-800 font-bold">
+                    {is_free ? t('featured_event_screen.free') : `£${price}`}
+                </Text>
+            )}
 
-            <Animated.View
-                style={{
-                    // backgroundColor: colours.secondaryColour,
-                    opacity: fadeAnim
-                }}
-                className='absolute bg-green-100 border-green-800 border-y-2 inset-x-0 bottom-20 py-3 flex justify-between flex-row items-center px-6'>
-                {
-                    isSoldOut ?
-                        <View
-                            className='p-3 rounded-lg bg-green-800 opacity-60'
-                        >
-                            <Text className='text-center text-white font-bold'>
-                                SOLD OUT
-                            </Text>
-                        </View>
-                        :
-
-                        <TouchableOpacity
-                            onPress={showBookingModal}
-                            disabled={isEventExpired(date)}
-                            className={`p-3 rounded-lg bg-green-700 w-1/4 ${isEventExpired(date) && 'opacity-60'}`}
-                        >
-                            <Text className='text-center text-white font-bold'>
-                                {isEventExpired(date) ? `${t('featured_event_screen.closed')}` : `${t('featured_event_screen.book')}`}
-                            </Text>
-                        </TouchableOpacity>
-                }
-                {
-                    is_free ?
-                        <Text className='text-2xl text-green-800 font-bold'>
-                            {t('featured_event_screen.free')}
-                        </Text>
-                        :
-                        <Text className='text-2xl text-green-800 font-bold'>
-                            £{price}
-                        </Text>
-                }
-
-                <BookEventCheckoutModal
-                    modalVisible={checkoutModalVisible}
-                    setModalVisible={setCheckoutModalVisible}
-                    price={price}
-                    is_free={is_free}
-                    organizer_id={organizer_id}
-                    featured_event_id={featured_event_id}
-                    handleBookEvent={handleBookEvent}
-                    date={date}
-                    tickets_sold={tickets_sold}
-                    chat_room_id={chat_room_id}
-                />
-            </Animated.View>
+            <BookEventCheckoutModal
+                modalVisible={checkoutModalVisible}
+                setModalVisible={setCheckoutModalVisible}
+                price={price}
+                is_free={is_free}
+                organizer_id={organizer_id}
+                featured_event_id={featured_event_id}
+                handleBookEvent={handleBookEvent}
+                date={date}
+                tickets_sold={tickets_sold}
+                chat_room_id={chat_room_id}
+            />
+        </Animated.View>
 
     )
 }

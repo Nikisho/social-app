@@ -21,13 +21,15 @@ interface Interest {
 }
 interface ProfileInterestsSelectorProps extends UserDataProps {
     updateFields: (fields: Partial<UserDataProps>) => void;
+    maxNumberOfInterests?:number
 }
 const ProfileInterestsSelector:React.FC<ProfileInterestsSelectorProps> = ({
     userInterests,
-    updateFields
+    updateFields,
+    maxNumberOfInterests = 10
 }) => {
     const [interestGroups, setInterestGroups] = useState< InterestGroup[] | null>();
-    const maxNumberOfInterests = 10;
+    // const maxNumberOfInterests = 10;
     const [loading, setLoading] = useState<boolean>(false);
     const fetchInterests = async () => {
         setLoading(true);
