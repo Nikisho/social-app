@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, Dimensions, FlatList, Pressable, TouchableOpacity, Modal } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Dimensions, FlatList, Pressable, TouchableOpacity, Modal, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import Hyperlink from 'react-native-hyperlink';
 import extractTimeFromDate from '../../../utils/functions/extractTimeFromDate';
 import colours from '../../../utils/styles/colours';
@@ -46,9 +46,15 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
         }
         if (error) console.error(error.code);
     };
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         fetchReactionEmojis();
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 800, // half a second fade in
+            useNativeDriver: true,
+        }).start();
     }, []);
 
     const MessageBubble = ({ item, isGroupStart }: {
@@ -123,42 +129,42 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
                     >
                         {
                             reactionBannerVisible && (
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={reactionBannerVisible}
-                                onRequestClose={() => setReactionBannerVisible(false)}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => setReactionBannerVisible(false)}
-                                    className='flex-1 items-center justify-center' >
-                                <View
-                                    className='absolute bg-gray-400 rounded-full p-2 px-5 flex flex-row space-x-3'>
-                                    
-                                    {
-                                        reactionEmojis?.map((emoji) => (
-                                            <TouchableOpacity
-                                                className='px-1'
-                                                key={emoji.reaction_id}
-                                                onPress={() => {
-                                                    handleReact(
-                                                        item.message_id, 
-                                                        emoji.reaction_id,
-                                                        currentUser.id,
-                                                        item.chat_room_id,
-                                                        setReactionBannerVisible,
-                                                        fetchMessages
-                                                    )
-                                                }}
-                                            >
-                                                <Text className='text-2xl'>
-                                                    {emoji.reaction_emoji}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        ))
-                                    }
-                                </View>
-                                </TouchableOpacity>
+                                <Modal
+                                    animationType="slide"
+                                    transparent={true}
+                                    visible={reactionBannerVisible}
+                                    onRequestClose={() => setReactionBannerVisible(false)}
+                                >
+                                    <TouchableOpacity
+                                        onPress={() => setReactionBannerVisible(false)}
+                                        className='flex-1 items-center justify-center' >
+                                        <View
+                                            className='absolute bg-gray-400 rounded-full p-2 px-5 flex flex-row space-x-3'>
+
+                                            {
+                                                reactionEmojis?.map((emoji) => (
+                                                    <TouchableOpacity
+                                                        className='px-1'
+                                                        key={emoji.reaction_id}
+                                                        onPress={() => {
+                                                            handleReact(
+                                                                item.message_id,
+                                                                emoji.reaction_id,
+                                                                currentUser.id,
+                                                                item.chat_room_id,
+                                                                setReactionBannerVisible,
+                                                                fetchMessages
+                                                            )
+                                                        }}
+                                                    >
+                                                        <Text className='text-2xl'>
+                                                            {emoji.reaction_emoji}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                ))
+                                            }
+                                        </View>
+                                    </TouchableOpacity>
                                 </Modal>
                             )
                         }
@@ -261,13 +267,30 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
     return (
         <>
             {messages && (
+                messages.length === 0 ? (
+                                    <View style={{
+                    flex: 1,
+                    padding: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Animated.View style={{ opacity: fadeAnim }}>
+                        <View
+                            className='p-3 px-10 bg-gray-300 rounded-2xl space-y-2'
+                        >
+                            <Text className='text-center text-lg font-semibold'>
+                                🚀 Start the buzz and send the first message!
+                            </Text>
+                        </View>
+                    </Animated.View>
+                </View>
+                ) :
                 <View style={styles.container}>
                     <FlatList
                         data={messages}
                         renderItem={({ item, index }) => {
                             const previousMessage = messages[index + 1];
                             const isGroupStart = !previousMessage || previousMessage.sender_id !== item.sender_id;
-
                             return (
                                 <MessageBubble
                                     item={item}
@@ -280,7 +303,8 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
                         inverted
                     />
                 </View>
-            )}
+                ) 
+            }
         </>
     );
 };
