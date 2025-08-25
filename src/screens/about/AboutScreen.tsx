@@ -1,32 +1,19 @@
 import { View, Text, ScrollView, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import SecondaryHeader from '../../components/SecondaryHeader'
-import { supabase } from '../../../supabase'
 
 const AboutScreen = () => {
-    const [logo, setLogo] = useState();
-    const fetchLogo = async () => {
-        const { data, error } = await supabase
-            .from('users')
-            .select('photo')
-            .eq('id', 386)
-            .single()
-        if (data) setLogo(data.photo)
-    };
-
-    useEffect( () => {
-        fetchLogo();
-    }, []);
+    const logoUrl = 'https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/app_assets/logo.png';
     return (
         <View className='h-full'>
             <SecondaryHeader displayText='About Linkzy' />
-            <ScrollView className="flex-1 bg-white p-4">
+            <ScrollView className="flex-1 p-4">
                 {/* Brand Logo */}
                 <View className="items-center mb-6">
                     <Image
                         source={{
-                            uri: logo
-                        }} // <-- adjust path to your logo
+                            uri: logoUrl
+                        }} 
                         className="w-40 h-40 mb-2"
                         resizeMode="contain"
                     />
@@ -34,9 +21,6 @@ const AboutScreen = () => {
                         Linkzy - Turn clicks into connections
                     </Text>
                 </View>
-
-                <Text className="text-2xl font-bold mb-4">About Linkzy</Text>
-
                 <Text className="text-xl font-semibold mb-2">Our Mission</Text>
                 <Text className="text-gray-700 mb-6 leading-relaxed">
                     Linkzy was created to make discovering and joining community-driven

@@ -15,7 +15,7 @@ const EulaScreen = () => {
       />
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.heading}>{t('eula.title')}</Text>
+          {/* <Text style={styles.heading}>{t('eula.title')}</Text> */}
 
           <Text style={styles.sectionHeading}>{t('eula.section1.heading')}</Text>
           <Text style={styles.text}>{t('eula.section1.text')}</Text>
@@ -61,11 +61,11 @@ const EulaScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     padding: 20,
   },
   scrollContainer: {
-    paddingVertical: 100,
+    paddingBottom: 100,
   },
   heading: {
     fontSize: 24,

@@ -30,6 +30,7 @@ const DashboardScreen = () => {
     const [events, setEvents] = useState<EventCard[] | null>([]);
     const currentUser = useSelector(selectCurrentUser);
     const [isUpcoming, setIsUpcoming] = useState<boolean>(true);
+
     const fetchOrganizerId = async () => {
         const { data, error } = await supabase
             .from('organizers')
@@ -43,7 +44,8 @@ const DashboardScreen = () => {
             console.error(error.message)
         }
         return null;
-    }
+    };
+
     const fetchFeaturedEvents = async () => {
         const organizer_id = await fetchOrganizerId();
         if (!organizer_id) {
@@ -72,7 +74,7 @@ const DashboardScreen = () => {
             Animated.timing(fadeAnim, {
                 toValue: 1,
                 duration: 300,
-                delay: index * 200, // 0.1s stagger per item
+                delay: index * 200,
                 useNativeDriver: true,
             }).start();
         }, []);
@@ -136,6 +138,16 @@ const DashboardScreen = () => {
         fetchFeaturedEvents();
     }, []);
 
+    const upcomingEvents = events?.filter(
+        (e) => new Date(e.date) > new Date()
+    );
+
+    const pastEvents = events?.filter(
+        (e) => new Date(e.date) <= new Date()
+    );
+
+    const eventsToShow = isUpcoming ? upcomingEvents : pastEvents;
+
     return (
         <View className='h-screen'>
             <SecondaryHeader
@@ -159,15 +171,34 @@ const DashboardScreen = () => {
                     </Text>
                 </TouchableOpacity>
             </View>
-                <FlatList
-                    data={events}
-                    contentContainerStyle={{ paddingBottom: 200 }}
-    
-                    renderItem={({ item, index }) => (
-                        <FadeInItem item={item} index={index} />
-                    )}
-                    keyExtractor={(item) => item.featured_event_id.toString()}
-                /> 
+            {
+                eventsToShow?.length === 0 ?
+                    <View className="bg-red-20 h-1/2 justify-center items-center  p-6">
+                        <Text className="text-lg font-semibold text-gray-700">
+                            No events found
+                        </Text>
+                        <Text className="mt-2 text-center text-gray-500">
+                            Organise an event and bring your community together 🚀
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate("featuredEventsSubmit")}
+                            className="mt-6 px-4 py-2 bg-black rounded-xl"
+                        >
+                            <Text className="text-white text-lg font-medium">Create event</Text>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    <FlatList
+                        data={eventsToShow}
+                        contentContainerStyle={{ paddingBottom: 200 }}
+
+                        renderItem={({ item, index }) => (
+                            <FadeInItem item={item} index={index} />
+                        )}
+                        keyExtractor={(item) => item.featured_event_id.toString()}
+                    />
+            }
+
             <TouchableOpacity
                 onPress={() => navigation.navigate('featuredEventsSubmit')}
                 style={styles.shadowButtonStyle}

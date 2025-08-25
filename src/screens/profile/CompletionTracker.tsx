@@ -39,24 +39,18 @@ const CompletionTracker: React.FC<CompletionTrackerProps> = ({
                     </View>
                     <Text className="mt-2 text-sm text-gray-600">{progressPercentage}% complete</Text>
                     <View className='mt-2'>
-                        <View className='flex flex-row'>
-                            <SimpleCheckbox
-                                label='Write a description'
-                                checked={bio !== null}
-                            />
-                        </View>
-                        <View className='flex flex-row'>
-                            <SimpleCheckbox
-                                label='Select 3 interests'
-                                checked={interests?.length > 3}
-                            />
-                        </View>
-                        <View className='flex flex-row'>
-                            <SimpleCheckbox
-                                label='Add a photo'
-                                checked={photo !== null}
-                            />
-                        </View>
+                        <SimpleCheckbox
+                            label='Write a description'
+                            checked={bio !== null}
+                        />
+                        <SimpleCheckbox
+                            label='Select 3 interests'
+                            checked={interests?.length >= 3}
+                        />
+                        <SimpleCheckbox
+                            label='Add a photo'
+                            checked={photo !== null}
+                        />
                     </View>
                 </>
             }

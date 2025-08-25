@@ -10,8 +10,8 @@ const PrivacyPolicyScreen = () => {
             />
             <ScrollView 
                 contentContainerStyle={{paddingBottom: 200}}
-                className="flex-1 bg-white p-4">
-                <Text className="text-2xl font-bold mb-4">Privacy Policy</Text>
+                className="flex-1  p-4">
+                {/* <Text className="text-2xl font-bold mb-4">Privacy Policy</Text> */}
                 <Text className="text-gray-700 mb-4">
                     This privacy policy applies to the Linkzy app (hereby referred to as
                     "Application") for mobile devices that was created by Nicolas (hereby

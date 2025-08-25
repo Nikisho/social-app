@@ -23,7 +23,7 @@ const UserInterestsForm: React.FC<UserPhotoFormProps> = ({
                     Help us match you with the right 
                 </Text>
                 <Text style={styles.headerText}>
-                    expiences!
+                    experiences!
                 </Text>
                 <Text style={styles.subHeaderText}>
                     Select ten interests to personalise your journey.

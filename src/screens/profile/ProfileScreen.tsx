@@ -209,90 +209,93 @@ const ProfileScreen = () => {
 
 	return (
 		<>
-			<View className='flex flex-row items-center'>
-				<SecondaryHeader
-					displayText={userData.name}
-				/>
-
-				{/* Profile completion tracket */}
-
-				{
-					userData?.date_of_birth && (
-						<View
-							// style={{ backgroundColor: colours.secondaryColour }}
-							className={` flex flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
-						>
-
-							{userData.sex !== 0 && (
-								<Text className="text-lg font-semibold  text-white">
-									{userData.sex === 1 ? "♂" : "♀"}
-								</Text>
-							)}
-
-							<Text
-								className='text-lg font-semibold text-white'>
-								{getAge(userData.date_of_birth)}
-							</Text>
-						</View>
-					)
-				}
-			</View>
-
-			<FeaturedEventsUser
-				HeaderContent={
+			{
+				userData && userInterests && (
 					<>
-						{
-							isCurrentUserProfile &&
-							<CompletionTracker
-								{...userData}
-								interests={userInterests}
+						<View className='flex flex-row items-center'>
+							<SecondaryHeader
+								displayText={userData.name}
 							/>
-						}
-						<UserDetails
-							name={userData.name}
-							dateOfBirth={userData.date_of_birth}
-							photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
-							bio={userData.bio}
-							sex={userData.sex}
-							isOrganizer={userData.is_organizer}
-							handlePressChat={handlePressChat}
+							{
+								userData?.date_of_birth && (
+									<View
+										// style={{ backgroundColor: colours.secondaryColour }}
+										className={` flex flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
+									>
+
+										{userData.sex !== 0 && (
+											<Text className="text-lg font-semibold  text-white">
+												{userData.sex === 1 ? "♂" : "♀"}
+											</Text>
+										)}
+
+										<Text
+											className='text-lg font-semibold text-white'>
+											{getAge(userData.date_of_birth)}
+										</Text>
+									</View>
+								)
+							}
+						</View>
+
+						<FeaturedEventsUser
+							HeaderContent={
+								<>
+									{
+										isCurrentUserProfile &&
+										<CompletionTracker
+											{...userData}
+											interests={userInterests}
+										/>
+									}
+									<UserDetails
+										name={userData.name}
+										dateOfBirth={userData.date_of_birth}
+										photo={currentUser.id === user_id ? currentUser.photo : userData.photo}
+										bio={userData.bio}
+										sex={userData.sex}
+										isOrganizer={userData.is_organizer}
+										handlePressChat={handlePressChat}
+										setModalVisible={setModalVisible}
+										isCurrentUserProfile={isCurrentUserProfile}
+										user_id={user_id}
+										modalVisible={modalVisible}
+										setProfilePictureModalVisible={setProfilePictureModalVisible}
+										profilePictureModalVisible={profilePictureModalVisible}
+									/>
+									<UserInterests
+										user_id={user_id}
+										userInterests={userInterests!}
+										isCurrentUserProfile={isCurrentUserProfile}
+
+									/>
+									{userData?.is_organizer &&
+										<Text className='text-lg font-semibold mb-2'> {t('profile_screen.events')} </Text>
+									}
+								</>
+
+							}
+							user_id={user_id}
+						/>
+						<UpdateBioModal
 							setModalVisible={setModalVisible}
-							isCurrentUserProfile={isCurrentUserProfile}
-							user_id={user_id}
+							closeModal={closeModal}
+							userData={userData}
+							setUserData={setUserData}
 							modalVisible={modalVisible}
-							setProfilePictureModalVisible={setProfilePictureModalVisible}
-							profilePictureModalVisible={profilePictureModalVisible}
+							updateUserDescription={updateUserDescription}
 						/>
-						<UserInterests
+						<ProfilePictureModal
+							setModalVisible={setProfilePictureModalVisible}
+							modalVisible={profilePictureModalVisible}
+							photo={isCurrentUserProfile ? currentUser.photo : userData.photo}
 							user_id={user_id}
-							userInterests={userInterests!}
-							isCurrentUserProfile={isCurrentUserProfile}
-
+							pickImage={pickImage}
+							clearImage={clearImage}
 						/>
-						{userData?.is_organizer &&
-							<Text className='text-lg font-semibold mb-2'> {t('profile_screen.events')} </Text>
-						}
 					</>
-
-				}
-				user_id={user_id}
-			/>
-			<UpdateBioModal
-				setModalVisible={setModalVisible}
-				closeModal={closeModal}
-				userData={userData}
-				setUserData={setUserData}
-				modalVisible={modalVisible}
-				updateUserDescription={updateUserDescription}
-			/>
-			<ProfilePictureModal
-				setModalVisible={setProfilePictureModalVisible}
-				modalVisible={profilePictureModalVisible}
-				photo={isCurrentUserProfile ? currentUser.photo : userData.photo}
-				user_id={user_id}
-				pickImage={pickImage}
-				clearImage={clearImage}
-			/>
+				)
+			}
 		</>
 
 	)

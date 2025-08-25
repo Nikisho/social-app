@@ -71,11 +71,11 @@ const AttendeeListScreen = () => {
     };
 
     const handleNavigate = async () => {
-        const userHasPhoto = await checkProfilePicture(currentUser.id);
-        if (!userHasPhoto && !__DEV__) {
-            platformAlert('Add a profile picture to chat with attendees!');
-            return;
-        }
+        // const userHasPhoto = await checkProfilePicture(currentUser.id);
+        // if (!userHasPhoto ) {
+        //     platformAlert('Add a profile picture to chat with attendees!');
+        //     return;
+        // }
         navigation.navigate('groupchat', {
             featured_event_id: featured_event_id
         })

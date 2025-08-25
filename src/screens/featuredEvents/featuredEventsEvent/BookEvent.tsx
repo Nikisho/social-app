@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, Animated } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, Animated, Platform } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import colours from '../../../utils/styles/colours'
 import { supabase } from '../../../../supabase';
@@ -195,7 +195,7 @@ const BookEvent: React.FC<BookEventProps> = ({
             style={{
                 opacity: fadeAnim
             }}
-            className='absolute bg-green-100 border-green-800 border-y-2 inset-x-0 bottom-20 py-3 flex justify-between flex-row items-center px-6'>
+            className={`absolute bg-green-100 border-green-800 border-y-2 inset-x-0 py-3 flex justify-between flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
             <RenderActionButton
                 isExpired={isExpired}
                 isSoldOut={isSoldOut}

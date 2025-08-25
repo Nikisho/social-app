@@ -2,12 +2,12 @@ import { View, Text, Image, TouchableOpacity, Animated } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import styles from '../../../utils/styles/shadow';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 interface ChatHeaderProps {
     title: string;
@@ -129,9 +129,9 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
                     borderTopWidth: 1,
                     borderColor: '#ccc',
                 }}
-                className="p-3 px-3 flex-row space-x-3 bg-gray-200"
+                className="p-3 px-3 flex-row space-x-2 bg-gray-200"
             >
-                <AntDesign name="pushpino" size={24} color="black" />
+                <MaterialCommunityIcons name="pin" size={24} color="black" />
                 <View className="flex-1">
                     <Text className="text-wrap">{blurb_message}</Text>
                 </View>

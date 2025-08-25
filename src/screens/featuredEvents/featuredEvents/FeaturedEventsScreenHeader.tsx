@@ -134,7 +134,7 @@ const FeaturedEventsScreenHeader = () => {
             >
                 <AntDesign name="calendar" size={20} color="white" />
                 <Text className='text-white font-semibold'>
-                    Create Event
+                    Create event
                 </Text>
             </TouchableOpacity>
             <Text className='text-2xl font-semibold '>

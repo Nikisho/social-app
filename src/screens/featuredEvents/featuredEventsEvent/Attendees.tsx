@@ -60,10 +60,6 @@ const Attendees = ({
             platformAlert("Join the event to see who's going and chat with them!");
             return;
         }
-        if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
-            platformAlert("Join the event to see who's going and chat with them!")
-            return;
-        }
         navigation.navigate('attendeelist', {
             featured_event_id: featured_event_id,
             chat_room_id: chat_room_id

@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { FeaturedEventsEventScreenRouteProps, RootStackNavigationProp } from '../../../utils/types/types'
@@ -40,11 +40,11 @@ interface EventDataProps {
 }
 
 interface Interests {
-	interest_code: number;
-	interest_group_code: number;
-	interests: {
-		description: string;
-	}
+    interest_code: number;
+    interest_group_code: number;
+    interests: {
+        description: string;
+    }
 }
 
 const FeaturedEventsEventScreen = () => {
@@ -96,57 +96,55 @@ const FeaturedEventsEventScreen = () => {
     }, [featured_event_id]);
     return (
         <>
-            <View>
-                <ScrollView
-                    className='p-2'
-                    contentContainerStyle={{ paddingBottom: 200 }}
-                >
-                    {
-                        eventData && (
-                            <>
-                                <FeaturedEventsEventHeader
-                                    {...eventData}
-                                />
-                                <FeaturedEventDetails
-                                    {...eventData}
-                                />
-                                <PromoterDetails
-                                    {...eventData}
-                                />
-                                <Attendees
-                                    {...eventData}
-                                />
-                                <EventInterests
-                                    interests={interests}
-                                />
-                            </>
-                        )
-                    }
-                </ScrollView>
-            </View>
-
             {
-                isOwnEvent ?
-                    <View
-                        style={{
-                            backgroundColor: colours.secondaryColour,
-                        }}
-                        className='absolute inset-x-0 bottom-20 h-[10%] flex justify-center flex-row items-center px-6'>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('editfeaturedevent', {
-                                featured_event_id: featured_event_id
-                            })}
-                            className='bg-white p-2 px-4 rounded-full  '>
-                            <Text className='text-lg font-semibold text-center'>
-                                Manage event
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
+                eventData && (
 
-                    <BookEvent
-                        {...eventData!}
-                    />
+                    <>
+                        <ScrollView
+                            className='p-2'
+                            contentContainerStyle={{ paddingBottom: 200 }}
+                        >
+                            <FeaturedEventsEventHeader
+                                {...eventData}
+                            />
+                            <FeaturedEventDetails
+                                {...eventData}
+                            />
+                            <PromoterDetails
+                                {...eventData}
+                            />
+                            <Attendees
+                                {...eventData}
+                            />
+                            <EventInterests
+                                interests={interests}
+                            />
+                        </ScrollView>
+
+                        {
+                            isOwnEvent ?
+                                <View
+                                    style={{
+                                        backgroundColor: colours.secondaryColour,
+                                    }}
+                                    className={`absolute inset-x-0 h-[10%] flex justify-center flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('editfeaturedevent', {
+                                            featured_event_id: featured_event_id
+                                        })}
+                                        className='bg-white p-2 px-4 rounded-full  '>
+                                        <Text className='text-lg font-semibold text-center'>
+                                            Manage event
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                                :
+                                <BookEvent
+                                    {...eventData!}
+                                />
+                        }
+                    </>
+                )
             }
         </>
     )

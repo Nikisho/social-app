@@ -48,16 +48,14 @@ const ChatCard: React.FC<ChatCardProps> = ({
     const handleNavigate = async () => {
 
         if (item.type === 'group') {
-
-            const userHasPhoto = await checkProfilePicture(currentUser.id);
-            if (!userHasPhoto && !__DEV__) {
-                platformAlert('Add a profile picture to chat with attendees!');
-                return;
-            }
+            // const userHasPhoto = await checkProfilePicture(currentUser.id);
+            // if (!userHasPhoto && !__DEV__) {
+            //     platformAlert('Add a profile picture to chat with attendees!');
+            //     return;
+            // }
             navigation.navigate('groupchat', {
                 featured_event_id: item.featured_event_id
             })
-
         } else {
             navigation.navigate('chat',
                 { user_id: item.user_id }
@@ -80,7 +78,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
                         style={styles.shadow}
                         className='bg-white rounded-full'
                     >
-
                         <Image
                             className='w-12 h-12 rounded-full'
                             source={{
@@ -88,7 +85,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
                             }}
                         />
                     </View>
-
                     :
                     <View
                         style={{

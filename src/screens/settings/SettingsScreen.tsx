@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
@@ -15,9 +15,6 @@ const SettingsScreen = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const navigation = useNavigation<RootStackNavigationProp>();
   const { t } = useTranslation();
-  const openURL = (url: string) => {
-    Linking.openURL(url).catch((err) => console.error("Failed to open URL:", err));
-  };
 
   const menuItems = [
     {
@@ -35,7 +32,8 @@ const SettingsScreen = () => {
     {
       title: `${t('settings_screen.contact_us')}`,
       icon: <MaterialIcons name="headphones" size={24} color="black" />,
-      onPress: () => openURL('https://www.linkzyapp.com/contactus.html'),
+      // onPress: () => openURL('https://www.linkzyapp.com/contactus.html'),
+      onPress: () => currentUser.id === 386 ? console.log('Nope') : navigation.navigate('chat', { user_id: 386 })
     },
     {
       title: `${t('settings_screen.about')}`,
@@ -46,27 +44,24 @@ const SettingsScreen = () => {
 
   return (
     <View className="h-full">
-      <View className=''>
+      <View className='mb-3'>
 
-      <SecondaryHeader
-        displayText={t('settings_screen.title')}
+        <SecondaryHeader
+          displayText={t('settings_screen.title')}
         />
-        </View>
-      <View className="w-full flex flex-row justify-center pb-5">
       </View>
 
       {menuItems.map((item, index) => (
         <TouchableOpacity
           key={index}
           onPress={item.onPress}
-          className="py-5 px-4 border-t flex flex-row items-center space-x-4"
+          style={{borderTopWidth: 0.2}}
+          className="py-5 px-4 flex flex-row items-center space-x-4"
         >
           {item.icon}
           <Text>{item.title}</Text>
         </TouchableOpacity>
       ))}
-
-      <>
         <TouchableOpacity
           onPress={() => setDeleteModalVisible(!deleteModalVisible)}
           className="w-full bg-red-500 py-5 flex flex-row justify-center"
@@ -78,7 +73,6 @@ const SettingsScreen = () => {
           setModalVisible={setDeleteModalVisible}
           currentUserId={currentUser.id}
         />
-      </>
     </View>
   );
 };

@@ -38,7 +38,6 @@ const EmptyChat: React.FC<EmptyChatProps> = ({
 
         if (!currentUserEvents?.length) return [];
 
-        // 2. Find matching events
         const { data, error }: any = await supabase
             .from('featured_event_bookings')
             .select(`
@@ -85,10 +84,10 @@ const EmptyChat: React.FC<EmptyChatProps> = ({
                     className='p-3 px-10 bg-gray-300 rounded-2xl space-y-2'
                 >
                     <Text className='text-center text-lg font-semibold'>
-                        Say hi to {name}! 👋
+                        {user_id===386 ? '👋 Need help? Start typing below to chat with the Linkzy team.' : `Say hi to ${name}! 👋`}
                     </Text>
                     {
-                        commonEvent &&
+                        commonEvent && user_id !== 386 &&
                         <Text className='text-center text-lg'>
                             {CTAMessage} {commonEvent?.featured_events.title} 🚀
                         </Text>
