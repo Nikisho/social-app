@@ -12,7 +12,7 @@ import { RootStackNavigationProp } from '../utils/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropdownMenu from './DropdownMenu';
 import abbrNum from '../utils/functions/abbrNum';
-import BuyGemsModal from './BuyGemsModal';
+import BuyGemsModal from '../../Archive/BuyGemsModal';
 
 GoogleSignin.configure({ webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID });
 const Header = () => {

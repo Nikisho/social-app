@@ -32,7 +32,7 @@ const BecomeAnOrganizerModal: React.FC<BecomeAnOrganizerModalProps> = ({
           </Text>
 
           <TouchableOpacity style={styles.continueButton} onPress={handleStartOnboarding}>
-            <Text style={styles.buttonText}>Start Onboarding</Text>
+            <Text style={styles.buttonText}>Learn more</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => setModalVisible(false)}>

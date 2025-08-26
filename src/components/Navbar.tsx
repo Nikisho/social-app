@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import colours from '../utils/styles/colours';
@@ -11,21 +10,12 @@ import { RootStackNavigationProp } from '../utils/types/types';
 import { supabase } from '../../supabase';
 import Badge from './Badge';
 import { usePushNotifications } from '../utils/functions/usePushNotifications';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
+import * as Notifications from 'expo-notifications';
 const Navbar = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const currentUser = useSelector(selectCurrentUser);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState<number | null>(null);
   const menuItems = [
-    // {
-    //   icon: <AntDesign name="search1" size={30} color="white" />,
-    //   navigation: 'search'
-    // },
-    // {
-    //   icon: <MaterialIcons name="leaderboard" size={26} color="white" />,
-    //   navigation: 'leaderboard'
-    // },
     {
       icon: <View>
         <Entypo name="message" size={26} color="white" />
@@ -37,10 +27,6 @@ const Navbar = () => {
       icon: <Entypo name="home" size={26} color="white" />,
       navigation: 'featuredEvents'
     },
-    // {
-    //   icon: <Entypo name="calendar" size={26} color="white" />,
-    //   navigation: 'meetups'
-    // },
     {
       icon: <Entypo name="ticket" size={26} color="white" />,
       navigation: 'ticketfeed'
@@ -51,7 +37,12 @@ const Navbar = () => {
     },
   ];
 
-  const screens = ['leaderboard', 'meetups', 'chat', 'chatlist', 'featuredEvents']
+  if (currentUser.isOrganizer === true) {
+    menuItems.splice(2, 0, {
+      icon: <Entypo name="calendar" size={30} color="white" />,
+      navigation: 'dashboard'
+    });
+  }
   const { expoPushToken } = usePushNotifications();
   const updateExpoPushToken = async () => {
     if (currentUser.id === null) {
@@ -66,7 +57,7 @@ const Navbar = () => {
     if (error) { console.error(error.message); }
   };
   const fetchUnreadMessagesCount = async () => {
-    const { data, error } = await supabase.rpc('fetch_unread_messages_count', { current_user_id: currentUser.id })
+    const { data, error } = await supabase.rpc('fetch_unread_messages_count_v2', { current_user_id: currentUser.id })
     if (data) {
       setUnreadMessagesCount(data[0].count);
     }
@@ -78,24 +69,13 @@ const Navbar = () => {
   useEffect(() => {
     fetchUnreadMessagesCount();
     updateExpoPushToken();
-
-    //THIS IS A TEMPORARY SOLUTION AS THIS FORCES DATA TO BE FETCHED EACH 
-    //TIME THE MESSAGES TABLE IS UPDATED. NOT SUSTAINABLE IN LONG TERM!
-    const subscription = supabase
-      .channel('messages')
-      .on('postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'messages',
-          // filter: ''
-        },
-        (payload) => {
-          console.log('Change detected:', payload);
-          fetchUnreadMessagesCount();  // Re-fetch unread messages count when data changes
-        }
-      )
-      .subscribe();
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      const data = notification.request.content.data
+      if (data?.screen === 'ChatScreen' || data?.screen === 'GroupChatScreen') {
+        fetchUnreadMessagesCount();
+      }
+    });
+    return () => subscription.remove();
   }, [expoPushToken]);
 
   return (
@@ -106,9 +86,8 @@ const Navbar = () => {
         menuItems.map((item) => (
           <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}
             onPress={() => {
-              if (item.navigation === 'search' || item.navigation === 'meetups' || item.navigation === 'chatlist' || item.navigation === 'leaderboard' || item.navigation === 'featuredEvents'  || item.navigation === 'ticketfeed'  ) {
-              // if ( screens.includes(item.navigation) ) {
-                navigation.navigate(item.navigation);
+              if (item.navigation === 'chatlist' || item.navigation === 'featuredEvents' || item.navigation === 'ticketfeed' || item.navigation === 'dashboard') {
+                navigation.navigate(item.navigation as never);
               } else if (item.navigation === 'profile') {
                 navigation.navigate('profile', {
                   user_id: currentUser.id,

@@ -16,6 +16,7 @@ const UpdateInterestsScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const navigation = useNavigation();
     const { user_interests } = route.params;
+    console.log(user_interests)
     const mappedInterests = user_interests.map(item => ({
         interestCode: item.interest_code,
         interestGroupCode: item.interest_group_code

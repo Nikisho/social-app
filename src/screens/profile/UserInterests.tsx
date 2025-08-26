@@ -41,11 +41,19 @@ const UserInterests: React.FC<UserInterestsProps> = ({
             </View>
             {
                 userInterests?.length === 0 ?
-                    <View>
-                        <Text className='italic py-3'>
-                            {t('profile_screen.no_interests')} 
-                        </Text>
-                    </View>
+                    isCurrentUserProfile ?
+                        <View>
+                            <Text className='italic text-lg py-3'>
+                                {/* {t('profile_screen.no_interests')} */}
+                                Select your interests to get the best experience!
+                            </Text>
+                        </View>
+                        :
+                        <View>
+                            <Text className='italic text-lg py-3 text-center'>
+                                {t('profile_screen.no_interests')}
+                            </Text>
+                        </View>
                     :
                     <View
                         // horizontal
@@ -53,9 +61,15 @@ const UserInterests: React.FC<UserInterestsProps> = ({
                     >
                         {
                             userInterests?.map((interest) => (
-                                <View style={styles.interestButton} className='w-1/' key={interest.interest_code}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate('featuredEvents', {
+                                            interest: interest
+                                        })
+                                    }}
+                                    style={styles.interestButton} className='w-1/' key={interest.interest_code}>
                                     <Text>{interest.interests.description}</Text>
-                                </View>
+                                </TouchableOpacity>
                             ))
                         }
                     </View>

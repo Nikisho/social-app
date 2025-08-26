@@ -127,13 +127,16 @@ const FeaturedEventsScreenHeader = () => {
     return (
         <View className='p-3 flex flex-row items-center space-x-5 z-20'>
             <TouchableOpacity
-                className='rounded-full p-2 w-10 h-10 bg-black flex flex-row items-center justify-center'
+                className='rounded-lg p-2 space-x-2  bg-black flex flex-row items-center justify-center'
                 style={styles.shadow}
                 onPress={createFeaturedEvent}
+                // onPress={() => navigation.navigate('organizerOnboarding')}
             >
-                <AntDesign name="plus" size={25} color="white" />
+                <AntDesign name="calendar" size={20} color="white" />
+                <Text className='text-white font-semibold'>
+                    Create event
+                </Text>
             </TouchableOpacity>
-
             <Text className='text-2xl font-semibold '>
                 {t('featured_events.title')}
             </Text>

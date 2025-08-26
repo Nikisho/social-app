@@ -1,5 +1,5 @@
 import { Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { ChatScreenRouteProp, RootStackNavigationProp } from '../../../utils/types/types';
 import { supabase } from '../../../../supabase';
@@ -13,6 +13,9 @@ import SendMedia from '../SendMedia';
 import { decode } from 'base64-arraybuffer';
 import { uuidv4 } from '../../../utils/functions/uuidv4';
 import { ImagePickerAsset } from 'expo-image-picker';
+import EmptyChat from './EmptyChat';
+import LoadingScreen from '../../loading/LoadingScreen';
+import markMessagesRead from '../../../utils/functions/markMessagesRead';
 
 interface UserDataProps {
   name: string;
@@ -21,6 +24,9 @@ interface UserDataProps {
 }
 
 interface Message {
+  message_reactions: {
+    reactions: { reaction_emoji: string }
+  }[];
   message_id: number;
   chat_room_id: number;
   sender_id: number;
@@ -36,8 +42,10 @@ const ChatScreen = () => {
   const [chatRoomIdState, setChatRoomIdState] = useState<number>();
   const [userData, setUserData] = useState<UserDataProps>();
   const [messages, setMessages] = useState<ArrayLike<Message>>([]);
-  const [media, setMedia] = useState<ImagePickerAsset| null>(null);
+  const [media, setMedia] = useState<ImagePickerAsset | null>(null);
   const navigation = useNavigation<RootStackNavigationProp>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [onlineStatus, setOnlineStatus] = useState<'online' | 'offline'>('offline');
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
@@ -50,56 +58,57 @@ const ChatScreen = () => {
 
   const fetchChatData = async () => {
 
-    const { data:existingChat, error:existingChatError } = await supabase
+    const { data: existingChat, error: existingChatError } = await supabase
       .from('private_chats')
       .select()
       .or(`and(user1_id.eq.${user_id},user2_id.eq.${currentUser.id}),and(user1_id.eq.${currentUser.id},user2_id.eq.${user_id})`)
       .single();
-    if (existingChatError) {console.error( existingChatError.message)};
+    if (existingChatError) { console.error(existingChatError.message) };
 
     if (existingChat) {
-        setChatRoomIdState(existingChat.chat_room_id);
-        return existingChat.chat_room_id;
+      setChatRoomIdState(existingChat.chat_room_id);
+      return existingChat.chat_room_id;
     } else {
 
-        const { data: newChatRoom, error:newChatRoomError } = await supabase
-          .from('chat_rooms')
-          .insert({
-            type: 'private'
-          })
-          .select()
-          .single();
+      const { data: newChatRoom, error: newChatRoomError } = await supabase
+        .from('chat_rooms')
+        .insert({
+          type: 'private'
+        })
+        .select()
+        .single();
 
-        setChatRoomIdState(newChatRoom.chat_room_id);
-        if(newChatRoomError) {
-          console.error('Error adding chat room:', newChatRoomError);
-          return;
-        }
-        
-        const {error:privateChatError} =  await supabase.from('private_chats').insert({
-            user1_id: user_id,
-            user2_id: currentUser.id,
-            chat_room_id: newChatRoom.chat_room_id,
-          });
-        if(privateChatError) {
-          console.error('Error adding private chat:', privateChatError);
-          return;
-        }
+      setChatRoomIdState(newChatRoom.chat_room_id);
+      if (newChatRoomError) {
+        console.error('Error adding chat room:', newChatRoomError);
+        return;
+      }
 
-        const { error: participantError } = await supabase.from('participants').insert([
-          { chat_room_id: newChatRoom.chat_room_id, user_id: user_id },
-          { chat_room_id: newChatRoom.chat_room_id, user_id: currentUser.id },
-        ]);
-        if (participantError) {
-          console.error('Error adding participants:', participantError);
-          return;
-        }
+      const { error: privateChatError } = await supabase.from('private_chats').insert({
+        user1_id: user_id,
+        user2_id: currentUser.id,
+        chat_room_id: newChatRoom.chat_room_id,
+      });
+      if (privateChatError) {
+        console.error('Error adding private chat:', privateChatError);
+        return;
+      }
+
+      const { error: participantError } = await supabase.from('participants').insert([
+        { chat_room_id: newChatRoom.chat_room_id, user_id: user_id },
+        { chat_room_id: newChatRoom.chat_room_id, user_id: currentUser.id },
+      ]);
+      if (participantError) {
+        console.error('Error adding participants:', participantError);
+        return;
+      }
     }
 
   };
   //When the user opens a chat here we set the unread messages to read in the DB
   //This is done in the chat screen directly to update no matter where the user opens the chat from
   const setMessagesRead = async (chatRoomID: number) => {
+    if (!chatRoomIdState) return;
     const { error } = await supabase
       .from('messages')
       .update({ read_by_recipient: true })
@@ -107,25 +116,40 @@ const ChatScreen = () => {
       .neq('sender_id', currentUser.id)
       .eq('read_by_recipient', false);
     if (error) { console.error(error.message) }
+
   }
-  const fetchMessages = async () => {
+  const fetchMessages = async (isInitialLoad?: boolean) => {
     // console.log(chatRoomIdState)
     //The room ID constant does not update right away, 
     // on the first render it has value undefined
     // so we return here, then once it updates the second render
     // fetches the messages
+    isInitialLoad && setLoading(true);
+
     if (!chatRoomIdState) return;
     const { error, data } = await supabase
       .from('messages')
-      .select()
+      .select(`*, 
+                users(
+                    photo,
+                    name,
+                    id
+                ),
+                message_reactions (
+                reaction_id,
+                reactions (reaction_emoji)
+            )
+                `)
       .eq('chat_room_id', chatRoomIdState)
       .order('created_at', { ascending: false })
 
     if (data) {
       setMessages(data);
-      setMessagesRead(chatRoomIdState)
+      markMessagesRead(chatRoomIdState!, currentUser.id, data[0]?.message_id)
     }
     if (error) console.error(error.message);
+    isInitialLoad && setLoading(false);
+
   };
 
   const updateProfilePictureInStorageBucket = async (file: string, unique_file_identifier: string) => {
@@ -158,30 +182,38 @@ const ChatScreen = () => {
       .insert({
         sender_id: currentUser.id,
         chat_room_id: chatRoomIdState,
-        mediaUrl: media? mediaUrl : null,
+        mediaUrl: media ? mediaUrl : null,
         content: newMessage
       });
-      await fetchMessages();
+
+    const { error: ChatRoomError } = await supabase
+      .from('chat_rooms')
+      .update({
+        updated_at: new Date()
+      })
+      .eq('chat_room_id', chatRoomIdState);
+
+    await fetchMessages();
     if (error) console.error(error.message);
+    if (ChatRoomError) console.error(ChatRoomError.message);
   };
 
   //This is to refresh the messages whenever the user receives a message
   const subscription = supabase
-  .channel('messages')
-  .on('postgres_changes',
-    {
-      event: '*',
-      schema: 'public',
-      table: 'messages',
-      filter: `sender_id=eq.${user_id}`
-    },
-    (payload) => {
-      console.log('Change detected:', payload);
-      fetchMessages();  // Re-fetch unread messages count when data changes
-
-    }
-  )
-  .subscribe();
+    .channel('chat_rooms')
+    .on('postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'chat_rooms',
+        filter: `chat_room_id=eq.${chatRoomIdState}`
+      },
+      (payload) => {
+        console.log('Change detected:', payload);
+        fetchMessages();  // Re-fetch unread messages count when data changes
+      }
+    )
+    .subscribe();
 
   const blockAndReportUser = async () => {
 
@@ -190,9 +222,9 @@ const ChatScreen = () => {
       .insert({
         user_id: currentUser.id,
         blocked_user_id: user_id
-    });
+      });
 
-    if (error) {throw error.message};
+    if (error) { throw error.message };
 
     Alert.alert('You will not receive updates and messages from this user')
     navigation.navigate('chatlist');
@@ -201,16 +233,21 @@ const ChatScreen = () => {
   useEffect(() => {
     fetchUserData();
     fetchChatData();
-    fetchMessages();
+    fetchMessages(true);
+    setMessagesRead(chatRoomIdState!);
   }, [chatRoomIdState]);
 
 
   if (media) {
-    return <SendMedia 
-              media={media} 
-              setMedia={setMedia}
-              onSendMessage={sendMessage}
-            />
+    return <SendMedia
+      media={media}
+      setMedia={setMedia}
+      onSendMessage={sendMessage}
+    />
+  }
+
+  if (loading) {
+    return <LoadingScreen displayText='Getting your messages...' />
   }
   return (
     <SafeAreaProvider className='h-screen'>
@@ -222,6 +259,7 @@ const ChatScreen = () => {
               photo={userData.photo}
               user_id={userData.id}
               blockAndReportUser={blockAndReportUser}
+              onlineStatus={'tbc'}
             />
           </>
         )
@@ -229,10 +267,17 @@ const ChatScreen = () => {
       {
         chatRoomIdState && (
           <>
-            <ChatBody
-              messages={messages}
-              currentUser={currentUser}
-            />
+            {
+              messages.length === 0 ?
+                <EmptyChat
+                  user_id={user_id}
+                  name={userData?.name!}
+                /> :
+                <ChatBody
+                  messages={messages}
+                  fetchMessages={fetchMessages}
+                />
+            }
             <InputBox
               onSendMessage={sendMessage}
               setMedia={setMedia}

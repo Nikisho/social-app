@@ -1,7 +1,7 @@
 import { Platform, RefreshControl, View, FlatList, ActivityIndicator, Text } from 'react-native'
 import React from 'react'
 import FeedCard from './FeedCard';
-import GoogleAds from './GoogleAds';
+import GoogleAds from '../../Archive/GoogleAds';
 
 interface FeedProps {
   eventList: {

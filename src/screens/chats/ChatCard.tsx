@@ -1,6 +1,5 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
@@ -9,9 +8,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import extractTimeFromDate from '../../utils/functions/extractTimeFromDate';
 import styles from '../../utils/styles/shadow';
 import { getColorFromName } from '../../utils/functions/getColorFromName';
-import platformAlert from '../../utils/functions/platformAlert';
-import checkProfilePicture from '../../utils/functions/checkProfilePicture';
-
 interface ChatCardProps {
     item: {
         user_id: number;
@@ -22,42 +18,19 @@ interface ChatCardProps {
         last_message_time: string;
         chat_room_id: number;
         type: string;
-    }
-    currentUser: {
-        id: number
+        unread_count: number;
     }
 }
 const ChatCard: React.FC<ChatCardProps> = ({
-    item,
-    currentUser
+    item
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
-    const [unreadMessageCount, setUnreadMessageCount] = useState<number | null>(null)
-    const fetchMessageCount = async () => {
-
-        const { error, data } = await supabase
-            .from('messages')
-            .select('*', { count: 'exact' })
-            .eq('chat_room_id', item.chat_room_id)
-            .eq('read_by_recipient', false)
-            .neq('sender_id', currentUser.id)
-        if (data) { setUnreadMessageCount(data.length) }
-        if (error) { throw error.message }
-    };
-
     const handleNavigate = async () => {
 
         if (item.type === 'group') {
-
-            const userHasPhoto = await checkProfilePicture(currentUser.id);
-            if (!userHasPhoto) {
-                platformAlert('Add a profile picture to chat with attendees!');
-                return;
-            }
             navigation.navigate('groupchat', {
                 featured_event_id: item.featured_event_id
             })
-
         } else {
             navigation.navigate('chat',
                 { user_id: item.user_id }
@@ -65,11 +38,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
         }
     };
 
-    useFocusEffect(
-        React.useCallback(() => {
-            fetchMessageCount()
-        }, [])
-    );
     return (
         <TouchableOpacity
             onPress={handleNavigate}
@@ -80,7 +48,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
                         style={styles.shadow}
                         className='bg-white rounded-full'
                     >
-
                         <Image
                             className='w-12 h-12 rounded-full'
                             source={{
@@ -88,7 +55,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
                             }}
                         />
                     </View>
-
                     :
                     <View
                         style={{
@@ -113,7 +79,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
                     <Text
                         numberOfLines={1} style={{ width: 220 }}
                     >
-                        {item.title} 
+                        {item.title}
                     </Text>
                     {
                         item.last_message_content ?
@@ -123,7 +89,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
                                 style={{ fontSize: 12, width: 220 }}
                                 className={`text-gray-600 ${!item.last_message_content && 'italic'}`}
                             >
-                                {item.last_message_content} 
+                                {item.last_message_content}
                             </Text>
                             :
                             <>
@@ -140,8 +106,6 @@ const ChatCard: React.FC<ChatCardProps> = ({
                             </>
                     }
                 </View>
-
-
             </View>
             <View>
 
@@ -153,7 +117,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
                     )
                 }
                 {
-                    unreadMessageCount !== 0 && (
+                    item.unread_count !== 0 && item.unread_count !== null &&(
                         <View className='flex flex-row items-center justify-end grow '
                         >
                             <View className='rounded-full'
@@ -164,13 +128,14 @@ const ChatCard: React.FC<ChatCardProps> = ({
                                 <Text
                                     style={{
                                         paddingHorizontal: 6,
-                                        paddingVertical: 2,
+                                        paddingVertical: 1,
                                         color: '#ffffff',
                                         fontSize: 12,
 
                                     }}
                                     className=' rounded-full'>
-                                    {unreadMessageCount}
+                                    {/* {unreadMessageCount} */}
+                                    {item.unread_count}
                                 </Text>
                             </View>
 

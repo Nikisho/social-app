@@ -55,6 +55,7 @@ const TicketFeedScreen = () => {
     }
 
     const isTicketExpired = (eventDate: Date | string): boolean => {
+        if (__DEV__) return false;
         // Convert input to Date object (works with both strings and Date objects)
         const event = new Date(eventDate);
         const now = new Date();

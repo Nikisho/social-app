@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, Alert, Animated, Platform } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import colours from '../../../utils/styles/colours'
 import { supabase } from '../../../../supabase';
 import { useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import BookEventCheckoutModal from './BookEventCheckoutModal';
 import { delay } from '../../../utils/functions/delay';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import { t } from 'i18next';
+import RenderActionButton from './RenderActionButton';
 
 interface BookEventProps {
     is_free: boolean;
@@ -46,9 +47,9 @@ const BookEvent: React.FC<BookEventProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
 
     const canBook = async () => {
-        if (__DEV__) {
-            return true;
-        }
+        // if (__DEV__) {
+        //     return true;
+        // }
         const { count, error } = await supabase
             .from('featured_event_bookings')
             .select('user_id', { count: 'exact' })
@@ -67,15 +68,16 @@ const BookEvent: React.FC<BookEventProps> = ({
     };
 
     const isEventExpired = (eventDate: Date) => {
-        if (__DEV__) {
-            return false;
-        }
+        // if (__DEV__) {
+        //     return false;
+        // }
         const now = new Date();
         const event = new Date(eventDate)
         const eventEndOfDay = new Date(event)
         eventEndOfDay.setHours(23, 59, 59, 999);
         return now > eventEndOfDay;
     };
+    const isExpired = isEventExpired(date);
 
     const showBookingModal = async () => {
         try {
@@ -179,44 +181,31 @@ const BookEvent: React.FC<BookEventProps> = ({
 
         }
     }
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
+    useEffect(() => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 800, // half a second fade in
+            useNativeDriver: true,
+        }).start();
+    }, []);
     return (
-        <View
+        <Animated.View
             style={{
-                backgroundColor: colours.secondaryColour,
+                opacity: fadeAnim
             }}
-            className='absolute inset-x-0 bottom-0 h-[10%] flex justify-between flex-row items-center px-6'>
-            {
-                isSoldOut ?
-                    <View
-                        className='p-3 rounded-full bg-white opacity-60'
-                    >
-                        <Text className='text-center font-bold'>
-                            SOLD OUT
-                        </Text>
-                    </View>
-                    :
-
-                    <TouchableOpacity
-                        onPress={showBookingModal}
-                        disabled={isEventExpired(date)}
-                        className={`p-3 rounded-full bg-white w-1/4 ${isEventExpired(date) && 'opacity-60'}`}
-                    >
-                        <Text className='text-center font-bold'>
-                            {isEventExpired(date) ? `${t('featured_event_screen.closed')}`: `${t('featured_event_screen.book')}`}
-                        </Text>
-                    </TouchableOpacity>
-            }
-            {
-                is_free ?
-                    <Text className='text-3xl text-white font-bold'>
-                        {t('featured_event_screen.free')}
-                    </Text>
-                    :
-                    <Text className='text-3xl text-white font-bold'>
-                        £{price}
-                    </Text>
-            }
+            className={`absolute bg-green-100 border-green-800 border-y-2 inset-x-0 py-3 flex justify-between flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
+            <RenderActionButton
+                isExpired={isExpired}
+                isSoldOut={isSoldOut}
+                showBookingModal={showBookingModal}
+            />
+            {(!isExpired && !isSoldOut) && (
+                <Text className="text-2xl text-green-800 font-bold">
+                    {is_free ? t('featured_event_screen.free') : `£${price}`}
+                </Text>
+            )}
 
             <BookEventCheckoutModal
                 modalVisible={checkoutModalVisible}
@@ -230,7 +219,8 @@ const BookEvent: React.FC<BookEventProps> = ({
                 tickets_sold={tickets_sold}
                 chat_room_id={chat_room_id}
             />
-        </View>
+        </Animated.View>
+
     )
 }
 

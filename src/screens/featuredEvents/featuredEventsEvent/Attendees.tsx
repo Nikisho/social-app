@@ -14,7 +14,11 @@ interface AttendeeProps {
     users: { name: string, photo: string, id: number }
 }
 
-const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_event_id: number, chat_room_id: number, organizers: { user_id: number } }) => {
+const Attendees = ({ 
+    featured_event_id, 
+    chat_room_id, 
+    organizers }: { featured_event_id: number, chat_room_id: number, organizers: { user_id: number }
+ }) => {
 
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
     const { t } = useTranslation();
@@ -54,12 +58,6 @@ const Attendees = ({ featured_event_id, chat_room_id, organizers }: { featured_e
 
         if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
             platformAlert("Join the event to see who's going and chat with them!");
-            return;
-        }
-        // const attendeeIds = attendees?.map(attendee => attendee.users.id)
-        // console.log(attendeeIds)
-        if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
-            platformAlert("Join the event to see who's going and chat with them!")
             return;
         }
         navigation.navigate('attendeelist', {

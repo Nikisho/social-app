@@ -6,7 +6,9 @@ import { supabase } from '../../../../supabase';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import FastImage from 'react-native-fast-image';
 import { t } from 'i18next';
-
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../context/navSlice';
+import { SkeletonFeed } from './SkeletonFeed';
 
 interface FeaturedEventCard {
     image_url: string;
@@ -15,47 +17,66 @@ interface FeaturedEventCard {
     price: string;
     location: string;
     date: Date;
-    time: string;
+    event_time: string;
     is_free: boolean;
     test: boolean;
+    matched_interest_description: string
 }
 
-const FeaturedEventsFeed = () => {
+interface Interest {
+    interest: {
+        interest_code: number;
+        interests: {
+            description: string
+        }
+    }
+}
+
+const FeaturedEventsFeed = ({
+    interest
+}: Interest) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const [loading, setLoading] = useState(false);
     const [featuredEvents, setFeaturedEvents] = useState<any>();
-    
+    const currentUser = useSelector(selectCurrentUser)
     const fetchFeaturedEvents = async () => {
-        const { data, error } = await supabase
-            .from('featured_events')
-            .select()
-            .order('date', { ascending: false })
+        setLoading(true);
+        const { data, error } = await supabase.rpc('fetch_events_v2', {
+            current_user_id: currentUser.id,
+            interest_code: interest ? interest.interest_code : null
+        })
         if (data) {
             setFeaturedEvents(data);
         }
         if (error) {
             console.error(error.message);
         }
-    }; 
+        setLoading(false);
+    };
 
     useFocusEffect(
         React.useCallback(() => {
             fetchFeaturedEvents()
-        }, [])
+        }, [interest])
     );
-    const renderItem = ({ item }: { item: FeaturedEventCard }) => {
 
+    if (loading) return (
+        <SkeletonFeed/>
+    )
+    const renderItem = ({ item }: { item: FeaturedEventCard }) => {
         return (
+
             <TouchableOpacity
                 className={`my-2
                     rounded-xl border bg-white p-2
-                    ${item.test === true && !__DEV__? 'hidden' : ''}
+                    ${item.test === true && !__DEV__ ? 'hidden' : ''}
                 `}
                 onPress={() => navigation.navigate('featuredeventsevent', {
                     featured_event_id: item.featured_event_id
                 })}
             >
                 <FastImage
-                    source={{ uri: item.image_url}}
+                    source={{ uri: item.image_url }}
                     className="w-full h-80 rounded-xl overflow-hidden justify-end"
                 >
                     <View className="p-2 bg-black w-1/4 text-center mx-2 my-2 rounded-lg">
@@ -78,11 +99,22 @@ const FeaturedEventsFeed = () => {
                         {item.title}
                     </Text>
                     <Text className='text-amber-800 mb-1'>
-                        {item.time && formatDateShortWeekday(item?.date) + ', ' + (item?.time).slice(0, -3)}
+                        {item.event_time && item.date && formatDateShortWeekday(item?.date) + ', ' + (item?.event_time).slice(0, -3)}
                     </Text>
-                    <Text>
+                    <Text className='font-medium text-lg'>
                         {item.location}
                     </Text>
+                    {
+                        item.matched_interest_description && !interest && (
+                            <View className='flex flex-row'>
+                                <View className='mt-2 p-2 px-4 rounded-full bg-yellow-100 border-yellow-500 border'>
+                                    <Text className=''>
+                                        Because you like {item.matched_interest_description}
+                                    </Text>
+                                </View>
+                            </View>
+                        )
+                    }
                 </View>
             </TouchableOpacity>
         )
@@ -93,15 +125,46 @@ const FeaturedEventsFeed = () => {
                 mx-[-8]
                 space-y-2
         '>
-            {
-                featuredEvents &&
-                <FlatList
-                    data={featuredEvents}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.featured_event_id.toString()}
-                />
-            }
 
+            {interest && (
+                <View className="bg-gray-100 rounded-2xl px-4 py-2 mb-3 flex ">
+                    <Text className="text-base  text-gray-700 font-semibold">
+                        Events related to  {interest.interests.description}
+                    </Text>
+                    <TouchableOpacity
+                        className=''
+                        onPress={() => navigation.navigate('featuredEvents', {})}
+                    >
+                        <Text className='text-indigo-600'>
+                            Clear filter
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+            {
+                featuredEvents && featuredEvents.length !== 0 ?
+                    <FlatList
+                        data={featuredEvents}
+                        renderItem={renderItem}
+                        contentContainerStyle={{paddingBottom: 100}}
+                        keyExtractor={item => item.featured_event_id.toString()}
+                    /> :
+                    <View className="flex-1 items-center justify-center p-6">
+                        <Text className="text-lg font-semibold text-gray-700">
+                            No events found
+                        </Text>
+                        <Text className="mt-2 text-center text-gray-500">
+                            There aren’t any events linked to this interest yet.
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate("featuredEvents", {} as never)}
+                            className="mt-6 px-4 py-2 bg-black rounded-xl"
+                        >
+                            <Text className="text-white text-lg font-medium">Return Home</Text>
+                        </TouchableOpacity>
+                    </View>
+            }
         </View>
     )
 }

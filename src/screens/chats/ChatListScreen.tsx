@@ -1,5 +1,5 @@
 import { View, ListRenderItem, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
@@ -8,9 +8,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import NoMessagesView from './NoMessageView';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { useTranslation } from 'react-i18next';
-
+import LoadingScreen from '../loading/LoadingScreen';
+import * as Notifications from 'expo-notifications';
 interface ChatDataProps {
 	user_id: number;
+	unread_count: number
 	featured_event_id: number;
 	photo: string;
 	title: string;
@@ -26,45 +28,71 @@ const ChatListScreen = () => {
 	const [chats, setChats] = useState<Array<ChatDataProps>>();
 	const currentUser = useSelector(selectCurrentUser);
 	const { t } = useTranslation();
-	const fetchChats = async () => {
-		const [privateRes, groupRes] = await Promise.all([
-			supabase.rpc('fetch_private_chats', { current_user_id: currentUser.id }),
-			supabase.rpc('fetch_group_chats', { current_user_id: currentUser.id })
-		]);
-		if (privateRes.error) console.error('Private chat error:', privateRes.error.message);
-		if (groupRes.error) console.error('Group chat error:', groupRes.error.message);
+	const [loading, setLoading] = useState<boolean>(false);
 
-		if (privateRes.data || groupRes.data) {
-			// Tag chats so your UI knows which is which
-			const taggedPrivate = (privateRes.data || []).map((chat: ChatDataProps) => ({
-				...chat,
-				type: 'private'
-			}));
+	const fetchChats = async (isInitialLoad?: boolean) => {
+		isInitialLoad && setLoading(true);
+		try {
+			const [privateRes, groupRes] = await Promise.all([
+				supabase.rpc('fetch_private_chats_v2', { current_user_id: currentUser.id }),
+				supabase.rpc('fetch_group_chats_v2', { current_user_id: currentUser.id })
+			]);
+			if (privateRes.error) console.error('Private chat error:', privateRes.error.message);
+			if (groupRes.error) console.error('Group chat error:', groupRes.error.message);
 
-			const taggedGroup = (groupRes.data || []).map((chat: ChatDataProps) => ({
-				...chat,
-				type: 'group'
-			}));
+			if (privateRes.data || groupRes.data) {
+				// Tag chats so your UI knows which is which
+				const taggedPrivate = (privateRes.data || []).map((chat: ChatDataProps) => ({
+					...chat,
+					type: 'private'
+				}));
 
-			// Combine and sort by latest message
-			const combined = [...taggedPrivate, ...taggedGroup].sort(
-				(a, b) => Number(new Date(b.last_message_time)) - Number(new Date(a.last_message_time))
-			);
+				const taggedGroup = (groupRes.data || []).map((chat: ChatDataProps) => ({
+					...chat,
+					type: 'group'
+				}));
 
-			setChats(combined);
+				// Combine and sort by latest message
+				const combined = [...taggedPrivate, ...taggedGroup].sort(
+					(a, b) => Number(new Date(b.last_message_time)) - Number(new Date(a.last_message_time))
+				);
+				setChats(combined);
+			}
+		} catch (error) {
+			console.error(error)
+		}
+		finally {
+			isInitialLoad && setLoading(false);
 		}
 	};
 
 	useFocusEffect(
 		React.useCallback(() => {
-			fetchChats();
+			fetchChats(true);
 		}, [])
 	);
-	const renderItem: ListRenderItem<ChatDataProps> = ({ item }) => (
-		<ChatCard item={item}
-			currentUser={currentUser}
-		/>
-	);
+	useEffect(() => {
+		// This will trigger when a notification is received while the app is in the foreground
+		const subscription = Notifications.addNotificationReceivedListener(notification => {
+			// You can inspect the notification to make sure it’s a chat update
+			const data = notification.request.content.data
+			if (data?.screen === 'ChatScreen' || data?.screen ==='GroupChatScreen') {
+				fetchChats();
+			}
+		});
+		return () => subscription.remove();
+	}, []);
+
+	const renderItem: ListRenderItem<ChatDataProps> = ({ item }) => {
+		return (
+			<ChatCard item={item}
+			/>
+		)
+	};
+
+	if (loading) {
+		return <LoadingScreen displayText='Getting your chats...' />
+	}
 	return (
 		<View className=''>
 			<SecondaryHeader

@@ -134,7 +134,7 @@ const UserDetailsScreen = () => {
                 uid: user?.id,
                 expo_push_token: expoPushToken?.data
             })
-            .select('id')
+            .select('id, is_organizer')
             .single();
         if (error) {setLoading(!loading); throw error.message; };
         if (data) {
@@ -146,7 +146,8 @@ const UserDetailsScreen = () => {
                 age: userDetails.dateOfBirth ? `${getAge(userDetails.dateOfBirth)}` : null,
                 photo: userDetails.photo ? photoUrl : null,
                 sex: userDetails.sex,
-                id: data.id
+                id: data.id,
+				isOrganizer: data.is_organizer
             }))
         }
         setLoading(!loading);

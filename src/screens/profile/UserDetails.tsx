@@ -29,6 +29,7 @@ interface UserDetailsProps {
     user_id: number;
     modalVisible: boolean;
     profilePictureModalVisible: boolean
+    isOrganizer?: boolean | null;
 }
 
 interface trophyProps {
@@ -54,50 +55,17 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     user_id,
     modalVisible,
     profilePictureModalVisible,
-    setProfilePictureModalVisible
+    setProfilePictureModalVisible,
+    isOrganizer
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const currentUser = useSelector(selectCurrentUser);
     const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-600' : 'bg-red-300')
-    const today = new Date('2025-04-05');
-    const [trophies, setTrophies] = useState<trophyProps[] | null>(null);
     const { t } = useTranslation();
-    const fetchUserTropHies = async () => {
-        const { data, error } = await supabase
-            .from('fact_user_competition_prizes')
-            .select(
-                `*, 
-                    dim_competition_prizes(
-                        trophy_id,
-                        trophy_image,
-                        trophy_name
-                    )
-                `)
-            .eq('user_id', user_id)
-            .limit(2)
-            .filter('trophy_expiry_date', 'gte', new Date())
 
-        if (error) {
-            console.error(error)
-        }
-
-        if (data) {
-            setTrophies(data)
-        } else {
-            console.log('No data');
-            return;
-        }
-
-    };
-
-    useFocusEffect(
-        React.useCallback(() => {
-            fetchUserTropHies();
-        }, [user_id])
-    );
     return (
         <View className=''>
-            <View className='flex space-x-5 py-1 items-center'>
+            <View className='flex py-1 items-center'>
                 <TouchableOpacity
                     className='flex flex-items-center space-x-3 border  rounded-full'
                     onPress={() => setProfilePictureModalVisible(!profilePictureModalVisible)}
@@ -125,18 +93,17 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </TouchableOpacity>
-                {/* <View className='flex justify-between space-y'> */}
 
-                <View className='flex flex-row space-x-5 mt-5 '>
+                <View className='flex flex-row  mt-3 '>
 
-                    <Text className='text-xl font-bold'>
+                    <Text className='text-xl hidden font-bold'>
                         {name}
                     </Text>
                     {
                         dateOfBirth && (
                             <View
                                 // style={{ backgroundColor: colours.secondaryColour }}
-                                className={` flex flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
+                                className={` hidden flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
                             >
 
                                 {sex !== 0 && (
@@ -152,11 +119,20 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             </View>
                         )
                     }
+
                 </View>
-                {/* <UserBadges
-                        user_id={user_id}
-                    /> */}
-                {/* </View> */}
+                
+                <View className=''>
+                    {
+                        isOrganizer ?
+                            <View className="bg-green-100 px-3 py-2 rounded-full mt-1 flex-row items-center border-green-800 border">
+                                <Text className="text-green-800 font-semibold text-xs">🎤 Event Organiser</Text>
+                            </View> :
+                            <View className="bg-gray-200 px-3 py-2 rounded-full mt-1 flex-row items-center">
+                                <Text className="text-gray-700 font-semibold text-xs">👤 Community Member</Text>
+                            </View>
+                    }
+                </View>
                 <View className='absolute top-0 right-0 items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
@@ -179,30 +155,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
                 </View>
             </View>
-            {/* <View className=' w- flex flex-row space-x-2 pt-1' >
-                {
-                    trophy && (new Date(trophy?.trophy_expiry_date) > today)  && (
-                    trophies?.map((trophy) => (
-                        <View key={trophy.trophy_id} className='flex flex-row items-center space-x-1 rounded-full bg-amber-300 px-2 h-8'>
-                            <Text
-                                style={{ fontFamily: 'American Typewriter' }}
-                                className='font-semi text-lg'>
-                                {ordinal_suffix_of(trophy.rank).toString()}
-                            </Text>
-                            <Text> of the {trophy.competition_period_type}</Text>
-                            <Text>{trophy.dim_competition_prizes.trophy_name}</Text>
-                            <Image
-                                className='h-10 w-9 rounded-full'
-                                source={{
-                                    uri: trophy.dim_competition_prizes.trophy_image
-                                }}
-                            />
-                        </View>
-                    )
-
-                    )
-                }
-            </View> */}
 
             {/* Following banner */}
             {/* <View className='flex-row justify-center space-x-20'>
@@ -242,11 +194,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                             {bio}
                         </Text> :
                         <View className='w-full flex items-center justify-center'>
-                            {currentUser.id === user_id ?
-                                <Text className='italic text-center'>
+                            {currentUser.id == user_id ?
+                                <Text className='italic text-center text-lg'>
                                     {t('profile_screen.add_description_prompt')}
                                 </Text> :
-                                <Text className='italic text-center'>
+                                <Text className='italic text-lg text-center'>
                                     {t('profile_screen.no_description')}
                                 </Text>
                             }
