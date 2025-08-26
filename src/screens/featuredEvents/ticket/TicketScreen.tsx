@@ -108,7 +108,7 @@ const TicketScreen = ({ }) => {
                                 onPress={() => navigation.navigate('featuredeventsevent', {
                                     featured_event_id: ticket.featured_event_id
                                 })}
-                                className='py-4 px-5 rounded-full bg-black flex flex-row space-x-3 pl-24'>
+                                className='py-4 px-5 rounded-full bg-black flex flex-row space-x-3 justify-center'>
                                 <Entypo name="calendar" size={26} color="white" />
                                 <Text
 
@@ -121,7 +121,7 @@ const TicketScreen = ({ }) => {
                                     featured_event_id: ticket.featured_event_id,
                                     chat_room_id: ticket.featured_events.chat_room_id
                                 })}
-                                className='py-4 px-5 rounded-full bg-white border flex flex-row space-x-3 pl-24'>
+                                className='py-4 px-5 rounded-full bg-white border flex flex-row space-x-3 justify-center'>
                                 <MaterialIcons name="groups" size={26} color="black" />
 
                                 <Text className='text-lg text-center font-semibold'>
@@ -132,7 +132,7 @@ const TicketScreen = ({ }) => {
                                 onPress={() => navigation.navigate('groupchat', {
                                     featured_event_id: ticket.featured_event_id
                                 })}
-                                className='py-4 px-5 rounded-full bg-green-50 border-green-900 border-2 flex flex-row space-x-3 pl-24'>
+                                className='py-4 px-5 rounded-full bg-green-50 border-green-900 border-2 flex flex-row space-x-3 justify-center'>
                                 <Entypo name="chat" size={26} color="black" />
                                 <Text className='text-lg text-center font-semibold text-green-900'>
                                     Join the event chat

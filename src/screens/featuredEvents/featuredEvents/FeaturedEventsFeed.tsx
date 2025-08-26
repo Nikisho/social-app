@@ -8,7 +8,7 @@ import FastImage from 'react-native-fast-image';
 import { t } from 'i18next';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
-
+import { SkeletonFeed } from './SkeletonFeed';
 
 interface FeaturedEventCard {
     image_url: string;
@@ -36,9 +36,11 @@ const FeaturedEventsFeed = ({
     interest
 }: Interest) => {
     const navigation = useNavigation<RootStackNavigationProp>();
+    const [loading, setLoading] = useState(false);
     const [featuredEvents, setFeaturedEvents] = useState<any>();
     const currentUser = useSelector(selectCurrentUser)
     const fetchFeaturedEvents = async () => {
+        setLoading(true);
         const { data, error } = await supabase.rpc('fetch_events_v2', {
             current_user_id: currentUser.id,
             interest_code: interest ? interest.interest_code : null
@@ -49,6 +51,7 @@ const FeaturedEventsFeed = ({
         if (error) {
             console.error(error.message);
         }
+        setLoading(false);
     };
 
     useFocusEffect(
@@ -56,6 +59,10 @@ const FeaturedEventsFeed = ({
             fetchFeaturedEvents()
         }, [interest])
     );
+
+    if (loading) return (
+        <SkeletonFeed/>
+    )
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
         return (
 
@@ -127,7 +134,7 @@ const FeaturedEventsFeed = ({
                     <TouchableOpacity
                         className=''
                         onPress={() => navigation.navigate('featuredEvents', {})}
-                        >
+                    >
                         <Text className='text-indigo-600'>
                             Clear filter
                         </Text>
@@ -140,6 +147,7 @@ const FeaturedEventsFeed = ({
                     <FlatList
                         data={featuredEvents}
                         renderItem={renderItem}
+                        contentContainerStyle={{paddingBottom: 100}}
                         keyExtractor={item => item.featured_event_id.toString()}
                     /> :
                     <View className="flex-1 items-center justify-center p-6">

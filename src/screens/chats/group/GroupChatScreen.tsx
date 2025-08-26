@@ -13,6 +13,7 @@ import { Text } from 'react-native'
 import ChatClosed from './ChatClosed'
 import formatDate from '../../../utils/functions/formatDate'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
+import markMessagesRead from '../../../utils/functions/markMessagesRead'
 
 
 
@@ -74,15 +75,16 @@ const GroupChatScreen = () => {
         }
     };
 
-    const setMessagesRead = async (chatRoomID: number) => {
-        const { error } = await supabase
-            .from('messages')
-            .update({ read_by_recipient: true })
-            .eq('chat_room_id', chatRoomID)
-            .neq('sender_id', currentUser.id)
-            .eq('read_by_recipient', false);
-        if (error) { console.error(error.message) }
-    };
+    // const setMessagesRead = async (chatRoomID: number) => {
+    //     if (!eventData?.chat_room_id) return;
+    //     const { error } = await supabase
+    //         .from('messages')
+    //         .update({ read_by_recipient: true })
+    //         .eq('chat_room_id', chatRoomID)
+    //         .neq('sender_id', currentUser.id)
+    //         .eq('read_by_recipient', false);
+    //     if (error) { console.error(error.message) }
+    // };
 
     const fetchMessages = async (isInitialLoad?: boolean) => {
         //The room ID constant does not update right away, 
@@ -110,7 +112,7 @@ const GroupChatScreen = () => {
 
         if (data) {
             setMessages(data);
-            setMessagesRead(eventData?.chat_room_id)
+            markMessagesRead(data[0].chat_room_id, currentUser.id, data[0]?.message_id)
         }
         if (error) console.error(error.message);
         isInitialLoad && setLoading(false);
@@ -162,8 +164,8 @@ const GroupChatScreen = () => {
     useEffect(() => {
         fetchEventData();
         fetchMessages(true);
+        // setMessagesRead(eventData?.chat_room_id!)
     }, [eventData?.chat_room_id]);
-
 
     if (loading) {
         return <LoadingScreen displayText='Getting your messages...' />

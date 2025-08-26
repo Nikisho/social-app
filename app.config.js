@@ -69,6 +69,9 @@ export default {
       },
       permissions: ["android.permission.RECORD_AUDIO"]
     },
+    notification: {
+      androidMode: 'collapse' 
+    },
     web: {
       favicon: "./assets/favicon.png"
     },

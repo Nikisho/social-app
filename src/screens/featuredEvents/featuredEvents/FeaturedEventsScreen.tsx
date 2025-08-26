@@ -12,7 +12,7 @@ const FeaturedEventsScreen = () => {
 
   console.log(interest)
   return (
-    <View className='pb-10'>
+    <View>
       <UpdateAppModal />
       <FeaturedEventsScreenHeader/>
       <FeaturedEventsFeed 

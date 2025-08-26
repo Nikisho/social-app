@@ -15,6 +15,7 @@ import { uuidv4 } from '../../../utils/functions/uuidv4';
 import { ImagePickerAsset } from 'expo-image-picker';
 import EmptyChat from './EmptyChat';
 import LoadingScreen from '../../loading/LoadingScreen';
+import markMessagesRead from '../../../utils/functions/markMessagesRead';
 
 interface UserDataProps {
   name: string;
@@ -107,6 +108,7 @@ const ChatScreen = () => {
   //When the user opens a chat here we set the unread messages to read in the DB
   //This is done in the chat screen directly to update no matter where the user opens the chat from
   const setMessagesRead = async (chatRoomID: number) => {
+    if (!chatRoomIdState) return;
     const { error } = await supabase
       .from('messages')
       .update({ read_by_recipient: true })
@@ -114,6 +116,7 @@ const ChatScreen = () => {
       .neq('sender_id', currentUser.id)
       .eq('read_by_recipient', false);
     if (error) { console.error(error.message) }
+
   }
   const fetchMessages = async (isInitialLoad?: boolean) => {
     // console.log(chatRoomIdState)
@@ -142,7 +145,7 @@ const ChatScreen = () => {
 
     if (data) {
       setMessages(data);
-      setMessagesRead(chatRoomIdState)
+      markMessagesRead(chatRoomIdState!, currentUser.id, data[0]?.message_id)
     }
     if (error) console.error(error.message);
     isInitialLoad && setLoading(false);
@@ -231,6 +234,7 @@ const ChatScreen = () => {
     fetchUserData();
     fetchChatData();
     fetchMessages(true);
+    setMessagesRead(chatRoomIdState!);
   }, [chatRoomIdState]);
 
 
