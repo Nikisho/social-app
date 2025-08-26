@@ -10,7 +10,6 @@ import SignUpScreen from './src/screens/authentication/signup/SignUpScreen';
 import SignInScreen from './src/screens/authentication/signin/SignInScreen';
 import colours from './src/utils/styles/colours';
 import { Keyboard, Platform, View } from 'react-native';
-import SubmitCommentScreen from './Archive/comments/SubmitCommentScreen';
 import { useEffect, useState } from 'react';
 import ChatListScreen from './src/screens/chats/ChatListScreen';
 import ChatScreen from './src/screens/chats/private/ChatScreen';
@@ -163,7 +162,6 @@ function AppSafeAreaWrapper() {
 								<Stack.Screen name="dashboard" component={DashboardScreen} />
 								<Stack.Screen name="profile" component={ProfileScreen} />
 								<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
-								<Stack.Screen name="comment" component={SubmitCommentScreen} />
 								<Stack.Screen name="chatlist" component={ChatListScreen} />
 								<Stack.Screen name="chat" component={ChatScreen} />
 								<Stack.Screen name="groupchat" component={GroupChatScreen} />
