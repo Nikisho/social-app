@@ -126,7 +126,10 @@ const ChatScreen = () => {
     // fetches the messages
     isInitialLoad && setLoading(true);
 
-    if (!chatRoomIdState) return;
+    if (!chatRoomIdState) {
+      isInitialLoad && setLoading(false);
+      return;
+    };
     const { error, data } = await supabase
       .from('messages')
       .select(`*, 

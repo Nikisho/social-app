@@ -93,7 +93,11 @@ const GroupChatScreen = () => {
         // fetches the messages
 
         isInitialLoad && setLoading(true);
-        if (!eventData?.chat_room_id) return;
+        if (!eventData?.chat_room_id) {
+            isInitialLoad && setLoading(false);
+            return;
+        }
+
         const { error, data } = await supabase
             .from('messages')
             .select(`*, 
@@ -112,7 +116,7 @@ const GroupChatScreen = () => {
 
         if (data) {
             setMessages(data);
-            markMessagesRead(data[0].chat_room_id, currentUser.id, data[0]?.message_id)
+            markMessagesRead(eventData?.chat_room_id!, currentUser.id, data[0]?.message_id)
         }
         if (error) console.error(error.message);
         isInitialLoad && setLoading(false);
