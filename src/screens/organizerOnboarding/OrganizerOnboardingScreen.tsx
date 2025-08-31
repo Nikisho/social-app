@@ -25,7 +25,7 @@ const OrganizerOnboardingScreen = () => {
 
     if (data?.is_organizer) {
       console.log(data.is_organizer);
-      navigation.navigate('featuredEvents')
+      navigation.navigate('featuredEvents', {})
     }
     if (error) {
       console.error(error.message)
@@ -67,7 +67,7 @@ const OrganizerOnboardingScreen = () => {
       });
       const result = await verify.json();
       if (result?.success) {
-        navigation.navigate('featuredEvents');
+        navigation.navigate('featuredEvents', {});
         platformAlert('Congratulations! You are now an organizer ✨')
       } else {
         Alert.alert('Verification Failed', 'Please complete onboarding.');
@@ -89,14 +89,18 @@ const OrganizerOnboardingScreen = () => {
 
   if (loading) return <LoadingScreen displayText='Redirecting you to Stripe' />
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{
+        paddingBottom: 200
+      }}
+    >
       <View className='p-3'>
         <SecondaryHeader
           displayText='Become an organiser'
         />
       </View>
       <View className='flex items-center  justify-center bg-[#fffef4]  px-5 space-y'>
-        <Text className='text-2xl font-bold my-5  text-center' >🎉 Ready to Host Your Own Events?</Text>
+        <Text className='text-2xl font-bold text-center' >🎉 Ready to Host Your Own Events?</Text>
         <Text className=' mb-5 text-lg'>Become an organiser and unlock powerful tools:</Text>
 
         <View className='space-y-4'>

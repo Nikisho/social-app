@@ -15,6 +15,7 @@ interface FeaturedEventCard {
     date: Date;
     time: string;
     is_free: boolean;
+    test: boolean;
 }
 
 const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, HeaderContent: any }) => {
@@ -63,9 +64,10 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
         return (
             <TouchableOpacity
-                className='my-2
+                className={`my-2
                     rounded-xl border bg-white p-2
-                '
+                    ${item.test && !__DEV__ ? 'hidden' : ''}
+                `}
                 onPress={() => navigation.navigate('featuredeventsevent', {
                     featured_event_id: item.featured_event_id
                 })}

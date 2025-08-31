@@ -21,26 +21,35 @@ const Navbar = () => {
         <Entypo name="message" size={26} color="white" />
         <Badge messageCount={unreadMessagesCount!} />
       </View>,
-      navigation: 'chatlist'
+      navigation: 'chatlist',
+      text: 'Messages'
+
     },
     {
       icon: <Entypo name="home" size={26} color="white" />,
-      navigation: 'featuredEvents'
+      navigation: 'featuredEvents',
+      text: 'Home'
+
     },
     {
       icon: <Entypo name="ticket" size={26} color="white" />,
-      navigation: 'ticketfeed'
+      navigation: 'ticketfeed',
+      text: 'Tickets'
+
     },
     {
       icon: <Ionicons name="person" size={30} color="white" />,
-      navigation: 'profile'
+      navigation: 'profile',
+      text: 'Profile'
     },
   ];
 
   if (currentUser.isOrganizer === true) {
     menuItems.splice(2, 0, {
       icon: <Entypo name="calendar" size={30} color="white" />,
-      navigation: 'dashboard'
+      navigation: 'dashboard',
+      text: 'Events'
+
     });
   }
   const { expoPushToken } = usePushNotifications();
@@ -84,7 +93,7 @@ const Navbar = () => {
       className={`absolute inset-x-0 bottom-0 flex items-center justify-between flex-row ${Platform.OS === 'ios' ? 'h-[10%]' : 'h-[8%]'}`}>
       {
         menuItems.map((item) => (
-          <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center`}
+          <TouchableOpacity key={menuItems.indexOf(item)} className={` flex justify-center w-1/5 items-center space-y-1`}
             onPress={() => {
               if (item.navigation === 'chatlist' || item.navigation === 'featuredEvents' || item.navigation === 'ticketfeed' || item.navigation === 'dashboard') {
                 navigation.navigate(item.navigation as never);
@@ -95,6 +104,9 @@ const Navbar = () => {
               }
             }}>
             <Text className='text-lg'>{item.icon}</Text>
+            <Text className='text-white text-xs'>
+              {item.text}
+            </Text>
           </TouchableOpacity>
         ))
       }

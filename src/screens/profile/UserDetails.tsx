@@ -15,6 +15,7 @@ import UserBadges from './UserBadges';
 import { supabase } from '../../../supabase';
 import ordinal_suffix_of from '../../utils/functions/ordinal_suffix_of';
 import { useTranslation } from 'react-i18next';
+import UserDetailsRole from './UserDetailsRole';
 
 interface UserDetailsProps {
     name: string;
@@ -62,7 +63,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     const currentUser = useSelector(selectCurrentUser);
     const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-600' : 'bg-red-300')
     const { t } = useTranslation();
-
     return (
         <View className=''>
             <View className='flex py-1 items-center'>
@@ -102,7 +102,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     {
                         dateOfBirth && (
                             <View
-                                // style={{ backgroundColor: colours.secondaryColour }}
                                 className={` hidden flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
                             >
 
@@ -121,18 +120,10 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                     }
 
                 </View>
-                
-                <View className=''>
-                    {
-                        isOrganizer ?
-                            <View className="bg-green-100 px-3 py-2 rounded-full mt-1 flex-row items-center border-green-800 border">
-                                <Text className="text-green-800 font-semibold text-xs">🎤 Event Organiser</Text>
-                            </View> :
-                            <View className="bg-gray-200 px-3 py-2 rounded-full mt-1 flex-row items-center">
-                                <Text className="text-gray-700 font-semibold text-xs">👤 Community Member</Text>
-                            </View>
-                    }
-                </View>
+                <UserDetailsRole
+                    isOrganizer={isOrganizer!}
+                    user_id={user_id}
+                />
                 <View className='absolute top-0 right-0 items-end grow px-5'>
                     {
                         !isCurrentUserProfile ? (
