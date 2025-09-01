@@ -85,7 +85,7 @@ const Navbar = () => {
       }
     });
     return () => subscription.remove();
-  }, [expoPushToken]);
+  }, [expoPushToken, currentUser.isOrganizer]);
 
   return (
     <View

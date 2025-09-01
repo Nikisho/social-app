@@ -55,7 +55,7 @@ const mainTheme = {
 export default function AppWrapper() {
 	return (
 		<StripeProvider
-			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY_PROD!}
+			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
 			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
 			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
 		>

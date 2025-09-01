@@ -5,8 +5,8 @@ import * as WebBrowser from 'expo-web-browser';
 import LoadingScreen from '../loading/LoadingScreen';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import styles from '../../utils/styles/shadow';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import platformAlert from '../../utils/functions/platformAlert';
@@ -15,6 +15,7 @@ const OrganizerOnboardingScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const currentUser = useSelector(selectCurrentUser);
   const navigation = useNavigation<RootStackNavigationProp>();
+  const dispatch = useDispatch();
 
   const checkIfOrganizer = async () => {
     const { error, data } = await supabase
@@ -36,6 +37,7 @@ const OrganizerOnboardingScreen = () => {
     setLoading(true);
     const session = await supabase.auth.getSession();
     const token = session.data.session?.access_token;
+
     const forwardurl = 'https://wffeinvprpdyobervinr.supabase.co'
     try {
       const response = await fetch(`${forwardurl}/functions/v1/onboard-organizer-stripe`, {
@@ -69,6 +71,10 @@ const OrganizerOnboardingScreen = () => {
       if (result?.success) {
         navigation.navigate('featuredEvents', {});
         platformAlert('Congratulations! You are now an organizer ✨')
+        dispatch(setCurrentUser({
+          ...currentUser,
+          isOrganizer: true
+        }))
       } else {
         Alert.alert('Verification Failed', 'Please complete onboarding.');
       }
