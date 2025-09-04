@@ -26,16 +26,17 @@ Deno.serve(async (req) => {
 
 
   if (!account.details_submitted) {
-    await stripe.accounts.del(accountId);
-    const {error} = await supabaseAdmin
-      .from("organizers")
-      .delete()
-      .eq("stripe_account_id", accountId);
-    if (error) {
-      throw error.message;
-    }
+    // await stripe.accounts.del(accountId);
+    // const {error} = await supabaseAdmin
+    //   .from("organizers")
+    //   .delete()
+    //   .eq("stripe_account_id", accountId);
+    // if (error) {
+    //   throw error.message;
+    // }
 
-    console.log('The user interupted the onboarding, therefore this account was deleted')
+    // console.log('The user interupted the onboarding, therefore this account was deleted')
+    console.log('User has not finished onboarding yet');
     return Response.json({ success: false }, { status: 400}); 
   }
 

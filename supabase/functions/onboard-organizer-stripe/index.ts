@@ -5,11 +5,10 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { saveOrganizerAccount } from "../_utils/saveOrganizerAccount.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
+import { getOrganizerAccount } from "../_utils/getOrganizerAccount.ts"
 import { stripe } from "../_utils/stripe.ts";
 
 // @ts-ignore
-
-
 Deno.serve(async (req) => {
   try {
     const authHeader = req.headers.get("Authorization")!;
@@ -19,28 +18,47 @@ Deno.serve(async (req) => {
     const { data: { user } } = await supabaseAdmin.auth.getUser(jwt);
     if (!user) throw new Error("No user found for JWT!");
 
-    const account = await stripe.accounts.create({
-      type: "express",
-      country: "GB",
-      email: user.email,
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
-    });
+    const existingAccountId = await getOrganizerAccount(user.id);
 
-    await saveOrganizerAccount(user.id, account.id);
+    let accountId;
+    if (existingAccountId) {
+      accountId = existingAccountId;
+    } else {
+      const account = await stripe.accounts.create({
+        type: "express",
+        country: "GB",
+        email: user.email,
+        capabilities: {
+          card_payments: { requested: true },
+          transfers: { requested: true },
+        },
+      });
+      accountId = account.id;
+      await saveOrganizerAccount(user.id, accountId);
+    }
+
+    // const account = await stripe.accounts.create({
+    //   type: "express",
+    //   country: "GB",
+    //   email: user.email,
+    //   capabilities: {
+    //     card_payments: { requested: true },
+    //     transfers: { requested: true },
+    //   },
+    // });
+
+    // await saveOrganizerAccount(user.id, accountId);
 
     const accountLink = await stripe.accountLinks.create({
-      account: account.id,
+      account: accountId,
       refresh_url: "https://com.linkzy",
       return_url: "https://www.linkzyapp.com",
       type: "account_onboarding",
     });
 
-    console.log("account set up ✅ ", account);
+    console.log("account set up ✅ ", accountId);
     return new Response(
-      JSON.stringify({ url: accountLink.url, accountId: account.id }),
+      JSON.stringify({ url: accountLink.url, accountId: accountId }),
       { headers: { "Content-Type": "application/json" } },
     );
   } catch (error) {

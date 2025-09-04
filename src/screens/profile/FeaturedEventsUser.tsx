@@ -5,6 +5,7 @@ import { RootStackNavigationProp } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
 import formatDateShortWeekday from '../../utils/functions/formatDateShortWeekday';
 import FastImage from 'react-native-fast-image';
+import fetchOrganizerId from '../../utils/functions/fetchOrganizerId';
 
 interface FeaturedEventCard {
     image_url: string;
@@ -15,28 +16,15 @@ interface FeaturedEventCard {
     date: Date;
     time: string;
     is_free: boolean;
+    test: boolean;
 }
 
 const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, HeaderContent: any }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [featuredEvents, setFeaturedEvents] = useState<FeaturedEventCard[] | null>(null);
-
-    const fetchOrganizerId = async () => {
-        const { data, error } = await supabase
-            .from('organizers')
-            .select('organizer_id')
-            .eq('user_id', user_id)
-            .single()
-        if (data) {
-            return data.organizer_id;
-        }
-        if (error) {
-            console.error(error.message)
-        }
-        return null;
-    }
+    
     const fetchFeaturedEvents = async () => {
-        const organizer_id = await fetchOrganizerId();
+        const organizer_id = await fetchOrganizerId(user_id);
         if (!organizer_id) {
             setFeaturedEvents(null);
             return;
@@ -63,9 +51,10 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
         return (
             <TouchableOpacity
-                className='my-2
+                className={`my-2
                     rounded-xl border bg-white p-2
-                '
+                    ${item.test && !__DEV__ ? 'hidden' : ''}
+                `}
                 onPress={() => navigation.navigate('featuredeventsevent', {
                     featured_event_id: item.featured_event_id
                 })}

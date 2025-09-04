@@ -97,6 +97,11 @@ export const usePushNotifications = (): PushNotificationState => {
                         hasNavigated.current = true;
                         navigate("groupchat", { featured_event_id: data.featuredEventId });
                     }
+
+                    if (data?.screen === "EventScreen" && data?.featuredEventId){
+                        hasNavigated.current = true;
+                        navigate("featuredeventsevent", { featured_event_id: data.featuredEventId });
+                    }
                 }
             });
 

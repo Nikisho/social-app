@@ -5,8 +5,8 @@ import * as WebBrowser from 'expo-web-browser';
 import LoadingScreen from '../loading/LoadingScreen';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import styles from '../../utils/styles/shadow';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../context/navSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from '../../context/navSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import platformAlert from '../../utils/functions/platformAlert';
@@ -15,6 +15,7 @@ const OrganizerOnboardingScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const currentUser = useSelector(selectCurrentUser);
   const navigation = useNavigation<RootStackNavigationProp>();
+  const dispatch = useDispatch();
 
   const checkIfOrganizer = async () => {
     const { error, data } = await supabase
@@ -25,7 +26,7 @@ const OrganizerOnboardingScreen = () => {
 
     if (data?.is_organizer) {
       console.log(data.is_organizer);
-      navigation.navigate('featuredEvents')
+      navigation.navigate('featuredEvents', {})
     }
     if (error) {
       console.error(error.message)
@@ -36,6 +37,7 @@ const OrganizerOnboardingScreen = () => {
     setLoading(true);
     const session = await supabase.auth.getSession();
     const token = session.data.session?.access_token;
+
     const forwardurl = 'https://wffeinvprpdyobervinr.supabase.co'
     try {
       const response = await fetch(`${forwardurl}/functions/v1/onboard-organizer-stripe`, {
@@ -67,8 +69,12 @@ const OrganizerOnboardingScreen = () => {
       });
       const result = await verify.json();
       if (result?.success) {
-        navigation.navigate('featuredEvents');
+        navigation.navigate('featuredEvents', {});
         platformAlert('Congratulations! You are now an organizer ✨')
+        dispatch(setCurrentUser({
+          ...currentUser,
+          isOrganizer: true
+        }))
       } else {
         Alert.alert('Verification Failed', 'Please complete onboarding.');
       }
@@ -89,14 +95,18 @@ const OrganizerOnboardingScreen = () => {
 
   if (loading) return <LoadingScreen displayText='Redirecting you to Stripe' />
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{
+        paddingBottom: 200
+      }}
+    >
       <View className='p-3'>
         <SecondaryHeader
           displayText='Become an organiser'
         />
       </View>
       <View className='flex items-center  justify-center bg-[#fffef4]  px-5 space-y'>
-        <Text className='text-2xl font-bold my-5  text-center' >🎉 Ready to Host Your Own Events?</Text>
+        <Text className='text-2xl font-bold text-center' >🎉 Ready to Host Your Own Events?</Text>
         <Text className=' mb-5 text-lg'>Become an organiser and unlock powerful tools:</Text>
 
         <View className='space-y-4'>

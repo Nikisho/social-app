@@ -20,6 +20,7 @@ import Quantity from './Quantity';
 import AddressInput from './AddressInput';
 import DateTimeInput from './DateTimeInput';
 import InterestsInput from './InterestsInput';
+import fetchOrganizerId from '../../../utils/functions/fetchOrganizerId';
 
 
 interface EventDataProps {
@@ -75,17 +76,17 @@ const FeaturedEventsSubmitScreen = () => {
     };
 
 
-    const fetchOrganizerId = async () => {
-        const { error, data } = await supabase
-            .from('organizers')
-            .select('organizer_id')
-            .eq('user_id', currentUser.id)
-            .single()
-        if (error) console.error(error.message);
-        if (data) {
-            return data.organizer_id;
-        }
-    }
+    // const fetchOrganizerId = async () => {
+    //     const { error, data } = await supabase
+    //         .from('organizers')
+    //         .select('organizer_id')
+    //         .eq('user_id', currentUser.id)
+    //         .single()
+    //     if (error) console.error(error.message);
+    //     if (data) {
+    //         return data.organizer_id;
+    //     }
+    // }
     console.log(eventData.userInterests);
     
     const createInterests = async (featured_event_id: number) => {
@@ -120,7 +121,7 @@ const FeaturedEventsSubmitScreen = () => {
             setLoading(false);
             return;
         }
-        const organizer_id = await fetchOrganizerId();
+        const organizer_id = await fetchOrganizerId(currentUser.id);
         const unique_file_identifier = uuidv4(9);
         const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/featured-events/${organizer_id}/${unique_file_identifier}.jpg`
         if (media) {

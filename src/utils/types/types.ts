@@ -8,6 +8,7 @@ export type RootStackParamList = {
   comment: {event_id: number, parent_comment_id?: number, parent_comment_user_name?: string };
   event: {event_id: number};
   profile: {user_id:number};
+  following: {user_id:number};
   chat: {user_id:number};
   chatlist: undefined;
   search: undefined;
@@ -35,7 +36,9 @@ export type RootStackParamList = {
   groupchat:{featured_event_id: number};
   dashboard: undefined;
   privacypolicy: undefined;
-  about:undefined
+  about:undefined;
+  ticketscanner:{featured_event_id: number};
+
 };
 
 // Define the navigation prop types
@@ -54,6 +57,8 @@ export type EditFeaturedEventScreenRouteProps = RouteProp<RootStackParamList, 'e
 export type AttendeeListScreenProps = RouteProp<RootStackParamList, 'attendeelist'>;
 export type GroupChatScreenProps = RouteProp<RootStackParamList, 'groupchat'>;
 export type FeaturedEventsScreenRouteProps = RouteProp<RootStackParamList, 'featuredEvents'>;
+export type FollowingScreenRouteProp = RouteProp<RootStackParamList, 'following'>;
+export type TicketScannerScreenRouteProp = RouteProp<RootStackParamList, 'ticketscanner'>;
 
 
 

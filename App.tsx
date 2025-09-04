@@ -41,6 +41,8 @@ import DashboardScreen from './src/screens/featuredEvents/dashboard/DashboardScr
 import { updateCurrentUser } from './src/utils/functions/updateCurrentUser';
 import PrivacyPolicyScreen from './src/screens/privacypolicy/PrivacyPolicyScreen';
 import AboutScreen from './src/screens/about/AboutScreen';
+import FollowingScreen from './src/screens/following/FollowingScreen';
+import TicketScannerScreen from './src/screens/featuredEvents/ticket/TicketScannerScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -159,8 +161,10 @@ function AppSafeAreaWrapper() {
 								<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
 								<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
 								<Stack.Screen name="ticket" component={TicketScreen} />
+								<Stack.Screen name="ticketscanner" component={TicketScannerScreen} />
 								<Stack.Screen name="dashboard" component={DashboardScreen} />
 								<Stack.Screen name="profile" component={ProfileScreen} />
+								<Stack.Screen name="following" component={FollowingScreen} />
 								<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
 								<Stack.Screen name="chatlist" component={ChatListScreen} />
 								<Stack.Screen name="chat" component={ChatScreen} />
