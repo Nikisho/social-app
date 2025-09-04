@@ -128,6 +128,15 @@ const DashboardScreen = () => {
                             }
                         </View>
                     </View>
+                    <TouchableOpacity 
+                        className='self-start rounded-xl'
+                        style={styles.shadowButtonStyle}
+                        onPress={() => navigation.navigate('ticketscanner', {featured_event_id: item.featured_event_id})}
+                        >
+                        <Text className='text-white m-2'>
+                            Scan
+                        </Text>
+                    </TouchableOpacity>
                 </TouchableOpacity >
             </Animated.View>
 
