@@ -1,7 +1,7 @@
 import { createOrRetrieveCustomer } from "../_utils/createOrRetrieveCustomer.ts";
 import { serve } from "https://deno.land/std@0.132.0/http/server.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
-import { stripe } from "../_utils/stripe.ts";
+import { stripe, stripe_pk } from "../_utils/stripe.ts";
 import { PaymentIntentParamsProps } from "../_utils/db_types.ts";
 
 // @ts-ignore
@@ -84,7 +84,8 @@ serve(async (req: Request) => {
 
     console.log("✅ Payment intent created: ", paymentIntent);
     const res = {
-      stripe_pk: Deno.env.get("STRIPE_PUBLISHABLE_KEY_PROD"),
+      //stripe_pk: Deno.env.get("STRIPE_PUBLISHABLE_KEY_PROD"),
+      stripe_pk: stripe_pk,
       paymentIntent: paymentIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,
       customer: customer,

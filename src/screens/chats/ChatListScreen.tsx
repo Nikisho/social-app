@@ -35,7 +35,7 @@ const ChatListScreen = () => {
 		try {
 			const [privateRes, groupRes] = await Promise.all([
 				supabase.rpc('fetch_private_chats_v2', { current_user_id: currentUser.id }),
-				supabase.rpc('fetch_group_chats_v2', { current_user_id: currentUser.id })
+				supabase.rpc('fetch_group_chats_v3', { current_user_id: currentUser.id })
 			]);
 			if (privateRes.error) console.error('Private chat error:', privateRes.error.message);
 			if (groupRes.error) console.error('Group chat error:', groupRes.error.message);

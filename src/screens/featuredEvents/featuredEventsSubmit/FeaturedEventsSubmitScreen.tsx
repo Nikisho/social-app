@@ -21,6 +21,7 @@ import AddressInput from './AddressInput';
 import DateTimeInput from './DateTimeInput';
 import InterestsInput from './InterestsInput';
 import fetchOrganizerId from '../../../utils/functions/fetchOrganizerId';
+import RepeatEvent from './RepeatEvent';
 
 
 interface EventDataProps {
@@ -54,6 +55,7 @@ const FeaturedEventsSubmitScreen = () => {
     const [loading, setLoading] = useState(false);
     const [isFree, setIsFree] = useState<boolean>(false)
     const [open, setOpen] = useState(false);
+    const [repeatEvent, setRepeatEvent] = useState<boolean>(false);
 
     const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -75,18 +77,6 @@ const FeaturedEventsSubmitScreen = () => {
         }
     };
 
-
-    // const fetchOrganizerId = async () => {
-    //     const { error, data } = await supabase
-    //         .from('organizers')
-    //         .select('organizer_id')
-    //         .eq('user_id', currentUser.id)
-    //         .single()
-    //     if (error) console.error(error.message);
-    //     if (data) {
-    //         return data.organizer_id;
-    //     }
-    // }
     console.log(eventData.userInterests);
     
     const createInterests = async (featured_event_id: number) => {
@@ -100,6 +90,32 @@ const FeaturedEventsSubmitScreen = () => {
             .insert(userInterestsData)
         if (error) { console.error(error.message) }
     };
+
+    const handleScheduleEvent = async (featured_event_id: number) => {
+        const { data, error } = await supabase
+            .from('recurring_series')
+            .insert({
+                featured_event_id: featured_event_id,
+                day_of_week: eventData.date.getDay()
+            })
+            .select('series_id')
+            .single()
+
+        if (data) {
+            const { error: errorInsertSeriesId } = await supabase
+                .from('featured_events')
+                .update({
+                    series_id: data.series_id
+                })
+                .eq('featured_event_id', featured_event_id)
+            if (errorInsertSeriesId) {
+                console.error(errorInsertSeriesId.message)
+            }
+        }
+        if (error) {
+            console.error('Error inserting into series :', error.message)
+        }
+    }
 
 
     const submitEvent = async () => {
@@ -165,7 +181,11 @@ const FeaturedEventsSubmitScreen = () => {
             .select('featured_event_id')
             .single()
         if (data) {
-            createInterests(data.featured_event_id)
+            createInterests(data.featured_event_id);
+
+            if (repeatEvent) {
+                handleScheduleEvent(data.featured_event_id);
+            }
         }
         if (error) {
             console.error(error.message)
@@ -229,6 +249,10 @@ const FeaturedEventsSubmitScreen = () => {
                 <InterestsInput
                     setEventData={setEventData}
                     userInterests={eventData.userInterests}
+                />
+                <RepeatEvent
+                    repeatEvent={repeatEvent}
+                    setRepeatEvent={setRepeatEvent}
                 />
                 <TouchableOpacity
                     onPress={() => submitEvent()}

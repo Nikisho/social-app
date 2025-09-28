@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
-import { stripe } from "../_utils/stripe.ts";
+import { stripe, stripe_webhook } from "../_utils/stripe.ts";
 import { supabaseAdmin } from '../_utils/supabase.ts'
 import { generateTicket } from '../_utils/generateTicket.ts'
 import { bookFeaturedEvent } from '../_utils/bookFeaturedEvent.ts'
@@ -22,7 +22,8 @@ async function handler(request: Request) {
     receivedEvent = await stripe?.webhooks.constructEventAsync(
       body,
       signature,
-      Deno.env.get("STRIPE_WEBHOOK_SIGNING_SECRET_PROD"),
+      //Deno.env.get("STRIPE_WEBHOOK_SIGNING_SECRET_PROD"),
+      stripe_webhook,
       undefined,
     );
 
