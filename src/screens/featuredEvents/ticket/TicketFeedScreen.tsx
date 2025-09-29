@@ -124,7 +124,7 @@ const TicketFeedScreen = () => {
                         </Text>
 
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('featuredEvents')}
+                            onPress={() => navigation.navigate('featuredEvents', {})}
                             className="bg-black px-6 py-3 rounded-full"
                         >
                             <Text className="text-white font-semibold text-base">Browse Events</Text>

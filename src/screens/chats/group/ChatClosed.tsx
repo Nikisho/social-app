@@ -6,7 +6,7 @@ import styles from '../../../utils/styles/shadow';
 const ChatClosed = ({message}: {message:string}) => {
        const navigation = useNavigation<RootStackNavigationProp>();
        const handleConnect = () => {
-           navigation.navigate('featuredEvents');
+           navigation.navigate('featuredEvents', {});
        };
     return (
         <View className={`bg-gray-200 p-5 justify-between flex items-center`}>

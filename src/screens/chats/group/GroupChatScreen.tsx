@@ -44,6 +44,7 @@ interface EventDataProps {
     date: string;
     time: string;
     //   max_tickets: number
+    series_id: number | null;
     organizers: {
         user_id: number
         users: { name: string; photo: string }
@@ -74,7 +75,8 @@ const GroupChatScreen = () => {
             setEventData(data)
         }
     };
-
+    
+    console.log(eventData?.series_id)
     // const setMessagesRead = async (chatRoomID: number) => {
     //     if (!eventData?.chat_room_id) return;
     //     const { error } = await supabase
@@ -191,7 +193,7 @@ const GroupChatScreen = () => {
                         />
 
                         {
-                            eventDatePlus24Hours && eventDatePlus24Hours < today ?
+                            (eventDatePlus24Hours && eventDatePlus24Hours < today ) && !eventData.series_id?
                                 <ChatClosed
                                     message={`This event ended on ${formatDateShortWeekday(eventData.date)}`}
                                 />

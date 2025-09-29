@@ -22,6 +22,16 @@ const PriceInput: React.FC<PriceInputProps> = ({
     setIsFree,
     setEventData,
 }) => {
+
+    const calculateRevenue = (price: string) => {
+        const platformFeeRate = 0;
+        const priceNum = Number(price);
+        const stripeFee = priceNum * 0.015 + 0.2;
+        const platformFee = priceNum * platformFeeRate;
+        const revenue = priceNum - stripeFee - platformFee;
+        return revenue.toFixed(2);
+    };
+
     return (
         <>
             <View className='flex flex-row w-full justify-between  '>
@@ -42,7 +52,7 @@ const PriceInput: React.FC<PriceInputProps> = ({
                                     price: value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
                                 }))
                             }}
-                            className={` text-xl ${Platform.OS === 'ios' && 'pb-1'}`}
+                            className={`text-xl w-10 ${Platform.OS === 'ios' && 'pb-1'}`}
                         />
                     </View>
                 </View>
@@ -62,8 +72,8 @@ const PriceInput: React.FC<PriceInputProps> = ({
                 </View>
 
             </View>
-            <View className='flex-row my-4 items-center space-x-4 px-2 py-1 bg-amber-100 border border-amber-300 rounded-lg'>
-                <Text className=''>You’ll receive the ticket price minus a 3% platform fee.</Text>
+            <View className='flex-row my-4 items-center space-x-4 px-2 py-1 bg-amber-100 border border-amber-500 '>
+                <Text className=''>You’ll receive the ticket price minus Stripe’s processing fee (1.5% + 20p). {price ? `Total per ticket: £${calculateRevenue(price)}` : ''}</Text>
             </View>
         </>
 

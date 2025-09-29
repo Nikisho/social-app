@@ -12,6 +12,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import { Entypo } from '@expo/vector-icons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 interface EventCard {
     image_url: string;
@@ -128,11 +129,11 @@ const DashboardScreen = () => {
                             }
                         </View>
                     </View>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         className='self-start rounded-lg'
                         style={styles.shadowButtonStyle}
-                        onPress={() => navigation.navigate('ticketscanner', {featured_event_id: item.featured_event_id})}
-                        >
+                        onPress={() => navigation.navigate('ticketscanner', { featured_event_id: item.featured_event_id })}
+                    >
                         <Text className='text-white m-2'>
                             Scan tickets
                         </Text>
@@ -163,6 +164,16 @@ const DashboardScreen = () => {
                 displayText='Organise'
             />
             {/* tabs view */}
+            {/* <TouchableOpacity
+                onPress={() => navigation.navigate('managememberships')}
+                style={styles.shadow}
+                className='my-2 space-x-2 items-center flex flex-row self-center p-3 px-4 rounded-full bg-white'>
+                <FontAwesome6 name="user-group" size={14} color="black" />
+                <Text className='font-bold text-center text-black'>
+                    Manage memberships
+                </Text>
+            </TouchableOpacity> */}
+
             <View className='my-5 bg-gray-200 rounded-full flex flex-row self-center justify-center w-3/4'>
                 <TouchableOpacity
                     onPress={() => setIsUpcoming(true)}

@@ -38,6 +38,8 @@ export type RootStackParamList = {
   privacypolicy: undefined;
   about:undefined;
   ticketscanner:{featured_event_id: number};
+  managememberships:undefined;
+  createmembership:undefined;
 
 };
 
