@@ -53,7 +53,7 @@ serve(async (req: Request) => {
 
     console.log('🎉stripe account ID :', stripe_account_id);
 
-    const platformFee = Math.round(amount * 0.03);
+    const platformFee =  0; //No platform fee for now Math.round(amount * 0.03);
 
     const paymentIntentParams: PaymentIntentParamsProps = {
       amount: amount,

@@ -8,32 +8,97 @@ import { supabaseAdmin } from "../_utils/supabase.ts";
 
 Deno.serve(async (req: Request) => {
   const { __DEV__ } = await req.json();
-  function getWeekAfterNextWeekday(runDate: Date, dayOfWeek: number): Date {
+  function getWeekAfterNextWeekday(
+    runDate: Date,
+    dayOfWeek: number,
+    eventExistsNextWeek: boolean | undefined,
+  ): Date {
     // dayOfWeek: 1 = Monday, 7 = Sunday
     const result = new Date(runDate);
     // Step 1: move to next Monday
     const daysUntilNextMonday = ((8 - result.getDay()) % 7) || 7;
     result.setDate(result.getDate() + daysUntilNextMonday);
     // step 2 : add 1 week.
-    result.setDate(result.getDate() + 1 * 7)
+    if (eventExistsNextWeek) {
+      result.setDate(result.getDate() + 1 * 7);
+    }
     // Step 3: add (dayOfWeek - 1) days
     result.setDate(result.getDate() + (dayOfWeek - 1));
     return result;
   }
 
-  try {
+  const getNextMonday = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + (((1 + 7 - d.getDay()) % 7) || 7));
+    d.setHours(0, 0, 0, 0); // normalize to midnight
+    return d;
+  };
 
+  function addDays(date: Date, days: number) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  const checkEventExistsNextWeek = async (series_id: number) => {
+    const nextMonday = getNextMonday();
+    const nextSunday = addDays(nextMonday, 6);
+
+    const { data, error } = await supabaseAdmin
+      .from("featured_events")
+      .select("featured_event_id, date")
+      .eq("series_id", series_id)
+      .gte("date", nextMonday.toISOString())
+      .lte("date", nextSunday.toISOString())
+      .limit(1);
+
+    if (error) {
+      console.error(error.message);
+      return false;
+    }
+    return data && data.length > 0;
+  };
+
+  const checkAlreadyScheduled = async (series_id: number, targetDate: Date) => {
+    const { data, error } = await supabaseAdmin
+      .from("featured_events")
+      .select("featured_event_id")
+      .eq("series_id", series_id)
+      .eq("date", targetDate.toISOString().split("T")[0]);
+
+    if (error) {
+      console.error("Error checking scheduled event:", error.message);
+      return false;
+    }
+    return data && data.length > 0;
+  };
+
+  try {
     const { data, error } = await supabaseAdmin
       .from("recurring_series")
       .select(`*, featured_events(*)`)
-      .eq('paused', false)
+      .eq("paused", false);
 
     if (data) {
       const seriesList = data;
       for (const series of seriesList) {
-
+        const eventExistsNextWeek = checkEventExistsNextWeek(series.series_id);
         const today = new Date();
-        const nextEventDate =  getWeekAfterNextWeekday(today, series.day_of_week);
+        const nextEventDate = getWeekAfterNextWeekday(
+          today,
+          series.day_of_week,
+          await eventExistsNextWeek,
+        );
+
+        const exists = await checkAlreadyScheduled(
+          series.series_id,
+          nextEventDate,
+        );
+        if (exists) {
+          console.log(`Skipping, event ${series.featured_events.title} already exists for ${nextEventDate} :`);
+          continue; //skip to next item in loop
+        }
+
         const { error: insertError } = await supabaseAdmin
           .from("featured_events")
           .insert({
@@ -49,7 +114,7 @@ Deno.serve(async (req: Request) => {
             max_tickets: series.featured_events.max_tickets,
             chat_room_id: series.featured_events.chat_room_id,
             series_id: series.series_id,
-            test: __DEV__? true : false
+            test: __DEV__ ? true : false,
           });
 
         if (insertError) {
