@@ -57,8 +57,9 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
         if (user_id === currentUser.id) return;
 
         //Fetch organizer id
-        const organizer_id = await fetchOrganizerId(user_id)
+        const organizer_id = await fetchOrganizerId(user_id);
 
+        if (!organizer_id) return;
         //Check if the current user follows the user.
         const { data, error } = await supabase
             .from('organizer_followers')
@@ -74,10 +75,11 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
         }
     }
 
-
     const fetchFollowerCount = async () => {
         if (!isOrganizer) { return }
         const organizer_id = await fetchOrganizerId(user_id);
+        if (!organizer_id) return;
+
         const { count, error } = await supabase
             .from('organizer_followers')
             .select(`follower_id
@@ -85,8 +87,7 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
                 ,
                 { count: 'exact', head: true }
             ).eq('organizer_id', organizer_id)
-
-        if (count) {
+        if (count !== null && count !== undefined) {
             setFollowerCount(count)
         }
         if (error) {
@@ -97,11 +98,10 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
     const fetchFollowingCount = async () => {
         const { count, error } = await supabase
             .from('organizer_followers')
-            .select(`follower_id `, {count: 'exact', head:true})
+            .select(`follower_id `, { count: 'exact', head: true })
             .eq('follower_id', user_id)
-
-        if (count) {
-            setFollowingCount(count)
+        if (count !== null && count !== undefined) {
+            setFollowingCount(count!)
         }
         if (error) {
             console.error(error.message);
@@ -112,7 +112,7 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
         fetchFollowerCount();
         fetchFollowingCount();
         checkUserFollows();
-    }, [isOrganizer, user_id, userFollows]);
+    }, [user_id, isOrganizer, userFollows]);
 
     return (
         <View className='mb-3'>
@@ -121,11 +121,13 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
                     <View className=' space-y-2'>
                         <View className="bg-black px-3 space-x-1 py-2 rounded-full mt-1 flex-row items-center  border">
                             <Text className="text-white mr-2">📣 Event organiser</Text>
-                            <View className='border-x  px-2 border-white'>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('followers', { user_id: user_id })}
+                                className='border-x  px-2 border-white'>
                                 <Text className='text-white'>
                                     {followerCount} Followers
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('following', { user_id: user_id })}
                                 className=' px-2 border-white'>

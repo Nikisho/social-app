@@ -174,6 +174,7 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
                                 padding: 10,
                                 borderRadius: 10,
                             }]}
+
                             onPress={() => { setReactionBannerVisible(!reactionBannerVisible) }}
                         >
                             <View>
@@ -192,12 +193,23 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
                                         )}
                                     </View>
                                 )}
-
+                                {item.mediaUrl && (
+                                    <Image
+                                        source={{ uri: item.mediaUrl }}
+                                        style={styles.image} // Use styles for better control
+                                        resizeMode='contain' // Keeps the aspect ratio
+                                        onError={() => console.log('Error loading image')} // Error handling
+                                    />
+                                )}
                                 {/* Message text */}
                                 {item.content && (
-                                    <Hyperlink linkDefault={true} linkStyle={{ color: 'blue' }}>
+                                    <Hyperlink linkDefault={true}
+                                        linkStyle={{
+                                            color: isCurrentUser ? '#82C3D9' : 'blue',
+                                            textDecorationLine: 'underline'
+                                        }}                                        >
                                         <Text
-                                            selectable
+                                            selectable={true}
                                             style={{
                                                 color: isCurrentUser ? '#ffffff' : '#000000',
                                                 fontSize: 16,
@@ -268,42 +280,42 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
         <>
             {messages && (
                 messages.length === 0 ? (
-                                    <View style={{
-                    flex: 1,
-                    padding: 10,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <Animated.View style={{ opacity: fadeAnim }}>
-                        <View
-                            className='p-3 px-10 bg-gray-300 rounded-2xl space-y-2'
-                        >
-                            <Text className='text-center text-lg font-semibold'>
-                                🚀 Start the buzz and send the first message!
-                            </Text>
-                        </View>
-                    </Animated.View>
-                </View>
+                    <View style={{
+                        flex: 1,
+                        padding: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <Animated.View style={{ opacity: fadeAnim }}>
+                            <View
+                                className='p-3 px-10 bg-gray-300 rounded-2xl space-y-2'
+                            >
+                                <Text className='text-center text-lg font-semibold'>
+                                    🚀 Start the buzz and send the first message!
+                                </Text>
+                            </View>
+                        </Animated.View>
+                    </View>
                 ) :
-                <View style={styles.container}>
-                    <FlatList
-                        data={messages}
-                        renderItem={({ item, index }) => {
-                            const previousMessage = messages[index + 1];
-                            const isGroupStart = !previousMessage || previousMessage.sender_id !== item.sender_id;
-                            return (
-                                <MessageBubble
-                                    item={item}
-                                    isGroupStart={isGroupStart}
-                                />
-                            );
-                        }}
-                        keyExtractor={(item: Message) => item.message_id.toString()}
-                        contentContainerStyle={styles.flatListContent}
-                        inverted
-                    />
-                </View>
-                ) 
+                    <View style={styles.container}>
+                        <FlatList
+                            data={messages}
+                            renderItem={({ item, index }) => {
+                                const previousMessage = messages[index + 1];
+                                const isGroupStart = !previousMessage || previousMessage.sender_id !== item.sender_id;
+                                return (
+                                    <MessageBubble
+                                        item={item}
+                                        isGroupStart={isGroupStart}
+                                    />
+                                );
+                            }}
+                            keyExtractor={(item: Message) => item.message_id.toString()}
+                            contentContainerStyle={styles.flatListContent}
+                            inverted
+                        />
+                    </View>
+            )
             }
         </>
     );

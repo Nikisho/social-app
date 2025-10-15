@@ -14,6 +14,10 @@ import ChatClosed from './ChatClosed'
 import formatDate from '../../../utils/functions/formatDate'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
 import markMessagesRead from '../../../utils/functions/markMessagesRead'
+import { ImagePickerAsset } from 'expo-image-picker'
+import { uuidv4 } from '../../../utils/functions/uuidv4'
+import { decode } from 'base64-arraybuffer'
+import SendMedia from '../SendMedia'
 
 
 
@@ -54,6 +58,7 @@ interface EventDataProps {
 const GroupChatScreen = () => {
     const route = useRoute<GroupChatScreenProps>()
     const currentUser = useSelector(selectCurrentUser);
+    const [media, setMedia] = useState<ImagePickerAsset | null>(null);
     const { featured_event_id } = route.params;
     const [messages, setMessages] = useState<ArrayLike<Message>>([]);
     const [eventData, setEventData] = useState<EventDataProps | null>(null)
@@ -75,18 +80,6 @@ const GroupChatScreen = () => {
             setEventData(data)
         }
     };
-    
-    console.log(eventData?.series_id)
-    // const setMessagesRead = async (chatRoomID: number) => {
-    //     if (!eventData?.chat_room_id) return;
-    //     const { error } = await supabase
-    //         .from('messages')
-    //         .update({ read_by_recipient: true })
-    //         .eq('chat_room_id', chatRoomID)
-    //         .neq('sender_id', currentUser.id)
-    //         .eq('read_by_recipient', false);
-    //     if (error) { console.error(error.message) }
-    // };
 
     const fetchMessages = async (isInitialLoad?: boolean) => {
         //The room ID constant does not update right away, 
@@ -118,25 +111,43 @@ const GroupChatScreen = () => {
 
         if (data) {
             setMessages(data);
-            markMessagesRead(eventData?.chat_room_id!, currentUser.id, data[0]?.message_id)
+            isInitialLoad && markMessagesRead(eventData?.chat_room_id!, currentUser.id, data[0]?.message_id)
         }
         if (error) console.error(error.message);
         isInitialLoad && setLoading(false);
     };
 
 
+  const updateMediaInStorageBucket = async (file: string, unique_file_identifier: string, chatRoomIdState: number) => {
+    const arrayBuffer = decode(file);
+    try {
+      const { error } = await supabase
+        .storage
+        .from('chat_rooms_media')
+        .upload(`${chatRoomIdState}/${unique_file_identifier}.jpg`, arrayBuffer, {
+          contentType: 'image/png',
+          upsert: true,
+        });
+      if (error) {
+        console.error('Upload error:', error.message);
+      }
+    } catch (error) {
+      console.error('Conversion or upload error:', error);
+    }
+  }
+
     const sendMessage = async (newMessage: string) => {
-        // const unique_file_identifier = uuidv4(9);
-        // const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/chat_rooms_media/${chatRoomIdState}/${unique_file_identifier}.jpg`
-        // if (media) {
-        //     await updateProfilePictureInStorageBucket(media.base64!, unique_file_identifier);
-        // }
+        const unique_file_identifier = uuidv4(9);
+        const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/chat_rooms_media/${eventData?.chat_room_id}/${unique_file_identifier}.jpg`
+        if (media) {
+            await updateMediaInStorageBucket(media.base64!, unique_file_identifier, eventData?.chat_room_id!);
+        }
         const { error } = await supabase
             .from('messages')
             .insert({
                 sender_id: currentUser.id,
                 chat_room_id: eventData?.chat_room_id,
-                // mediaUrl: media ? mediaUrl : null,
+                mediaUrl: media ? mediaUrl : null,
                 content: newMessage
             });
 
@@ -162,7 +173,7 @@ const GroupChatScreen = () => {
             },
             (payload) => {
                 console.log('Change detected:', payload);
-                fetchMessages();  // Re-fetch unread messages count when data changes
+                fetchMessages(false);  // Re-fetch unread messages count when data changes
             }
         )
         .subscribe();
@@ -170,8 +181,15 @@ const GroupChatScreen = () => {
     useEffect(() => {
         fetchEventData();
         fetchMessages(true);
-        // setMessagesRead(eventData?.chat_room_id!)
     }, [eventData?.chat_room_id]);
+
+      if (media) {
+        return <SendMedia
+          media={media}
+          setMedia={setMedia}
+          onSendMessage={sendMessage}
+        />
+      }
 
     if (loading) {
         return <LoadingScreen displayText='Getting your messages...' />
@@ -193,13 +211,14 @@ const GroupChatScreen = () => {
                         />
 
                         {
-                            (eventDatePlus24Hours && eventDatePlus24Hours < today ) && !eventData.series_id?
+                            (eventDatePlus24Hours && eventDatePlus24Hours < today) && !eventData.series_id ?
                                 <ChatClosed
                                     message={`This event ended on ${formatDateShortWeekday(eventData.date)}`}
                                 />
                                 :
                                 <InputBox
                                     onSendMessage={sendMessage}
+                                    setMedia={setMedia}
                                 />
                         }
 

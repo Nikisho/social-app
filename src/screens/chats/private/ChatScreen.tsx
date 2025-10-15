@@ -107,17 +107,18 @@ const ChatScreen = () => {
   };
   //When the user opens a chat here we set the unread messages to read in the DB
   //This is done in the chat screen directly to update no matter where the user opens the chat from
-  const setMessagesRead = async (chatRoomID: number) => {
-    if (!chatRoomIdState) return;
-    const { error } = await supabase
-      .from('messages')
-      .update({ read_by_recipient: true })
-      .eq('chat_room_id', chatRoomID)
-      .neq('sender_id', currentUser.id)
-      .eq('read_by_recipient', false);
-    if (error) { console.error(error.message) }
+  //OUTDATED TO BE REMOVED
+  // const setMessagesRead = async (chatRoomID: number) => {
+  //   if (!chatRoomIdState) return;
+  //   const { error } = await supabase
+  //     .from('messages')
+  //     .update({ read_by_recipient: true })
+  //     .eq('chat_room_id', chatRoomID)
+  //     .neq('sender_id', currentUser.id)
+  //     .eq('read_by_recipient', false);
+  //   if (error) { console.error(error.message) }
 
-  }
+  // }
   const fetchMessages = async (isInitialLoad?: boolean) => {
     // console.log(chatRoomIdState)
     //The room ID constant does not update right away, 
@@ -172,7 +173,6 @@ const ChatScreen = () => {
       console.error('Conversion or upload error:', error);
     }
   }
-
 
   const sendMessage = async (newMessage: string) => {
     const unique_file_identifier = uuidv4(9);
@@ -237,7 +237,7 @@ const ChatScreen = () => {
     fetchUserData();
     fetchChatData();
     fetchMessages(true);
-    setMessagesRead(chatRoomIdState!);
+    // setMessagesRead(chatRoomIdState!);
   }, [chatRoomIdState]);
 
 
