@@ -132,7 +132,7 @@ const OrganizerOnboardingScreen = () => {
         <TouchableOpacity
           style={styles.shadowButtonStyle}
           className='rounded-lg p-3 bg-black my-1 px-4' onPress={handleOnboarding}>
-          <Text className='text-lg font-bold text-[#fffef4]'>Become an Organizer 🚀</Text>
+          <Text className='text-lg font-bold text-[#fffef4]'>Become an organiser 🚀</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
