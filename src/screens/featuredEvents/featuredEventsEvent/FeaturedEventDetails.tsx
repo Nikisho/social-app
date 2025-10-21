@@ -78,7 +78,9 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                 </TouchableOpacity>
             </FastImage>
 
-            <Text className='px-3 my-2 text-amber-800 text-lg font-semibold' >
+            <Text 
+                selectable
+                className='px-3 my-2 text-amber-800 text-lg font-semibold' >
                 {
                     date && time && (formatDateShortWeekday(date) + ', ' + (time).slice(0, -3))
                 }
@@ -89,7 +91,9 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                 <View className='mb-4 flex flex-row items-center'>
                     <Entypo name="location-pin" size={24} color="black" />
 
-                    <Text className='text-lg'>
+                    <Text 
+                        selectable
+                        className='text-lg'>
                         {location}
                     </Text>
                 </View>
@@ -103,6 +107,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                 >
 
                     <Text
+                        selectable
                         onTextLayout={onTextLayout}
                         numberOfLines={textShown ? undefined : 4}
                         style={{ lineHeight: 21, fontSize: 15 }}>

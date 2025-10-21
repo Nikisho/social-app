@@ -129,27 +129,27 @@ const FollowingScreen = () => {
                 }
             </TouchableOpacity >)
     }
+    console.log(followings)
     return (
         <View>
             <SecondaryHeader displayText='Following' />
-            {
-                followings &&
-
+            {followings?.length !==0 ? (
                 <FlatList
-                    contentContainerStyle={{paddingBottom: 100}}
-                    renderItem={({item}) => {
-                        return(
-
-                            <RenderItem
-                             item={item}
-                            />
-                        )
-                    }}
                     data={followings}
-                    keyExtractor={(item: any) => item.organizer_id.toString()}
-
+                    renderItem={({ item }) => <RenderItem item={item} />}
+                    keyExtractor={item => item.organizer_id.toString()}
+                    contentContainerStyle={{ paddingBottom: 100 }}
                 />
-            }
+            ) : (
+                <View className="h-1/2 justify-center items-center p-6">
+                    <Text className="text-lg font-semibold text-gray-700">No followings</Text>
+                    <Text className="mt-2 text-center text-gray-500">
+                        {currentUser.id === user_id
+                            ? "You're not following anyone yet 😴"
+                            : "This user isn’t following anyone yet 😴"}
+                    </Text>
+                </View>
+            )}
         </View>
     )
 }

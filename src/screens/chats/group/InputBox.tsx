@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 // import MediaAttachment from './MediaAttachment';
 import { ImagePickerAsset } from 'expo-image-picker';
+import MediaAttachment from '../MediaAttachment';
 
 interface InputBoxProps {
     onSendMessage: (message: string) => void;
-    // setMedia: (media: ImagePickerAsset) => void;
+    setMedia: (media: ImagePickerAsset) => void;
 };
 
-const InputBox: React.FC<InputBoxProps> = ({ onSendMessage }) => {
+const InputBox: React.FC<InputBoxProps> = ({ onSendMessage, setMedia }) => {
     const [message, setMessage] = useState<string>('');
     const [inputHeight, setInputHeight] = useState<number>(40); // default height (min)
 
@@ -42,13 +43,13 @@ const InputBox: React.FC<InputBoxProps> = ({ onSendMessage }) => {
                     style={{ height: inputHeight }}  // Set dynamic height
                     className='text-lg px-1 w-5/6'>
                 </TextInput>
-                {/* {
+                {
                     message === '' && (
                         <MediaAttachment 
                             setMedia={setMedia}
                         />
                     )
-                } */}
+                }
             </View>
 
             <TouchableOpacity onPress={handleSubmit} className='bg-blue-300 p-4 rounded-full'>

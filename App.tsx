@@ -45,6 +45,7 @@ import FollowingScreen from './src/screens/following/FollowingScreen';
 import TicketScannerScreen from './src/screens/featuredEvents/ticket/TicketScannerScreen';
 import ManageMembershipsScreen from './src/screens/memberships/ManageMembershipsScreen';
 import CreateMembershipScreen from './src/screens/memberships/CreateMembershipScreen';
+import FollowerScreen from './src/screens/follower/FollowerScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -169,6 +170,7 @@ function AppSafeAreaWrapper() {
 								<Stack.Screen name="createmembership" component={CreateMembershipScreen} />
 								<Stack.Screen name="profile" component={ProfileScreen} />
 								<Stack.Screen name="following" component={FollowingScreen} />
+								<Stack.Screen name="followers" component={FollowerScreen} />
 								<Stack.Screen name="attendeelist" component={AttendeeListScreen} />
 								<Stack.Screen name="chatlist" component={ChatListScreen} />
 								<Stack.Screen name="chat" component={ChatScreen} />

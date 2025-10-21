@@ -6,7 +6,7 @@ import { RootStackNavigationProp } from '../../utils/types/types';
 const NoMessagesView = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const handleConnect = () => {
-        navigation.navigate('featuredEvents');
+        navigation.navigate('featuredEvents', {});
     };
 
     return (
