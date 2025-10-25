@@ -72,11 +72,28 @@ Deno.serve(async (req: Request) => {
     }
     return data && data.length > 0;
   };
+  function getSalesWindow(
+    eventDate: string | Date,
+  ) {
+    const date = new Date(eventDate);
 
+    // sales start: 7 days before event
+    const sales_start = new Date(date);
+    sales_start.setDate(date.getDate() - 7);
+
+    // sales end: 1 day before event
+    const sales_end = new Date(date);
+    sales_end.setDate(date.getDate() - 1);
+
+    return {
+      sales_start: sales_start.toISOString(),
+      sales_end: sales_end.toISOString(),
+    };
+  }
   try {
     const { data, error } = await supabaseAdmin
       .from("recurring_series")
-      .select(`*, featured_events(*)`)
+      .select(`*, featured_events(*, ticket_types(*))`)
       .eq("paused", false);
 
     if (data) {
@@ -95,11 +112,13 @@ Deno.serve(async (req: Request) => {
           nextEventDate,
         );
         if (exists) {
-          console.log(`Skipping, event ${series.featured_events.title} already exists for ${nextEventDate} :`);
-          continue; //skip to next item in loop
+          console.log(
+            `Skipping, event ${series.featured_events.title} already exists for ${nextEventDate} :`,
+          );
+          continue;
         }
-
-        const { error: insertError } = await supabaseAdmin
+        console.log("See ticket types :", series.featured_events.ticket_types);
+        const { data: insertData, error: insertError } = await supabaseAdmin
           .from("featured_events")
           .insert({
             title: series.featured_events.title,
@@ -115,13 +134,42 @@ Deno.serve(async (req: Request) => {
             chat_room_id: series.featured_events.chat_room_id,
             series_id: series.series_id,
             test: __DEV__ ? true : false,
-          });
+          })
+          .select("featured_event_id")
+          .single();
 
         if (insertError) {
           console.error(
             "Error inserting intor featured_events: ",
             insertError.message,
           );
+        }
+
+        for (const ticket of series.featured_events.ticket_types) {
+          console.log("look here :", ticket.sales_start);
+
+          const { sales_start, sales_end } = getSalesWindow(nextEventDate);
+
+          const clonedTicket = {
+            name: ticket.name,
+            price: ticket.price,
+            is_free: ticket.is_free,
+            description: ticket.description,
+            quantity: ticket.quantity,
+            is_active: ticket.is_active,
+            organizer_id: ticket.organizer_id,
+            tickets_sold: 0, // reset
+            sales_start: sales_start,
+            sales_end: sales_end,
+            featured_event_id: insertData.featured_event_id,
+          };
+
+          const { error } = await supabaseAdmin.from("ticket_types").insert(
+            clonedTicket,
+          );
+          if (error) {
+            console.error("Could not add ticket type :", error.message);
+          }
         }
       }
     }

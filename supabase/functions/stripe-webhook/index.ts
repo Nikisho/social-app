@@ -34,6 +34,7 @@ async function handler(request: Request) {
         session.metadata.user_id,
         session.metadata.featured_event_id,
         session.metadata.date,
+        session.metadata.ticket_type_id
       )
 
       console.log(' ✅ Session received: ', session);
@@ -62,6 +63,7 @@ async function handler(request: Request) {
           session.metadata.tickets_sold,
           data.ticket_transaction_id,
           session.metadata.chat_room_id,
+          session.metadata.ticket_type_id
         )
       }
       return new Response(JSON.stringify({ status: "success" }), {

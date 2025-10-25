@@ -1,7 +1,6 @@
 import { View, Text, TextInput } from 'react-native'
 import React from 'react'
 
-
 interface EventDataProps {
     title: string;
     description: string;
@@ -9,36 +8,39 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
+
 }
 
-interface AddressInputProps {
-    address: string;
+interface TitleInputProps {
     setEventData: React.Dispatch<React.SetStateAction<EventDataProps>>;
-}
+    title: string;
+};
 
-const AddressInput: React.FC<AddressInputProps> = ({
-    address,
-    setEventData
+const TitleInput:React.FC<TitleInputProps> = ({
+    setEventData,
+    title,
 }) => {
     return (
-        <View>
-            <Text className='text-xl font-bold m-2'>
-                Address
+        <View className='border my-6'>
+            <Text className='font-semibold mt-3 px-5'>
+                Event Title
+                <Text className='text-red-400'> *  </Text>
             </Text>
+
             <TextInput
-                value={address}
-                placeholder='London, 123 Street'
+                value={title}
+                placeholder='Add a title for your event'
                 maxLength={60}
                 onChangeText={(value) => {
                     setEventData((prevData: EventDataProps) => ({
                         ...prevData,
-                        location: value
+                        title: value
                     }))
                 }}
-                className='border rounded-xl h-16 px-5'
+                className=' h-10 px-5'
             />
         </View>
     )
 }
 
-export default AddressInput
+export default TitleInput

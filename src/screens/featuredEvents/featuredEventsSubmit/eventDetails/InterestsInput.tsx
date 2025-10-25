@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, Modal } from 'react-native'
 import React, { useState } from 'react'
-import ProfileInterestsSelector from '../../../components/ProfileInterestsSelector';
-import styles from '../../../utils/styles/shadow';
-import UserInterests from '../../profile/UserInterests';
+import ProfileInterestsSelector from '../../../../components/ProfileInterestsSelector';
+import styles from '../../../../utils/styles/shadow';
+import UserInterests from '../../../profile/UserInterests';
 
 
 
@@ -17,16 +17,22 @@ const InterestsInput = ({
             return { ...prev, ...fields }
         })
     };
+
+
+    const fetchInterests = async () => {
+        
+    }
     return (
         <>
             <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}  
-                style={styles.shadow}
-                className='p-2 mt-4 rounded-full bg-gray-200 w-1/ border-green-800'
+                // style={styles.shadow}
+                className='p-2 mt-4 border bg-gray-100 '
             >
-                <Text className='text-lg text-center'>
+                <Text className='text-lg text-center font-semibold'>
                     Select topics & interests
                 </Text>
+
             </TouchableOpacity>
             <Modal
                 animationType="slide"

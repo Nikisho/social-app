@@ -28,6 +28,18 @@ interface EventDataProps {
     date: Date;
     max_tickets: number;
     chat_room_id: number
+    ticket_types: {
+        description:string;
+        is_free: boolean;
+        organizer_id: number;
+        sales_start: Date;
+        sales_end:Date;
+        name:string;
+        price:string
+        quantity: number;
+        tickets_sold:number;
+        ticket_type_id: number;
+    }[]
     organizers: {
         user_id: number
         users: {
@@ -63,12 +75,14 @@ const FeaturedEventsEventScreen = () => {
                 organizers(
                     user_id,
                     users(*)
-                )
+                ),
+                ticket_types(*)
                 `)
             .eq('featured_event_id', featured_event_id)
             .single()
         if (data) {
             setEventData(data)
+            console.log(eventData?.ticket_types)
         }
         if (error) console.error(error.message);
     };

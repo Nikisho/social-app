@@ -19,6 +19,8 @@ interface BookEventCheckoutModalProps {
     date: Date
     tickets_sold: number;
     chat_room_id: number;
+    ticket_name: number;
+    ticket_type_id: number;
 }
 
 const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
@@ -31,7 +33,9 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     featured_event_id,
     organizer_id,
     chat_room_id,
-    tickets_sold
+    tickets_sold,
+    ticket_name,
+    ticket_type_id
 }) => {
 
     const { t } = useTranslation();
@@ -49,6 +53,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 user_id: currentUser.id,
                 date: date,
                 tickets_sold: tickets_sold,
+                ticket_type_id: ticket_type_id,
                 chat_room_id: chat_room_id
             },
         }
@@ -187,7 +192,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 onPress={() => setModalVisible(false)}
                 className='flex-1 justify-end items-center bottom-0 w-full  ' >
                 <TouchableWithoutFeedback>
-                    <View className='bg-black w-full p-1 space-y-3 h-80' >
+                    <View className='bg-black w-full p-1 space-y-3 h-96' >
                         <View className='p-2'>
                             <Text className='text-white text-xl'>
                                 {t('event_checkout.order_summary')}
@@ -196,7 +201,9 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
 
                         <View className='p-2 py-3  border-y border-white flex flex-row justify-between'>
                             <Text className='text-white text-lg'>
-                                {t('event_checkout.general_admission')}
+                                {/* {t('event_checkout.general_admission')} */}
+                                {ticket_name}
+
                             </Text>
                             {
                                 is_free ?

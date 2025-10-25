@@ -17,12 +17,16 @@ interface FeaturedEventCard {
     time: string;
     is_free: boolean;
     test: boolean;
+    ticket_types: {
+        name:string;
+        price:string
+    }[]
 }
 
 const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, HeaderContent: any }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const [featuredEvents, setFeaturedEvents] = useState<FeaturedEventCard[] | null>(null);
-    
+
     const fetchFeaturedEvents = async () => {
         const organizer_id = await fetchOrganizerId(user_id);
         if (!organizer_id) {
@@ -31,7 +35,7 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
         }
         const { data, error } = await supabase
             .from('featured_events')
-            .select()
+            .select(`*, ticket_types(*)`)
             .order('date', { ascending: false })
             .eq('organizer_id', organizer_id)
 
@@ -49,6 +53,9 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
         }, [user_id])
     );
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
+        const minPrice = Math.min(
+            ...item.ticket_types.map(t => Number(t.price))
+        );
         return (
             <TouchableOpacity
                 className={`my-2
@@ -65,13 +72,13 @@ const FeaturedEventsUser = ({ user_id, HeaderContent }: { user_id: number, Heade
                 >
                     <View className="p-2 w-1/4 bg-black text-center mx-2 my-4 rounded-lg">
                         {
-                            item.is_free ?
+                            minPrice === 0?
                                 <Text className="text-lg font-semibold text-center text-white">
                                     FREE
                                 </Text>
                                 :
                                 <Text className="text-lg font-semibold text-center text-white">
-                                    £{item.price}
+                                    £{minPrice}
                                 </Text>
                         }
                     </View>

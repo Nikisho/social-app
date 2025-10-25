@@ -5,7 +5,8 @@ export const bookFeaturedEvent = async (
     featured_event_id: number,
     tickets_sold: number,
     ticket_transaction_id: number,
-    chat_room_id:number
+    chat_room_id:number,
+    ticket_type_id: number
 ) => {
     try {
         // const ticketSoldNumber = new Number(tickets_sold)
@@ -21,11 +22,12 @@ export const bookFeaturedEvent = async (
             console.error(error.message);
         } else {
             const { error } = await supabaseAdmin
-                .from('featured_events')
+                .from('ticket_types')
                 .update({
                     tickets_sold: Number(tickets_sold) + 1
                 })
-                .eq('featured_event_id', featured_event_id)
+                // .eq('featured_event_id', featured_event_id)
+                .eq('ticket_type_id', ticket_type_id)
 
             if (error)
                 console.error(error.message);

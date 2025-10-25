@@ -81,7 +81,7 @@ const FeaturedEventsFeed = ({
                 >
                     <View className="p-2 bg-black w-1/4 text-center mx-2 my-2 rounded-lg">
                         {
-                            item.is_free ?
+                            Number(item.price) === 0 ?
                                 <Text className="text-lg text-center font-semibold text-white">
                                     {t('featured_events.free')}
                                 </Text>
