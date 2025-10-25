@@ -2,7 +2,7 @@ import { View, TouchableOpacity, Alert, Text } from 'react-native'
 import React from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import styles from '../../../utils/styles/shadow';
+import styles from '../../../../utils/styles/shadow';
 import FastImage from 'react-native-fast-image';
 
 interface MediaPickerProps {

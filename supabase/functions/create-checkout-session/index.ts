@@ -22,7 +22,8 @@ serve(async (req: Request) => {
       organizer_id,
       date,
       tickets_sold,
-      chat_room_id
+      chat_room_id,
+      ticket_type_id
     } = await req.json();
     // Retrieve the logged in user's Stripe customer ID or create a new customer object for them.
     // See ../_utils/supabase.ts for the implementation.
@@ -68,7 +69,8 @@ serve(async (req: Request) => {
         organizer_id: String(organizer_id),
         date: String(date),
         tickets_sold: String(tickets_sold),
-        chat_room_id: String(chat_room_id)
+        chat_room_id: String(chat_room_id),
+        ticket_type_id: String(ticket_type_id)
       },
     }
 

@@ -54,6 +54,7 @@ export interface PaymentIntentParamsProps {
         organizer_id: string,
         date: string,
         tickets_sold: string,
-        chat_room_id: string
+        chat_room_id: string,
+        ticket_type_id: string
       },
 }

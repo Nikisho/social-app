@@ -33,7 +33,7 @@ import OrganizerOnboardingScreen from './src/screens/organizerOnboarding/Organiz
 import { StripeProvider } from '@stripe/stripe-react-native';
 import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
 import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
-import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/EditFeaturedEventScreen';
+import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/manageEvent/EditFeaturedEventScreen';
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
 import GroupChatScreen from './src/screens/chats/group/GroupChatScreen';
@@ -60,7 +60,7 @@ const mainTheme = {
 export default function AppWrapper() {
 	return (
 		<StripeProvider
-			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY_PROD!}
+			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
 			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
 			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
 		>

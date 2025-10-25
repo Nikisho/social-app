@@ -12,6 +12,7 @@ import { delay } from '../../../utils/functions/delay';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import { t } from 'i18next';
 import RenderActionButton from './RenderActionButton';
+import TicketTypeModal from './TicketTypeModal';
 
 interface BookEventProps {
     is_free: boolean;
@@ -25,6 +26,18 @@ interface BookEventProps {
     location: string;
     title: string;
     time: string;
+    ticket_types: {
+        description: string;
+        is_free: boolean;
+        organizer_id: number;
+        sales_start: Date;
+        sales_end:Date;
+        name:string;
+        price:string
+        quantity: number;
+        tickets_sold: number;
+        ticket_type_id: number;
+    }[]
 
 }
 const BookEvent: React.FC<BookEventProps> = ({
@@ -38,18 +51,21 @@ const BookEvent: React.FC<BookEventProps> = ({
     chat_room_id,
     location,
     title,
-    time
+    time,
+    ticket_types
 
 }) => {
     const currentUser = useSelector(selectCurrentUser);
     const isSoldOut = tickets_sold >= max_tickets;
     const [checkoutModalVisible, setCheckoutModalVisible] = useState<boolean>(false);
     const navigation = useNavigation<RootStackNavigationProp>();
+    const [ticketTypeModalVisible, setTicketTypeModalVisible] = useState<boolean>(false);
+    const [selectedTicket, setSelectedTicket] = useState<any>(null);
 
     const canBook = async () => {
-        // if (__DEV__) {
-        //     return true;
-        // }
+        if (__DEV__) {
+            return true;
+        }
         const { count, error } = await supabase
             .from('featured_event_bookings')
             .select('user_id', { count: 'exact' })
@@ -93,8 +109,22 @@ const BookEvent: React.FC<BookEventProps> = ({
 
     }
 
+    const showTicketTypeModal = async () => {
+        try {
+            const canPost = await canBook();
+            if (canPost === false) {
+                platformAlert("You've already booked tickets for this event");
+                return;
+            }
+            setTicketTypeModalVisible(!ticketTypeModalVisible)
+        } catch (error: any) {
+            Alert.alert(error.message)
+        }
+
+    }
+
     const handleBookEvent = async () => {
-        if (is_free) {
+        if (selectedTicket.is_free ) {
             const { error } = await supabase
                 .from('featured_event_bookings')
                 .insert({
@@ -105,11 +135,12 @@ const BookEvent: React.FC<BookEventProps> = ({
                 console.error(error.message);
             } else {
                 const { error } = await supabase
-                    .from('featured_events')
+                    .from('ticket_types')
                     .update({
-                        tickets_sold: tickets_sold + 1
+                        tickets_sold: selectedTicket.tickets_sold + 1
                     })
-                    .eq('featured_event_id', featured_event_id)
+                    // .eq('featured_event_id', featured_event_id)
+                    .eq('ticket_type_id', selectedTicket.ticket_type_id)
 
                 if (error)
                     console.error(error.message);
@@ -134,11 +165,13 @@ const BookEvent: React.FC<BookEventProps> = ({
                 .insert({
                     user_id: currentUser.id,
                     featured_event_id: featured_event_id,
+                    ticket_type_id: selectedTicket.ticket_type_id,
                     qr_code_link: qrValue,
                     expiry_date: new Date(eventDate.setDate(eventDate.getDate() + 1))
                 })
             if (TicketsError) {
-                throw TicketsError.message;
+                console.error('Error buying ticket :', TicketsError.message);
+                return;
             }
         };
 
@@ -146,6 +179,7 @@ const BookEvent: React.FC<BookEventProps> = ({
         await delay(2000);
         navigation.navigate('ticketfeed');
         setCheckoutModalVisible(!checkoutModalVisible);
+        setTicketTypeModalVisible(!ticketTypeModalVisible)
         emailUserUponPurchase();
     };
 
@@ -182,11 +216,11 @@ const BookEvent: React.FC<BookEventProps> = ({
         }
     }
     const fadeAnim = useRef(new Animated.Value(0)).current;
-
+    console.log('hey: ' ,ticket_types[0].price)
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 800, // half a second fade in
+            duration: 800, 
             useNativeDriver: true,
         }).start();
     }, []);
@@ -195,29 +229,38 @@ const BookEvent: React.FC<BookEventProps> = ({
             style={{
                 opacity: fadeAnim
             }}
-            className={`absolute bg-green-100 border-green-800 border-y-2 inset-x-0 py-3 flex justify-between flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
+            className={`absolute bg-black inset-x-0 py-5 flex justify-center flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
             <RenderActionButton
                 isExpired={isExpired}
-                isSoldOut={isSoldOut}
-                showBookingModal={showBookingModal}
+                showTicketTypeModal={showTicketTypeModal}
             />
-            {(!isExpired && !isSoldOut) && (
-                <Text className="text-2xl text-green-800 font-bold">
-                    {is_free ? t('featured_event_screen.free') : `£${price}`}
+            {/* {(!isExpired && !isSoldOut) && (
+                <Text className="text-2xl text-blue-800 font-bold">
+                    {Number(ticket_types[0].price) === 0 ? t('featured_event_screen.free') : `£${ticket_types[0].price}`}
                 </Text>
-            )}
+            )} */}
 
             <BookEventCheckoutModal
                 modalVisible={checkoutModalVisible}
                 setModalVisible={setCheckoutModalVisible}
-                price={price}
-                is_free={is_free}
+                price={selectedTicket?.price}
+                is_free={selectedTicket?.is_free}
                 organizer_id={organizer_id}
                 featured_event_id={featured_event_id}
                 handleBookEvent={handleBookEvent}
                 date={date}
-                tickets_sold={tickets_sold}
+                tickets_sold={selectedTicket?.tickets_sold}
                 chat_room_id={chat_room_id}
+                ticket_name={selectedTicket?.name}
+                ticket_type_id={selectedTicket?.ticket_type_id}
+            />
+            <TicketTypeModal 
+                modalVisible={ticketTypeModalVisible}
+                setBookEventModalVisible={setCheckoutModalVisible}
+                setModalVisible={setTicketTypeModalVisible}
+                setSelectedTicket={setSelectedTicket}
+                // selectedTicket={selectedTicket}
+                ticket_types={ticket_types}
             />
         </Animated.View>
 

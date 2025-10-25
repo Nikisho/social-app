@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text, Animated } from 'react-native'
+import { View, TouchableOpacity, Text, Animated, Image } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import SecondaryHeader from '../../../components/SecondaryHeader';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -9,7 +9,6 @@ import { supabase } from '../../../../supabase';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import { useNavigation } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
-import FastImage from 'react-native-fast-image';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
 import { Entypo } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -24,6 +23,10 @@ interface EventCard {
     time: string;
     is_free: boolean;
     test: boolean;
+    ticket_types : {
+        name:string;
+        price: string
+    }[]
 }
 
 const DashboardScreen = () => {
@@ -54,8 +57,8 @@ const DashboardScreen = () => {
             return;
         }
         const { data, error } = await supabase
-            .from('featured_events')
-            .select()
+            .from(`featured_events`)
+            .select(`*, ticket_types(*)`)
             .order('date', { ascending: false })
             .eq('organizer_id', organizer_id)
 
@@ -80,27 +83,31 @@ const DashboardScreen = () => {
             }).start();
         }, []);
 
+        const minPrice = Math.min(
+            ...item.ticket_types.map(t => Number(t.price))
+        );
+
         return (
             <Animated.View style={{ opacity: fadeAnim }}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('featuredeventsevent', { featured_event_id: item.featured_event_id })}
                     style={styles.shadow}
-                    className={` bg-gray-100 my-1 flex-row flex p-4 space-x-5 
+                    className={` bg-gray-100 my-1 flex-row flex p-4 gap-x-5 
                     ${isUpcoming && new Date(item.date) <= today && 'hidden'}
                     ${!isUpcoming && new Date(item.date) > today && 'hidden'}
                 `} >
-                    <FastImage
+                    <Image
                         source={{ uri: item.image_url }}
                         className='w-28 h-28 rounded-xl overflow-hidden justify-end'
                     />
 
-                    <View className='space-y-2 flex-1'>
+                    <View className='gap-y-2 flex-1'>
                         <Text
                             numberOfLines={2}
                             className='text-xl font-bold text-wrap'>
                             {item.title}
                         </Text>
-                        <View className='flex-row items-center space-x-2 flex-1 mr-4'>
+                        <View className='flex-row items-center gap-x-2 flex-1 mr-4'>
                             <Entypo name="location-pin" size={24} color="black" />
                             <Text
                                 numberOfLines={1}
@@ -108,23 +115,23 @@ const DashboardScreen = () => {
                                 {item.location}
                             </Text>
                         </View>
-                        <View className='flex flex-row items-center space-x-2'>
+                        <View className='flex flex-row items-center gap-x-2'>
                             <Entypo name="calendar" size={24} color="black" />
                             <Text className=' text-lg'>
                                 {item.date && item.time && (formatDateShortWeekday(item.date) + ', ' + (item.time).slice(0, -3))}
                             </Text>
                         </View>
 
-                        <View className='flex flex-row items-center space-x-2'>
+                        <View className='flex flex-row items-center gap-x-2'>
                             <Entypo name="ticket" size={24} color="black" />
                             {
-                                item.is_free ?
+                                minPrice === 0 ?
                                     <Text className=' text-lg'>
                                         {`FREE`}
                                     </Text>
                                     :
                                     <Text className=' text-lg'>
-                                        £{item.price}
+                                        £{minPrice}
                                     </Text>
                             }
                         </View>
@@ -167,7 +174,7 @@ const DashboardScreen = () => {
             {/* <TouchableOpacity
                 onPress={() => navigation.navigate('managememberships')}
                 style={styles.shadow}
-                className='my-2 space-x-2 items-center flex flex-row self-center p-3 px-4 rounded-full bg-white'>
+                className='my-2 gap-x-2 items-center flex flex-row self-center p-3 px-4 rounded-full bg-white'>
                 <FontAwesome6 name="user-group" size={14} color="black" />
                 <Text className='font-bold text-center text-black'>
                     Manage memberships

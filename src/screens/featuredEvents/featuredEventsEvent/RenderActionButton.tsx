@@ -3,33 +3,25 @@ import React from 'react'
 import { t } from 'i18next';
 
 interface RenderActionButtonProps {
-    isSoldOut:boolean
-    showBookingModal: () => void
     isExpired:boolean
+    showTicketTypeModal: () => void
 }
 const RenderActionButton:React.FC<RenderActionButtonProps>= ({
-    isSoldOut,
-    showBookingModal,
-    isExpired
+    isExpired,
+    showTicketTypeModal
 }) => {
-    if (isSoldOut) {
-        return (
-            <View className="p-3 rounded-lg bg-green-800 opacity-60">
-                <Text className="text-center text-white font-bold">SOLD OUT</Text>
-            </View>
-        )
-    }
+
 
     return (
         <TouchableOpacity
-            onPress={showBookingModal}
+            onPress={showTicketTypeModal}
             disabled={isExpired}
-            className={`p-3 rounded-lg bg-green-700 px-5 ${isExpired && 'opacity-60'}`}
+            className={`p-3 rounded-full bg-white px-10 ${isExpired && 'opacity-60'}`}
         >
-            <Text className="text-center text-white font-bold">
+            <Text className="text-center text-black font-bold">
                 {isExpired
                     ? t('featured_event_screen.closed')
-                    : t('featured_event_screen.book')}
+                    : 'GET TICKETS' }
             </Text>
         </TouchableOpacity>
     )

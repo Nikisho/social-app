@@ -1,6 +1,6 @@
 import { View, Text, Platform, Switch } from 'react-native'
 import React from 'react'
-import styles from '../../../utils/styles/shadow'
+import styles from '../../../../utils/styles/shadow'
 
 interface ManageSeriesProps {
     repeatEvent: boolean | null;

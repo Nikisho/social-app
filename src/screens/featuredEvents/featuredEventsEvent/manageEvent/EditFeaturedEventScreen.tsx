@@ -1,16 +1,16 @@
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { EditFeaturedEventScreenRouteProps, RootStackNavigationProp } from '../../../utils/types/types'
-import SecondaryHeader from '../../../components/SecondaryHeader'
-import { supabase } from '../../../../supabase'
+import { EditFeaturedEventScreenRouteProps, RootStackNavigationProp } from '../../../../utils/types/types'
+import SecondaryHeader from '../../../../components/SecondaryHeader'
+import { supabase } from '../../../../../supabase'
 import MediaPicker from './MediaPicker'
-import { uploadEventMediaToStorageBucket } from '../../../utils/functions/uploadEventMediaToStorageBucket'
+import { uploadEventMediaToStorageBucket } from '../../../../utils/functions/uploadEventMediaToStorageBucket'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import platformAlert from '../../../utils/functions/platformAlert'
-import LoadingScreen from '../../loading/LoadingScreen'
+import platformAlert from '../../../../utils/functions/platformAlert'
+import LoadingScreen from '../../../loading/LoadingScreen'
 import TicketStatsBanner from './TicketStatsBanner'
-import { uuidv4 } from '../../../utils/functions/uuidv4'
+import { uuidv4 } from '../../../../utils/functions/uuidv4'
 import ManageRSVPsModal from './ManageRSVPsModal'
 import ManageSeries from './ManageSeries'
 
@@ -20,6 +20,7 @@ interface EventDataProps {
   title: string
   description: string
   organizer_id: number
+  series_id:number;
   price: string
   time: string
   location: string
@@ -31,6 +32,14 @@ interface EventDataProps {
   recurring_series: {
     paused: boolean
   }
+  ticket_types: {
+    name: string;
+    price: string;
+    quantity: number;
+    tickets_sold: number;
+    ticket_type_id: number;
+    is_free: boolean;
+  }[]
   max_tickets: number
   organizers: {
     user_id: number
@@ -53,30 +62,52 @@ const EditFeaturedEventScreen = () => {
   })
   const [loading, setLoading] = useState(false)
   const fetchEventData = async () => {
-    const { data, error } = await supabase
+    const { data: event, error } = await supabase
       .from('featured_events')
-      .select(`*, organizers(user_id, users(*)), recurring_series(paused)`)
+      .select(`*, organizers(user_id, users(*)), ticket_types(*)`)
       .eq('featured_event_id', featured_event_id)
-      .single()
-    if (error) {
-      console.error(error.message)
-      return
+      .single();
+
+    if (error || !event) {
+      console.error(error?.message || 'No event found');
+      return;
     }
-    if (data) {
-      setEventData(data)
-      setInitial({
-        description: data.description,
-        image_url: data.image_url,
-        hasSeries: Boolean(data.series_id),
-        repeatEvent: data.series_id && !data.recurring_series.paused ? true : false
-      })
+
+    setEventData(event);
+
+    // Compute total tickets sold
+    const total = event.ticket_types?.reduce(
+      (sum: number, t: any) => sum + (t.tickets_sold || 0),
+      0
+    );
+    console.log(total);
+
+    let paused = null;
+
+    // ✅ Fetch recurring_series separately
+    if (event.series_id) {
+      const { data: series, error: seriesError } = await supabase
+        .from('recurring_series')
+        .select('paused')
+        .eq('series_id', event.series_id)
+        .single();
+
+      if (seriesError) console.error(seriesError.message);
+      paused = series?.paused;
     }
-    if (data.series_id && !data.recurring_series.paused) {
-      setRepeatEvent(true);
-    } else {
-      setRepeatEvent(false);
-    }
-  }
+
+    const repeatFlag = Boolean(event.series_id && paused === false);
+
+    setInitial({
+      description: event.description,
+      image_url: event.image_url,
+      hasSeries: Boolean(event.series_id),
+      repeatEvent: repeatFlag,
+    });
+
+    setRepeatEvent(repeatFlag);
+  };
+
   useEffect(() => {
     fetchEventData()
   }, []);
@@ -98,57 +129,71 @@ const EditFeaturedEventScreen = () => {
   }, [eventData, initial, repeatEvent])
 
 
-  const handleRepeatEvent = async () => {
-    if (repeatEvent === initial.repeatEvent) return;
+const handleRepeatEvent = async () => {
+  if (repeatEvent === initial.repeatEvent) return;
 
-    if (!initial.hasSeries && repeatEvent) {
-      //Create new series if the event was originally not a series
-      const { data, error } = await supabase
-        .from('recurring_series')
-        .insert({
-          featured_event_id: featured_event_id,
-          day_of_week: new Date(eventData?.date!).getDay()
-        })
-        .select('series_id')
-        .single()
+  // CASE 1: Event is not part of a series yet → Create new series
+  if (!initial.hasSeries && repeatEvent) {
+    const dayOfWeek = new Date(eventData?.date!).getDay();
 
-      if (data) {
-        const { error: errorInsertSeriesId } = await supabase
-          .from('featured_events')
-          .update({
-            series_id: data.series_id
-          })
-          .eq('featured_event_id', featured_event_id)
-        if (errorInsertSeriesId) {
-          console.error(errorInsertSeriesId.message)
-        }
-      }
-      if (error) {
-        console.error('Error inserting into series :', error.message)
-      }
+    const { data, error } = await supabase
+      .from('recurring_series')
+      .insert({
+        featured_event_id,
+        day_of_week: dayOfWeek,
+        paused: false,
+      })
+      .select('series_id')
+      .single();
+
+    if (error) {
+      console.error('Error inserting into series:', error.message);
+      return;
     }
 
-    if (initial.hasSeries && !repeatEvent) {
-      //Pause the series if the event was scheduled
+    const { error: updateError } = await supabase
+      .from('featured_events')
+      .update({ series_id: data.series_id })
+      .eq('featured_event_id', featured_event_id);
+
+    if (updateError) console.error('Error linking series_id:', updateError.message);
+    return;
+  }
+
+  // CASE 2: Event is part of a series → Pause or unpause
+  if (initial.hasSeries && eventData?.series_id) {
+    const { data: series, error: fetchError } = await supabase
+      .from('recurring_series')
+      .select('paused')
+      .eq('series_id', eventData.series_id)
+      .single();
+
+    if (fetchError) {
+      console.error('Error fetching series:', fetchError.message);
+      return;
+    }
+
+    // Pause series
+    if (!repeatEvent && !series?.paused) {
       const { error } = await supabase
         .from('recurring_series')
-        .update({
-          paused: true
-        })
-        .eq('featured_event_id', featured_event_id)
-      if (error) console.error('Error pausing event :', error.message)
+        .update({ paused: true })
+        .eq('series_id', eventData.series_id);
+
+      if (error) console.error('Error pausing series:', error.message);
     }
 
-    if (initial.hasSeries && repeatEvent && eventData?.recurring_series?.paused) {
-      // Unpause the series
+    // Unpause series
+    if (repeatEvent && series?.paused) {
       const { error } = await supabase
         .from('recurring_series')
         .update({ paused: false })
-        .eq('featured_event_id', featured_event_id);
+        .eq('series_id', eventData.series_id);
 
-      if (error) console.error('Error unpausing event :', error.message);
+      if (error) console.error('Error unpausing series:', error.message);
     }
   }
+};
 
 
   const handleSubmit = async () => {
@@ -219,8 +264,7 @@ const EditFeaturedEventScreen = () => {
       >
         <SecondaryHeader displayText="Manage event" />
         <TicketStatsBanner
-          sold={eventData?.tickets_sold!}
-          max={eventData?.max_tickets!}
+          ticket_types={eventData?.ticket_types!}
         />
 
         <ManageRSVPsModal

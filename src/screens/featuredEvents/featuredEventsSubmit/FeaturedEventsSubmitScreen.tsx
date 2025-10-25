@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platfor
 import React, { useState } from 'react'
 import SecondaryHeader from '../../../components/SecondaryHeader'
 import { ImagePickerAsset } from 'expo-image-picker';
-import MediaPicker from './MediaPicker';
+import MediaPicker from './eventDetails/MediaPicker';
 import { supabase } from '../../../../supabase';
 import { decode } from 'base64-arraybuffer';
 import { uuidv4 } from '../../../utils/functions/uuidv4';
@@ -13,16 +13,11 @@ import extractTimeFromDateSubmit from '../../../utils/functions/extractTimeFromD
 import platformAlert from '../../../utils/functions/platformAlert';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
-import TitleInput from './TitleInput';
-import DescriptionInput from './DescriptionInput';
-import PriceInput from './PriceInput';
-import Quantity from './Quantity';
-import AddressInput from './AddressInput';
-import DateTimeInput from './DateTimeInput';
-import InterestsInput from './InterestsInput';
 import fetchOrganizerId from '../../../utils/functions/fetchOrganizerId';
-import RepeatEvent from './RepeatEvent';
-
+import { useMultistepForm } from '../../../hooks/useMultistepForm';
+import BasicInfo from './basicInfo/BasicInfo';
+import EventDetails from './eventDetails/EventDetails';
+import TicketTypesList from './newTickets/TicketTypesList';
 
 interface EventDataProps {
     title: string;
@@ -33,10 +28,21 @@ interface EventDataProps {
     quantity: string | null;
     userInterests?: {
         interestCode: number
-        interestGroupCode:number
+        interestGroupCode: number
     }[]
+};
 
+type TicketProps = {
+    name: string;
+    description?: string;
+    price: number;
+    quantity: number;
+    sales_start: Date;
+    sales_end: Date;
+    is_free: boolean;
+    id: number;
 }
+
 const FeaturedEventsSubmitScreen = () => {
     const [eventData, setEventData] = useState<EventDataProps>({
         title: '',
@@ -49,12 +55,11 @@ const FeaturedEventsSubmitScreen = () => {
     });
 
     console.log(eventData);
-
+    const [tickets, setTickets] = useState<TicketProps[]>([]);
     const [media, setMedia] = useState<ImagePickerAsset | null>(null);
     const currentUser = useSelector(selectCurrentUser);
     const [loading, setLoading] = useState(false);
-    const [isFree, setIsFree] = useState<boolean>(false)
-    const [open, setOpen] = useState(false);
+    // const [isFree, setIsFree] = useState<boolean>(false)
     const [repeatEvent, setRepeatEvent] = useState<boolean>(false);
 
     const navigation = useNavigation<RootStackNavigationProp>();
@@ -77,8 +82,7 @@ const FeaturedEventsSubmitScreen = () => {
         }
     };
 
-    console.log(eventData.userInterests);
-    
+
     const createInterests = async (featured_event_id: number) => {
         const userInterestsData = eventData?.userInterests!.map((interest) => ({
             featured_event_id: featured_event_id,
@@ -116,14 +120,36 @@ const FeaturedEventsSubmitScreen = () => {
             console.error('Error inserting into series :', error.message)
         }
     }
+    console.log(tickets);
 
+    const handleSubmitTickets = async (featured_event_id: number, organizer_id: number) => {
+        const ticketInserts = tickets.map((t) => ({
+            featured_event_id: featured_event_id,
+            organizer_id: organizer_id,
+            name: t.name,
+            description: t.description,
+            is_free: t.is_free,
+            price: t.is_free ?  '0' : t.price,
+            quantity: t.quantity,
+            sales_start: t.sales_start,
+            sales_end: t.sales_end
+        }));
+
+        const { error } = await supabase.from('ticket_types').insert(ticketInserts);
+        if (error) console.error(error.message);
+    }
 
     const submitEvent = async () => {
         setLoading(true);
+        if (tickets.length === 0) {
+            platformAlert('You need to add at least one ticket type');
+            setLoading(false)
+            return;
+        }
         if (
             !eventData?.title?.trim() ||
             !eventData.description?.trim() ||
-            (!isFree && !eventData.price?.trim()) ||
+            // (!isFree && !eventData.price?.trim()) ||
             !eventData.location?.trim() ||
             media === null
         ) {
@@ -131,6 +157,7 @@ const FeaturedEventsSubmitScreen = () => {
             setLoading(false);
             return;
         }
+
 
         if (eventData.userInterests?.length === 0) {
             platformAlert('Please select topics & interests for the event.');
@@ -168,12 +195,10 @@ const FeaturedEventsSubmitScreen = () => {
                 title: eventData?.title,
                 description: eventData?.description,
                 image_url: mediaUrl,
-                price: isFree ? '0' : eventData?.price,
                 location: eventData?.location,
                 date: eventData?.date,
                 time: extractTimeFromDateSubmit(eventData?.date),
                 organizer_id: organizer_id,
-                is_free: isFree,
                 max_tickets: eventData?.quantity,
                 chat_room_id: chatRoomData?.chat_room_id,
                 test: __DEV__ ? true : false
@@ -183,6 +208,7 @@ const FeaturedEventsSubmitScreen = () => {
         if (data) {
             createInterests(data.featured_event_id);
 
+            handleSubmitTickets(data.featured_event_id, organizer_id);
             if (repeatEvent) {
                 handleScheduleEvent(data.featured_event_id);
             }
@@ -191,10 +217,40 @@ const FeaturedEventsSubmitScreen = () => {
             console.error(error.message)
         }
         setLoading(false);
-        navigation.navigate('featuredEvents', {
-            
-        });
+        navigation.navigate('dashboard');
     }
+
+    const {
+        steps,
+        currentStepIndex,
+        step,
+        isFirstStep,
+        isLastStep,
+        next,
+        back
+    } = useMultistepForm(
+        [
+            <BasicInfo
+                setEventData={setEventData}
+                eventData={eventData}
+                repeatEvent={repeatEvent}
+                setRepeatEvent={setRepeatEvent}
+            />,
+            <EventDetails
+                setMedia={setMedia}
+                media={media}
+                setEventData={setEventData}
+                eventData={eventData}
+                userInterests={eventData.userInterests}
+            />,
+            <TicketTypesList
+                tickets={tickets}
+                setTickets={setTickets}
+            />
+
+        ]);
+
+
     if (loading) {
         return <LoadingScreen displayText='Loading...' />
     }
@@ -206,62 +262,30 @@ const FeaturedEventsSubmitScreen = () => {
             // keyboardVerticalOffset={Platform.OS === 'ios' ?  47 : 0}
             style={{ flex: 1 }}
         >
-            <View className=''>
-                <SecondaryHeader
-                    displayText='Create an event'
-                />
+            <View>
+                {step}
             </View>
-            <ScrollView className='px-3 '
-                contentContainerStyle={{ paddingBottom: 100 }}
-            >
-                <MediaPicker
-                    setMedia={setMedia}
-                    media={media}
-                />
-                <TitleInput
-                    setEventData={setEventData}
-                    title={eventData?.title}
-                />
-                <DescriptionInput
-                    setEventData={setEventData}
-                    description={eventData?.description}
-                />
-                <PriceInput
-                    isFree={isFree}
-                    price={eventData?.price}
-                    setEventData={setEventData}
-                    setIsFree={setIsFree}
-                />
-                <Quantity
-                    quantity={eventData?.quantity!}
-                    setEventData={setEventData}
-                />
-                <DateTimeInput
-                    open={open}
-                    date={eventData.date}
-                    setOpen={setOpen}
-                    setEventData={setEventData}
-                />
-                <AddressInput
-                    address={eventData?.location}
-                    setEventData={setEventData}
-                />
-                <InterestsInput
-                    setEventData={setEventData}
-                    userInterests={eventData.userInterests}
-                />
-                <RepeatEvent
-                    repeatEvent={repeatEvent}
-                    setRepeatEvent={setRepeatEvent}
-                />
+            <View className='flex flex-row space-x-5 absolute bottom-28 right-5'>
+                {
+                    !isFirstStep &&
+                    <TouchableOpacity
+                        className='bg-blue-100 border-2 border-blue-600 w-48 p-4 '
+                        onPress={back}>
+                        <Text className='text-center text-lg font-bold'>
+                            Go back
+                        </Text>
+                    </TouchableOpacity>
+                }
+
                 <TouchableOpacity
-                    onPress={() => submitEvent()}
-                    className='bg-black w-1/3 mt-5 rounded-full self-center p-3'>
-                    <Text className='text-white text-xl text-center font-bold'>
-                        Submit
+                    className='bg-black w-48 p-4 '
+                    onPress={isLastStep ? submitEvent : next}>
+                    <Text className='text-white text-center text-lg font-bold'>
+                        {isLastStep ? 'Publish' : 'Continue'}
                     </Text>
                 </TouchableOpacity>
-            </ScrollView>
+
+            </View>
         </KeyboardAvoidingView>
 
     )
