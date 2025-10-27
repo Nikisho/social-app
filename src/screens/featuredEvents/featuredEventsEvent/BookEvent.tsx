@@ -62,9 +62,9 @@ const BookEvent: React.FC<BookEventProps> = ({
     const [selectedTicket, setSelectedTicket] = useState<any>(null);
 
     const canBook = async () => {
-        // if (__DEV__) {
-        //     return true;
-        // }
+        if (__DEV__) {
+            return true;
+        }
         const { count, error } = await supabase
             .from('featured_event_bookings')
             .select('user_id', { count: 'exact' })

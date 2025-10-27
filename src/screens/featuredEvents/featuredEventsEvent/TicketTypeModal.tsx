@@ -1,4 +1,4 @@
-import { View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
+import { View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity, Platform } from 'react-native'
 import React from 'react'
 import { FlatList } from 'react-native-gesture-handler';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
@@ -59,24 +59,24 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                     </Text>
 
                     {hasSalesEnded ? (
-                        <Text className="text-lg font-medium text-gray-500">Sales ended</Text>
+                        <Text className="text-lg font-medium text-gray-900">Sales ended</Text>
                     ) : isSoldOut ? (
-                        <Text className="text-lg font-medium text-red-500">Sold out</Text>
+                        <Text className={`text-lg font-medium ${Platform.OS === 'ios' ? 'text-red-500' : ''}`}>Sold out</Text>
                     ) : item.is_free ? (
-                        <Text className="text-lg font-medium text-green-600">Free</Text>
+                        <Text className="text-lg font-medium">Free</Text>
                     ) : (
                         <Text className="text-lg font-medium text-gray-800">£{item.price}</Text>
                     )}
                 </View>
 
                 {/* Description */}
-                {item.description ? (
+                {!item.description ? (
                     <Text
-                        className="text-gray-600 text-sm mt-2" numberOfLines={3}>
+                        className="text-sm mt-2" numberOfLines={3}>
                         {item.description}
                     </Text>
                 ) : (
-                    <Text className="text-gray-400 text-sm mt-2 italic">
+                    <Text className={` ${Platform.OS === 'ios' ? 'text-gray-400' : 'text-gray-900'} text-sm mt-2 italic`}>
                         No description provided
                     </Text>
                 )}
@@ -92,7 +92,7 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                             <Text className="text font-medium text-gray-900">Sales starts on {formatDateShortWeekday(item.sales_start)} at {extractTimeFromDateSubmit(item.sales_start)}</Text>
                         }
 
-                        <Text className="text-xs text-gray-500">
+                        <Text className="text-xs">
                             {/* Ends {new Date(item.sales_end).toLocaleDateString()} */}
                             Ends {formatDateShortWeekday(item.sales_end)}
                         </Text>
