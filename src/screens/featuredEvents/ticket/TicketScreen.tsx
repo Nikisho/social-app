@@ -9,7 +9,6 @@ import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeek
 import SecondaryHeader from '../../../components/SecondaryHeader';
 import { useTranslation } from 'react-i18next';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
-import PromoterDetails from '../featuredEventsEvent/PromoterDetails';
 import OrganizerInfo from './OrganizerInfo';
 
 interface TicketProps {
@@ -18,6 +17,7 @@ interface TicketProps {
     featured_event_id: number;
     featured_events: {
         title: string;
+        hide_participants: boolean;
         date: string;
         time: string;
         chat_room_id: number;
@@ -51,7 +51,8 @@ const TicketScreen = ({ }) => {
                     description,
                     chat_room_id,
                     location,
-                    organizer_id
+                    organizer_id,
+                    hide_participants
                 )`)
             .eq('ticket_id', ticket_id)
             .single()
@@ -67,6 +68,7 @@ const TicketScreen = ({ }) => {
     useEffect(() => {
         fetchTicket();
     }, []);
+    
     return (
         <ScrollView
             style={{ backgroundColor: colours.primaryColour }}
@@ -138,18 +140,22 @@ const TicketScreen = ({ }) => {
                                     View event
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('attendeelist', {
-                                    featured_event_id: ticket.featured_event_id,
-                                    chat_room_id: ticket.featured_events.chat_room_id
-                                })}
-                                className='py-4 px-5 rounded-full bg-white border flex flex-row space-x-3 justify-center'>
-                                <MaterialIcons name="groups" size={26} color="black" />
+                            {
+                                !ticket.featured_events.hide_participants && (
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('attendeelist', {
+                                            featured_event_id: ticket.featured_event_id,
+                                            chat_room_id: ticket.featured_events.chat_room_id
+                                        })}
+                                        className='py-4 px-5 rounded-full bg-white border flex flex-row space-x-3 justify-center'>
+                                        <MaterialIcons name="groups" size={26} color="black" />
 
-                                <Text className='text-lg text-center font-semibold'>
-                                    View attendees
-                                </Text>
-                            </TouchableOpacity>
+                                        <Text className='text-lg text-center font-semibold'>
+                                            View attendees
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('groupchat', {
                                     featured_event_id: ticket.featured_event_id

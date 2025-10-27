@@ -27,6 +27,7 @@ interface EventDataProps {
     tickets_sold: number;
     date: Date;
     max_tickets: number;
+    hide_participants: boolean;
     chat_room_id: number
     ticket_types: {
         description:string;

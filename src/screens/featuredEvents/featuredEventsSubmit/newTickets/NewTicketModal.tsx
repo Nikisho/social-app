@@ -1,11 +1,12 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal, InputAccessoryView, Button, StyleSheet } from 'react-native'
+import React, { useRef, useState } from 'react'
 import formatDateShortWeekday from '../../../../utils/functions/formatDateShortWeekday';
 import extractTimeFromDateSubmit from '../../../../utils/functions/extractTimeFromDateSubmit';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import DatePicker from 'react-native-date-picker';
 import { uuidv4 } from '../../../../utils/functions/uuidv4';
 import platformAlert from '../../../../utils/functions/platformAlert';
+import DoneKeyboardCloseButton from '../../../../components/DoneKeyboardCloseButton';
 
 type TicketProps = {
     setTickets: any;
@@ -81,7 +82,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
 
         return revenue.toFixed(2);
     };
-
+    const inputAccessoryViewID = 'uniqueID';
 
     return (
         <Modal
@@ -106,7 +107,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                                 ...prevData,
                                 is_free: false
                             }))}
-                            className={`p-4 flex grow items-center ${!ticket.is_free && 'text-blue-300'} `}
+                            className={`p-4 flex grow items-center `}
                             style={{
                                 borderWidth: 0.3,
                                 borderColor: ticket.is_free ? '#000000' : 'blue',
@@ -126,7 +127,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                             className='p-4 flex  grow items-center  '
                             style={{
                                 borderWidth: 0.3,
-                                borderColor: '#000000'
+                                borderColor: !ticket.is_free ? '#000000' : 'blue',
                             }}
                         >
                             <Text className={`font-semibold ${ticket.is_free && 'text-blue-500'}`}>
@@ -161,8 +162,10 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                             <Text className='text-red-400'> *  </Text>
                         </Text>
 
+
                         <TextInput
                             value={ticket.description}
+                            inputAccessoryViewID={inputAccessoryViewID}
                             multiline
                             placeholder='Add a description for your ticket'
                             maxLength={120}
@@ -173,6 +176,9 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                                 }))
                             }}
                             className=' h-16 px-5'
+                        />
+                        <DoneKeyboardCloseButton
+                            inputAccessoryViewID={inputAccessoryViewID}
                         />
                     </View>
                     <View className='border my-'>
@@ -186,6 +192,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                             placeholder='20'
                             keyboardType='numeric'
                             maxLength={10}
+                            returnKeyType='done'
                             onChangeText={(value) => {
                                 setTicket((prevData: any) => ({
                                     ...prevData,
@@ -206,6 +213,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                         <TextInput
                             value={ticket.price!}
                             editable={!ticket.is_free}
+                            returnKeyType='done'
                             placeholder='£0.00'
                             keyboardType='numeric'
                             maxLength={10}
@@ -330,3 +338,20 @@ const NewTicketsModal: React.FC<TicketProps> = ({
 }
 
 export default NewTicketsModal
+
+const styles = StyleSheet.create({
+    textInput: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        minHeight: 120,
+        margin: 20,
+    },
+    accessory: {
+        backgroundColor: '#f7f7f7',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        alignItems: 'flex-end',
+    },
+});

@@ -8,17 +8,23 @@ import { selectCurrentUser } from '../../../context/navSlice';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { getColorFromName } from '../../../utils/functions/getColorFromName';
 import { useTranslation } from 'react-i18next';
+import styles from '../../../utils/styles/shadow';
+import Entypo from '@expo/vector-icons/Entypo';
 
 interface AttendeeProps {
     id: number;
-    users: { name: string, photo: string, id: number }
+    users: { name: string, photo: string, id: number };
 }
 
-const Attendees = ({ 
-    featured_event_id, 
-    chat_room_id, 
-    organizers }: { featured_event_id: number, chat_room_id: number, organizers: { user_id: number }
- }) => {
+interface AttendeesProps {
+    featured_event_id: number, chat_room_id: number, organizers: { user_id: number }, hide_participants: boolean;
+}
+
+const Attendees: React.FC<AttendeesProps> = ({
+    featured_event_id,
+    chat_room_id,
+    hide_participants,
+    organizers }) => {
 
     const [attendees, setAttendees] = useState<AttendeeProps[]>();
     const { t } = useTranslation();
@@ -46,20 +52,35 @@ const Attendees = ({
         if (error) {
             throw error.message;
         }
-
         return null;
     };
 
-
+    const handleNavigateGroupChat = async () => {
+        const response = await fetchAttendees();
+        const attendeeIds = response?.map(attendee => attendee.users.id);
+        if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
+            platformAlert("Join the event to see who's going and chat with them!");
+            return;
+        }
+        navigation.navigate('groupchat', {
+            featured_event_id: featured_event_id
+        })
+    }
     const handleNavigate = async () => {
         // const attendeeIds = data?.map(attendee => attendee.users.id);
-        const response  =  await fetchAttendees();
+        const response = await fetchAttendees();
         const attendeeIds = response?.map(attendee => attendee.users.id);
 
         if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
             platformAlert("Join the event to see who's going and chat with them!");
             return;
         }
+
+        if (hide_participants && !isOrganizer ) {
+            platformAlert('The organiser has chosen to hide the participants for this event.');
+            return;
+        }
+
         navigation.navigate('attendeelist', {
             featured_event_id: featured_event_id,
             chat_room_id: chat_room_id
@@ -104,20 +125,36 @@ const Attendees = ({
     }
 
     return (
-        <TouchableOpacity
-            onPress={handleNavigate}
-            className='p-2'>
-            <Text className='text-xl font-bold'>
-                {t('featured_event_screen.going')} {'  ' + attendees?.length.toString()}
-            </Text>
-            <FlatList
-                horizontal
-                data={attendees?.slice(0, 3)}
-                renderItem={renderItem}
-                keyExtractor={item => item.id.toString()}
-            />
+        <View className='flex flex-row justify-between mx-2'>
+            <TouchableOpacity
+                onPress={handleNavigate}
+                className='p-2'>
+                <Text className='text-xl font-bold'>
+                    {t('featured_event_screen.going')} {attendees?.length !== 0  && '  ' + attendees?.length.toString()}
+                </Text>
+                {
+                    attendees?.length !== 0 ?
 
-        </TouchableOpacity>
+                    <FlatList
+                        horizontal
+                        data={attendees?.slice(0, 3)}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id.toString()}
+                    /> :
+                    <Text className='italic my-2'>No attendees yet</Text>
+                }
+
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={handleNavigateGroupChat}
+                style={styles.shadow}
+                className='border h-10 mt-5 px-3 self-center rounded-xl bg-black flex-row justify-center space-x-3 items-center'>
+                <Entypo name="chat" size={20} color="white" />
+                <Text className='text-white text-center font-bold'>
+                    Event chat
+                </Text>
+            </TouchableOpacity>
+        </View>
     )
 }
 

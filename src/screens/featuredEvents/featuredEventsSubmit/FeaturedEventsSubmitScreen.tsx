@@ -26,6 +26,7 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
+    hide_participants?: boolean;
     userInterests?: {
         interestCode: number
         interestGroupCode: number
@@ -51,7 +52,8 @@ const FeaturedEventsSubmitScreen = () => {
         location: '',
         quantity: null,
         date: new Date((new Date()).setHours(12, 0, 0, 0)),
-        userInterests: []
+        userInterests: [],
+        hide_participants: false
     });
 
     console.log(eventData);
@@ -129,7 +131,7 @@ const FeaturedEventsSubmitScreen = () => {
             name: t.name,
             description: t.description,
             is_free: t.is_free,
-            price: t.is_free ?  '0' : t.price,
+            price: t.is_free ? '0' : t.price,
             quantity: t.quantity,
             sales_start: t.sales_start,
             sales_end: t.sales_end
@@ -201,7 +203,8 @@ const FeaturedEventsSubmitScreen = () => {
                 organizer_id: organizer_id,
                 max_tickets: eventData?.quantity,
                 chat_room_id: chatRoomData?.chat_room_id,
-                test: __DEV__ ? true : false
+                test: __DEV__ ? true : false,
+                hide_participants: eventData?.hide_participants
             })
             .select('featured_event_id')
             .single()
@@ -265,26 +268,33 @@ const FeaturedEventsSubmitScreen = () => {
             <View>
                 {step}
             </View>
-            <View className='flex flex-row space-x-5 absolute bottom-28 right-5'>
-                {
-                    !isFirstStep &&
+
+            <View className='absolute bottom-28 flex self-center w-full h-14 items-center justify-center '>
+
+                <View className='flex flex-row space-x-5 justify-between w-full px-5'>
+                    {
+                        !isFirstStep ?
+                        <TouchableOpacity
+                            className='bg-blue-100 border-2 border-blue-600 w-32 p-4 '
+                            onPress={back}>
+                            <Text className='text-center text-lg font-bold'>
+                                Go back
+                            </Text>
+                        </TouchableOpacity> :
+                        <View>
+
+                        </View>
+                    }
+
                     <TouchableOpacity
-                        className='bg-blue-100 border-2 border-blue-600 w-48 p-4 '
-                        onPress={back}>
-                        <Text className='text-center text-lg font-bold'>
-                            Go back
+                        className='bg-black p-4 w-32 '
+                        onPress={isLastStep ? submitEvent : next}>
+                        <Text className='text-white text-center text-lg font-bold'>
+                            {isLastStep ? 'Publish' : 'Continue'}
                         </Text>
                     </TouchableOpacity>
-                }
 
-                <TouchableOpacity
-                    className='bg-black w-48 p-4 '
-                    onPress={isLastStep ? submitEvent : next}>
-                    <Text className='text-white text-center text-lg font-bold'>
-                        {isLastStep ? 'Publish' : 'Continue'}
-                    </Text>
-                </TouchableOpacity>
-
+                </View>
             </View>
         </KeyboardAvoidingView>
 

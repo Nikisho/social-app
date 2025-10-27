@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import TitleInput from './TitleInput'
 import AddressInput from './AddressInput';
 import DateTimeInput from './DateTimeInput';
+import HideParticipants from './HideParticipants';
 
 
 interface EventDataProps {
@@ -12,6 +13,7 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
+    hide_participants?: boolean;
 
 }
 
@@ -60,6 +62,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                 setEventData={setEventData}
                 setRepeatEvent={setRepeatEvent}
             />
+            <HideParticipants
+                hide_participants={eventData.hide_participants!}
+                setEventData={setEventData}
+                />
         </View>
     )
 }

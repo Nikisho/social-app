@@ -2,6 +2,8 @@ import { View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity } from 'r
 import React from 'react'
 import { FlatList } from 'react-native-gesture-handler';
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday';
+import extractTimeFromDate from '../../../utils/functions/extractTimeFromDate';
+import extractTimeFromDateSubmit from '../../../utils/functions/extractTimeFromDateSubmit';
 
 
 interface ticket_type_props {
@@ -42,6 +44,7 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
         const now = new Date();
         const hasSalesEnded = new Date(item.sales_end).getTime() <= now.getTime();
         const salesNotStarted = new Date(item.sales_start).getTime() > now.getTime();
+        console.log(now.getTime())
         return (
             <TouchableOpacity
                 disabled={isSoldOut || hasSalesEnded || salesNotStarted}
@@ -61,16 +64,14 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                         <Text className="text-lg font-medium text-red-500">Sold out</Text>
                     ) : item.is_free ? (
                         <Text className="text-lg font-medium text-green-600">Free</Text>
-                    ) : salesNotStarted ? 
-                        <Text className="text-lg font-medium text-gray-500">Sales starts on {formatDateShortWeekday(item.sales_start)}</Text>
-                       : (
+                    ) : (
                         <Text className="text-lg font-medium text-gray-800">£{item.price}</Text>
                     )}
                 </View>
 
                 {/* Description */}
                 {item.description ? (
-                    <Text 
+                    <Text
                         className="text-gray-600 text-sm mt-2" numberOfLines={3}>
                         {item.description}
                     </Text>
@@ -85,13 +86,20 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                     {/* <Text className="text-xs text-gray-500">
                         {item.tickets_sold}/{item.quantity} sold
                     </Text> */}
-                    <Text className="text-xs text-gray-500">
-                        {/* Ends {new Date(item.sales_end).toLocaleDateString()} */}
-                        Ends {formatDateShortWeekday(item.sales_end)}
-                    </Text>
+                    <View>
+                        {
+                            salesNotStarted &&
+                            <Text className="text font-medium text-gray-900">Sales starts on {formatDateShortWeekday(item.sales_start)} at {extractTimeFromDateSubmit(item.sales_start)}</Text>
+                        }
+
+                        <Text className="text-xs text-gray-500">
+                            {/* Ends {new Date(item.sales_end).toLocaleDateString()} */}
+                            Ends {formatDateShortWeekday(item.sales_end)}
+                        </Text>
+                    </View>
+
                 </View>
             </TouchableOpacity>
-
         )
     }
     return (
@@ -113,7 +121,7 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                         </View>
                         <FlatList
                             contentContainerStyle={{
-                                paddingBottom:100
+                                paddingBottom: 100
                             }}
                             data={ticket_types}
                             renderItem={renderItem}

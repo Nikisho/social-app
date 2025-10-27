@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import SecondaryHeader from '../../../../components/SecondaryHeader'
 import MediaPicker from './MediaPicker'
@@ -36,7 +36,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({
 }) => {
     
     return (
-        <View className='flex mx-4' >
+        <ScrollView className='flex mx-4' 
+            contentContainerStyle={{
+                paddingBottom: 300
+            }}
+            >
             <View className={`mb-5`} >
                 <Text className='text-2xl font-semibold '>
                     Event details
@@ -63,7 +67,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 userInterests={userInterests}
                 setEventData={setEventData}
             />
-        </View>
+        </ScrollView>
     )
 }
 

@@ -8,6 +8,9 @@ import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeek
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import styles from '../../../utils/styles/shadow';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import platformAlert from '../../../utils/functions/platformAlert';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../context/navSlice';
 
 interface ChatHeaderProps {
     title: string;
@@ -15,8 +18,11 @@ interface ChatHeaderProps {
     featured_event_id: number;
     date: string;
     time: string;
-    chat_room_id:number;
-    // blockAndReportUser: () => void;
+    chat_room_id: number;
+    hide_participants:boolean;
+    organizers: {
+        user_id: number;
+    }
 }
 
 const GroupChatHeader: React.FC<ChatHeaderProps> = ({
@@ -25,14 +31,29 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
     featured_event_id,
     date,
     time,
-    chat_room_id
+    chat_room_id,
+    hide_participants,
+    organizers
 }) => {
 
     const navigation = useNavigation<RootStackNavigationProp>();
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const blurb_message = `Use this group to coordinate arrivals, ask questions, and meet people attending!`;
     const fadeAnim = useRef(new Animated.Value(0)).current; // start invisible
+    const currentUser = useSelector(selectCurrentUser);
+    const isOrganizer = currentUser.id === organizers.user_id
+    console.log(isOrganizer)
+    const handleViewParticipants = async () => {
+        if (hide_participants && !isOrganizer) {
+            platformAlert('The organiser has chosen to hide the participants for this event.'); 
+            return;
+        }
+        navigation.navigate('attendeelist', {
+            featured_event_id: featured_event_id,
+            chat_room_id: chat_room_id
+        })
 
+    }
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
@@ -40,6 +61,7 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
             useNativeDriver: true,
         }).start();
     }, []);
+
     return (
         <>
             <View className='flex flex-row justify-between items-center bg-gray-200'>
@@ -90,12 +112,7 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
                             </Text>
 
                             <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate('attendeelist', {
-                                        featured_event_id: featured_event_id,
-                                        chat_room_id: chat_room_id
-                                    })
-                                }}
+                                onPress={handleViewParticipants}
                                 style={styles.shadow}
                                 className='flex flex-row justify-center bg-white items-center space-x-2  rounded-full w-2/3 p-1 px-2'>
                                 <MaterialIcons name="groups" size={24} color="black" />
