@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SecondaryHeader from '../../../components/SecondaryHeader'
 import { ImagePickerAsset } from 'expo-image-picker';
 import MediaPicker from './eventDetails/MediaPicker';
@@ -18,6 +18,7 @@ import { useMultistepForm } from '../../../hooks/useMultistepForm';
 import BasicInfo from './basicInfo/BasicInfo';
 import EventDetails from './eventDetails/EventDetails';
 import TicketTypesList from './newTickets/TicketTypesList';
+import { useKeyboardListener } from '../../../hooks/useKeyboardListener';
 
 interface EventDataProps {
     title: string;
@@ -55,17 +56,17 @@ const FeaturedEventsSubmitScreen = () => {
         userInterests: [],
         hide_participants: false
     });
-
-    console.log(eventData);
     const [tickets, setTickets] = useState<TicketProps[]>([]);
     const [media, setMedia] = useState<ImagePickerAsset | null>(null);
     const currentUser = useSelector(selectCurrentUser);
     const [loading, setLoading] = useState(false);
-    // const [isFree, setIsFree] = useState<boolean>(false)
     const [repeatEvent, setRepeatEvent] = useState<boolean>(false);
 
     const navigation = useNavigation<RootStackNavigationProp>();
 
+    const isKeyboardVisible = useKeyboardListener();
+
+    console.log('The keyboard is up :', isKeyboardVisible)
     const uploadEventMediaToStorageBucket = async (file: string, unique_file_identifier: string, organizer_id: number) => {
         const arrayBuffer = decode(file);
         try {
@@ -122,7 +123,6 @@ const FeaturedEventsSubmitScreen = () => {
             console.error('Error inserting into series :', error.message)
         }
     }
-    console.log(tickets);
 
     const handleSubmitTickets = async (featured_event_id: number, organizer_id: number) => {
         const ticketInserts = tickets.map((t) => ({
@@ -253,7 +253,6 @@ const FeaturedEventsSubmitScreen = () => {
 
         ]);
 
-
     if (loading) {
         return <LoadingScreen displayText='Loading...' />
     }
@@ -269,33 +268,37 @@ const FeaturedEventsSubmitScreen = () => {
                 {step}
             </View>
 
-            <View className='absolute bottom-28 flex self-center w-full h-14 items-center justify-center '>
+            {
+                (Platform.OS === 'android' && !isKeyboardVisible) &&
+                <View
+                    className={`absolute ${Platform.OS !== 'android' ? 'bottom-28' : 'bottom-20'} flex self-center w-full h-14 items-center justify-center `}>
 
-                <View className='flex flex-row space-x-5 justify-between w-full px-5'>
-                    {
-                        !isFirstStep ?
+                    <View className='flex flex-row space-x-5 justify-between w-full px-5'>
+                        {
+                            !isFirstStep ?
+                                <TouchableOpacity
+                                    className='bg-blue-100 border-2 border-blue-600 w-32 px-4 justify-center'
+                                    onPress={back}>
+                                    <Text className='text-center text-lg font-bold'>
+                                        Go back
+                                    </Text>
+                                </TouchableOpacity> :
+                                <View>
+
+                                </View>
+                        }
+
                         <TouchableOpacity
-                            className='bg-blue-100 border-2 border-blue-600 w-32 p-4 '
-                            onPress={back}>
-                            <Text className='text-center text-lg font-bold'>
-                                Go back
+                            className='bg-black p-4 w-32  '
+                            onPress={isLastStep ? submitEvent : next}>
+                            <Text className='text-white text-center text-lg font-bold'>
+                                {isLastStep ? 'Publish' : 'Continue'}
                             </Text>
-                        </TouchableOpacity> :
-                        <View>
+                        </TouchableOpacity>
 
-                        </View>
-                    }
-
-                    <TouchableOpacity
-                        className='bg-black p-4 w-32 '
-                        onPress={isLastStep ? submitEvent : next}>
-                        <Text className='text-white text-center text-lg font-bold'>
-                            {isLastStep ? 'Publish' : 'Continue'}
-                        </Text>
-                    </TouchableOpacity>
-
+                    </View>
                 </View>
-            </View>
+            }
         </KeyboardAvoidingView>
 
     )

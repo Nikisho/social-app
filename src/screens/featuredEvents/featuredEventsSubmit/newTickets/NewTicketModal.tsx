@@ -145,7 +145,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                         <TextInput
                             value={ticket.name}
                             placeholder='Add a title for your ticket'
-                            maxLength={60}
+                            maxLength={30}
                             onChangeText={(value) => {
                                 setTicket((prevData: any) => ({
                                     ...prevData,
@@ -168,7 +168,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                             inputAccessoryViewID={inputAccessoryViewID}
                             multiline
                             placeholder='Add a description for your ticket'
-                            maxLength={120}
+                            maxLength={100}
                             onChangeText={(value) => {
                                 setTicket((prevData: any) => ({
                                     ...prevData,
@@ -191,7 +191,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                             value={ticket.quantity}
                             placeholder='20'
                             keyboardType='numeric'
-                            maxLength={10}
+                            maxLength={5}
                             returnKeyType='done'
                             onChangeText={(value) => {
                                 setTicket((prevData: any) => ({

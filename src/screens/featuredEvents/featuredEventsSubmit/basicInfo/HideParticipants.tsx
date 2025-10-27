@@ -17,7 +17,6 @@ const HideParticipants:React.FC<HideParticipantsProps> = ({
     hide_participants,
     setEventData
 }) => {
-    console.log(hide_participants)
     return (
         <View>
             <Text className='font-semibold mt-3 px-5'>
