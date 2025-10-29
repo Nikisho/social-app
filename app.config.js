@@ -48,7 +48,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.3.8",
+    version: "1.3.9",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
