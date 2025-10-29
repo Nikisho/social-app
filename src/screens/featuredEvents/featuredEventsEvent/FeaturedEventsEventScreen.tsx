@@ -25,6 +25,8 @@ interface EventDataProps {
     is_free: boolean;
     featured_event_id: number;
     tickets_sold: number;
+        end_date: Date;
+    end_time: string;
     date: Date;
     max_tickets: number;
     hide_participants: boolean;

@@ -7,7 +7,10 @@ interface EventDataProps {
     price: string;
     location: string;
     date: Date;
+    end_datetime: Date;
     quantity: string | null;
+    hide_participants?: boolean;
+
 }
 interface HideParticipantsProps {
     hide_participants: boolean;

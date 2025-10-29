@@ -12,6 +12,7 @@ interface EventDataProps {
     price: string;
     location: string;
     date: Date;
+    end_datetime: Date;
     quantity: string | null;
     hide_participants?: boolean;
 
@@ -61,6 +62,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
             <DateTimeInput
                 open={open}
                 date={eventData.date}
+                end_datetime={eventData.end_datetime}
                 repeatEvent={repeatEvent}
                 setOpen={setOpen}
                 setEventData={setEventData}

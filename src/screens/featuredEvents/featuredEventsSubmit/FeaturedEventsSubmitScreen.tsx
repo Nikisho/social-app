@@ -27,6 +27,7 @@ interface EventDataProps {
     price: string;
     location: string;
     date: Date;
+    end_datetime: Date;
     quantity: string | null;
     hide_participants?: boolean;
     userInterests?: {
@@ -54,6 +55,7 @@ const FeaturedEventsSubmitScreen = () => {
         location: '',
         quantity: null,
         date: new Date((new Date()).setHours(12, 0, 0, 0)),
+        end_datetime: new Date((new Date()).setHours(17, 0, 0, 0)),
         userInterests: [],
         hide_participants: false
     });
@@ -144,6 +146,12 @@ const FeaturedEventsSubmitScreen = () => {
 
     const submitEvent = async () => {
         setLoading(true);
+        if (eventData.date >= eventData.end_datetime) {
+            platformAlert('The start date/time must be before the end date/time.');
+            setLoading(false);
+
+            return;
+        }
         if (tickets.length === 0) {
             platformAlert('You need to add at least one ticket type');
             setLoading(false);
@@ -227,6 +235,8 @@ const FeaturedEventsSubmitScreen = () => {
                 location: eventData?.location,
                 date: eventData?.date,
                 time: extractTimeFromDateSubmit(eventData?.date),
+                end_time: extractTimeFromDateSubmit(eventData?.end_datetime),
+                end_date: eventData?.end_datetime,
                 organizer_id: organizer_id,
                 max_tickets: eventData?.quantity,
                 chat_room_id: chatRoomData?.chat_room_id,
@@ -291,36 +301,36 @@ const FeaturedEventsSubmitScreen = () => {
             <View>
                 {step}
             </View>
-                <View
-                    className={`absolute ${Platform.OS !== 'android' ? 'bottom-28' : 'bottom-20'} flex self-center w-full h-14 items-center justify-center `}>
+            <View
+                className={`absolute ${Platform.OS !== 'android' ? 'bottom-28' : 'bottom-20'} flex self-center w-full h-14 items-center justify-center `}>
 
-                    <View className='flex flex-row space-x-5 justify-between w-full px-5'>
-                        {
-                            !isFirstStep ?
-                                <TouchableOpacity
-                                    style={styles.shadow}
-                                    className='bg-blue-500 rounded-lg w-1/3 p-3 justify-center'
-                                    onPress={back}>
-                                    <Text className='text-center text-white text-lg font-bold'>
-                                        Go back
-                                    </Text>
-                                </TouchableOpacity> :
-                                <View>
+                <View className='flex flex-row space-x-5 justify-between w-full px-5'>
+                    {
+                        !isFirstStep ?
+                            <TouchableOpacity
+                                style={styles.shadow}
+                                className='bg-blue-500 rounded-lg w-1/3 p-3 justify-center'
+                                onPress={back}>
+                                <Text className='text-center text-white text-lg font-bold'>
+                                    Go back
+                                </Text>
+                            </TouchableOpacity> :
+                            <View>
 
-                                </View>
-                        }
+                            </View>
+                    }
 
-                        <TouchableOpacity
-                            style={styles.shadow}
-                            className='bg-black rounded-lg p-3  w-1/3 '
-                            onPress={isLastStep ? submitEvent : next}>
-                            <Text className='text-white text-center text-lg font-bold'>
-                                {isLastStep ? 'Publish' : 'Continue'}
-                            </Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.shadow}
+                        className='bg-black rounded-lg p-3  w-1/3 '
+                        onPress={isLastStep ? submitEvent : next}>
+                        <Text className='text-white text-center text-lg font-bold'>
+                            {isLastStep ? 'Publish' : 'Continue'}
+                        </Text>
+                    </TouchableOpacity>
 
-                    </View>
                 </View>
+            </View>
         </View>
 
     )

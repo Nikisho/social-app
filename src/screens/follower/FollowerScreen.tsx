@@ -120,7 +120,7 @@ const FollowerScreen = () => {
                             data={followers}
                             renderItem={({ item }) => <RenderItem item={item} />}
                             keyExtractor={item => item.id.toString()}
-                            contentContainerStyle={{ paddingBottom: 100 }}
+                            contentContainerStyle={{ paddingBottom: 200 }}
                         />
                     ) : (
                         <View className="h-1/2 justify-center items-center p-6">

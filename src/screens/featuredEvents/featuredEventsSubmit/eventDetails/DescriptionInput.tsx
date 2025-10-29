@@ -9,7 +9,7 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
-
+    end_datetime: Date;
 }
 
 interface DescriptionInputProps {

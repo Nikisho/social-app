@@ -18,6 +18,8 @@ interface EventDataProps {
     is_free: boolean;
     date: Date;
     featured_event_id: number;
+    end_date: Date;
+    end_time: string;
 
 }
 const FeaturedEventDetails: React.FC<EventDataProps> = ({
@@ -26,7 +28,9 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
     description,
     date,
     time,
-    featured_event_id
+    featured_event_id,
+    end_date,
+    end_time,
 }) => {
     const { t } = useTranslation();
     const [textShown, setTextShown] = useState(false); //To show ur remaining Text
@@ -70,28 +74,43 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                     justify-end
                     w-full h-80 oversize-hidden mt-3 rounded-xl'
             >
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => handleShareEventLink()}
                     style={styles.shadowButtonStyle}
                     className='bg-black p-3 m-5 rounded-full justify-center flex'>
                     <Ionicons name="share-social-outline" size={25} color="white" />
                 </TouchableOpacity>
             </FastImage>
+            <View className="m-2 p-4 bg-white rounded-2xl shadow-sm">
+                <View className="flex flex-row justify-between items-center">
+                    <View className="flex-1">
+                        <Text className="text-gray-900 text-lg font-semibold mb-2">Event timing</Text>
 
-            <Text 
-                selectable
-                className='px-3 my-2 text-amber-800 text-lg font-semibold' >
-                {
-                    date && time && (formatDateShortWeekday(date) + ', ' + (time).slice(0, -3))
-                }
-            </Text>
+                        <View className="flex flex-row space-x-2 mt-1">
+                            <Text className="text-gray-600 font-medium">Starts:</Text>
+                            <Text className="text-gray-800 font-semibold">
+                                {date && time && `${formatDateShortWeekday(date)}, ${time.slice(0, -3)}`}
+                            </Text>
+                        </View>
+
+                        <View className="flex flex-row space-x-2 mt-1">
+                            <Text className="text-gray-600 font-medium">Ends:</Text>
+                            <Text className="text-gray-800 font-semibold">
+                                {end_date && end_time && `${formatDateShortWeekday(end_date)}, ${end_time.slice(0, -3)}`}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+
+
 
             <View className='px-2'>
 
                 <View className='mb-4 flex flex-row items-center'>
                     <Entypo name="location-pin" size={24} color="black" />
 
-                    <Text 
+                    <Text
                         selectable
                         className='text-lg'>
                         {location}
@@ -118,7 +137,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                 {
                     lengthMore ? <Text
                         onPress={toggleNumberOfLines}
-                        style={{ lineHeight: 21, marginTop: 10, fontSize: 15 }}>{textShown ? `${t('featured_event_screen.read_less')}...` :` ${t('featured_event_screen.read_more')}...`}</Text>
+                        style={{ lineHeight: 21, marginTop: 10, fontSize: 15 }}>{textShown ? `${t('featured_event_screen.read_less')}...` : ` ${t('featured_event_screen.read_more')}...`}</Text>
                         : null
                 }
             </View>

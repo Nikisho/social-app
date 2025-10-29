@@ -13,7 +13,7 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
-
+    end_datetime: Date;
 }
 
 interface EventDetailsProps {
@@ -39,7 +39,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     return (
         <ScrollView className={`flex mx-4 ${deviceHeight < 650 && 'h-2/3'}`}
             contentContainerStyle={{
-                paddingBottom: 250
+                paddingBottom: 350
             }}
         >
             <View className={`mb-5`} >
