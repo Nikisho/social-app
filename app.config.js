@@ -62,7 +62,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.2.13',
+      buildNumber: '1.2.14',
       deploymentTarget: "12.0"
     },
     android: {
@@ -70,7 +70,7 @@ export default {
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,
-      versionCode: 33,
+      versionCode: 34,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
