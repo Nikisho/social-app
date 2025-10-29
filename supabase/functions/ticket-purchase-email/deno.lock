@@ -1,7 +1,16 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@supabase/functions-js@*": "2.5.0",
     "npm:openai@^4.52.5": "4.104.0"
+  },
+  "jsr": {
+    "@supabase/functions-js@2.5.0": {
+      "integrity": "c48e3fc5da1510ce6dab34af3fc49cd637ea7b721d92faffd0545cbdcc548430",
+      "dependencies": [
+        "npm:openai"
+      ]
+    }
   },
   "npm": {
     "@types/node-fetch@2.6.13": {

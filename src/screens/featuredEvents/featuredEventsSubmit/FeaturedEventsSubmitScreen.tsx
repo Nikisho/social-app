@@ -19,6 +19,7 @@ import BasicInfo from './basicInfo/BasicInfo';
 import EventDetails from './eventDetails/EventDetails';
 import TicketTypesList from './newTickets/TicketTypesList';
 import { useKeyboardListener } from '../../../hooks/useKeyboardListener';
+import styles from '../../../utils/styles/shadow';
 
 interface EventDataProps {
     title: string;
@@ -145,9 +146,41 @@ const FeaturedEventsSubmitScreen = () => {
         setLoading(true);
         if (tickets.length === 0) {
             platformAlert('You need to add at least one ticket type');
-            setLoading(false)
+            setLoading(false);
             return;
         }
+
+        if (!eventData?.title?.trim()) {
+            platformAlert('Please enter a title for your event.');
+            setLoading(false);
+            return;
+        }
+
+        if (!eventData.location?.trim()) {
+            platformAlert('Please choose a location for your event.');
+            setLoading(false);
+            return;
+        }
+
+        if (!eventData.description?.trim()) {
+            platformAlert('Please enter a description for your event.');
+            setLoading(false);
+            return;
+
+        }
+
+        if (media === null) {
+            platformAlert('Please select a main image for your event.');
+            setLoading(false);
+            return;
+        }
+
+        if (eventData.userInterests?.length === 0) {
+            platformAlert('Please select topics & interests for the event.');
+            setLoading(false);
+            return;
+        }
+
         if (
             !eventData?.title?.trim() ||
             !eventData.description?.trim() ||
@@ -160,12 +193,6 @@ const FeaturedEventsSubmitScreen = () => {
             return;
         }
 
-
-        if (eventData.userInterests?.length === 0) {
-            platformAlert('Please select topics & interests for the event.');
-            setLoading(false);
-            return;
-        }
         const organizer_id = await fetchOrganizerId(currentUser.id);
         const unique_file_identifier = uuidv4(9);
         const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/featured-events/${organizer_id}/${unique_file_identifier}.jpg`
@@ -259,17 +286,11 @@ const FeaturedEventsSubmitScreen = () => {
 
     return (
 
-        <KeyboardAvoidingView className=''
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            // keyboardVerticalOffset={Platform.OS === 'ios' ?  47 : 0}
-            style={{ flex: 1 }}
+        <View className='flex-1'
         >
             <View>
                 {step}
             </View>
-
-            {
-                (Platform.OS === 'android' && !isKeyboardVisible) &&
                 <View
                     className={`absolute ${Platform.OS !== 'android' ? 'bottom-28' : 'bottom-20'} flex self-center w-full h-14 items-center justify-center `}>
 
@@ -277,9 +298,10 @@ const FeaturedEventsSubmitScreen = () => {
                         {
                             !isFirstStep ?
                                 <TouchableOpacity
-                                    className='bg-blue-100 border-2 border-blue-600 w-32 px-4 justify-center'
+                                    style={styles.shadow}
+                                    className='bg-blue-500 rounded-lg w-1/3 p-3 justify-center'
                                     onPress={back}>
-                                    <Text className='text-center text-lg font-bold'>
+                                    <Text className='text-center text-white text-lg font-bold'>
                                         Go back
                                     </Text>
                                 </TouchableOpacity> :
@@ -289,7 +311,8 @@ const FeaturedEventsSubmitScreen = () => {
                         }
 
                         <TouchableOpacity
-                            className='bg-black p-4 w-32  '
+                            style={styles.shadow}
+                            className='bg-black rounded-lg p-3  w-1/3 '
                             onPress={isLastStep ? submitEvent : next}>
                             <Text className='text-white text-center text-lg font-bold'>
                                 {isLastStep ? 'Publish' : 'Continue'}
@@ -298,8 +321,7 @@ const FeaturedEventsSubmitScreen = () => {
 
                     </View>
                 </View>
-            }
-        </KeyboardAvoidingView>
+        </View>
 
     )
 }

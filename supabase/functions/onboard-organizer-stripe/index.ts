@@ -52,7 +52,7 @@ Deno.serve(async (req) => {
     const accountLink = await stripe.accountLinks.create({
       account: accountId,
       refresh_url: "https://com.linkzy",
-      return_url: "https://www.linkzyapp.com",
+      return_url: "https://www.linkzyapp.com/onboarding-complete.html",
       type: "account_onboarding",
     });
 

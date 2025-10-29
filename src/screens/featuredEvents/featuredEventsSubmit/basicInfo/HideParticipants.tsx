@@ -19,7 +19,7 @@ const HideParticipants:React.FC<HideParticipantsProps> = ({
 }) => {
     return (
         <View>
-            <Text className='font-semibold mt-3 px-5'>
+            <Text className='font-semibold px-5'>
                 Hide participants
                 <Text className='text-red-400'> *  </Text>
             </Text>

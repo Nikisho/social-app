@@ -12,7 +12,7 @@ import { getColorFromName } from '../../utils/functions/getColorFromName';
 const FollowerScreen = () => {
     const route = useRoute<ProfileScreenRouteProp>();
     const { user_id } = route.params;
-    const [followers, setFollowers] = useState<any>();
+    const [followers, setFollowers] = useState<any>([]);
     const currentUser = useSelector(selectCurrentUser);
     const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -28,6 +28,7 @@ const FollowerScreen = () => {
 
         // Step 2: get user details
         const followerIds = followers.map(f => f.follower_id);
+        console.log(followerIds.length)
         if (followerIds.length > 0) {
             const { data: userData, error: usersError } = await supabase
                 .from('users')
@@ -36,7 +37,7 @@ const FollowerScreen = () => {
 
             if (usersError) throw usersError;
             setFollowers(userData);
-            console.log(userData)
+            console.log(userData.length)
         }
     }
 
@@ -114,7 +115,7 @@ const FollowerScreen = () => {
             {
                 followers && (
                     <>
-                    {followers?.length ? (
+                    {followers?.length !== 0  ? (
                         <FlatList
                             data={followers}
                             renderItem={({ item }) => <RenderItem item={item} />}

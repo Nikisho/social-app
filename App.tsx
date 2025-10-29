@@ -111,6 +111,7 @@ function AppSafeAreaWrapper() {
 		config: {
 			screens: {
 				resetpassword: 'resetpassword',
+				organizeronboarding: 'organizerOnboarding',
 				featuredeventsevent: {
 					path: 'featuredeventsevent',
 					parse: {

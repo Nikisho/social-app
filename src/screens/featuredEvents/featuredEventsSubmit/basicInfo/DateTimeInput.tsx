@@ -5,6 +5,7 @@ import formatDate from '../../../../utils/functions/formatDate';
 import extractTimeFromDateSubmit from '../../../../utils/functions/extractTimeFromDateSubmit';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import formatDateShortWeekday from '../../../../utils/functions/formatDateShortWeekday';
+import platformAlert from '../../../../utils/functions/platformAlert';
 
 interface EventDataProps {
     title: string;
@@ -34,12 +35,12 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
     setRepeatEvent
 }) => {
     console.log(repeatEvent)
-    const infoMessage = "If selected, this event will auto-schedule every Sunday for the week after next.";
+    const infoMessage = "If selected, this event will auto repost weekly";
 
     return (
-        <View className='border my-7 px-5  space-y-4'>
+        <View className='border mb-3 px-5  space-y-4'>
 
-            <Text className='font-semibold mt-3 '>
+            <Text className='font-semibold mt-2 '>
                 Date and time
                 <Text className='text-red-400'> *  </Text>
             </Text>
@@ -59,7 +60,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    onPress={() => {setRepeatEvent(true); Alert.alert(infoMessage)}}
+                    onPress={() => {setRepeatEvent(true); platformAlert(infoMessage)}}
                     className='p-4 flex items-center  '
                     style={{
                         borderWidth: 0.3,
@@ -71,8 +72,6 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                     </Text>
                 </TouchableOpacity>
             </View>
-
-
 
             <TouchableOpacity onPress={() => setOpen(true)}
                 // style={styles.translucidViewStyle}

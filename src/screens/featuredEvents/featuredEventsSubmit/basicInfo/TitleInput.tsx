@@ -21,8 +21,8 @@ const TitleInput: React.FC<TitleInputProps> = ({
     title,
 }) => {
     return (
-        <View className='border my-6'>
-            <Text className='font-semibold mt-3 px-5'>
+        <View className='border mb-4'>
+            <Text className='font-semibold mt-2 px-5'>
                 Event Title
                 <Text className='text-red-400'> *  </Text>
             </Text>
