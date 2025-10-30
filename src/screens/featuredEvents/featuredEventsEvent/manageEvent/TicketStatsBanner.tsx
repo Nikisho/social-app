@@ -56,7 +56,7 @@ const TicketStatsBanner: React.FC<TicketStatsBannerProps> = ({ ticket_types }) =
         </View>
 
         {/* Right: Progress pill */}
-        <View className="bg-gray-100 h-8 rounded-full px-4 self-start ustify-center items-center min-w-[80px]">
+        <View className="bg-gray-100 h-8 rounded-full px-4 self-start justify-center items-center min-w-[80px]">
           <Text className="text-gray-800 font-semibold text-sm">{percentage}% full</Text>
         </View>
       </View>
@@ -87,10 +87,13 @@ const TicketStatsBanner: React.FC<TicketStatsBannerProps> = ({ ticket_types }) =
           setModalVisible(!modalVisible);
         }}>
         <View
-          className='flex-1 mt-20 ' >
-          <View className='bg-gray-50 my-20 mx-5 h-3/4' style={styles.shadow} >
+          className='flex-1 justify-center' >
+          <View className='bg-gray-50 mx-5 h-3/4' style={styles.shadow} >
 
             <FlatList
+              contentContainerStyle={{
+                // paddingBottom: 1
+              }}
               data={ticket_types}
               renderItem={renderItem}
               keyExtractor={(item) => item.ticket_type_id.toString()}
