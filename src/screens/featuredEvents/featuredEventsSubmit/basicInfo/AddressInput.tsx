@@ -4,14 +4,15 @@ import GooglePlacesTextInput from 'react-native-google-places-textinput';
 import styles from '../../../../utils/styles/shadow';
 import colours from '../../../../utils/styles/colours';
 
-
 interface EventDataProps {
     title: string;
     description: string;
     price: string;
     location: string;
     date: Date;
+    end_datetime: Date;
     quantity: string | null;
+    hide_participants?: boolean;
 }
 
 interface AddressInputProps {
@@ -31,9 +32,9 @@ const AddressInput: React.FC<AddressInputProps> = ({
         }))
     };
     return (
-        <View className='border'>
+        <View className='border mb-4'>
 
-            <Text className='font-semibold mt-3 px-5'>
+            <Text className='font-semibold mt-2 px-5'>
                 Location
                 <Text className='text-red-400'> *  </Text>
             </Text>
@@ -50,8 +51,9 @@ const AddressInput: React.FC<AddressInputProps> = ({
                 }}
                 apiKey={process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY!}
                 fetchDetails={true}
+                scrollEnabled={true}
                 value={address}
-                placeHolderText={'Enter a location'}
+                placeHolderText={'Enter a location'}                
                 detailsFields={['formattedAddress', 'location', 'viewport']}
                 onPlaceSelect={(place) => handlePlaceSelect(place?.details?.formattedAddress)}
             />

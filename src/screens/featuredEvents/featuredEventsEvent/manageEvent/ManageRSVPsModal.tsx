@@ -137,7 +137,7 @@ const ManageRSVPsModal = ({
                         {item.ticket_types?.name}
                     </Text>
                 </View>
-                {
+                {/* {
                     !item.ticket_types?.is_free && (
                         <TouchableOpacity
                             onPress={() => handleInitiateRefund(item.ticket_id)}
@@ -148,7 +148,7 @@ const ManageRSVPsModal = ({
                             </Text>
                         </TouchableOpacity>
                     )
-                }
+                } */}
             </View>
         )
     }

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView, Dimensions } from 'react-native'
 import React from 'react'
 import SecondaryHeader from '../../../../components/SecondaryHeader'
 import MediaPicker from './MediaPicker'
@@ -13,7 +13,7 @@ interface EventDataProps {
     location: string;
     date: Date;
     quantity: string | null;
-
+    end_datetime: Date;
 }
 
 interface EventDetailsProps {
@@ -21,7 +21,7 @@ interface EventDetailsProps {
     media: any,
     eventData: EventDataProps,
     setEventData: React.Dispatch<React.SetStateAction<EventDataProps>>;
-        userInterests?: {
+    userInterests?: {
         interestCode: number
         interestGroupCode: number
     }[]
@@ -34,9 +34,14 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     media,
     userInterests
 }) => {
-    
+    const deviceHeight = Dimensions.get('window').height;
+
     return (
-        <View className='flex mx-4' >
+        <ScrollView className={`flex mx-4 ${deviceHeight < 650 && 'h-2/3'}`}
+            contentContainerStyle={{
+                paddingBottom: 350
+            }}
+        >
             <View className={`mb-5`} >
                 <Text className='text-2xl font-semibold '>
                     Event details
@@ -63,7 +68,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 userInterests={userInterests}
                 setEventData={setEventData}
             />
-        </View>
+        </ScrollView>
     )
 }
 

@@ -44,7 +44,7 @@ interface EventDataProps {
     image_url: string;
     featured_event_id: number;
     chat_room_id: number;
-    //   tickets_sold: number
+    hide_participants:boolean;
     date: string;
     time: string;
     //   max_tickets: number

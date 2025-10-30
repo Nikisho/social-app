@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React from 'react'
 
 interface EventDataProps {
@@ -7,7 +7,9 @@ interface EventDataProps {
     price: string;
     location: string;
     date: Date;
+    end_datetime: Date;
     quantity: string | null;
+    hide_participants?: boolean;
 
 }
 
@@ -16,21 +18,21 @@ interface TitleInputProps {
     title: string;
 };
 
-const TitleInput:React.FC<TitleInputProps> = ({
+const TitleInput: React.FC<TitleInputProps> = ({
     setEventData,
     title,
 }) => {
     return (
-        <View className='border my-6'>
-            <Text className='font-semibold mt-3 px-5'>
+        <View className='border mb-4'>
+            <Text className='font-semibold mt-2 px-5'>
                 Event Title
                 <Text className='text-red-400'> *  </Text>
             </Text>
-
             <TextInput
                 value={title}
                 placeholder='Add a title for your event'
                 maxLength={60}
+                returnKeyType='done'
                 onChangeText={(value) => {
                     setEventData((prevData: EventDataProps) => ({
                         ...prevData,

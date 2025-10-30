@@ -56,7 +56,6 @@ const BookEvent: React.FC<BookEventProps> = ({
 
 }) => {
     const currentUser = useSelector(selectCurrentUser);
-    const isSoldOut = tickets_sold >= max_tickets;
     const [checkoutModalVisible, setCheckoutModalVisible] = useState<boolean>(false);
     const navigation = useNavigation<RootStackNavigationProp>();
     const [ticketTypeModalVisible, setTicketTypeModalVisible] = useState<boolean>(false);
@@ -94,20 +93,6 @@ const BookEvent: React.FC<BookEventProps> = ({
         return now > eventEndOfDay;
     };
     const isExpired = isEventExpired(date);
-
-    const showBookingModal = async () => {
-        try {
-            const canPost = await canBook();
-            if (canPost === false) {
-                platformAlert("You've already booked tickets for this event");
-                return;
-            }
-            setCheckoutModalVisible(!checkoutModalVisible)
-        } catch (error: any) {
-            Alert.alert(error.message)
-        }
-
-    }
 
     const showTicketTypeModal = async () => {
         try {
@@ -216,7 +201,6 @@ const BookEvent: React.FC<BookEventProps> = ({
         }
     }
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    console.log('hey: ' ,ticket_types[0].price)
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
@@ -234,12 +218,6 @@ const BookEvent: React.FC<BookEventProps> = ({
                 isExpired={isExpired}
                 showTicketTypeModal={showTicketTypeModal}
             />
-            {/* {(!isExpired && !isSoldOut) && (
-                <Text className="text-2xl text-blue-800 font-bold">
-                    {Number(ticket_types[0].price) === 0 ? t('featured_event_screen.free') : `£${ticket_types[0].price}`}
-                </Text>
-            )} */}
-
             <BookEventCheckoutModal
                 modalVisible={checkoutModalVisible}
                 setModalVisible={setCheckoutModalVisible}
@@ -259,7 +237,6 @@ const BookEvent: React.FC<BookEventProps> = ({
                 setBookEventModalVisible={setCheckoutModalVisible}
                 setModalVisible={setTicketTypeModalVisible}
                 setSelectedTicket={setSelectedTicket}
-                // selectedTicket={selectedTicket}
                 ticket_types={ticket_types}
             />
         </Animated.View>

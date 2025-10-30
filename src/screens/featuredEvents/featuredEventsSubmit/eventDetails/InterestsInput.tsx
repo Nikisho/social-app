@@ -26,7 +26,6 @@ const InterestsInput = ({
         <>
             <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}  
-                // style={styles.shadow}
                 className='p-2 mt-4 border bg-gray-100 '
             >
                 <Text className='text-lg text-center font-semibold'>
@@ -43,14 +42,12 @@ const InterestsInput = ({
                 }}>
 
                 <View className='flex-1 justify-center items-center mt-22 bg-' >
-                    <View className='bg-white rounded-xl m-20 w-4/5 p-5 space-y-5' style={styles.shadow} >
-
+                    <View className='bg-white rounded-xl m-20 w-11/12 p-5 space-y-5' style={styles.shadow} >
                         <ProfileInterestsSelector
                             userInterests={userInterests}
                             updateFields={updateFields}
                             maxNumberOfInterests={5}
                         />
-
                         <View className='flex flex-row w-full py-10 justify-center space-x-20'>
                             <TouchableOpacity
                                 onPress={() => setModalVisible(!modalVisible)}

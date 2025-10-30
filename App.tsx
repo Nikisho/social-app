@@ -60,7 +60,7 @@ const mainTheme = {
 export default function AppWrapper() {
 	return (
 		<StripeProvider
-			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
+			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY_PROD!}
 			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
 			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
 		>
@@ -111,6 +111,7 @@ function AppSafeAreaWrapper() {
 		config: {
 			screens: {
 				resetpassword: 'resetpassword',
+				organizeronboarding: 'organizerOnboarding',
 				featuredeventsevent: {
 					path: 'featuredeventsevent',
 					parse: {

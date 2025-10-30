@@ -66,7 +66,8 @@ const FeaturedEventsFeed = ({
     const renderItem = ({ item }: { item: FeaturedEventCard }) => {
         return (
 
-            <TouchableOpacity
+            <TouchableOpacity  
+                activeOpacity={0.8}
                 className={`my-2
                     rounded-xl border bg-white p-2
                     ${item.test === true && !__DEV__ ? 'hidden' : ''}

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SecondaryHeader from '../../../components/SecondaryHeader'
 import { ImagePickerAsset } from 'expo-image-picker';
 import MediaPicker from './eventDetails/MediaPicker';
@@ -18,6 +18,8 @@ import { useMultistepForm } from '../../../hooks/useMultistepForm';
 import BasicInfo from './basicInfo/BasicInfo';
 import EventDetails from './eventDetails/EventDetails';
 import TicketTypesList from './newTickets/TicketTypesList';
+import { useKeyboardListener } from '../../../hooks/useKeyboardListener';
+import styles from '../../../utils/styles/shadow';
 
 interface EventDataProps {
     title: string;
@@ -25,7 +27,9 @@ interface EventDataProps {
     price: string;
     location: string;
     date: Date;
+    end_datetime: Date;
     quantity: string | null;
+    hide_participants?: boolean;
     userInterests?: {
         interestCode: number
         interestGroupCode: number
@@ -51,19 +55,21 @@ const FeaturedEventsSubmitScreen = () => {
         location: '',
         quantity: null,
         date: new Date((new Date()).setHours(12, 0, 0, 0)),
-        userInterests: []
+        end_datetime: new Date((new Date()).setHours(17, 0, 0, 0)),
+        userInterests: [],
+        hide_participants: false
     });
-
-    console.log(eventData);
     const [tickets, setTickets] = useState<TicketProps[]>([]);
     const [media, setMedia] = useState<ImagePickerAsset | null>(null);
     const currentUser = useSelector(selectCurrentUser);
     const [loading, setLoading] = useState(false);
-    // const [isFree, setIsFree] = useState<boolean>(false)
     const [repeatEvent, setRepeatEvent] = useState<boolean>(false);
 
     const navigation = useNavigation<RootStackNavigationProp>();
 
+    const isKeyboardVisible = useKeyboardListener();
+
+    console.log('The keyboard is up :', isKeyboardVisible)
     const uploadEventMediaToStorageBucket = async (file: string, unique_file_identifier: string, organizer_id: number) => {
         const arrayBuffer = decode(file);
         try {
@@ -120,7 +126,6 @@ const FeaturedEventsSubmitScreen = () => {
             console.error('Error inserting into series :', error.message)
         }
     }
-    console.log(tickets);
 
     const handleSubmitTickets = async (featured_event_id: number, organizer_id: number) => {
         const ticketInserts = tickets.map((t) => ({
@@ -129,7 +134,7 @@ const FeaturedEventsSubmitScreen = () => {
             name: t.name,
             description: t.description,
             is_free: t.is_free,
-            price: t.is_free ?  '0' : t.price,
+            price: t.is_free ? '0' : t.price,
             quantity: t.quantity,
             sales_start: t.sales_start,
             sales_end: t.sales_end
@@ -141,11 +146,49 @@ const FeaturedEventsSubmitScreen = () => {
 
     const submitEvent = async () => {
         setLoading(true);
-        if (tickets.length === 0) {
-            platformAlert('You need to add at least one ticket type');
-            setLoading(false)
+        if (eventData.date >= eventData.end_datetime) {
+            platformAlert('The start date/time must be before the end date/time.');
+            setLoading(false);
+
             return;
         }
+        if (tickets.length === 0) {
+            platformAlert('You need to add at least one ticket type');
+            setLoading(false);
+            return;
+        }
+
+        if (!eventData?.title?.trim()) {
+            platformAlert('Please enter a title for your event.');
+            setLoading(false);
+            return;
+        }
+
+        if (!eventData.location?.trim()) {
+            platformAlert('Please choose a location for your event.');
+            setLoading(false);
+            return;
+        }
+
+        if (!eventData.description?.trim()) {
+            platformAlert('Please enter a description for your event.');
+            setLoading(false);
+            return;
+
+        }
+
+        if (media === null) {
+            platformAlert('Please select a main image for your event.');
+            setLoading(false);
+            return;
+        }
+
+        if (eventData.userInterests?.length === 0) {
+            platformAlert('Please select topics & interests for the event.');
+            setLoading(false);
+            return;
+        }
+
         if (
             !eventData?.title?.trim() ||
             !eventData.description?.trim() ||
@@ -158,12 +201,6 @@ const FeaturedEventsSubmitScreen = () => {
             return;
         }
 
-
-        if (eventData.userInterests?.length === 0) {
-            platformAlert('Please select topics & interests for the event.');
-            setLoading(false);
-            return;
-        }
         const organizer_id = await fetchOrganizerId(currentUser.id);
         const unique_file_identifier = uuidv4(9);
         const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/featured-events/${organizer_id}/${unique_file_identifier}.jpg`
@@ -198,10 +235,13 @@ const FeaturedEventsSubmitScreen = () => {
                 location: eventData?.location,
                 date: eventData?.date,
                 time: extractTimeFromDateSubmit(eventData?.date),
+                end_time: extractTimeFromDateSubmit(eventData?.end_datetime),
+                end_date: eventData?.end_datetime,
                 organizer_id: organizer_id,
                 max_tickets: eventData?.quantity,
                 chat_room_id: chatRoomData?.chat_room_id,
-                test: __DEV__ ? true : false
+                test: __DEV__ ? true : false,
+                hide_participants: eventData?.hide_participants
             })
             .select('featured_event_id')
             .single()
@@ -250,43 +290,48 @@ const FeaturedEventsSubmitScreen = () => {
 
         ]);
 
-
     if (loading) {
         return <LoadingScreen displayText='Loading...' />
     }
 
     return (
 
-        <KeyboardAvoidingView className=''
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            // keyboardVerticalOffset={Platform.OS === 'ios' ?  47 : 0}
-            style={{ flex: 1 }}
+        <View className='flex-1'
         >
             <View>
                 {step}
             </View>
-            <View className='flex flex-row space-x-5 absolute bottom-28 right-5'>
-                {
-                    !isFirstStep &&
+            <View
+                className={`absolute ${Platform.OS !== 'android' ? 'bottom-28' : 'bottom-20'} flex self-center w-full h-14 items-center justify-center `}>
+
+                <View className='flex flex-row space-x-5 justify-between w-full px-5'>
+                    {
+                        !isFirstStep ?
+                            <TouchableOpacity
+                                style={styles.shadow}
+                                className='bg-blue-500 rounded-lg w-1/3 p-3 justify-center'
+                                onPress={back}>
+                                <Text className='text-center text-white text-lg font-bold'>
+                                    Go back
+                                </Text>
+                            </TouchableOpacity> :
+                            <View>
+
+                            </View>
+                    }
+
                     <TouchableOpacity
-                        className='bg-blue-100 border-2 border-blue-600 w-48 p-4 '
-                        onPress={back}>
-                        <Text className='text-center text-lg font-bold'>
-                            Go back
+                        style={styles.shadow}
+                        className='bg-black rounded-lg p-3  w-1/3 '
+                        onPress={isLastStep ? submitEvent : next}>
+                        <Text className='text-white text-center text-lg font-bold'>
+                            {isLastStep ? 'Publish' : 'Continue'}
                         </Text>
                     </TouchableOpacity>
-                }
 
-                <TouchableOpacity
-                    className='bg-black w-48 p-4 '
-                    onPress={isLastStep ? submitEvent : next}>
-                    <Text className='text-white text-center text-lg font-bold'>
-                        {isLastStep ? 'Publish' : 'Continue'}
-                    </Text>
-                </TouchableOpacity>
-
+                </View>
             </View>
-        </KeyboardAvoidingView>
+        </View>
 
     )
 }
