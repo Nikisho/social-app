@@ -47,8 +47,8 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     placeholder='Enter username '
                     className={` px-5 text-center flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
                     value={name}
-                    maxLength={15}
-                    onChangeText={(value) => updateFields({ name: value.replace(/[^a-z0-9_]/gi, '') })}
+                    maxLength={35}
+                    onChangeText={(value) => updateFields({ name: value.replace(/[^.a-z0-9_]/gi, '') })}
                 />
             </View>
             <View className='w-5/6 space-y-3'>

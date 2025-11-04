@@ -7,20 +7,28 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 
 Deno.serve(async (req) => {
+  const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
+  const password = Deno.env.get("ZOHO_PASSWORD")!;
+  const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
 
-  const zohoEmail = Deno.env.get('ZOHO_LOGIN_EMAIL')!;
-  const password  = Deno.env.get('ZOHO_PASSWORD')!
-  const fromEmail = Deno.env.get('ZOHO_FROM_EMAIL')!;
-
-  const { 
-    email, 
-    name, 
-    title, 
-    location, 
-    date
+  const {
+    email,
+    name,
+    title,
+    location,
+    date,
   } = await req.json();
 
   try {
+
+    if (email.indexOf('linkzy') > -1) {
+      console.log('The email function was stopped as this is a test email with "linkzy" ')
+     return new Response(
+      JSON.stringify({ message: `Email function execustion  stopped as email is ${email}` }),
+      { headers: { "Content-Type": "application/json" }, status: 200 },
+    )
+    }
+
     const client = new SMTPClient({
       connection: {
         hostname: "smtp.zoho.eu",
@@ -33,7 +41,8 @@ Deno.serve(async (req) => {
       },
     });
 
-    const confirmationSubject = `✅ Ticket confirmed for ${title} – See You There!`;
+    const confirmationSubject =
+      `✅ Ticket confirmed for ${title} – See You There!`;
     const confirmationMessage = `
         Hi ${name},
 

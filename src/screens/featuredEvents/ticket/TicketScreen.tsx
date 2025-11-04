@@ -92,10 +92,12 @@ const TicketScreen = ({ }) => {
                                     backgroundColor="white"
                                 />
                             </View>
-                            <View className='flex flex-row space-x-4 mx-2'>
+                            <View className='flex flex-row space-x-4 mx-2 pr-5'>
                                 <Entypo name="megaphone" size={24} color="black" />
-                                <Text className='text-lg font-semibold text-wrap'>
-                                    {ticket.featured_events.title}
+                                <Text 
+                                    numberOfLines={3}
+                                    className='text-lg font-semibold text-wrap'>
+                                    {ticket.featured_events.title} 
                                 </Text>
                             </View>
                             <View className='flex flex-row space-x-4 mx-2'>
