@@ -32,7 +32,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     repeatEvent,
     setRepeatEvent
 }) => {
-    const [open, setOpen] = useState(false);
     const deviceHeight = Dimensions.get('window').height;
     console.log('Location is: ', eventData?.location)
     return (
@@ -60,11 +59,9 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                 address={eventData.location}
             />
             <DateTimeInput
-                open={open}
                 date={eventData.date}
                 end_datetime={eventData.end_datetime}
                 repeatEvent={repeatEvent}
-                setOpen={setOpen}
                 setEventData={setEventData}
                 setRepeatEvent={setRepeatEvent}
             />
