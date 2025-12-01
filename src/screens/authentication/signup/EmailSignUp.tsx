@@ -34,7 +34,7 @@ const EmailSignUp = () => {
 			.select('*')
 			.eq('email', email);
 
-		if (existingUser && existingUser.length > 0) {
+		if (existingUser && existingUser.length > 0 && existingUser[0].guest === false) {
 			platformAlert("It looks like you already have an account. Please sign in instead.");
 			navigation.navigate('signin');
 			setLoading(false);

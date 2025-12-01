@@ -1,32 +1,29 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
-
-// Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
+
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
   const password = Deno.env.get("ZOHO_PASSWORD")!;
   const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
 
-  const {
-    email,
-    name,
-    title,
-    location,
-    date,
-  } = await req.json();
+  const { email, name, title, location, date, qrValue } = await req.json();
 
   try {
-
-    if (email.indexOf('linkzy') > -1) {
-      console.log('The email function was stopped as this is a test email with "linkzy" ')
-     return new Response(
-      JSON.stringify({ message: `Email function execustion  stopped as email is ${email}` }),
-      { headers: { "Content-Type": "application/json" }, status: 200 },
-    )
+    if (email.includes("linkzy")) {
+      return new Response(
+        JSON.stringify({ message: `Email skipped for ${email}` }),
+        { headers: { "Content-Type": "application/json" }, status: 200 },
+      );
     }
 
     const client = new SMTPClient({
@@ -34,66 +31,62 @@ Deno.serve(async (req) => {
         hostname: "smtp.zoho.eu",
         port: 465,
         tls: true,
-        auth: {
-          username: zohoEmail,
-          password: password,
-        },
+        auth: { username: zohoEmail, password },
       },
     });
 
-    const confirmationSubject =
-      `✅ Ticket confirmed for ${title} – See You There!`;
-    const confirmationMessage = `
-        Hi ${name},
+    const subject = `Your Ticket for ${title} is Confirmed!`;
 
-        Thanks for booking your ticket with Linkzy. Your purchase has been successfully confirmed! 🎉
+const body = `
+Hello ${name}, 🎉
 
-        You're now on the guest list for the upcoming event.
-        Keep an eye on your inbox for any updates or details from the organizer.
+Your ticket is all set! You're officially booked in for the event.
 
-        Here’s a quick summary:
-        - 📅 Event: ${title}
-        - 📍 Location: ${location}
-        - 🗓️ Date & Time: ${date}
-        - 🎟️ Ticket: Confirmed
+Event Details
+• 🗓️ Event: ${title}
+• 📍 Location: ${location}
+• ⏰ Date & Time: ${date}
 
-        If you have any questions or need to make changes, just reply to this email, we're happy to help.
+Your QR code ticket is attached to this email — just show it at the entrance for quick check-in.
 
-        Thanks again for being part of Linkzy. See you soon!
+If you have any questions, feel free to reply directly to this email.
 
-        Best,
-        The LINKZY Team
-        `;
+See you there!
+— The Linkzy Team ✨
+`.trim();
+   
     await client.send({
       from: fromEmail,
       to: email,
-      subject: confirmationSubject,
-      content: confirmationMessage,
+      subject,
+      content: body,
+      attachments: [
+        {
+          filename: "ticket-qr.png",
+          content: qrValue,
+          contentType: "image/png",
+          encoding: "base64", // this is required
+        },
+      ],
     });
 
     await client.close();
 
     return new Response(
       JSON.stringify({ message: `Email sent to ${email}` }),
-      { headers: { "Content-Type": "application/json" }, status: 200 },
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      },
     );
   } catch (err) {
     console.error("Email error:", err);
     return new Response(
       JSON.stringify({ error: "Failed to send email" }),
-      { headers: { "Content-Type": "application/json" }, status: 500 },
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      },
     );
   }
 });
-
-/* To invoke locally:
-
-  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  2. Make an HTTP request:
-
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/ticket-purchase-email' \
-    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-    --header 'Content-Type: application/json' \
-    --data '{"name":"Functions"}'
-
-*/

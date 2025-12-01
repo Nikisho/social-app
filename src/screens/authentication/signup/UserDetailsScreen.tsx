@@ -113,7 +113,8 @@ const UserDetailsScreen = () => {
         }
 
     }
-    const createProfile = async () => {
+
+     const createProfile = async () => {
         const todaysDate = new Date();
         if (userDetails.dateOfBirth && formatDate(userDetails.dateOfBirth) !== formatDate(todaysDate)) {
             const userAge = getAge(userDetails.dateOfBirth);
@@ -123,20 +124,22 @@ const UserDetailsScreen = () => {
             }
         }
         setLoading(!loading);
+
         const { data, error } = await supabase
             .from('users')
-            .insert({
+            .upsert({
                 name: userDetails.name,
                 date_of_birth : formatDate(userDetails.dateOfBirth!) !== formatDate(todaysDate)? userDetails.dateOfBirth : null,
-                email: user?.email,
+                email: user?.email!.toLowerCase(),
                 auth_provider: user?.app_metadata.provider,
                 sex: userDetails.sex,
                 uid: user?.id,
-                expo_push_token: expoPushToken?.data
-            })
+                expo_push_token: expoPushToken?.data,
+                guest: false
+            },  { onConflict: 'email' })
             .select('id, is_organizer')
             .single();
-        if (error) {setLoading(!loading); throw error.message; };
+        if (error) {setLoading(!loading); console.error('Could not insert user : ',error.message); };
         if (data) {
             await updateProfilePictureInStorageBucket(userDetails.photo?.base64!, data.id);
             await createUserInterests(data.id);

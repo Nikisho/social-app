@@ -31,9 +31,9 @@ interface BookEventProps {
         is_free: boolean;
         organizer_id: number;
         sales_start: Date;
-        sales_end:Date;
-        name:string;
-        price:string
+        sales_end: Date;
+        name: string;
+        price: string
         quantity: number;
         tickets_sold: number;
         ticket_type_id: number;
@@ -83,9 +83,9 @@ const BookEvent: React.FC<BookEventProps> = ({
     };
 
     const isEventExpired = (eventDate: Date) => {
-        // if (__DEV__) {
-        //     return false;
-        // }
+        if (__DEV__) {
+            return false;
+        }
         const now = new Date();
         const event = new Date(eventDate)
         const eventEndOfDay = new Date(event)
@@ -109,7 +109,7 @@ const BookEvent: React.FC<BookEventProps> = ({
     }
 
     const handleBookEvent = async () => {
-        if (selectedTicket.is_free ) {
+        if (selectedTicket.is_free) {
             const { error } = await supabase
                 .from('featured_event_bookings')
                 .insert({
@@ -171,6 +171,7 @@ const BookEvent: React.FC<BookEventProps> = ({
     const emailUserUponPurchase = async () => {
         try {
             const edge_function_base_url = 'https://wffeinvprpdyobervinr.supabase.co/functions/v1/ticket-purchase-email'
+            const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
 
             const {
                 data: { session },
@@ -189,6 +190,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                     title: title,
                     location: location,
                     date: date && time && (formatDateShortWeekday(date) + ', ' + (time).slice(0, -3)),
+                    qrValue: qrValue
                 }),
             });
 
@@ -204,7 +206,7 @@ const BookEvent: React.FC<BookEventProps> = ({
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 800, 
+            duration: 800,
             useNativeDriver: true,
         }).start();
     }, []);
@@ -213,7 +215,7 @@ const BookEvent: React.FC<BookEventProps> = ({
             style={{
                 opacity: fadeAnim
             }}
-            className={`absolute bg-black inset-x-0 py-5 flex justify-center flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
+            className={`absolute bg-black inset-x-0 py-5 flex justify-center flex-row items-center px-6 ${Platform.OS === 'ios' ? 'bottom-20' : 'bottom-14'}`}>
             <RenderActionButton
                 isExpired={isExpired}
                 showTicketTypeModal={showTicketTypeModal}
@@ -232,7 +234,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                 ticket_name={selectedTicket?.name}
                 ticket_type_id={selectedTicket?.ticket_type_id}
             />
-            <TicketTypeModal 
+            <TicketTypeModal
                 modalVisible={ticketTypeModalVisible}
                 setBookEventModalVisible={setCheckoutModalVisible}
                 setModalVisible={setTicketTypeModalVisible}
