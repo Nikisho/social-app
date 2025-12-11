@@ -46,6 +46,7 @@ import TicketScannerScreen from './src/screens/featuredEvents/ticket/TicketScann
 import ManageMembershipsScreen from './src/screens/memberships/ManageMembershipsScreen';
 import CreateMembershipScreen from './src/screens/memberships/CreateMembershipScreen';
 import FollowerScreen from './src/screens/follower/FollowerScreen';
+import EmailAttendeesScreen from './src/screens/emailattendees/EmailAttendeesScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -60,7 +61,7 @@ const mainTheme = {
 export default function AppWrapper() {
 	return (
 		<StripeProvider
-			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY_PROD!}
+			publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
 			merchantIdentifier="merchant.com.linkzy" // required for Apple Pay
 			urlScheme="com.linkzy" // required for 3D Secure and bank redirects
 		>
@@ -176,6 +177,7 @@ function AppSafeAreaWrapper() {
 								<Stack.Screen name="chatlist" component={ChatListScreen} />
 								<Stack.Screen name="chat" component={ChatScreen} />
 								<Stack.Screen name="groupchat" component={GroupChatScreen} />
+								<Stack.Screen name="emailattendees" component={EmailAttendeesScreen} />
 								<Stack.Screen name="eula" component={EulaScreen} />
 								<Stack.Screen name="privacypolicy" component={PrivacyPolicyScreen} />
 								<Stack.Screen name="about" component={AboutScreen} />

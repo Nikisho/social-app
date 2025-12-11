@@ -13,6 +13,7 @@ import TicketStatsBanner from './TicketStatsBanner'
 import { uuidv4 } from '../../../../utils/functions/uuidv4'
 import ManageRSVPsModal from './ManageRSVPsModal'
 import ManageSeries from './ManageSeries'
+import EmailParticipants from './EmailParticipants'
 
 type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
@@ -38,6 +39,7 @@ interface EventDataProps {
     quantity: number;
     tickets_sold: number;
     ticket_type_id: number;
+    description: string
     is_free: boolean;
   }[]
   max_tickets: number
@@ -270,7 +272,9 @@ const handleRepeatEvent = async () => {
         <ManageRSVPsModal
           featured_event_id={featured_event_id}
         />
-
+        <EmailParticipants 
+          featured_event_id={featured_event_id}
+        />
         <ManageSeries
           repeatEvent={repeatEvent}
           setRepeatEvent={setRepeatEvent}

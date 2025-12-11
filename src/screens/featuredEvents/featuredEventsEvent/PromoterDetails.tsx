@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '../../../../supabase';
 import { selectCurrentUser } from '../../../context/navSlice';
 import { useSelector } from 'react-redux';
+import { getColorFromName } from '../../../utils/functions/getColorFromName';
 
 interface PromoterDetailsProps {
     organizer_id: number;
@@ -86,13 +87,38 @@ const PromoterDetails: React.FC<PromoterDetailsProps> = ({
                 onPress={() => navigation.navigate('profile', {
                     user_id: organizers.users.id
                 })}
-                className='flex flex-row border items-center  space-x-5 rounded-xl p-2 my-3'>
-                <Image
-                    className='w-10 h-10 rounded-full'
-                    source={{
-                        uri: organizers?.users.photo
-                    }}
-                />
+                className='flex flex-row border items-center  space-x-5 rounded-xl p-2 my-3'
+            >
+                {
+                    organizers?.users.photo ? (
+                        <Image
+                            className='w-10 h-10 rounded-full'
+                            source={{
+                                uri: organizers?.users.photo
+                            }}
+                        />
+                    ) :
+                        (
+                            <View
+                                style={{
+                                    backgroundColor: getColorFromName(organizers?.users.name),
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginRight: 10,
+                                }}
+                            >
+                                <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                                    {organizers?.users.name.charAt(0).toUpperCase()}
+                                </Text>
+                            </View>
+                        )
+                }
+
+
+
                 <Text className='text-xl'>
                     {organizers?.users.name}
                 </Text>
