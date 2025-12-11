@@ -40,7 +40,9 @@ export type RootStackParamList = {
   ticketscanner:{featured_event_id: number};
   managememberships:undefined;
   createmembership:undefined;
-  followers: {user_id: number}
+  followers: {user_id: number};
+  emailattendees: {featured_event_id: number};
+
 };
 
 // Define the navigation prop types

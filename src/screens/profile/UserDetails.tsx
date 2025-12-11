@@ -76,7 +76,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 <Image
                                     className='w-36 h-36 rounded-full'
                                     source={{
-                                        uri: `${photo}t={${new Date()}}`,
+                                        uri: `${photo}`,
                                     }}
                                 />
                             ) :
