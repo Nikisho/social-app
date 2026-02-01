@@ -40,21 +40,25 @@ serve(async (req: Request) => {
     const fetchStripeAccountId = async () => {
       const { data, error } = await supabaseAdmin
         .from("organizers")
-        .select("stripe_account_id")
+        .select("stripe_account_id, platform_fee_discount_pct")
         .eq("organizer_id", organizer_id)
         .single();
       if (data) {
-        return data.stripe_account_id;
+        return data;
       }
       if (error) {
         throw error.message;
       }
     };
-    const stripe_account_id = await fetchStripeAccountId();
+    const organizer = await fetchStripeAccountId();
 
-    console.log('🎉stripe account ID :', stripe_account_id);
+    console.log('🎉stripe account ID :', organizer.stripe_account_id);
+    const priceInPence = amount //Already turned in pence 
+    const baseFee = Math.round(priceInPence * 0.015) + 20;
+    const discountPct = organizer.platform_fee_discount_pct ?? 0;
+    const platformFeeInPence = Math.round(baseFee * (1 - discountPct / 100));
 
-    const platformFee =  0; //No platform fee for now Math.round(amount * 0.03);
+    // const platformFee = //No platform fee for now Math.round(amount * 0.03);
 
     const paymentIntentParams: PaymentIntentParamsProps = {
       amount: amount,
@@ -77,9 +81,9 @@ serve(async (req: Request) => {
     const PLATFORM_ORGANIZER_ID = 1;
     if (organizer_id !== PLATFORM_ORGANIZER_ID ) {
       paymentIntentParams.transfer_data = {
-        destination: stripe_account_id,
+        destination: organizer.stripe_account_id,
       };
-      paymentIntentParams.application_fee_amount = platformFee;
+      paymentIntentParams.application_fee_amount = platformFeeInPence;
     }
 
     const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
