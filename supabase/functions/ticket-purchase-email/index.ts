@@ -19,12 +19,12 @@ Deno.serve(async (req) => {
   const { email, name, title, location, date, qrValue } = await req.json();
 
   try {
-    if (email.includes("linkzy")) {
-      return new Response(
-        JSON.stringify({ message: `Email skipped for ${email}` }),
-        { headers: { "Content-Type": "application/json" }, status: 200 },
-      );
-    }
+    // if (email.includes("linkzy")) {
+    //   return new Response(
+    //     JSON.stringify({ message: `Email skipped for ${email}` }),
+    //     { headers: { "Content-Type": "application/json" }, status: 200 },
+    //   );
+    // }
 
     const client = new SMTPClient({
       connection: {
