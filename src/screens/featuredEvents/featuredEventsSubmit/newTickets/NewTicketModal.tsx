@@ -138,7 +138,7 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                     </View>
                     <View className='border my-6'>
                         <Text className='font-semibold mt-3 px-5'>
-                            Name
+                            Title
                             <Text className='text-red-400'> *  </Text>
                         </Text>
 
@@ -229,12 +229,12 @@ const NewTicketsModal: React.FC<TicketProps> = ({
                             className=' h-10 px-5'
                         />
                     </View>
-                    {
+                    {/* {
                         !ticket.is_free &&
                         <View className='flex-row -6 items-center space-x-4 px-2 py-1 bg-amber-100 border border-amber-500 '>
                             <Text className=''>You’ll receive the ticket price minus Stripe’s processing fee (1.5% + 20p). {ticket.price && Number(ticket.price) >= 1 ? `Total per ticket: £${calculateRevenue(ticket.price)}` : ''}</Text>
                         </View>
-                    }
+                    } */}
                     <View className='border px-5 my-6 space-y-4'>
                         <Text className='font-semibold mt-3 '>
                             Sales start
