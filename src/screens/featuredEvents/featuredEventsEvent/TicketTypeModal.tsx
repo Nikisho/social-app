@@ -70,7 +70,7 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                 </View>
 
                 {/* Description */}
-                {!item.description ? (
+                {item.description ? (
                     <Text
                         className="text-sm mt-2" numberOfLines={3}>
                         {item.description}

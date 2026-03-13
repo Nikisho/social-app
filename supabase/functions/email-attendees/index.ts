@@ -19,10 +19,43 @@ Deno.serve(async (req) => {
   const password = Deno.env.get("ZOHO_PASSWORD")!;
   const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
 
-  const handleEmail = async (recipient: { users: {email: string}}) => {
+  const showOrganiserEmail = async () => {
+    const client = new SMTPClient({
+      connection: {
+        hostname: "smtp.zoho.eu",
+        port: 465,
+        tls: true,
+        auth: { username: zohoEmail, password },
+      },
+    });
+
+    const subject = `Email sent to attendees — Message from ${user.name}: ${email.subject}`;
+
+    const body = `
+${email.body}
+
+Questions about the event?
+Message the organiser:
+Email: ${user.email}
+`.split("\n")
+      .map((line) => line.replace(/\s+$/g, ""))
+      .join("\n");
+
+    await client.send({
+      from: `LINKZY <support@linkzyapp.com>`,
+      to: user.email,
+      subject,
+      content: body,
+    });
+
+    await client.close();
+  };
+
+
+  const handleEmail = async (recipient: { users: { email: string } }) => {
     if (recipient.users.email.includes("linkzy")) {
-      console.log('Test email with Linkzy, skipping')
-      return 
+      console.log("Test email with Linkzy, skipping");
+      return;
     }
     const client = new SMTPClient({
       connection: {
@@ -41,20 +74,22 @@ ${email.body}
 Questions about the event?
 Message the organiser:
 Email: ${user.email}
-`.split('\n')
-.map(line => line.replace(/\s+$/g, ''))
-.join('\n');;
-   
+`.split("\n")
+      .map((line) => line.replace(/\s+$/g, ""))
+      .join("\n");
+
     await client.send({
       from: `${user.name} <support@linkzyapp.com>`,
       to: recipient.users.email,
       subject,
-      content: body
+      content: body,
     });
 
     await client.close();
   };
+
   if (attendees) {
+    showOrganiserEmail();
     for (const attendee of attendees) {
       console.log("The attendee email is :", attendee.users.email);
       handleEmail(attendee);

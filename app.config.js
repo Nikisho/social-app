@@ -48,7 +48,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.3.12",
+    version: "1.3.13",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -62,7 +62,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.2.17',
+      buildNumber: '1.2.18',
       deploymentTarget: "12.0"
     },
     android: {
@@ -70,7 +70,7 @@ export default {
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,
-      versionCode: 38,
+      versionCode: 39,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"

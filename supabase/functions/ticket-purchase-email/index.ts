@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
   const password = Deno.env.get("ZOHO_PASSWORD")!;
   const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
 
-  const { email, name, title, location, date, qrValue } = await req.json();
+  const { email, name, title, location, date, qrValue, country_code } = await req.json();
 
   try {
     // if (email.includes("linkzy")) {
@@ -35,9 +35,33 @@ Deno.serve(async (req) => {
       },
     });
 
-    const subject = `Your Ticket for ${title} is Confirmed!`;
 
-const body = `
+console.log('The country code is: ', country_code ?? null)
+const isFrench = country_code === "FR";
+
+const subject = isFrench
+  ? `Billet confirmé : ${title}`
+  : `Ticket confirmed: ${title}`;
+
+const body = isFrench
+  ? `
+Bonjour ${name}, 🎉
+
+Votre billet est confirmé ! Vous êtes inscrit à l'événement.
+
+Détails de l'événement
+• 🗓️ Événement : ${title}
+• 📍 Lieu : ${location}
+• ⏰ Date et heure : ${date}
+
+Votre billet avec QR code est joint à cet email — il vous suffira de le présenter à l'entrée pour un accès rapide.
+
+Si vous avez la moindre question, vous pouvez répondre directement à cet email.
+
+À très bientôt !
+— L'équipe Linkzy ✨
+`.trim()
+  : `
 Hello ${name}, 🎉
 
 Your ticket is all set! You're officially booked in for the event.
