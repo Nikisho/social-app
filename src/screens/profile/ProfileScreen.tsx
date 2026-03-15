@@ -225,13 +225,13 @@ const ProfileScreen = () => {
 
 										{userData.sex !== 0 && (
 											<Text className="text-lg font-semibold  text-white">
-												{userData.sex === 1 ? "♂" : "♀"}
+												{userData?.sex === 1 ? "♂" : "♀"}
 											</Text>
 										)}
 
 										<Text
 											className='text-lg font-semibold text-white'>
-											{getAge(userData.date_of_birth)}
+											{getAge(userData?.date_of_birth)}
 										</Text>
 									</View>
 								)

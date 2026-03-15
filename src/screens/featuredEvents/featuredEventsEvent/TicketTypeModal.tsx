@@ -38,6 +38,7 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
     const renderItem = ({ item }: { item: ticket_type_props }) => {
         const handleSelectTicket = (item: ticket_type_props) => {
             setSelectedTicket(item);
+            setModalVisible(false)
             setBookEventModalVisible(true);
         }
         const isSoldOut = item.quantity <= item.tickets_sold;

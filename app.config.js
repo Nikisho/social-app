@@ -7,6 +7,7 @@ export default {
     runtimeVersion: "1.0.0",
     scheme: 'com.linkzy',
     plugins: [
+      "expo-asset",
       [
         'expo-build-properties',
         {
@@ -48,7 +49,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.3.13",
+    version: "1.3.14",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -70,7 +71,7 @@ export default {
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,
-      versionCode: 39,
+      versionCode: 40,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"

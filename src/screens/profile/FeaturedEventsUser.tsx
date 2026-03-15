@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
 import formatDateShortWeekday from '../../utils/functions/formatDateShortWeekday';
-import FastImage from 'react-native-fast-image';
+import FastImage from "@d11/react-native-fast-image";
 import fetchOrganizerId from '../../utils/functions/fetchOrganizerId';
 
 interface FeaturedEventCard {

@@ -1,19 +1,13 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { FontAwesome } from '@expo/vector-icons';
-import colours from '../../utils/styles/colours';
 import styles from '../../utils/styles/shadow';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../context/navSlice';
-import getAge from '../../utils/functions/getAge';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import UserBadges from './UserBadges';
-import { supabase } from '../../../supabase';
-import ordinal_suffix_of from '../../utils/functions/ordinal_suffix_of';
 import { useTranslation } from 'react-i18next';
 import UserDetailsRole from './UserDetailsRole';
 
@@ -31,17 +25,6 @@ interface UserDetailsProps {
     modalVisible: boolean;
     profilePictureModalVisible: boolean
     isOrganizer?: boolean | null;
-}
-
-interface trophyProps {
-    rank: number;
-    trophy_expiry_date: string;
-    competition_period_type: string;
-    trophy_id: string;
-    dim_competition_prizes: {
-        trophy_image: string;
-        trophy_name: string;
-    }
 }
 
 const UserDetails: React.FC<UserDetailsProps> = ({
@@ -64,7 +47,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
     const genderColour = sex === 0 ? 'bg-green-400' : (sex === 1 ? 'bg-sky-600' : 'bg-red-300')
     const { t } = useTranslation();
     return (
-        <View className=''>
+        <View>
             <View className='flex py-1 items-center'>
                 <TouchableOpacity
                     className='flex flex-items-center space-x-3 border  rounded-full'
@@ -84,42 +67,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                                 <FontAwesome name="user-circle" size={150} color="black" />
                             </>
                     }
-                    {
-                        false && (
-                            <View className='absolute right-5'>
-                                <FontAwesome className='' name="edit" size={30} color="white" />
-                            </View>
-                        )
-                    }
 
                 </TouchableOpacity>
 
-                <View className='flex flex-row  mt-3 '>
-
-                    <Text className='text-xl hidden font-bold'>
-                        {name}
-                    </Text>
-                    {
-                        dateOfBirth && (
-                            <View
-                                className={` hidden flex-row rounded-lg px-2 h-7 space-x-2 ${genderColour}`}
-                            >
-
-                                {sex !== 0 && (
-                                    <Text className="text-lg font-semibold  text-white">
-                                        {sex === 1 ? "♂" : "♀"}
-                                    </Text>
-                                )}
-
-                                <Text
-                                    className='text-lg font-semibold text-white'>
-                                    {getAge(dateOfBirth)}
-                                </Text>
-                            </View>
-                        )
-                    }
-
-                </View>
                 <UserDetailsRole
                     isOrganizer={isOrganizer!}
                     user_id={user_id}
@@ -147,23 +97,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({
                 </View>
             </View>
 
-            {/* Following banner */}
-            {/* <View className='flex-row justify-center space-x-20'>
-                <View className='p-3 b justify-center flex'>
-                    <Text className='text-center font-bold text-lg'>20</Text>
-                    <Text className='text-center text-sm'>
-                        Following
-                    </Text>
-                </View>
-                <View className='p-3 '>
-                    <Text className='text-center font-bold text-lg '>34</Text>
-                    <Text className='text-center'>
-                        Followers
-                    </Text>
-                </View>
-            </View> */}
-
-
             <View className='flex flex-row items-center space-x-3 mb-3'>
                 <Text className='text-lg font-semibold '>
                     {t('profile_screen.about')}
@@ -180,7 +113,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({
             <ScrollView>
                 {
                     bio ?
-                        <Text className='text-lg'
+                        <Text className='text-sm'
                         >
                             {bio}
                         </Text> :

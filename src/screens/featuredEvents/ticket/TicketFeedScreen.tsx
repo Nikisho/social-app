@@ -11,7 +11,7 @@ import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeek
 import styles from '../../../utils/styles/shadow'
 import { t } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import FastImage from 'react-native-fast-image'
+import FastImage from "@d11/react-native-fast-image"
 
 
 interface TicketsProps {

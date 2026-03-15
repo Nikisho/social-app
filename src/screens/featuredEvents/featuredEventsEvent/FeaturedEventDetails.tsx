@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react'
 import Entypo from '@expo/vector-icons/Entypo';
 import Hyperlink from 'react-native-hyperlink'
 import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeekday'
-import FastImage from 'react-native-fast-image'
+import FastImage from "@d11/react-native-fast-image"
 import platformAlert from '../../../utils/functions/platformAlert';
 import { useTranslation } from 'react-i18next';
 import Ionicons from '@expo/vector-icons/Ionicons';

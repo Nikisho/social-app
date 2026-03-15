@@ -3,7 +3,7 @@ import React from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import styles from '../../../../utils/styles/shadow';
-import FastImage from 'react-native-fast-image';
+import FastImage from "@d11/react-native-fast-image";
 
 interface MediaPickerProps {
     setEventData: any;
