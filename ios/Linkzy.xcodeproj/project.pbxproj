@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		53C49E011427C32ED6C757CA /* libPods-Linkzy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28545B2349020F913FC0E9A8 /* libPods-Linkzy.a */; };
-		582FEBFCEBAB4D51A9A3B263 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0EFE336D7B4959A5806123 /* noop-file.swift */; };
-		5EF359E3A13FF2BF0E772E8C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB23E158FA52FB4651BAE9A4 /* ExpoModulesProvider.swift */; };
-		855F4D14309E3B80FCAB242B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CAF40848229DD18C5D21D980 /* PrivacyInfo.xcprivacy */; };
+		5CECF537E6D544C8FB026772 /* libPods-Linkzy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F9E7B6927C3B70AC7ABD238 /* libPods-Linkzy.a */; };
+		999EF2CD87FE4E0B11100596 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A87AA53432B981B6CF002 /* ExpoModulesProvider.swift */; };
+		A50D347109F7CC51F9CF995A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DA6E9C14EC5EC7732955A481 /* PrivacyInfo.xcprivacy */; };
+		A701BAF8D0124333BCE209EA /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3D6AF3CA944A20871E9BCD /* noop-file.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		BFAA0F7064F84904941DEB7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7CCD667003044C2890A5A65 /* GoogleService-Info.plist */; };
+		D16818FDA6F74611B9800BB3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A810F44868E346B1A1A834C4 /* GoogleService-Info.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,15 +22,15 @@
 		13B07F961A680F5B00A75B9A /* Linkzy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linkzy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Linkzy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Linkzy/Info.plist; sourceTree = "<group>"; };
-		28545B2349020F913FC0E9A8 /* libPods-Linkzy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Linkzy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		925F8807010AD4D3B9CF014B /* Pods-Linkzy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Linkzy.release.xcconfig"; path = "Target Support Files/Pods-Linkzy/Pods-Linkzy.release.xcconfig"; sourceTree = "<group>"; };
+		679960FA36CDE475E1838D3C /* Pods-Linkzy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Linkzy.release.xcconfig"; path = "Target Support Files/Pods-Linkzy/Pods-Linkzy.release.xcconfig"; sourceTree = "<group>"; };
+		8A3D6AF3CA944A20871E9BCD /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Linkzy/noop-file.swift"; sourceTree = "<group>"; };
+		9F9E7B6927C3B70AC7ABD238 /* libPods-Linkzy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Linkzy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A810F44868E346B1A1A834C4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Linkzy/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Linkzy/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CAF40848229DD18C5D21D980 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Linkzy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		D750562AF8D02BF612E015C7 /* Pods-Linkzy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Linkzy.debug.xcconfig"; path = "Target Support Files/Pods-Linkzy/Pods-Linkzy.debug.xcconfig"; sourceTree = "<group>"; };
-		D7CCD667003044C2890A5A65 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Linkzy/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		DB23E158FA52FB4651BAE9A4 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Linkzy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		DC0EFE336D7B4959A5806123 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Linkzy/noop-file.swift"; sourceTree = "<group>"; };
+		DA6E9C14EC5EC7732955A481 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Linkzy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		E26A87AA53432B981B6CF002 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Linkzy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		E93BA24200E40505AF661303 /* Pods-Linkzy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Linkzy.debug.xcconfig"; path = "Target Support Files/Pods-Linkzy/Pods-Linkzy.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Linkzy/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* Linkzy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Linkzy-Bridging-Header.h"; path = "Linkzy/Linkzy-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -41,19 +41,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53C49E011427C32ED6C757CA /* libPods-Linkzy.a in Frameworks */,
+				5CECF537E6D544C8FB026772 /* libPods-Linkzy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0BD056562A615094D78B242A /* ExpoModulesProviders */ = {
+		00BACDE57745E389BFADE844 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				59ED2AB724DE9D81FD90BACF /* Linkzy */,
+				E93BA24200E40505AF661303 /* Pods-Linkzy.debug.xcconfig */,
+				679960FA36CDE475E1838D3C /* Pods-Linkzy.release.xcconfig */,
 			);
-			name = ExpoModulesProviders;
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* Linkzy */ = {
@@ -65,9 +67,9 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				D7CCD667003044C2890A5A65 /* GoogleService-Info.plist */,
-				DC0EFE336D7B4959A5806123 /* noop-file.swift */,
-				CAF40848229DD18C5D21D980 /* PrivacyInfo.xcprivacy */,
+				A810F44868E346B1A1A834C4 /* GoogleService-Info.plist */,
+				8A3D6AF3CA944A20871E9BCD /* noop-file.swift */,
+				DA6E9C14EC5EC7732955A481 /* PrivacyInfo.xcprivacy */,
 			);
 			name = Linkzy;
 			sourceTree = "<group>";
@@ -76,17 +78,9 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				28545B2349020F913FC0E9A8 /* libPods-Linkzy.a */,
+				9F9E7B6927C3B70AC7ABD238 /* libPods-Linkzy.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		59ED2AB724DE9D81FD90BACF /* Linkzy */ = {
-			isa = PBXGroup;
-			children = (
-				DB23E158FA52FB4651BAE9A4 /* ExpoModulesProvider.swift */,
-			);
-			name = Linkzy;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -103,8 +97,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				C3ED06DD7CDABFDD5DCF8023 /* Pods */,
-				0BD056562A615094D78B242A /* ExpoModulesProviders */,
+				00BACDE57745E389BFADE844 /* Pods */,
+				91A1ACB6B749E355305AE59F /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -119,6 +113,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8547690A97D32F085C87AF39 /* Linkzy */ = {
+			isa = PBXGroup;
+			children = (
+				E26A87AA53432B981B6CF002 /* ExpoModulesProvider.swift */,
+			);
+			name = Linkzy;
+			sourceTree = "<group>";
+		};
+		91A1ACB6B749E355305AE59F /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				8547690A97D32F085C87AF39 /* Linkzy */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,16 +136,6 @@
 			);
 			name = Supporting;
 			path = Linkzy/Supporting;
-			sourceTree = "<group>";
-		};
-		C3ED06DD7CDABFDD5DCF8023 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D750562AF8D02BF612E015C7 /* Pods-Linkzy.debug.xcconfig */,
-				925F8807010AD4D3B9CF014B /* Pods-Linkzy.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,13 +146,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Linkzy" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				F59153AA56A4A340DA78C791 /* [Expo] Configure project */,
+				C1B6D370237534A81C79B448 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				05CE13EAA9B20CAB374532FD /* [CP] Embed Pods Frameworks */,
+				C2EB5406A63FAE2148F97C19 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -172,8 +172,8 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 9T3P8RH5FA;
 						LastSwiftMigration = 1250;
+						DevelopmentTeam = "9T3P8RH5FA";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -204,8 +204,8 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				BFAA0F7064F84904941DEB7F /* GoogleService-Info.plist in Resources */,
-				855F4D14309E3B80FCAB242B /* PrivacyInfo.xcprivacy in Resources */,
+				D16818FDA6F74611B9800BB3 /* GoogleService-Info.plist in Resources */,
+				A50D347109F7CC51F9CF995A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,24 +226,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
-		};
-		05CE13EAA9B20CAB374532FD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Linkzy/Pods-Linkzy-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Linkzy/Pods-Linkzy-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -339,7 +321,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Linkzy/Pods-Linkzy-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F59153AA56A4A340DA78C791 /* [Expo] Configure project */ = {
+		C1B6D370237534A81C79B448 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -358,6 +340,24 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Linkzy/expo-configure-project.sh\"\n";
 		};
+		C2EB5406A63FAE2148F97C19 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Linkzy/Pods-Linkzy-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Linkzy/Pods-Linkzy-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -366,8 +366,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				582FEBFCEBAB4D51A9A3B263 /* noop-file.swift in Sources */,
-				5EF359E3A13FF2BF0E772E8C /* ExpoModulesProvider.swift in Sources */,
+				A701BAF8D0124333BCE209EA /* noop-file.swift in Sources */,
+				999EF2CD87FE4E0B11100596 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,15 +376,12 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D750562AF8D02BF612E015C7 /* Pods-Linkzy.debug.xcconfig */;
+			baseConfigurationReference = E93BA24200E40505AF661303 /* Pods-Linkzy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Linkzy/Linkzy.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9T3P8RH5FA;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -404,26 +401,26 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkzy;
-				PRODUCT_NAME = Linkzy;
+				PRODUCT_NAME = "Linkzy";
 				SWIFT_OBJC_BRIDGING_HEADER = "Linkzy/Linkzy-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+				DEVELOPMENT_TEAM = "9T3P8RH5FA";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 925F8807010AD4D3B9CF014B /* Pods-Linkzy.release.xcconfig */;
+			baseConfigurationReference = 679960FA36CDE475E1838D3C /* Pods-Linkzy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Linkzy/Linkzy.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9T3P8RH5FA;
 				INFOPLIST_FILE = Linkzy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -438,11 +435,14 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkzy;
-				PRODUCT_NAME = Linkzy;
+				PRODUCT_NAME = "Linkzy";
 				SWIFT_OBJC_BRIDGING_HEADER = "Linkzy/Linkzy-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+				DEVELOPMENT_TEAM = "9T3P8RH5FA";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 			};
 			name = Release;
 		};
