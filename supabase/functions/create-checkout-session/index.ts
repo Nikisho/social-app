@@ -16,6 +16,7 @@ serve(async (req: Request) => {
     // When you invoke the function via the client library it will automatically pass the authenticated user's JWT.
     const authHeader = req.headers.get("Authorization")!;
     const {
+      //ALREADY IN PENCE: IMPORTANT: amount must be in the smallest currency unit (e.g. pence for GBP) to work with Stripe
       amount,
       user_id,
       featured_event_id,
@@ -54,7 +55,7 @@ serve(async (req: Request) => {
 
     console.log('🎉stripe account ID :', organizer.stripe_account_id);
     const priceInPence = amount //Already turned in pence 
-    const baseFee = Math.round(priceInPence * 0.015) + 20;
+    const baseFee = Math.round(priceInPence * 0.030);
     const discountPct = organizer.platform_fee_discount_pct ?? 0;
     const platformFeeInPence = Math.round(baseFee * (1 - discountPct / 100));
 
@@ -69,6 +70,8 @@ serve(async (req: Request) => {
       },
       metadata: {
         user_id: String(user_id),
+        quantity: 1,
+        subtotal: String(amount),
         featured_event_id: String(featured_event_id),
         organizer_id: String(organizer_id),
         date: String(date),

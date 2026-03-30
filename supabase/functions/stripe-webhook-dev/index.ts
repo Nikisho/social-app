@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
 //Ensure dev keys are used
-import { stripe, stripe_webhook } from "../_utils/stripe.ts";
+import { stripe, stripe_webhook } from "../_utils/stripe_dev.ts";
 import { emailUserUponPurchase } from "../_utils/emailUserUponPurchase.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
 import { generateTicket } from "../_utils/generateTicket.ts";

@@ -13,6 +13,7 @@ import formatDateShortWeekday from '../../../utils/functions/formatDateShortWeek
 import { t } from 'i18next';
 import RenderActionButton from './RenderActionButton';
 import TicketTypeModal from './TicketTypeModal';
+import { uuidv4 } from '../../../../supabase/functions/_utils/uuidv4';
 
 interface BookEventProps {
     is_free: boolean;
@@ -142,8 +143,8 @@ const BookEvent: React.FC<BookEventProps> = ({
             if (participantsError) {
                 console.error(participantsError.message);
             }
-
-            const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
+            const uuid = uuidv4();
+            const qrValue = `com.linkzy://ticket/${uuid}`;
             const eventDate = new Date(date)
             const { error: TicketsError } = await supabase
                 .from('tickets')
@@ -152,12 +153,15 @@ const BookEvent: React.FC<BookEventProps> = ({
                     featured_event_id: featured_event_id,
                     ticket_type_id: selectedTicket.ticket_type_id,
                     qr_code_link: qrValue,
+                    uuid: uuid,
                     expiry_date: new Date(eventDate.setDate(eventDate.getDate() + 1))
                 })
             if (TicketsError) {
                 console.error('Error buying ticket :', TicketsError.message);
                 return;
             }
+            // emailUserUponPurchase();
+
         };
 
         platformAlert('Purchase successful! 💫');
@@ -165,7 +169,6 @@ const BookEvent: React.FC<BookEventProps> = ({
         navigation.navigate('ticketfeed');
         setCheckoutModalVisible(!checkoutModalVisible);
         setTicketTypeModalVisible(!ticketTypeModalVisible)
-        emailUserUponPurchase();
     };
 
     const emailUserUponPurchase = async () => {

@@ -35,29 +35,47 @@ const Attendees: React.FC<AttendeesProps> = ({
     const fetchAttendees = async () => {
         const { data, error } = await supabase
             .from('featured_event_bookings')
-            .select(` *,
+            .select(`*,
                 users(
                     name,
                     photo,
                     id
                 )
             `)
-            .eq('featured_event_id', featured_event_id)
+            .eq('featured_event_id', featured_event_id);
+
+        if (error) throw error.message;
 
         if (data) {
-            setAttendees(data);
-            return data;
+            const unique = Object.values(
+                data.reduce((acc: any, row: any) => {
+                    const userId = row.users?.id;
+
+                    if (!userId) return acc;
+
+                    if (!acc[userId]) {
+                        acc[userId] = {
+                            ...row,
+                            ticket_count: 0,
+                        };
+                    }
+
+                    acc[userId].ticket_count += 1;
+
+                    return acc;
+                }, {})
+            );
+
+            setAttendees(unique as any);
+            return unique;
         }
 
-        if (error) {
-            throw error.message;
-        }
         return null;
     };
 
     const handleNavigateGroupChat = async () => {
         const response = await fetchAttendees();
-        const attendeeIds = response?.map(attendee => attendee.users.id);
+        const attendeeIds = response?.map(attendee => (attendee as any).users.id);
         if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
             platformAlert("Join the event to see who's going and chat with them!");
             return;
@@ -69,14 +87,14 @@ const Attendees: React.FC<AttendeesProps> = ({
     const handleNavigate = async () => {
         // const attendeeIds = data?.map(attendee => attendee.users.id);
         const response = await fetchAttendees();
-        const attendeeIds = response?.map(attendee => attendee.users.id);
+        const attendeeIds = response?.map(attendee => (attendee as any).users.id);
 
         if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
             platformAlert("Join the event to see who's going and chat with them!");
             return;
         }
 
-        if (hide_participants && !isOrganizer ) {
+        if (hide_participants && !isOrganizer) {
             platformAlert('The organiser has chosen to hide the participants for this event.');
             return;
         }
@@ -130,18 +148,18 @@ const Attendees: React.FC<AttendeesProps> = ({
                 onPress={handleNavigate}
                 className='p-2'>
                 <Text className='text-xl font-bold'>
-                    {t('featured_event_screen.going')} {attendees?.length !== 0  && '  ' + attendees?.length.toString()}
+                    {t('featured_event_screen.going')} {attendees?.length !== 0 && '  ' + attendees?.length.toString()}
                 </Text>
                 {
                     attendees?.length !== 0 ?
 
-                    <FlatList
-                        horizontal
-                        data={attendees?.slice(0, 3)}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id.toString()}
-                    /> :
-                    <Text className='italic my-2'>No attendees yet</Text>
+                        <FlatList
+                            horizontal
+                            data={attendees?.slice(0, 3)}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.id.toString()}
+                        /> :
+                        <Text className='italic my-2'>No attendees yet</Text>
                 }
 
             </TouchableOpacity>

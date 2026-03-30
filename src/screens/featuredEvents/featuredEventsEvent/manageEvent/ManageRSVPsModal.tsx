@@ -20,6 +20,14 @@ interface RsvpProps {
         name: string;
         is_free: boolean;
     }
+    ticket_count: number;
+    tickets: {
+        ticket_id: number;
+        ticket_types: {
+            name: string;
+            is_free: boolean;
+        }
+    }[]
 };
 
 const ManageRSVPsModal = ({
@@ -48,7 +56,26 @@ const ManageRSVPsModal = ({
                 .select(`*, users(*), ticket_types(*)`)
                 .eq('featured_event_id', featured_event_id)
             if (data) {
-                setRsvps(data)
+                const grouped = Object.values(
+                    data.reduce((acc: any, ticket: any) => {
+                        const userId = ticket.user_id;
+
+                        if (!acc[userId]) {
+                            acc[userId] = {
+                                user_id: userId,
+                                users: ticket.users,
+                                ticket_count: 0,
+                                tickets: [],
+                            };
+                        }
+
+                        acc[userId].ticket_count += 1;
+                        acc[userId].tickets.push(ticket);
+
+                        return acc;
+                    }, {})
+                );
+                setRsvps(grouped as any)
             }
             if (error) console.error(error.message);
         } catch (error) {
@@ -63,10 +90,6 @@ const ManageRSVPsModal = ({
 
 
     const RenderItem = ({ item }: { item: RsvpProps }) => {
-
-        const handleInitiateRefund = async (ticket_id: number) => {
-            console.log('refunding for', ticket_id)
-        };
 
         return (
             <View className='p-3 px-5  bg-gray-100 m-2'>
@@ -134,7 +157,13 @@ const ManageRSVPsModal = ({
                     <Entypo name="ticket" size={20} color="black" />
 
                     <Text>
-                        {item.ticket_types?.name}
+                        {item.tickets[0].ticket_types?.name}
+                    </Text>
+
+                </View>
+                <View className='flex py-3 flex-row items-center space-x-3'>
+                    <Text>
+                        Quantity: {item.ticket_count}
                     </Text>
                 </View>
                 {/* {

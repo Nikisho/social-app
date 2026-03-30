@@ -50,6 +50,8 @@ export interface PaymentIntentParamsProps {
       application_fee_amount?: number,
       metadata: {
         user_id: string,
+        subtotal: string,
+        quantity: number,
         featured_event_id: string,
         organizer_id: string,
         date: string,

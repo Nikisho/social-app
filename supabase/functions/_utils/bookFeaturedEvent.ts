@@ -6,7 +6,8 @@ export const bookFeaturedEvent = async (
     tickets_sold: number,
     ticket_transaction_id: number,
     chat_room_id:number,
-    ticket_type_id: number
+    ticket_type_id: number,
+    quantity: number
 ) => {
     try {
         // const ticketSoldNumber = new Number(tickets_sold)
@@ -24,7 +25,7 @@ export const bookFeaturedEvent = async (
             const { error } = await supabaseAdmin
                 .from('ticket_types')
                 .update({
-                    tickets_sold: Number(tickets_sold) + 1
+                    tickets_sold: Number(tickets_sold) + quantity
                 })
                 // .eq('featured_event_id', featured_event_id)
                 .eq('ticket_type_id', ticket_type_id)
