@@ -27,7 +27,7 @@
     "production": {
       "ios": {
         "resourceClass": "m-medium",
-        "image": "macos-sequoia-15.3-xcode-16.2"
+        "image": "macos-sequoia-15.5-xcode-26.0"
       },
       "channel": "production"
     }
