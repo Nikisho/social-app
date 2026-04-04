@@ -33,6 +33,15 @@ async function handler(request: Request) {
       const quantity = Number(session.metadata.quantity || 1);
       const tickets: { ticket_id: number; qr_code_link: string }[] = [];
 
+      const booking_id = await bookFeaturedEvent(
+        session.metadata.user_id,
+        session.metadata.featured_event_id,
+        session.metadata.tickets_sold,
+        session.metadata.chat_room_id,
+        session.metadata.ticket_type_id,
+        quantity,
+      );
+
       for (let i = 0; i < quantity; i++) {
         const ticket = await generateTicket(
           session.metadata.user_id,
@@ -55,24 +64,11 @@ async function handler(request: Request) {
             currency: session.currency,
             ticket_id: ticket?.ticket_id || null,
             user_id: session.metadata.user_id,
+            featured_event_booking_id: booking_id,
             organizer_id: session.metadata.organizer_id,
           })
-          .select("ticket_transaction_id")
-          .single();
 
         if (error) throw error;
-
-        if (data) {
-          bookFeaturedEvent(
-            session.metadata.user_id,
-            session.metadata.featured_event_id,
-            session.metadata.tickets_sold,
-            data.ticket_transaction_id,
-            session.metadata.chat_room_id,
-            session.metadata.ticket_type_id,
-            quantity
-          );
-        }
       }
 
       emailUserUponPurchase(

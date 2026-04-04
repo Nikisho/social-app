@@ -14,6 +14,7 @@ import { uuidv4 } from '../../../../utils/functions/uuidv4'
 import ManageRSVPsModal from './ManageRSVPsModal'
 import ManageSeries from './ManageSeries'
 import EmailParticipants from './EmailParticipants'
+import GuestListBanner from './GuestListBanner'
 
 type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
@@ -270,6 +271,9 @@ const handleRepeatEvent = async () => {
         />
 
         <ManageRSVPsModal
+          featured_event_id={featured_event_id}
+        />
+        <GuestListBanner 
           featured_event_id={featured_event_id}
         />
         <EmailParticipants 

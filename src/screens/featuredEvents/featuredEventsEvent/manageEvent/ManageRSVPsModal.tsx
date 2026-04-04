@@ -21,7 +21,12 @@ interface RsvpProps {
         is_free: boolean;
     }
     ticket_count: number;
+    username: string;
+    email: string;
+    photo: string;
     tickets: {
+        type: string;
+        quantity: number;
         ticket_id: number;
         ticket_types: {
             name: string;
@@ -50,47 +55,56 @@ const ManageRSVPsModal = ({
     };
     const fetchData = async () => {
         try {
-            if (!featured_event_id) return
+            if (!featured_event_id) return;
+
             const { data, error } = await supabase
-                .from('tickets')
-                .select(`*, users(*), ticket_types(*)`)
-                .eq('featured_event_id', featured_event_id)
-            if (data) {
-                const grouped = Object.values(
-                    data.reduce((acc: any, ticket: any) => {
-                        const userId = ticket.user_id;
+                .from("event_bookings_view")
+                .select("*")
+                .eq("featured_event_id", featured_event_id);
 
-                        if (!acc[userId]) {
-                            acc[userId] = {
-                                user_id: userId,
-                                users: ticket.users,
-                                ticket_count: 0,
-                                tickets: [],
-                            };
-                        }
-
-                        acc[userId].ticket_count += 1;
-                        acc[userId].tickets.push(ticket);
-
-                        return acc;
-                    }, {})
-                );
-                setRsvps(grouped as any)
+            if (error) {
+                console.error(error.message);
+                return;
             }
-            if (error) console.error(error.message);
+
+            const grouped = Object.values(
+                data.reduce((acc: any, row: any) => {
+                    const userId = row.id;
+
+                    if (!acc[userId]) {
+                        acc[userId] = {
+                            user_id: userId,
+                            username: row.username,
+                            email: row.email,
+                            photo: row.photo,
+                            ticket_count: 0,
+                            tickets: [],
+                        };
+                    }
+
+                    acc[userId].ticket_count += row.quantity;
+
+                    acc[userId].tickets.push({
+                        type: row.ticket_type,
+                        quantity: row.quantity,
+                    });
+
+                    return acc;
+                }, {})
+            );
+
+            setRsvps(grouped as any);
+
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-
-    }
-
+    };
     useEffect(() => {
         fetchData()
     }, [featured_event_id]);
 
 
     const RenderItem = ({ item }: { item: RsvpProps }) => {
-
         return (
             <View className='p-3 px-5  bg-gray-100 m-2'>
 
@@ -100,17 +114,17 @@ const ManageRSVPsModal = ({
                     className='flex-row justify-between '>
 
                     <View className='flex flex-row space-x-3 items-center'>
-                        {item.users.photo ?
+                        {item.photo ?
                             <Image
                                 source={{
-                                    uri: item.users.photo
+                                    uri: item.photo
                                 }}
                                 className='h-14 w-14 rounded-full '
                             />
                             :
                             <View
                                 style={{
-                                    backgroundColor: getColorFromName(item.users.name),
+                                    backgroundColor: getColorFromName(item.username),
                                     width: 55,
                                     height: 55,
                                     borderRadius: 50,
@@ -121,7 +135,7 @@ const ManageRSVPsModal = ({
                                 }}
                             >
                                 <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>
-                                    {item.users.name.charAt(0).toUpperCase()}
+                                    {item.username.charAt(0).toUpperCase()}
                                 </Text>
                             </View>
                         }
@@ -130,7 +144,7 @@ const ManageRSVPsModal = ({
                                 numberOfLines={1}
                                 style={{ width: 100 }}
                                 className='text-lg text-'>
-                                {item.users.name}
+                                {item.username}
                             </Text>
                         </View>
                     </View>
@@ -146,25 +160,41 @@ const ManageRSVPsModal = ({
                         </TouchableOpacity>
                     }
                 </TouchableOpacity >
-                <View className='flex py-3 flex-row items-center space-x-3'>
-                    <MaterialIcons name="email" size={20} color="black" />
+                <View className="rounded-2xl p-2 my-2  mb-3 shadow-sm ">
 
-                    <Text selectable={true}>
-                        {item.users.email}
-                    </Text>
-                </View>
-                <View className='flex flex-row items-center space-x-3'>
-                    <Entypo name="ticket" size={20} color="black" />
+                    {/* Email */}
+                    <View className="flex flex-row items-center mb-2">
+                        <MaterialIcons name="email" size={18} color="#6B7280" />
+                        <Text className="ml-2 text-sm text-gray-600" selectable>
+                            {item.email}
+                        </Text>
+                    </View>
 
-                    <Text>
-                        {item.tickets[0].ticket_types?.name}
-                    </Text>
+                    {/* Tickets */}
+                    <View className="flex flex-row items-start mb-2">
+                        <Entypo name="ticket" size={18} color="#6B7280" />
+                        <View className="ml-2 flex-1">
+                            {item.tickets.map((ticket, index) => (
+                                <Text key={index} className="text-sm text-gray-800">
+                                    • {ticket.type} <Text className="text-gray-500">x{ticket.quantity}</Text>
+                                </Text>
+                            ))}
+                        </View>
+                    </View>
 
-                </View>
-                <View className='flex py-3 flex-row items-center space-x-3'>
-                    <Text>
-                        Quantity: {item.ticket_count}
-                    </Text>
+                    {/* Divider */}
+                    <View className="h-px bg-gray-100 my-" />
+
+                    {/* Quantity */}
+                    <View className="flex flex-row justify-between items-center">
+                        <Text className="text-sm text-gray-500">
+                            Total tickets
+                        </Text>
+                        <Text className="text-base font-semibold text-black">
+                            {item.ticket_count}
+                        </Text>
+                    </View>
+
                 </View>
                 {/* {
                     !item.ticket_types?.is_free && (
@@ -210,7 +240,7 @@ const ManageRSVPsModal = ({
                             <FlatList
                                 data={rsvps}
                                 renderItem={RenderItem}
-                                keyExtractor={(item) => item.users.id.toString()}
+                                keyExtractor={(item) => item.user_id.toString()}
                             />
                         ) : (
                             <View style={{ alignItems: "center", padding: 20 }}>

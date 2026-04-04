@@ -4,21 +4,21 @@ export const bookFeaturedEvent = async (
     user_id: number,
     featured_event_id: number,
     tickets_sold: number,
-    ticket_transaction_id: number,
     chat_room_id:number,
     ticket_type_id: number,
     quantity: number
 ) => {
     try {
         // const ticketSoldNumber = new Number(tickets_sold)
-        const { error } = await supabaseAdmin
+        const { data:booking, error } = await supabaseAdmin
             .from('featured_event_bookings')
             .insert({
                 user_id: user_id,
                 featured_event_id: featured_event_id,
-                ticket_transaction_id: ticket_transaction_id
+                quantity: quantity,
+                ticket_type_id: ticket_type_id
 
-            })
+            }).select('id').single();
         if (error) {
             console.error(error.message);
         } else {
@@ -44,6 +44,7 @@ export const bookFeaturedEvent = async (
         if (participantsError) {
             console.error(participantsError.message);
         }
+        return booking?.id;
     } catch (error) {
         throw error
     }
