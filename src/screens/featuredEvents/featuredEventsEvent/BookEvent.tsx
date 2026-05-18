@@ -14,6 +14,7 @@ import { t } from 'i18next';
 import RenderActionButton from './RenderActionButton';
 import TicketTypeModal from './TicketTypeModal';
 import { uuidv4 } from '../../../../supabase/functions/_utils/uuidv4';
+import LoadingScreen from '../../loading/LoadingScreen';
 
 interface BookEventProps {
     is_free: boolean;
@@ -38,8 +39,11 @@ interface BookEventProps {
         quantity: number;
         tickets_sold: number;
         ticket_type_id: number;
-    }[]
-
+    }[],
+    organizers: {
+        user_id: number
+        platform_fee_discount_pct: number;
+    }
 }
 const BookEvent: React.FC<BookEventProps> = ({
     is_free,
@@ -53,7 +57,8 @@ const BookEvent: React.FC<BookEventProps> = ({
     location,
     title,
     time,
-    ticket_types
+    ticket_types,
+    organizers
 
 }) => {
     const currentUser = useSelector(selectCurrentUser);
@@ -61,6 +66,7 @@ const BookEvent: React.FC<BookEventProps> = ({
     const navigation = useNavigation<RootStackNavigationProp>();
     const [ticketTypeModalVisible, setTicketTypeModalVisible] = useState<boolean>(false);
     const [selectedTicket, setSelectedTicket] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const canBook = async () => {
         if (__DEV__) {
@@ -109,102 +115,55 @@ const BookEvent: React.FC<BookEventProps> = ({
 
     }
 
-    const handleBookEvent = async () => {
+    const handleBookEvent = async (quantity: undefined | number = 1) => {
+        setLoading(true);
         if (selectedTicket.is_free) {
-            const { error } = await supabase
-                .from('featured_event_bookings')
-                .insert({
-                    user_id: currentUser.id,
-                    featured_event_id: featured_event_id,
-                })
+            const { error, response } = await supabase.functions.invoke(
+                'guest_free_ticket_claim',
+                {
+                    body: {
+                        user: { name: currentUser.name, email: currentUser.email },
+                        selected_ticket: {
+                            featured_event_id: selectedTicket.featured_event_id,
+                            tickets_sold: selectedTicket.tickets_sold,
+                            ticket_type_id: selectedTicket.ticket_type_id
+                        },
+                        event: {
+                            date: date,
+                            time: time,
+                            title: title,
+                            organizer_id: organizer_id,
+                            location: location,
+                            chat_room_id: chat_room_id,
+                        },
+                        quantity: quantity
+                    }
+                }
+            );
             if (error) {
-                console.error(error.message);
-            } else {
-                const { error } = await supabase
-                    .from('ticket_types')
-                    .update({
-                        tickets_sold: selectedTicket.tickets_sold + 1
-                    })
-                    // .eq('featured_event_id', featured_event_id)
-                    .eq('ticket_type_id', selectedTicket.ticket_type_id)
+                const status = response?.status
+                // console.log('Error code is  ', response?.status)
+                if (status === 409) {
+                    platformAlert("You already have a booking for this event.");
+                    return;
+                }
 
-                if (error)
-                    console.error(error.message);
-            }
-            //generate the ticket is the event is free as for paid events
-            //it is generated in the backend
-
-            const { error: participantsError } = await supabase
-                .from('participants')
-                .insert({
-                    user_id: currentUser.id,
-                    chat_room_id: chat_room_id
-                })
-            if (participantsError) {
-                console.error(participantsError.message);
-            }
-            const uuid = uuidv4();
-            const qrValue = `com.linkzy://ticket/${uuid}`;
-            const eventDate = new Date(date)
-            const { error: TicketsError } = await supabase
-                .from('tickets')
-                .insert({
-                    user_id: currentUser.id,
-                    featured_event_id: featured_event_id,
-                    ticket_type_id: selectedTicket.ticket_type_id,
-                    qr_code_link: qrValue,
-                    uuid: uuid,
-                    expiry_date: new Date(eventDate.setDate(eventDate.getDate() + 1))
-                })
-            if (TicketsError) {
-                console.error('Error buying ticket :', TicketsError.message);
+                platformAlert("Something went wrong. Please try again.");
                 return;
             }
-            // emailUserUponPurchase();
+            setLoading(false);
 
         };
+        setLoading(false);
 
         platformAlert('Purchase successful! 💫');
         await delay(2000);
         navigation.navigate('ticketfeed');
         setCheckoutModalVisible(!checkoutModalVisible);
         setTicketTypeModalVisible(!ticketTypeModalVisible)
+        setLoading(false);
     };
 
-    const emailUserUponPurchase = async () => {
-        try {
-            const edge_function_base_url = 'https://wffeinvprpdyobervinr.supabase.co/functions/v1/ticket-purchase-email'
-            const qrValue = `com.linkzy://event/${featured_event_id}/user/${currentUser.id}`;
-
-            const {
-                data: { session },
-            } = await supabase.auth.getSession();
-
-            const accessToken = session?.access_token;
-            const response = await fetch(edge_function_base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify({
-                    name: currentUser.name,
-                    email: currentUser.email,
-                    title: title,
-                    location: location,
-                    date: date && time && (formatDateShortWeekday(date) + ', ' + (time).slice(0, -3)),
-                    qrValue: qrValue
-                }),
-            });
-
-            const data = await response.json();
-            console.log("✅ Function response:", data);
-        } catch (error: any) {
-            console.error('Error booking event:', error.message);
-            platformAlert('An error occurred while booking the event. Please try again later.');
-
-        }
-    }
     const fadeAnim = useRef(new Animated.Value(0)).current;
     useEffect(() => {
         Animated.timing(fadeAnim, {
@@ -213,6 +172,14 @@ const BookEvent: React.FC<BookEventProps> = ({
             useNativeDriver: true,
         }).start();
     }, []);
+
+    if (loading) {
+        return (
+            <View className='absolute inset-0 bg-white h-full w-full'>
+                <LoadingScreen displayText={'Processing your booking'} />
+             </View> 
+        )
+    }
     return (
         <Animated.View
             style={{
@@ -236,6 +203,7 @@ const BookEvent: React.FC<BookEventProps> = ({
                 chat_room_id={chat_room_id}
                 ticket_name={selectedTicket?.name}
                 ticket_type_id={selectedTicket?.ticket_type_id}
+                platform_fee_discount_pct={organizers.platform_fee_discount_pct}
             />
             <TicketTypeModal
                 modalVisible={ticketTypeModalVisible}

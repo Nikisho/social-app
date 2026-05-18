@@ -15,6 +15,7 @@ import ManageRSVPsModal from './ManageRSVPsModal'
 import ManageSeries from './ManageSeries'
 import EmailParticipants from './EmailParticipants'
 import GuestListBanner from './GuestListBanner'
+import DeleteEventModal from './DeleteEventModal'
 
 type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
@@ -22,7 +23,7 @@ interface EventDataProps {
   title: string
   description: string
   organizer_id: number
-  series_id:number;
+  series_id: number;
   price: string
   time: string
   location: string
@@ -56,10 +57,12 @@ const EditFeaturedEventScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [repeatEvent, setRepeatEvent] = useState<boolean | null>(null);
   const [eventData, setEventData] = useState<EventDataProps | null>(null)
-  const [oldUniqueFileIdentifier, setOldUniqueFileIdentifier] = useState<string | null>(null)
-  const [initial, setInitial] = useState<{ description: string; image_url: string | { base64: string }, hasSeries: boolean, repeatEvent: boolean | null }>({
+  const [oldUniqueFileIdentifier, setOldUniqueFileIdentifier] = useState<string | null>(null);
+  const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState(false);
+  const [initial, setInitial] = useState<{ description: string; image_url: string | { base64: string }, title: string, hasSeries: boolean, repeatEvent: boolean | null }>({
     description: '',
     image_url: '',
+    title: '',
     hasSeries: false,
     repeatEvent: null,
   })
@@ -104,6 +107,7 @@ const EditFeaturedEventScreen = () => {
     setInitial({
       description: event.description,
       image_url: event.image_url,
+      title: event.title,
       hasSeries: Boolean(event.series_id),
       repeatEvent: repeatFlag,
     });
@@ -127,76 +131,77 @@ const EditFeaturedEventScreen = () => {
     if (!eventData) return false
     if (eventData.description !== initial.description) return true
     if (repeatEvent !== initial.repeatEvent) return true
+    if (eventData.title !== initial.title) return true
     if (typeof eventData.image_url === 'object') return true
     return false
   }, [eventData, initial, repeatEvent])
 
 
-const handleRepeatEvent = async () => {
-  if (repeatEvent === initial.repeatEvent) return;
+  const handleRepeatEvent = async () => {
+    if (repeatEvent === initial.repeatEvent) return;
 
-  // CASE 1: Event is not part of a series yet → Create new series
-  if (!initial.hasSeries && repeatEvent) {
-    const dayOfWeek = new Date(eventData?.date!).getDay();
+    // CASE 1: Event is not part of a series yet → Create new series
+    if (!initial.hasSeries && repeatEvent) {
+      const dayOfWeek = new Date(eventData?.date!).getDay();
 
-    const { data, error } = await supabase
-      .from('recurring_series')
-      .insert({
-        featured_event_id,
-        day_of_week: dayOfWeek,
-        paused: false,
-      })
-      .select('series_id')
-      .single();
+      const { data, error } = await supabase
+        .from('recurring_series')
+        .insert({
+          featured_event_id,
+          day_of_week: dayOfWeek,
+          paused: false,
+        })
+        .select('series_id')
+        .single();
 
-    if (error) {
-      console.error('Error inserting into series:', error.message);
+      if (error) {
+        console.error('Error inserting into series:', error.message);
+        return;
+      }
+
+      const { error: updateError } = await supabase
+        .from('featured_events')
+        .update({ series_id: data.series_id })
+        .eq('featured_event_id', featured_event_id);
+
+      if (updateError) console.error('Error linking series_id:', updateError.message);
       return;
     }
 
-    const { error: updateError } = await supabase
-      .from('featured_events')
-      .update({ series_id: data.series_id })
-      .eq('featured_event_id', featured_event_id);
-
-    if (updateError) console.error('Error linking series_id:', updateError.message);
-    return;
-  }
-
-  // CASE 2: Event is part of a series → Pause or unpause
-  if (initial.hasSeries && eventData?.series_id) {
-    const { data: series, error: fetchError } = await supabase
-      .from('recurring_series')
-      .select('paused')
-      .eq('series_id', eventData.series_id)
-      .single();
-
-    if (fetchError) {
-      console.error('Error fetching series:', fetchError.message);
-      return;
-    }
-
-    // Pause series
-    if (!repeatEvent && !series?.paused) {
-      const { error } = await supabase
+    // CASE 2: Event is part of a series → Pause or unpause
+    if (initial.hasSeries && eventData?.series_id) {
+      const { data: series, error: fetchError } = await supabase
         .from('recurring_series')
-        .update({ paused: true })
-        .eq('series_id', eventData.series_id);
+        .select('paused')
+        .eq('series_id', eventData.series_id)
+        .single();
 
-      if (error) console.error('Error pausing series:', error.message);
+      if (fetchError) {
+        console.error('Error fetching series:', fetchError.message);
+        return;
+      }
+
+      // Pause series
+      if (!repeatEvent && !series?.paused) {
+        const { error } = await supabase
+          .from('recurring_series')
+          .update({ paused: true })
+          .eq('series_id', eventData.series_id);
+
+        if (error) console.error('Error pausing series:', error.message);
+      }
+
+      // Unpause series
+      if (repeatEvent && series?.paused) {
+        const { error } = await supabase
+          .from('recurring_series')
+          .update({ paused: false })
+          .eq('series_id', eventData.series_id);
+
+        if (error) console.error('Error unpausing series:', error.message);
+      }
     }
-
-    // Unpause series
-    if (repeatEvent && series?.paused) {
-      const { error } = await supabase
-        .from('recurring_series')
-        .update({ paused: false })
-        .eq('series_id', eventData.series_id);
-
-      if (error) console.error('Error unpausing series:', error.message);
-    }
-  }
-};
+  };
 
 
   const handleSubmit = async () => {
@@ -231,7 +236,7 @@ const handleRepeatEvent = async () => {
       }
       const { error } = await supabase
         .from('featured_events')
-        .update({ description: eventData!.description, image_url: typeof eventData?.image_url !== 'string' ? mediaUrl : eventData.image_url })
+        .update({ description: eventData!.description, image_url: typeof eventData?.image_url !== 'string' ? mediaUrl : eventData.image_url, title: eventData?.title })
         .eq('featured_event_id', featured_event_id)
 
       if (error) throw new Error(error.message)
@@ -248,6 +253,23 @@ const handleRepeatEvent = async () => {
       setLoading(false)
     }
   }
+
+  const handleDeleteEvent = async () => {
+    const { error } = await supabase
+      .from('featured_events')
+      .delete()
+      .eq('featured_event_id', featured_event_id)
+
+    if (error) {
+      console.error('Error deleting event:', error.message);
+      platformAlert('Failed to delete event. Please try again.');
+      return;
+    }
+
+    platformAlert('Event deleted successfully');
+    navigation.navigate('featuredEvents', {});
+  };
+
 
   if (loading) {
     return <LoadingScreen displayText="Saving changes..." />
@@ -273,24 +295,24 @@ const handleRepeatEvent = async () => {
         <ManageRSVPsModal
           featured_event_id={featured_event_id}
         />
-        <GuestListBanner 
+        <GuestListBanner
           featured_event_id={featured_event_id}
         />
-        <EmailParticipants 
+        <EmailParticipants
           featured_event_id={featured_event_id}
         />
         <ManageSeries
           repeatEvent={repeatEvent}
           setRepeatEvent={setRepeatEvent}
         />
-        <View
+        {/* <View
           className="flex-row items-center space-x-4 bg-amber-100 border border-amber-300 rounded-2xl p-4 my-4 w-full"
         >
           <Ionicons name="warning-outline" size={28} color="#D97706" />
           <Text className="flex-1 text-amber-800 text-base leading-6">
             You can only edit the image and description of featured events.
           </Text>
-        </View>
+        </View> */}
 
         {eventData && (
           <>
@@ -298,6 +320,16 @@ const handleRepeatEvent = async () => {
             <MediaPicker setEventData={setEventData} eventData={eventData} />
             {/* </View> */}
 
+            <Text className="text-xl font-bold m-2">Title</Text>
+            <TextInput
+              multiline
+              value={eventData.title}
+              placeholder="Enter your event's title"
+              onChangeText={(value) =>
+                setEventData((prev) => prev! && { ...prev, title: value })
+              }
+              className="border rounded-xl h-15 p-5"
+            />
             <Text className="text-xl font-bold m-2">Description</Text>
             <TextInput
               multiline
@@ -309,16 +341,32 @@ const handleRepeatEvent = async () => {
               className="border rounded-xl h-32 p-5"
             />
 
-            <View className="py-5">
+            <View className="pt-5">
               <TouchableOpacity
                 onPress={handleSubmit}
                 disabled={!hasChanges}
-                className={`p-4 rounded-full w-1/2 self-center ${hasChanges ? 'bg-black' : 'bg-gray-400'
+                className={`p-4 rounded-lg w-full self-center ${hasChanges ? 'bg-black' : 'bg-gray-400'
                   }`}
               >
                 <Text className="text-white text-center font-bold">SAVE CHANGES</Text>
               </TouchableOpacity>
             </View>
+
+            <View className="pt-3">
+              <TouchableOpacity
+                onPress={() => setConfirmDeleteModalVisible(true)}
+                // disabled={!hasChanges}
+                className={`p-4 rounded-lg w-full self-center bg-red-600`}
+              >
+                <Text className="text-white text-center font-bold">DELETE EVENT</Text>
+              </TouchableOpacity>
+            </View>
+
+            <DeleteEventModal
+              showDeleteModal={confirmDeleteModalVisible}
+              setShowDeleteModal={setConfirmDeleteModalVisible}
+              handleDeleteEvent={handleDeleteEvent}
+            />
           </>
         )}
       </ScrollView>

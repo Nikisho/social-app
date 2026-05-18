@@ -1,7 +1,7 @@
 import { createOrRetrieveCustomer } from "../_utils/createOrRetrieveCustomer.ts";
 import { serve } from "https://deno.land/std@0.132.0/http/server.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
-import { stripe, stripe_pk } from "../_utils/stripe.ts";
+import { stripe, stripe_pk } from "../_utils/stripe_dev.ts";
 import { PaymentIntentParamsProps } from "../_utils/db_types.ts";
 
 // @ts-ignore

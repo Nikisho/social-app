@@ -7,11 +7,13 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
 import { PlatformPayButton, usePlatformPay } from '@stripe/stripe-react-native';
 import { useTranslation } from 'react-i18next';
+import { Ionicons } from '@expo/vector-icons';
+import { getPricePlusPlatformFee } from '../../../utils/functions/getPricePlusPlatformFee';
 
 interface BookEventCheckoutModalProps {
     modalVisible: boolean;
     setModalVisible: (bool: boolean) => void;
-    handleBookEvent: () => void;
+    handleBookEvent: (quantity?: number) => void;
     price: string;
     is_free: boolean;
     featured_event_id: number;
@@ -21,6 +23,7 @@ interface BookEventCheckoutModalProps {
     chat_room_id: number;
     ticket_name: number;
     ticket_type_id: number;
+    platform_fee_discount_pct: number;
 }
 
 const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
@@ -35,26 +38,35 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
     chat_room_id,
     tickets_sold,
     ticket_name,
-    ticket_type_id
+    ticket_type_id,
+    platform_fee_discount_pct
 }) => {
 
     const { t } = useTranslation();
-    const priceStripeAmount = Math.round(parseFloat(price) * 100);
     const currentUser = useSelector(selectCurrentUser);
-    console.log(chat_room_id)
+    const [ticketQuantity, setTicketQuantity] = useState<number>(1);
+    const subtotal = parseFloat(price) * ticketQuantity;
+    const ticketPrice = getPricePlusPlatformFee(
+        price,
+        platform_fee_discount_pct
+    );
+    const total = ticketPrice ? ticketPrice * ticketQuantity : 0;
+
+    console.log('sub is : ', subtotal)
     const [loading, setLoading] = useState<boolean>(false);
-    const fetchPaymentSheetParams = async (amount: number) => {
+    const fetchPaymentSheetParams = async (subtotal: number) => {
         const { data, error } = await supabase.functions.invoke(
             "create-checkout-session", {
             body: {
-                amount: amount,
+                subtotal: subtotal,
                 featured_event_id: featured_event_id,
                 organizer_id: organizer_id,
                 user_id: currentUser.id,
                 date: date,
                 tickets_sold: tickets_sold,
                 ticket_type_id: ticket_type_id,
-                chat_room_id: chat_room_id
+                chat_room_id: chat_room_id,
+                quantity: ticketQuantity
             },
         }
         );
@@ -75,7 +87,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
         setLoading(true);
         try {
             if (is_free === true) {
-                handleBookEvent();
+                handleBookEvent(ticketQuantity);
                 return;
             }
 
@@ -118,7 +130,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                         cartItems: [
                             {
                                 label: 'Linkzy',
-                                amount: price,
+                                amount: total.toFixed(2),
                                 paymentType: PlatformPay.PaymentType.Immediate,
                             }
                         ],
@@ -192,37 +204,124 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                 onPress={() => setModalVisible(false)}
                 className='flex-1 justify-end items-center bottom-0 w-full  ' >
                 <TouchableWithoutFeedback>
-                    <View className='bg-black w-full p-1 space-y-3 h-96' >
+                    <View className='bg-black w-full p-1 space-y-3 h-1/2' >
                         <View className='p-2'>
                             <Text className='text-white text-xl'>
                                 {t('event_checkout.order_summary')}
                             </Text>
                         </View>
 
-                        <View className='p-2 py-3  border-y border-white flex flex-row justify-between'>
-                            <Text className='text-white text-lg'>
-                                {/* {t('event_checkout.general_admission')} */}
-                                {ticket_name}
+                        <View className='flex-row justify-between border-y border-white'>
 
-                            </Text>
-                            {
-                                is_free ?
-                                    <Text className='text-lg text-white font-bold'>
-                                        {t('event_checkout.free')}
-                                    </Text>
-                                    :
-                                    <Text className=' text-lg text-white font-bold'>
-                                        {/* £{price} */}
-                                        {t('event_checkout.currency')} {price}
-                                    </Text>
-                            }
+                            <View className='p-2 py-3   flex '>
+                                <Text className='text-white text-lg'>
+                                    {/* {t('event_checkout.general_admission')} */}
+                                    {ticket_name}
+
+                                </Text>
+                                {
+                                    is_free ?
+                                        <Text className='text-lg text-white font-bold'>
+                                            {t('event_checkout.free')}
+                                        </Text>
+                                        :
+                                        <Text className=' text-lg text-white font-bold'>
+                                            {/* £{price} */}
+                                            {t('event_checkout.currency')} {price}
+                                        </Text>
+                                }
+                            </View>
+                            <View className='flex-row items-center px-3'>
+
+                                <TouchableOpacity
+                                    disabled={ticketQuantity === 1}
+                                    className={`{ticketQuantity === 1 && 'opacity-50'}`}
+                                    onPress={() =>
+                                        setTicketQuantity((prev: number) =>
+                                            Math.max(0, prev - 1)
+                                        )
+                                    }
+                                >
+                                    <Ionicons
+                                        name="remove-circle-outline"
+                                        size={28}
+                                        color="white"
+                                    />
+                                </TouchableOpacity>
+
+                                <Text className='text-white text-lg font-semibold mx-3'>
+                                    {ticketQuantity}
+                                </Text>
+
+                                <TouchableOpacity
+                                    disabled={ticketQuantity === 5}
+                                    className={`{ticketQuantity === 5 && 'opacity-50'}`}
+                                    onPress={() =>
+                                        setTicketQuantity((prev: number) => prev + 1)
+                                    }
+                                >
+                                    <Ionicons
+                                        name="add-circle"
+                                        size={28}
+                                        color="white"
+                                    />
+                                </TouchableOpacity>
+
+                            </View>
+
                         </View>
+                        <View className='mt-4 px-2'>
+
+
+
+                            {
+                                !is_free && (
+                                    <>
+
+                                        <View className='flex-row justify-between items-center mb-'>
+                                            <Text className='text-gray-300'>
+                                                Subtotal
+                                            </Text>
+
+                                            <Text className='text-white'>
+                                                {t('event_checkout.currency')}
+                                                {(subtotal).toFixed(2)}
+                                            </Text>
+                                        </View>
+                                        <View className='flex-row justify-between items-center mt-1 mb-3'>
+                                            <Text className='text-gray-400 text-sm'>
+                                                Booking fee
+                                            </Text>
+
+                                            <Text className='text-gray-400 text-sm'>
+                                                {t('event_checkout.currency')}
+                                                {(total - subtotal).toFixed(2)}
+                                            </Text>
+                                        </View>
+                                    </>
+                                )
+                            }
+
+                            <View className='flex-row justify-between items-center border-t border-white/10 pt-2'>
+                                <Text className='text-white font-semibold text-lg'>
+                                    Total
+                                </Text>
+
+                                <Text className='text-white font-bold text-xl'>
+                                    {is_free
+                                        ? t('event_checkout.free')
+                                        : `${t('event_checkout.currency')}${(total).toFixed(2)}`}
+                                </Text>
+                            </View>
+
+                        </View>
+
                         <View className='flex items-center p-5 space-y-5'>
                             <TouchableOpacity
                                 disabled={loading}
                                 className={`bg-white w-full p-2 rounded-full ${loading && 'opacity-30'}`}
-                                onPress={() => openPaymentSheet(priceStripeAmount)}>
-                                <Text className='text-lg text-center  font-bold'> 
+                                onPress={() => openPaymentSheet(subtotal)}>
+                                <Text className='text-lg text-center  font-bold'>
                                     {t('event_checkout.purchase')}
                                 </Text>
                             </TouchableOpacity>
@@ -230,8 +329,8 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                 <PlatformPayButton
                                     disabled={loading}
                                     type={PlatformPay.ButtonType.Pay}
-                                    onPress={() => handlePlatformPay(priceStripeAmount)}
-                                    appearance={Platform.OS === 'ios'? PlatformPay.ButtonStyle.Black : PlatformPay.ButtonStyle.White}
+                                    onPress={() => handlePlatformPay(subtotal)}
+                                    appearance={Platform.OS === 'ios' ? PlatformPay.ButtonStyle.Black : PlatformPay.ButtonStyle.White}
                                     style={{
                                         width: '100%',
                                         height: 50,
@@ -240,7 +339,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                         // borderRadius: 100
                                     }}
                                     borderRadius={100}
-                                    
+
                                 />
                             }
                         </View>

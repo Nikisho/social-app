@@ -8,6 +8,8 @@ import { supabaseAdmin } from "../_utils/supabase.ts";
 
 Deno.serve(async (req: Request) => {
   const { __DEV__ } = await req.json();
+
+
   function getWeekAfterNextWeekday(
     runDate: Date,
     dayOfWeek: number,
@@ -81,9 +83,9 @@ Deno.serve(async (req: Request) => {
     const sales_start = new Date(date);
     sales_start.setDate(date.getDate() - 7);
 
-    // sales end: 1 day before event
+    // sales end: on the day of the event
     const sales_end = new Date(date);
-    sales_end.setDate(date.getDate() - 1);
+    sales_end.setDate(date.getDate());
 
     return {
       sales_start: sales_start.toISOString(),
@@ -129,6 +131,8 @@ Deno.serve(async (req: Request) => {
             location: series.featured_events.location,
             date: nextEventDate,
             time: series.featured_events.time,
+            end_time: series.featured_events.end_time,
+            end_date: nextEventDate, //Need to change to end_date + 7
             is_free: series.featured_events.is_free,
             max_tickets: series.featured_events.max_tickets,
             chat_room_id: series.featured_events.chat_room_id,

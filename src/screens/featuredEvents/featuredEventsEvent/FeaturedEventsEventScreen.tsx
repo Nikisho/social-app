@@ -45,6 +45,7 @@ interface EventDataProps {
     }[]
     organizers: {
         user_id: number
+        platform_fee_discount_pct: number;
         users: {
             name: string
             photo: string
@@ -77,6 +78,7 @@ const FeaturedEventsEventScreen = () => {
             .select(`*, 
                 organizers(
                     user_id,
+                    platform_fee_discount_pct,
                     users(*)
                 ),
                 ticket_types(*)
