@@ -68,7 +68,6 @@ const EditFeaturedEventScreen = () => {
       (sum: number, t: any) => sum + (t.tickets_sold || 0),
       0
     );
-    console.log(total);
 
     let paused = null;
 
@@ -196,17 +195,26 @@ const EditFeaturedEventScreen = () => {
   };
 
 
+  const checkDateBeforeEndDate = () => {
+    const eventDate = new Date(`${eventData?.date}T${eventData?.time}`);
+    const eventEndDate = new Date(`${eventData?.end_date}T${eventData?.end_time}`);
+    return eventDate < eventEndDate;
+  }
+  
   const handleSubmit = async () => {
     if (!hasChanges) {
       return platformAlert('Nothing to save, you haven’t made any changes.')
     }
 
     setLoading(true);
-
     const newUniqueFileIdentifier = uuidv4(9)
     const mediaUrl = `https://wffeinvprpdyobervinr.supabase.co/storage/v1/object/public/featured-events/${eventData?.organizer_id}/${newUniqueFileIdentifier}.jpg`
     const oldPath = `${eventData?.organizer_id}/${oldUniqueFileIdentifier}.jpg`;
-
+    const isDateValid = checkDateBeforeEndDate();
+    if (!isDateValid) {
+      setLoading(false);
+      return platformAlert('Event start date must be before end date.');
+    }
     try {
       if (
         eventData &&
@@ -309,7 +317,7 @@ const EditFeaturedEventScreen = () => {
               }}
             >
 
-            <Text className='font-semibold mt-2 px-5'>Title</Text>
+            <Text className='font-semibold mt-2 px-3'>Title</Text>
 
             <TextInput
 
@@ -333,7 +341,7 @@ const EditFeaturedEventScreen = () => {
               }}
             >
 
-            <Text className='font-semibold mt-2 px-5'>Description</Text>
+            <Text className='font-semibold mt-2 px-3'>Description</Text>
             
             <TextInput
 

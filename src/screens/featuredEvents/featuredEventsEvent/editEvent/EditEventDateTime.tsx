@@ -25,14 +25,14 @@ const EditEventDateTime = ({
     const [openEndDateTime, setOpenEndDateTime] = useState(false);
 
     return (
-        <View 
-             style={{
+        <View
+            style={{
                 borderWidth: 1,
                 borderColor: '#ccc',
                 borderRadius: 8,
                 marginVertical: 10,
-                paddingVertical:10
-             }}
+                paddingVertical: 10
+            }}
         >
             <Text className='font-semibold mt-2 px-5 my-4'>
 
@@ -78,32 +78,41 @@ const EditEventDateTime = ({
                         </Text>
                     </View>
                 </TouchableOpacity>
+
+
                 <DatePicker
                     modal
                     open={open}
-                    date={new Date(`${date}`)}
+                    date={new Date(`${date}T${time}`)}
                     onConfirm={(date: Date) => {
                         setOpen(false)
+
+                        const dateString = date.toISOString().split("T")[0]
+                        const timeString = date.toTimeString().slice(0, 5)
+
                         setEventData((prevData: any) => ({
                             ...prevData,
-                            date: date,
-                            time: date.toTimeString().split(' ')[0] // Store only the time part
+                            date: dateString,
+                            time: timeString // Store only the time part
                         }))
                     }}
                     onCancel={() => {
                         setOpen(false)
                     }}
                 />
+
                 <DatePicker
                     modal
                     open={openEndDateTime}
-                    date={new Date(`${end_date}`)}
+                    date={new Date(`${end_date}T${end_time}`)}
                     onConfirm={(end_datetime: Date) => {
                         setOpenEndDateTime(false)
+                        const endDateString = end_datetime.toISOString().split("T")[0]
+                        const endTimeString = end_datetime.toTimeString().slice(0, 5)
                         setEventData((prevData: any) => ({
                             ...prevData,
-                            end_date: end_datetime,
-                            end_time: end_datetime.toTimeString().split(' ')[0] // Store only the time part
+                            end_date: endDateString,
+                            end_time: endTimeString
                         }))
                     }}
                     onCancel={() => {
