@@ -32,6 +32,7 @@ export type RootStackParamList = {
   ticket: {ticket_id: number};
   ticketfeed: undefined;
   editfeaturedevent: {featured_event_id: number};
+  manageevent: {featured_event_id: number};
   attendeelist: {featured_event_id: number,chat_room_id: number};
   groupchat:{featured_event_id: number};
   dashboard: undefined;
@@ -63,9 +64,41 @@ export type GroupChatScreenProps = RouteProp<RootStackParamList, 'groupchat'>;
 export type FeaturedEventsScreenRouteProps = RouteProp<RootStackParamList, 'featuredEvents'>;
 export type FollowingScreenRouteProp = RouteProp<RootStackParamList, 'following'>;
 export type TicketScannerScreenRouteProp = RouteProp<RootStackParamList, 'ticketscanner'>;
+export type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
-
-
+export interface EventDataProps {
+  title: string
+  description: string
+  organizer_id: number
+  series_id: number;
+  price: string
+  time: string
+  location: string
+  image_url: string | { base64: Base64<'jpg'>, uri: string }
+  is_free: boolean
+  featured_event_id: number
+  tickets_sold: number
+  date: Date;
+  end_time: string;
+  end_date: Date;
+  recurring_series: {
+    paused: boolean
+  }
+  ticket_types: {
+    name: string;
+    price: string;
+    quantity: number;
+    tickets_sold: number;
+    ticket_type_id: number;
+    description: string
+    is_free: boolean;
+  }[]
+  max_tickets: number
+  organizers: {
+    user_id: number
+    users: { name: string; photo: string }
+  }
+}
 
 
 

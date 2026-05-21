@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, useWindowDimensions } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../../../supabase';
-import Feed from '../../components/Feed';
+import Feed from '../../../Archive/Feed';
 import { AntDesign } from '@expo/vector-icons';
 import styles from '../../utils/styles/shadow';
 import { useNavigation } from '@react-navigation/native';

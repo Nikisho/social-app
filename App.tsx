@@ -33,7 +33,7 @@ import OrganizerOnboardingScreen from './src/screens/organizerOnboarding/Organiz
 import { StripeProvider } from '@stripe/stripe-react-native';
 import TicketScreen from './src/screens/featuredEvents/ticket/TicketScreen';
 import TicketFeedScreen from './src/screens/featuredEvents/ticket/TicketFeedScreen';
-import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/manageEvent/EditFeaturedEventScreen';
+import EditFeaturedEventScreen from './src/screens/featuredEvents/featuredEventsEvent/editEvent/EditFeaturedEventScreen';
 import { StatusBar } from 'react-native';
 import AttendeeListScreen from './src/screens/featuredEvents/featuredEventsEvent/AttendeeListScreen';
 import GroupChatScreen from './src/screens/chats/group/GroupChatScreen';
@@ -43,11 +43,10 @@ import PrivacyPolicyScreen from './src/screens/privacypolicy/PrivacyPolicyScreen
 import AboutScreen from './src/screens/about/AboutScreen';
 import FollowingScreen from './src/screens/following/FollowingScreen';
 import TicketScannerScreen from './src/screens/featuredEvents/ticket/TicketScannerScreen';
-import ManageMembershipsScreen from './src/screens/memberships/ManageMembershipsScreen';
-import CreateMembershipScreen from './src/screens/memberships/CreateMembershipScreen';
 import FollowerScreen from './src/screens/follower/FollowerScreen';
 import EmailAttendeesScreen from './src/screens/emailattendees/EmailAttendeesScreen';
 import GuestListScreen from './src/screens/guestlist/GuestListScreen';
+import ManageEventScreen from './src/screens/featuredEvents/featuredEventsEvent/manageEvent/ManageEventScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -164,13 +163,12 @@ function AppSafeAreaWrapper() {
 								<Stack.Screen name="featuredeventsevent" component={FeaturedEventsEventScreen} />
 								<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
 								<Stack.Screen name="editfeaturedevent" component={EditFeaturedEventScreen} />
+								<Stack.Screen name="manageevent" component={ManageEventScreen} />
 								<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
 								<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
 								<Stack.Screen name="ticket" component={TicketScreen} />
 								<Stack.Screen name="ticketscanner" component={TicketScannerScreen} />
 								<Stack.Screen name="dashboard" component={DashboardScreen} />
-								<Stack.Screen name="managememberships" component={ManageMembershipsScreen} />
-								<Stack.Screen name="createmembership" component={CreateMembershipScreen} />
 								<Stack.Screen name="profile" component={ProfileScreen} />
 								<Stack.Screen name="following" component={FollowingScreen} />
 								<Stack.Screen name="followers" component={FollowerScreen} />

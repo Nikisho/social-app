@@ -15,7 +15,7 @@ const ManageSeries:React.FC<ManageSeriesProps> = ({
     return (
         <View
             style={Platform.OS === 'ios' ? styles.shadow : { borderWidth: 1 }}
-            className="bg-white mt-4 rounded-2xl p-4 flex-row items-center justify-between">
+            className="bg-white my-4 rounded-2xl p-4 flex-row items-center justify-between">
             <View>
                 <Text className="text-black/70 text-base font-semibold">Manage series</Text>
                 <Text className="text-black text-lg font-bold">

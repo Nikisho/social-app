@@ -148,7 +148,7 @@ const FeaturedEventsEventScreen = () => {
                                     }}
                                     className={`absolute inset-x-0 h-[10%] flex justify-center flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
                                     <TouchableOpacity
-                                        onPress={() => navigation.navigate('editfeaturedevent', {
+                                        onPress={() => navigation.navigate('manageevent', {
                                             featured_event_id: featured_event_id
                                         })}
                                         className='bg-white p-2 px-4 rounded-full  '>

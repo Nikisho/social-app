@@ -1,56 +1,33 @@
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { EditFeaturedEventScreenRouteProps, RootStackNavigationProp } from '../../../../utils/types/types'
+import { EditFeaturedEventScreenRouteProps, EventDataProps, RootStackNavigationProp } from '../../../../utils/types/types'
 import SecondaryHeader from '../../../../components/SecondaryHeader'
 import { supabase } from '../../../../../supabase'
 import MediaPicker from './MediaPicker'
 import { uploadEventMediaToStorageBucket } from '../../../../utils/functions/uploadEventMediaToStorageBucket'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import platformAlert from '../../../../utils/functions/platformAlert'
 import LoadingScreen from '../../../loading/LoadingScreen'
-import TicketStatsBanner from './TicketStatsBanner'
 import { uuidv4 } from '../../../../utils/functions/uuidv4'
-import ManageRSVPsModal from './ManageRSVPsModal'
 import ManageSeries from './ManageSeries'
-import EmailParticipants from './EmailParticipants'
-import GuestListBanner from './GuestListBanner'
 import DeleteEventModal from './DeleteEventModal'
+import EditEventDateTime from './EditEventDateTime'
+import EditAddressInput from './EditAddressInput'
 
 type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
-interface EventDataProps {
-  title: string
-  description: string
-  organizer_id: number
-  series_id: number;
-  price: string
-  time: string
-  location: string
-  image_url: string | { base64: Base64<'jpg'>, uri: string }
-  is_free: boolean
-  featured_event_id: number
-  tickets_sold: number
+interface InitialStateProps {
+  description: string;
+  image_url: string | { base64: Base64<'jpg'>, uri: string };
+  title: string;
+  hasSeries: boolean;
+  repeatEvent: boolean | null;
   date: Date;
-  recurring_series: {
-    paused: boolean
-  }
-  ticket_types: {
-    name: string;
-    price: string;
-    quantity: number;
-    tickets_sold: number;
-    ticket_type_id: number;
-    description: string
-    is_free: boolean;
-  }[]
-  max_tickets: number
-  organizers: {
-    user_id: number
-    users: { name: string; photo: string }
-  }
+  end_date: Date;
+  end_time: string;
+  time: string;
+  location: string;
 }
-
 const EditFeaturedEventScreen = () => {
   const route = useRoute<EditFeaturedEventScreenRouteProps>()
   const { featured_event_id } = route.params
@@ -59,12 +36,17 @@ const EditFeaturedEventScreen = () => {
   const [eventData, setEventData] = useState<EventDataProps | null>(null)
   const [oldUniqueFileIdentifier, setOldUniqueFileIdentifier] = useState<string | null>(null);
   const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState(false);
-  const [initial, setInitial] = useState<{ description: string; image_url: string | { base64: string }, title: string, hasSeries: boolean, repeatEvent: boolean | null }>({
+  const [initial, setInitial] = useState<InitialStateProps>({
     description: '',
     image_url: '',
     title: '',
     hasSeries: false,
     repeatEvent: null,
+    date: new Date(),
+    end_date: new Date(),
+    end_time: '',
+    time: '',
+    location: ''
   })
   const [loading, setLoading] = useState(false)
   const fetchEventData = async () => {
@@ -110,6 +92,11 @@ const EditFeaturedEventScreen = () => {
       title: event.title,
       hasSeries: Boolean(event.series_id),
       repeatEvent: repeatFlag,
+      date: event.date,
+      end_date: event.end_date,
+      end_time: event.end_time,
+      time: event.time,
+      location: event.location
     });
 
     setRepeatEvent(repeatFlag);
@@ -132,6 +119,11 @@ const EditFeaturedEventScreen = () => {
     if (eventData.description !== initial.description) return true
     if (repeatEvent !== initial.repeatEvent) return true
     if (eventData.title !== initial.title) return true
+    if (eventData.date.toString() !== initial.date.toString()) return true
+    if (eventData.end_date.toString() !== initial.end_date.toString()) return true
+    if (eventData.end_time !== initial.end_time) return true
+    if (eventData.time !== initial.time) return true
+    if (eventData.location !== initial.location) return true
     if (typeof eventData.image_url === 'object') return true
     return false
   }, [eventData, initial, repeatEvent])
@@ -236,7 +228,16 @@ const EditFeaturedEventScreen = () => {
       }
       const { error } = await supabase
         .from('featured_events')
-        .update({ description: eventData!.description, image_url: typeof eventData?.image_url !== 'string' ? mediaUrl : eventData.image_url, title: eventData?.title })
+        .update({
+          description: eventData!.description,
+          image_url: typeof eventData?.image_url !== 'string' ? mediaUrl : eventData.image_url,
+          title: eventData?.title,
+          date: eventData?.date,
+          end_date: eventData?.end_date,
+          end_time: eventData?.end_time,
+          time: eventData?.time,
+          location: eventData?.location
+        })
         .eq('featured_event_id', featured_event_id)
 
       if (error) throw new Error(error.message)
@@ -287,60 +288,73 @@ const EditFeaturedEventScreen = () => {
         contentContainerStyle={{ paddingBottom: 100 }}
         keyboardShouldPersistTaps="handled"
       >
-        <SecondaryHeader displayText="Manage event" />
-        <TicketStatsBanner
-          ticket_types={eventData?.ticket_types!}
-        />
-
-        <ManageRSVPsModal
-          featured_event_id={featured_event_id}
-        />
-        <GuestListBanner
-          featured_event_id={featured_event_id}
-        />
-        <EmailParticipants
-          featured_event_id={featured_event_id}
-        />
+        <SecondaryHeader displayText="Edit event details" />
         <ManageSeries
           repeatEvent={repeatEvent}
           setRepeatEvent={setRepeatEvent}
         />
-        {/* <View
-          className="flex-row items-center space-x-4 bg-amber-100 border border-amber-300 rounded-2xl p-4 my-4 w-full"
-        >
-          <Ionicons name="warning-outline" size={28} color="#D97706" />
-          <Text className="flex-1 text-amber-800 text-base leading-6">
-            You can only edit the image and description of featured events.
-          </Text>
-        </View> */}
-
         {eventData && (
           <>
             {/* <View className={`${keyboardStatus==='Keyboard Shown' ? 'hidden' : '' }`}> */}
             <MediaPicker setEventData={setEventData} eventData={eventData} />
             {/* </View> */}
 
-            <Text className="text-xl font-bold m-2">Title</Text>
+            <View
+                style={{
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 8,
+                padding: 10,
+                marginVertical: 10
+              }}
+            >
+
+            <Text className='font-semibold mt-2 px-5'>Title</Text>
+
             <TextInput
+
               multiline
               value={eventData.title}
               placeholder="Enter your event's title"
               onChangeText={(value) =>
                 setEventData((prev) => prev! && { ...prev, title: value })
               }
-              className="border rounded-xl h-15 p-5"
+              className="  h-15 p-5"
             />
-            <Text className="text-xl font-bold m-2">Description</Text>
+            </View>
+
+            <View 
+              style={{
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 8,
+                padding: 10,
+                marginVertical: 10
+              }}
+            >
+
+            <Text className='font-semibold mt-2 px-5'>Description</Text>
+            
             <TextInput
+
               multiline
               value={eventData.description}
               placeholder="Enter your event's description"
               onChangeText={(value) =>
                 setEventData((prev) => prev! && { ...prev, description: value })
               }
-              className="border rounded-xl h-32 p-5"
+              className=" h-32 p-5"
             />
-
+            </View>
+            <EditAddressInput
+              address={eventData?.location}
+              setEventData={setEventData}
+            />
+            {/* Edit event date and time */}
+            <EditEventDateTime
+              eventData={eventData}
+              setEventData={setEventData}
+            />
             <View className="pt-5">
               <TouchableOpacity
                 onPress={handleSubmit}

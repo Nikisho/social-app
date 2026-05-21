@@ -20,6 +20,8 @@ type TicketStatsBannerProps = {
 
 const TicketStatsBanner: React.FC<TicketStatsBannerProps> = ({ ticket_types }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const totalSold = ticket_types?.reduce((sum, t) => sum + t.tickets_sold, 0);
+  const totalAmount = ticket_types?.reduce((sum, t) => sum + (Number(t.price) * t.tickets_sold), 0);
 
   const renderItem = ({ item }: { item: TicketTypeProps }) => {
     const percentage = Math.round((item.tickets_sold / item.quantity) * 100);
@@ -87,9 +89,21 @@ const TicketStatsBanner: React.FC<TicketStatsBannerProps> = ({ ticket_types }) =
           setModalVisible(!modalVisible);
         }}>
         <View
-          className='flex-1 justify-center' >
+          className='flex-1 justify-center ' >
           <View className='bg-gray-50 mx-5 h-3/4' style={styles.shadow} >
-
+          <View className='my-6'>
+              {/* <Text className='text-center text-xl font-bold my-4'>Ticket sales</Text> */}
+              <View className='flex-row justify-around '>
+                <View className='items-center'>
+                  <Text className='text-gray-600'>Total sold</Text>
+                  <Text className='font-semibold text-lg'>{totalSold}</Text>
+                </View>
+                <View className='items-center'>
+                  <Text className='text-gray-600'>Total amount</Text>
+                  <Text className='font-semibold text-lg'>£{totalAmount?.toFixed(2)}</Text>
+                </View>
+              </View>
+          </View>
             <FlatList
               contentContainerStyle={{
                 // paddingBottom: 1
