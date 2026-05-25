@@ -87,7 +87,6 @@ const FeaturedEventsEventScreen = () => {
             .single()
         if (data) {
             setEventData(data)
-            console.log(eventData?.ticket_types)
         }
         if (error) console.error(error.message);
     };

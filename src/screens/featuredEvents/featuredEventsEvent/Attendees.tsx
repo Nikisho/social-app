@@ -8,8 +8,6 @@ import { selectCurrentUser } from '../../../context/navSlice';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { getColorFromName } from '../../../utils/functions/getColorFromName';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../utils/styles/shadow';
-import Entypo from '@expo/vector-icons/Entypo';
 
 interface AttendeeProps {
     id: number;
@@ -85,7 +83,6 @@ const Attendees: React.FC<AttendeesProps> = ({
         })
     }
     const handleNavigate = async () => {
-        // const attendeeIds = data?.map(attendee => attendee.users.id);
         const response = await fetchAttendees();
         const attendeeIds = response?.map(attendee => (attendee as any).users.id);
 
@@ -163,7 +160,7 @@ const Attendees: React.FC<AttendeesProps> = ({
                 }
 
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={handleNavigateGroupChat}
                 style={styles.shadow}
                 className='border h-10 mt-5 px-3 self-center rounded-xl bg-black flex-row justify-center space-x-3 items-center'>
@@ -171,7 +168,7 @@ const Attendees: React.FC<AttendeesProps> = ({
                 <Text className='text-white text-center font-bold'>
                     Event chat
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     )
 }

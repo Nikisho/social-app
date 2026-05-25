@@ -158,7 +158,7 @@ const TicketScreen = ({ }) => {
                                     </TouchableOpacity>
                                 )
                             }
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => navigation.navigate('groupchat', {
                                     featured_event_id: ticket.featured_event_id
                                 })}
@@ -167,7 +167,7 @@ const TicketScreen = ({ }) => {
                                 <Text className='text-lg text-center font-semibold text-green-900'>
                                     Join the event chat
                                 </Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <OrganizerInfo
                             organizer_id={ticket.featured_events.organizer_id}

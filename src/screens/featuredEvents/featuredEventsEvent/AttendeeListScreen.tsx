@@ -1,16 +1,11 @@
-import { View, Text, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../../../../supabase';
-import { FontAwesome } from '@expo/vector-icons';
-import styles from '../../../utils/styles/shadow';
 import SecondaryHeader from '../../../components/SecondaryHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AttendeeListScreenProps, RootStackNavigationProp } from '../../../utils/types/types';
-import Entypo from '@expo/vector-icons/Entypo';
-import checkProfilePicture from '../../../utils/functions/checkProfilePicture';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
-import platformAlert from '../../../utils/functions/platformAlert';
 import { getColorFromName } from '../../../utils/functions/getColorFromName';
 import { useTranslation } from 'react-i18next';
 
@@ -25,8 +20,8 @@ const AttendeeListScreen = () => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const route = useRoute<AttendeeListScreenProps>()
     const [organizerIdUserId, setOragnizerUserId] = useState<number>();
-
-    const { featured_event_id, chat_room_id } = route.params
+    const [organizer, setOrganizer] = useState<any>();
+    const { featured_event_id } = route.params
     const currentUser = useSelector(selectCurrentUser);
     const { t } = useTranslation();
 
@@ -50,19 +45,53 @@ const AttendeeListScreen = () => {
         }
     };
 
+    const fetchOrgniserData = async () => {
+        const { data, error } = await supabase
+            .from('featured_events')
+            .select(`*,
+                organizers(
+                    user_id,
+                    users(
+                        name,
+                        photo
+                    )
+                )
+            `)
+            .eq('featured_event_id', featured_event_id)
+            .single();
+
+        if (data) {
+            const organizerObject = {
+                user_id: data.organizers.user_id,
+                users: {
+                    name: data.organizers.users.name,
+                    photo: data.organizers.users.photo
+                }
+            }
+            console.log(organizerObject)
+            setOrganizer(organizerObject)
+        }
+    }
     const fetchAttendees = async () => {
         const { data, error } = await supabase
-            .from('participants')
+            .from('featured_event_bookings')
             .select(` *,
                 users(
                     name,
                     photo
                 )
             `)
-            .eq('chat_room_id', chat_room_id)
+            .eq('featured_event_id', featured_event_id)
 
         if (data) {
-            setAttendees(data);
+
+            const uniqueUsers = Array.from(
+                new Map(
+                    data.map((item) => [item.user_id, item])
+                ).values()
+            )
+
+            setAttendees(uniqueUsers as any)
         }
 
         if (error) {
@@ -70,19 +99,9 @@ const AttendeeListScreen = () => {
         }
     };
 
-    const handleNavigate = async () => {
-        // const userHasPhoto = await checkProfilePicture(currentUser.id);
-        // if (!userHasPhoto ) {
-        //     platformAlert('Add a profile picture to chat with attendees!');
-        //     return;
-        // }
-        navigation.navigate('groupchat', {
-            featured_event_id: featured_event_id
-        })
-    }
-
     useEffect(() => {
         fetchAttendees();
+        fetchOrgniserData();
         fetchOrganizerUserId();
     }, [])
 
@@ -90,7 +109,6 @@ const AttendeeListScreen = () => {
         return (
             <TouchableOpacity
                 onPress={() => navigation.navigate('profile', { user_id: item.user_id })}
-                // style={styles.shadow}
                 className='p-3 px-5 flex-row justify-between '>
 
                 <View className='flex flex-row space-x-3'>
@@ -104,7 +122,7 @@ const AttendeeListScreen = () => {
                         :
                         <View
                             style={{
-                                backgroundColor: getColorFromName(item.users.name),
+                                backgroundColor: item.users.name ? getColorFromName(item?.users?.name) : 'gray',
                                 width: 55,
                                 height: 55,
                                 borderRadius: 50,
@@ -134,7 +152,6 @@ const AttendeeListScreen = () => {
                             )
                         }
                     </View>
-
                 </View>
 
                 {
@@ -159,37 +176,34 @@ const AttendeeListScreen = () => {
             <SecondaryHeader
                 displayText={t('attendee_list_screen.title')}
             />
-            <View className='flex items-center mt-'>
 
-                <TouchableOpacity
-                    onPress={handleNavigate}
-                    style={styles.shadow}
-                    className='p-3 my-5 w-1/3 rounded-full bg-black flex-row justify-center space-x-3 items-center'>
-                    <Entypo name="chat" size={24} color="white" />
-                    <Text className='text-lg text-white text-center font-bold'>
-                        Chat
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <View className='flex justify-center'>
-                <Text className='mx-5 text-lg font-semibold text-gray-600'>
-                    {attendees?.length} members
-                </Text>
-                {
-                    attendees &&
-                    [...attendees]
-                        .sort((a, b) =>
-                            a.user_id === organizerIdUserId ? -1 : b.user_id === organizerIdUserId ? 1 : 0
-                        )
-                        .map((item) => (
-                            <RenderItem
-                                key={item.user_id}
-                                item={item}
-                            />
-                        ))
-                }
-            </View>
+            {
+                attendees && organizer && (
+                    <View className='flex justify-center mt-5'>
+                        <Text className='mx-5 text-lg font-semibold text-gray-600'>
+                            {attendees?.length! + 1} members
+                        </Text>
 
+                        {
+                            Array.from(
+                                new Map(
+                                    [...attendees, organizer].map((item) => [item.user_id, item])
+                                ).values()
+                            )
+                                .sort((a, b) =>
+                                    a.user_id === organizerIdUserId ? -1 : b.user_id === organizerIdUserId ? 1 : 0
+                                )
+                                .map((item) => (
+                                    <RenderItem
+                                        key={item.user_id}
+                                        item={item}
+                                    />
+                                ))
+                        }
+
+                    </View>
+                )
+            }
         </ScrollView>
     )
 }

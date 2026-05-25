@@ -45,7 +45,6 @@ const ChatScreen = () => {
   const [media, setMedia] = useState<ImagePickerAsset | null>(null);
   const navigation = useNavigation<RootStackNavigationProp>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [onlineStatus, setOnlineStatus] = useState<'online' | 'offline'>('offline');
 
   const fetchUserData = async () => {
     const { error, data } = await supabase
@@ -262,7 +261,6 @@ const ChatScreen = () => {
               photo={userData.photo}
               user_id={userData.id}
               blockAndReportUser={blockAndReportUser}
-              onlineStatus={'tbc'}
             />
           </>
         )

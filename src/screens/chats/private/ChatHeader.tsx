@@ -13,7 +13,6 @@ interface ChatHeaderProps {
     photo: string;
     user_id: number;
     blockAndReportUser: () => void;
-    onlineStatus: string;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
@@ -21,7 +20,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
     photo,
     user_id,
     blockAndReportUser,
-    onlineStatus
 }) => {
 
     const navigation = useNavigation<RootStackNavigationProp>();
@@ -84,9 +82,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                             className='text-black text-lg'>
                             {name}
                         </Text>
-                        {/* <Text>
-                        {onlineStatus}
-                    </Text> */}
                     </View>
 
                 </TouchableOpacity>

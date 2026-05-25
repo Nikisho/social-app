@@ -51,8 +51,6 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
         platform_fee_discount_pct
     );
     const total = ticketPrice ? ticketPrice * ticketQuantity : 0;
-
-    console.log('sub is : ', subtotal)
     const [loading, setLoading] = useState<boolean>(false);
     const fetchPaymentSheetParams = async (subtotal: number) => {
         const { data, error } = await supabase.functions.invoke(
@@ -210,14 +208,10 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                 {t('event_checkout.order_summary')}
                             </Text>
                         </View>
-
                         <View className='flex-row justify-between border-y border-white'>
-
                             <View className='p-2 py-3   flex '>
                                 <Text className='text-white text-lg'>
-                                    {/* {t('event_checkout.general_admission')} */}
                                     {ticket_name}
-
                                 </Text>
                                 {
                                     is_free ?
@@ -232,7 +226,6 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                 }
                             </View>
                             <View className='flex-row items-center px-3'>
-
                                 <TouchableOpacity
                                     disabled={ticketQuantity === 1}
                                     className={`{ticketQuantity === 1 && 'opacity-50'}`}
@@ -266,18 +259,12 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                         color="white"
                                     />
                                 </TouchableOpacity>
-
                             </View>
-
                         </View>
                         <View className='mt-4 px-2'>
-
-
-
                             {
                                 !is_free && (
                                     <>
-
                                         <View className='flex-row justify-between items-center mb-'>
                                             <Text className='text-gray-300'>
                                                 Subtotal
@@ -336,10 +323,8 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                                         height: 50,
                                         borderColor: Platform.OS === 'ios' ? 'white' : '',
                                         borderWidth: 1,
-                                        // borderRadius: 100
                                     }}
                                     borderRadius={100}
-
                                 />
                             }
                         </View>

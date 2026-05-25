@@ -20,6 +20,7 @@ import EventDetails from './eventDetails/EventDetails';
 import TicketTypesList from './newTickets/TicketTypesList';
 import { useKeyboardListener } from '../../../hooks/useKeyboardListener';
 import styles from '../../../utils/styles/shadow';
+import SchedulePost from './schedulePost/SchedulePost';
 
 interface EventDataProps {
     title: string;
@@ -64,9 +65,9 @@ const FeaturedEventsSubmitScreen = () => {
     const currentUser = useSelector(selectCurrentUser);
     const [loading, setLoading] = useState(false);
     const [repeatEvent, setRepeatEvent] = useState<boolean>(false);
-
+    const [schedulePostDateTime, setSchedulePostDateTime] = useState<Date | null>(new Date());
+    const [publishNow, setPublishNow] = useState<boolean>(true);
     const navigation = useNavigation<RootStackNavigationProp>();
-
     const isKeyboardVisible = useKeyboardListener();
 
     console.log('The keyboard is up :', isKeyboardVisible)
@@ -192,7 +193,6 @@ const FeaturedEventsSubmitScreen = () => {
         if (
             !eventData?.title?.trim() ||
             !eventData.description?.trim() ||
-            // (!isFree && !eventData.price?.trim()) ||
             !eventData.location?.trim() ||
             media === null
         ) {
@@ -208,23 +208,23 @@ const FeaturedEventsSubmitScreen = () => {
             await uploadEventMediaToStorageBucket(media.base64!, unique_file_identifier, organizer_id);
         }
 
-        const { data: chatRoomData, error: chatRoomError } = await supabase
-            .from('chat_rooms')
-            .insert({
-                type: 'group'
-            })
-            .select('chat_room_id')
-            .single();
+        // const { data: chatRoomData, error: chatRoomError } = await supabase
+        //     .from('chat_rooms')
+        //     .insert({
+        //         type: 'group'
+        //     })
+        //     .select('chat_room_id')
+        //     .single();
 
-        if (chatRoomError) throw chatRoomError.message
+        // if (chatRoomError) throw chatRoomError.message
 
-        const { error: participantError } = await supabase
-            .from('participants')
-            .insert({
-                chat_room_id: chatRoomData.chat_room_id,
-                user_id: currentUser.id
-            })
-        if (participantError) throw participantError.message;
+        // const { error: participantError } = await supabase
+        //     .from('participants')
+        //     .insert({
+        //         chat_room_id: chatRoomData.chat_room_id,
+        //         user_id: currentUser.id
+        //     })
+        // if (participantError) throw participantError.message;
 
         const { error, data } = await supabase
             .from('featured_events')
@@ -239,9 +239,10 @@ const FeaturedEventsSubmitScreen = () => {
                 end_date: eventData?.end_datetime,
                 organizer_id: organizer_id,
                 max_tickets: eventData?.quantity,
-                chat_room_id: chatRoomData?.chat_room_id,
+                // chat_room_id: chatRoomData?.chat_room_id,
                 test: __DEV__ ? true : false,
-                hide_participants: eventData?.hide_participants
+                hide_participants: eventData?.hide_participants,
+                publish_at: publishNow ? null : schedulePostDateTime
             })
             .select('featured_event_id')
             .single()
@@ -286,6 +287,12 @@ const FeaturedEventsSubmitScreen = () => {
             <TicketTypesList
                 tickets={tickets}
                 setTickets={setTickets}
+            />,
+            <SchedulePost
+                setSchedulePostDateTime={setSchedulePostDateTime}
+                schedulePostDateTime={schedulePostDateTime} 
+                publishNow={publishNow}
+                setPublishNow={setPublishNow}
             />
 
         ]);

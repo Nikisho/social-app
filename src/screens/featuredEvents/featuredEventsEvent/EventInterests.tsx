@@ -16,15 +16,13 @@ type InterestsProps = {
 const EventInterests:React.FC<InterestsProps> = ({
     interests
 }) => {
-    console.log(interests)
     const navigation = useNavigation<RootStackNavigationProp>();
     return (
         <View className='py-3'>
             <View className='flex flex-row items-center space-x-3 mb-4 '>
-                <Text className='text-lg font-semibold'> Topics & Interests</Text>
+                <Text className='text-lg font-semibold'>Topics & Interests</Text>
             </View>
             <View
-                // horizontal
                 className='flex-row flex-wrap'
             >
                 {

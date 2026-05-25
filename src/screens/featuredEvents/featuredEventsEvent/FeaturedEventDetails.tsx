@@ -46,7 +46,7 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
         try {
 
             const result = await Share.share({
-                message: `https://linkzyapp.com/event.html?featured_event_id=${featured_event_id}`
+                message: `https://linkzyapp.com/events/${featured_event_id}`
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
