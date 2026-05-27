@@ -47,6 +47,7 @@ import FollowerScreen from './src/screens/follower/FollowerScreen';
 import EmailAttendeesScreen from './src/screens/emailattendees/EmailAttendeesScreen';
 import GuestListScreen from './src/screens/guestlist/GuestListScreen';
 import ManageEventScreen from './src/screens/featuredEvents/featuredEventsEvent/manageEvent/ManageEventScreen';
+import EventAnalyticsScreen from './src/screens/featuredEvents/featuredEventsEvent/analytics/EventAnalyticsScreen';
 
 const Stack = createStackNavigator();
 const mainTheme = {
@@ -164,6 +165,7 @@ function AppSafeAreaWrapper() {
 								<Stack.Screen name="featuredEventsSubmit" component={FeaturedEventsSubmitScreen} />
 								<Stack.Screen name="editfeaturedevent" component={EditFeaturedEventScreen} />
 								<Stack.Screen name="manageevent" component={ManageEventScreen} />
+								<Stack.Screen name="eventanalytics" component={EventAnalyticsScreen} />
 								<Stack.Screen name="organizerOnboarding" component={OrganizerOnboardingScreen} />
 								<Stack.Screen name="ticketfeed" component={TicketFeedScreen} />
 								<Stack.Screen name="ticket" component={TicketScreen} />

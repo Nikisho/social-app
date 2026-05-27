@@ -1,8 +1,7 @@
 import { View, Text, ScrollView, Platform, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { RootStackNavigationProp } from '../../../../utils/types/types'
-import ManageSeries from '../editEvent/ManageSeries'
+import { ManageEventScreenRouteProp, RootStackNavigationProp } from '../../../../utils/types/types'
 import EmailParticipants from './EmailParticipants'
 import GuestListBanner from './GuestListBanner'
 import ManageRSVPsModal from './ManageRSVPsModal'
@@ -10,9 +9,10 @@ import TicketStatsBanner from './TicketStatsBanner'
 import SecondaryHeader from '../../../../components/SecondaryHeader'
 import { supabase } from '../../../../../supabase'
 import EditEventBanner from './EditEventBanner'
+import AnalyticsBanner from './AnalyticsBanner'
 
 const ManageEventScreen = () => {
-    const route = useRoute<any>()
+    const route = useRoute<ManageEventScreenRouteProp>()
     const { featured_event_id } = route.params
     // const navigation = useNavigation<RootStackNavigationProp>();
     const [eventData, setEventData] = useState<any>(null);
@@ -71,10 +71,9 @@ const ManageEventScreen = () => {
                 <EditEventBanner
                     featured_event_id={featured_event_id}
                 />
-                {/* <ManageSeries
-                    repeatEvent={repeatEvent}
-                    setRepeatEvent={setRepeatEvent}
-                /> */}
+                <AnalyticsBanner
+                    featured_event_id={featured_event_id}
+                />
             </ScrollView>
         </KeyboardAvoidingView>
     )

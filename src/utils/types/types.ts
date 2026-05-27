@@ -32,6 +32,7 @@ export type RootStackParamList = {
   ticket: {ticket_id: number};
   ticketfeed: undefined;
   editfeaturedevent: {featured_event_id: number};
+  eventanalytics: {featured_event_id: number};
   manageevent: {featured_event_id: number};
   attendeelist: {featured_event_id: number,chat_room_id: number};
   groupchat:{featured_event_id: number};
@@ -64,6 +65,8 @@ export type GroupChatScreenProps = RouteProp<RootStackParamList, 'groupchat'>;
 export type FeaturedEventsScreenRouteProps = RouteProp<RootStackParamList, 'featuredEvents'>;
 export type FollowingScreenRouteProp = RouteProp<RootStackParamList, 'following'>;
 export type TicketScannerScreenRouteProp = RouteProp<RootStackParamList, 'ticketscanner'>;
+export type EventAnalyticsScreenRouteProp = RouteProp<RootStackParamList, 'eventanalytics'>;
+export type ManageEventScreenRouteProp = RouteProp<RootStackParamList, 'manageevent'>;
 export type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
 export interface EventDataProps {
