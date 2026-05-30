@@ -95,6 +95,48 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
         }
     }
 
+    const handleJoinChat = async () => {
+        const organizer_id = await fetchOrganizerId(user_id);
+        const { data, error } = await supabase
+            .from('organizers')
+            .select('chat_room_id')
+            .eq('organizer_id', organizer_id)
+            .single()
+
+        if (error) {
+            console.error(error.message);
+            return;
+        }
+        const { data: participantsData, error: participantsError } = await supabase
+            .from('participants')
+            .select()
+            .eq('user_id', currentUser.id)
+            .eq('chat_room_id', data?.chat_room_id)
+            .single()
+
+        if (participantsError && participantsError.code !== 'PGRST116') {
+            console.error(participantsError.message);
+            return;
+        }
+        //If the user is already a participant, navigate to the chat. 
+        if (participantsData) {
+            navigation.navigate("groupchat", { organizer_id })
+            return;
+        }
+        const { error: joinError } = await supabase
+            .from('participants')
+            .insert({
+                user_id: currentUser.id,
+                chat_room_id: data?.chat_room_id
+            })
+        if (joinError) {
+            console.error(joinError.message);
+            return;
+        }
+
+        navigation.navigate("groupchat", { organizer_id })
+    }
+
     const fetchFollowingCount = async () => {
         const { count, error } = await supabase
             .from('organizer_followers')
@@ -118,47 +160,108 @@ const UserDetailsRole: React.FC<UserDetailsRoleProps> = ({
         <View className='mb-3'>
             {
                 isOrganizer ?
-                    <View className=' space-y-2'>
-                        <View className="bg-black px-3 space-x-1 py-2 rounded-full mt-1 flex-row items-center  border">
-                            <Text className="text-white mr-2">📣 Event organiser</Text>
+                    <View className="items-center space-y-3">
+
+                        {/* Stats */}
+                        <View className="flex-row items-center space-x-8">
+
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('followers', { user_id: user_id })}
-                                className='border-x  px-2 border-white'>
-                                <Text className='text-white'>
-                                    {followerCount} Followers
+                                onPress={() =>
+                                    navigation.navigate("followers", { user_id })
+                                }
+                                className="items-center"
+                            >
+                                <Text className="font-bold text-lg">
+                                    {followerCount}
+                                </Text>
+
+                                <Text className="text-gray-500 text-sm">
+                                    Followers
                                 </Text>
                             </TouchableOpacity>
+
+
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('following', { user_id: user_id })}
-                                className=' px-2 border-white'>
-                                <Text className='text-white'>
-                                    Following  {followingCount}
+                                onPress={() =>
+                                    navigation.navigate("following", { user_id })
+                                }
+                                className="items-center"
+                            >
+                                <Text className="font-bold text-lg">
+                                    {followingCount}
+                                </Text>
+
+                                <Text className="text-gray-500 text-sm">
+                                    Following
                                 </Text>
                             </TouchableOpacity>
+
+
+
                         </View>
-                        {
-                            user_id !== currentUser.id && (
+
+                        {/* Organiser badge */}
+                        <View className="bg-gray-100 px-3 py-1 rounded-full">
+                            <Text className="text-xs text-gray-600 font-medium">
+                                📣 Event organiser
+                            </Text>
+                        </View>
+
+                        {/* Follow button */}
+                        {user_id !== currentUser.id && (
+                            <View className="flex-row items-center space-x-3">
+
                                 <TouchableOpacity
-                                    onPress={() => handleFollow()}
-                                    className='self-center p-2 px-3 bg-black rounded-full '>
-                                    <Text className='text-white font-semibold'>
+                                    onPress={handleFollow}
+                                    className="bg-black px-8 py-3 rounded-full"
+                                >
+                                    <Text className="text-white font-semibold">
                                         {followDisplayText}
                                     </Text>
                                 </TouchableOpacity>
-                            )
-                        }
+
+                                <TouchableOpacity
+                                    onPress={handleJoinChat}
+                                    className="bg-gray-100 px-5 py-3 rounded-full"
+                                >
+                                    <Text className="text-gray-800 font-semibold">
+                                        Join chat
+                                    </Text>
+                                </TouchableOpacity>
+
+                            </View>
+
+                        )}
+
                     </View>
 
                     :
-                    <View className="bg-gray-200 px-3 py-2 rounded-full mt-1 flex-row items-center">
-                        <Text className="text-gray-700 font-semibold text-xs mr-3">👤 Community member</Text>
+                    <View className="items-center space-y-3">
+
+                        {/* Stats */}
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('following', { user_id: user_id })}
-                            className=' px-2 border-l '>
-                            <Text className='text-'>
-                                Following  {followingCount}
+                            onPress={() =>
+                                navigation.navigate("following", { user_id })
+                            }
+                            className="items-center"
+                        >
+                            <Text className="font-bold text-lg">
+                                {followingCount}
+                            </Text>
+
+                            <Text className="text-gray-500 text-sm">
+                                Following
                             </Text>
                         </TouchableOpacity>
+
+
+                        {/* Community badge */}
+                        <View className="bg-gray-100 px-3 py-1 rounded-full">
+                            <Text className="text-xs text-gray-600 font-medium">
+                                👤 Community member
+                            </Text>
+                        </View>
+
                     </View>
             }
         </View>

@@ -312,3 +312,36 @@ entrypoint = "./functions/create-checkout-session-dev/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/create-checkout-session-dev/*.html" ]
+
+[functions.emergency-email-debug]
+enabled = true
+verify_jwt = true
+import_map = "./functions/emergency-email-debug/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/emergency-email-debug/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/emergency-email-debug/*.html" ]
+
+[functions.onboard-organizer-stripe-dev]
+enabled = true
+verify_jwt = true
+import_map = "./functions/onboard-organizer-stripe-dev/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/onboard-organizer-stripe-dev/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/onboard-organizer-stripe-dev/*.html" ]
+
+[functions.verify-onboarding-dev]
+enabled = true
+verify_jwt = true
+import_map = "./functions/verify-onboarding-dev/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/verify-onboarding-dev/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/verify-onboarding-dev/*.html" ]

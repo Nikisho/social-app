@@ -28,13 +28,11 @@ interface Message {
 
 interface ChatProps {
     messages: ArrayLike<Message>;
-    fetchMessages: () => void
-    organizers: {
-        user_id: number
-    }
+    fetchMessages: () => void;
+    user_id: number;
 }
 
-const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessages }) => {
+const GroupChatBody: React.FC<ChatProps> = ({ messages, user_id, fetchMessages }) => {
     const currentUser = useSelector(selectCurrentUser);
     const [reactionEmojis, setReactionEmojis] = useState<{ reaction_emoji: string, reaction_id: number }[]>();
     const fetchReactionEmojis = async () => {
@@ -184,7 +182,7 @@ const GroupChatBody: React.FC<ChatProps> = ({ messages, organizers, fetchMessage
                                         <Text style={{ fontWeight: 'bold', color: '#333' }}>
                                             {item.users?.name}
                                         </Text>
-                                        {item.sender_id === organizers.user_id && (
+                                        {item.sender_id === user_id && (
                                             <View className="bg-green-100 px-1 rounded-full flex-row items-center border-green-800 border">
                                                 <Text className="text-green-800 font-semibold text-xs text-center">
                                                     Organiser

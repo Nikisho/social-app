@@ -11,55 +11,68 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import platformAlert from '../../../utils/functions/platformAlert';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../context/navSlice';
+import colours from '../../../utils/styles/colours';
+import MembersModal from './MembersModal';
+import { supabase } from '../../../../supabase';
 
 interface ChatHeaderProps {
-    title: string;
-    image_url: string;
-    featured_event_id: number;
-    date: string;
-    time: string;
+    user_id: number;
+    organizer_id: number;
     chat_room_id: number;
-    hide_participants:boolean;
-    organizers: {
-        user_id: number;
+    users: {
+        name: string;
+        photo: string;
     }
 }
 
 const GroupChatHeader: React.FC<ChatHeaderProps> = ({
-    title,
-    image_url,
-    featured_event_id,
-    date,
-    time,
-    chat_room_id,
-    hide_participants,
-    organizers
+    users,
+    chat_room_id
 }) => {
 
     const navigation = useNavigation<RootStackNavigationProp>();
-    const [openDropDown, setOpenDropDown] = useState<boolean>(false);
-    const blurb_message = `Use this group to coordinate arrivals, ask questions, and meet people attending!`;
+    const blurb_message = `Use this group to interact with the community.`;
     const fadeAnim = useRef(new Animated.Value(0)).current; // start invisible
-    const currentUser = useSelector(selectCurrentUser);
-    const isOrganizer = currentUser.id === organizers.user_id
-    console.log(isOrganizer)
-    const handleViewParticipants = async () => {
-        if (hide_participants && !isOrganizer) {
-            platformAlert('The organiser has chosen to hide the participants for this event.'); 
-            return;
-        }
-        navigation.navigate('attendeelist', {
-            featured_event_id: featured_event_id,
-            chat_room_id: chat_room_id
-        })
+    const [membersModalVisible, setMembersModalVisible] = useState(false);
+    const [members, setMembers] = useState<{ name: string; photo: string; id: number }[]>([]);
+    const handleViewMembers = async () => {
+        setMembersModalVisible(true);
+    };
 
+    const fetchMembers = async () => {
+        const { data, error } = await supabase
+            .from('participants')
+            .select(`
+                *,
+                users (
+                    name,
+                    photo,
+                    id
+                )
+            `)
+            .eq('chat_room_id', chat_room_id);
+
+        if (data) {
+            const formattedMembers = data.map((participant) => ({
+                name: participant.users.name,
+                photo: participant.users.photo,
+                id: participant.users.id
+            }));
+            setMembers(formattedMembers);
+        }
+        
+        if (error) {
+            console.error(error.message);
+        }
     }
+
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 500, // half a second fade in
             useNativeDriver: true,
         }).start();
+        fetchMembers()
     }, []);
 
     return (
@@ -67,7 +80,6 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
             <View className='flex flex-row justify-between items-center bg-gray-200'>
 
                 <View
-                    // style={{backgroundColor: colours.secondaryColour}}
                     className='p-2 py-3 flex flex-row space-x-3 items-center'>
                     <TouchableOpacity className='mr-1' onPress={() => { navigation.goBack() }}>
                         <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
@@ -75,49 +87,44 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
 
 
                     <TouchableOpacity
-                        className='flex flex-row space-x-3'
-                        onPress={() => navigation.navigate('featuredeventsevent', {
-                            featured_event_id: featured_event_id
-                        })}
+                        className='flex flex-row space-x-3 items-center'
+                        onPress={handleViewMembers}
                     >
 
                         {
-                            image_url === null ?
+                            users.photo === null ?
                                 <>
                                     <FontAwesome name="user-circle" size={40} color="black" />
                                 </> :
                                 <View>
 
                                     <Image
-                                        className='w-24 h-24 rounded-lg'
+                                        className='w-12 h-12 rounded-full'
                                         source={{
-                                            uri: image_url,
+                                            uri: users.photo,
                                         }}
                                     />
                                 </View>
                         }
 
-                        <View className='space-y-2'>
+                        <View className='space-y-'>
                             <Text
                                 numberOfLines={1} style={{ width: 300 }}
-                                className='text-black text-lg'>
-                                {title}
-                            </Text>
-                            <Text
-                                numberOfLines={1} style={{ width: 300 }}
-                                className='text-black text-'>
-                                {
-                                    date && time && (formatDateShortWeekday(date) + ', ' + (time).slice(0, -3))
-                                }
+                                className='text-black text-lg font-semibold'>
+                                {users.name}
                             </Text>
 
-                            <TouchableOpacity
-                                onPress={handleViewParticipants}
+                            {/* <TouchableOpacity
+                                onPress={handleViewMembers}
                                 style={styles.shadow}
                                 className='flex flex-row justify-center bg-white items-center space-x-2  rounded-full w-2/3 p-1 px-2'>
                                 <MaterialIcons name="groups" size={24} color="black" />
-                                <Text className='text- font-semibold'>View participants</Text>
-                            </TouchableOpacity>
+                                <Text className='text- font-semibold'>View members</Text>
+                            </TouchableOpacity> */}
+
+                            <Text className='text-gray-500 text-sm italic'>
+                                Community chat
+                            </Text>
                         </View>
 
                     </TouchableOpacity>
@@ -153,6 +160,14 @@ const GroupChatHeader: React.FC<ChatHeaderProps> = ({
                     <Text className="text-wrap">{blurb_message}</Text>
                 </View>
             </Animated.View>
+            <MembersModal
+                modalVisible={membersModalVisible}
+                setModalVisible={setMembersModalVisible}
+                members={members}
+                chat_room_id={chat_room_id}
+                onClose={() => setMembersModalVisible(false)}
+
+            />
         </>
 
     )

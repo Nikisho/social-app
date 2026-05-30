@@ -79,7 +79,7 @@ const Attendees: React.FC<AttendeesProps> = ({
             return;
         }
         navigation.navigate('groupchat', {
-            featured_event_id: featured_event_id
+            organizer_id: organizers.user_id
         })
     }
     const handleNavigate = async () => {
@@ -87,7 +87,7 @@ const Attendees: React.FC<AttendeesProps> = ({
         const attendeeIds = response?.map(attendee => (attendee as any).users.id);
 
         if (!attendeeIds?.includes(currentUser.id) && !isOrganizer) {
-            platformAlert("Join the event to see who's going and chat with them!");
+            platformAlert("Join the event to see who's going");
             return;
         }
 

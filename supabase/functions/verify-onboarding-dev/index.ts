@@ -5,7 +5,7 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
-import { stripe } from "../_utils/stripe.ts";
+import { stripe } from "../_utils/stripe_dev.ts";
 import {createCommunityChat} from "../_utils/createCommunityChat.ts";
 // @ts-ignore
 
@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
   const { data: organizerData, error: organizerError } = await supabaseAdmin
     .from("organizers")
     ///////IMPORTANT REMOVE TEST TRUE FOR PROD FUNCTION////////
-    .update({ status: "complete" })
+    .update({ status: "complete", test: true })
     .eq("stripe_account_id", accountId)
     .select('organizer_id')
     .single()

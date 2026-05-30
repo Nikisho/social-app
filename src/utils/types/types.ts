@@ -35,7 +35,7 @@ export type RootStackParamList = {
   eventanalytics: {featured_event_id: number};
   manageevent: {featured_event_id: number};
   attendeelist: {featured_event_id: number,chat_room_id: number};
-  groupchat:{featured_event_id: number};
+  groupchat:{organizer_id: number};
   dashboard: undefined;
   privacypolicy: undefined;
   about:undefined;

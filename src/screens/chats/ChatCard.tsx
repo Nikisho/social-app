@@ -11,7 +11,7 @@ import { getColorFromName } from '../../utils/functions/getColorFromName';
 interface ChatCardProps {
     item: {
         user_id: number;
-        featured_event_id: number;
+        organizer_id: number;
         title: string;
         photo: string;
         last_message_content: string;
@@ -26,10 +26,9 @@ const ChatCard: React.FC<ChatCardProps> = ({
 }) => {
     const navigation = useNavigation<RootStackNavigationProp>();
     const handleNavigate = async () => {
-
         if (item.type === 'group') {
             navigation.navigate('groupchat', {
-                featured_event_id: item.featured_event_id
+                organizer_id: item.organizer_id,
             })
         } else {
             navigation.navigate('chat',
