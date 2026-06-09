@@ -11,7 +11,7 @@ const DeleteEventModal = ({
     showDeleteModal,
     setShowDeleteModal,
     handleDeleteEvent,
-}: DeleteEventModalProps) => {  
+}: DeleteEventModalProps) => {
     return (
         <Modal
             visible={showDeleteModal}
@@ -29,7 +29,19 @@ const DeleteEventModal = ({
                     <Text className="text-gray-600 text-center leading-5 mb-6">
                         Are you sure you want to delete this event?
                         {"\n\n"}
-                        This action is non reversible.
+
+                        This will:
+                        {"\n"}
+                        • Cancel the event
+                        {"\n"}
+                        • Refund all attendees
+                        {"\n"}
+                        • Send cancellation emails
+                        {"\n\n"}
+
+                        <Text className="font-bold text-red-600">
+                            This action is irreversible.
+                        </Text>
                     </Text>
 
                     <View className="flex-row gap-3">

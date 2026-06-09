@@ -31,6 +31,7 @@ interface EventDataProps {
     max_tickets: number;
     hide_participants: boolean;
     chat_room_id: number
+    cancelled: boolean;
     ticket_types: {
         description:string;
         is_free: boolean;
@@ -157,9 +158,21 @@ const FeaturedEventsEventScreen = () => {
                                     </TouchableOpacity>
                                 </View>
                                 :
+                                (eventData.cancelled ?
+                                    <View
+                                        style={{
+                                            backgroundColor: colours.secondaryColour,
+                                        }}
+                                        className={`absolute inset-x-0 h-[10%] flex justify-center flex-row items-center px-6 ${Platform.OS === 'ios'? 'bottom-20' : 'bottom-14'}`}>
+                                        <Text className='bg-white p-2 px-4 rounded-full text-lg font-semibold text-center'>
+                                            Event cancelled
+                                        </Text>
+                                    </View>
+                                    :
                                 <BookEvent
                                     {...eventData!}
                                 />
+                                    )
                         }
                     </>
                 )

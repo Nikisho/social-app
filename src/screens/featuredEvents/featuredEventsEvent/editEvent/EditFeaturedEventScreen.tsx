@@ -263,21 +263,33 @@ const EditFeaturedEventScreen = () => {
     }
   }
 
-  const handleDeleteEvent = async () => {
-    const { error } = await supabase
-      .from('featured_events')
-      .delete()
-      .eq('featured_event_id', featured_event_id)
+const handleDeleteEvent = async () => {
+  setLoading(true);
+
+  try {
+    const { error } = await supabase.functions.invoke(
+      "handle-delete-event",
+      {
+        method: "POST",
+        body: JSON.stringify({ featured_event_id }),
+      }
+    );
 
     if (error) {
-      console.error('Error deleting event:', error.message);
-      platformAlert('Failed to delete event. Please try again.');
+      console.error("Error invoking delete function:", error.message);
+      platformAlert("Failed to delete event. Please try again.");
       return;
     }
 
-    platformAlert('Event deleted successfully');
-    navigation.navigate('featuredEvents', {});
-  };
+    platformAlert("Event deleted successfully");
+    navigation.navigate("featuredEvents", {});
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    platformAlert("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
 
   if (loading) {
