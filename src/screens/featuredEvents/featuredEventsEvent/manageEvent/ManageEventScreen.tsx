@@ -10,13 +10,12 @@ import SecondaryHeader from '../../../../components/SecondaryHeader'
 import { supabase } from '../../../../../supabase'
 import EditEventBanner from './EditEventBanner'
 import AnalyticsBanner from './AnalyticsBanner'
+import EditTicketsBanner from './EditTicketsBanner'
 
 const ManageEventScreen = () => {
     const route = useRoute<ManageEventScreenRouteProp>()
     const { featured_event_id } = route.params
-    // const navigation = useNavigation<RootStackNavigationProp>();
     const [eventData, setEventData] = useState<any>(null);
-    // const [repeatEvent, setRepeatEvent] = useState<boolean | null>(null);
 
     const fetchEventData = async () => {
         const { data: event, error } = await supabase
@@ -69,6 +68,9 @@ const ManageEventScreen = () => {
                     featured_event_id={featured_event_id}
                 />
                 <EditEventBanner
+                    featured_event_id={featured_event_id}
+                />
+                <EditTicketsBanner
                     featured_event_id={featured_event_id}
                 />
                 <AnalyticsBanner
