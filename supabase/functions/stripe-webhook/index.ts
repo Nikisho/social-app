@@ -1,11 +1,12 @@
 // deno-lint-ignore-file
 import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
-//Ensure dev keys are used
+//Ensure dev keys are NOT used
 import { stripe, stripe_webhook } from "../_utils/stripe.ts";
 import { emailUserUponPurchase } from "../_utils/emailUserUponPurchase.ts";
 import { supabaseAdmin } from "../_utils/supabase.ts";
 import { generateTicket } from "../_utils/generateTicket.ts";
 import { bookFeaturedEvent } from "../_utils/bookFeaturedEvent.ts";
+import { emailOrganizerUponPurchase } from "../_utils/emailOrganizerUponPurchase.ts";
 // @ts-ignore
 const server = Deno.listen({ port: 8080 });
 async function handler(request: Request) {
@@ -66,7 +67,7 @@ async function handler(request: Request) {
             user_id: session.metadata.user_id,
             featured_event_booking_id: booking_id,
             organizer_id: session.metadata.organizer_id,
-          })
+          });
 
         if (error) throw error;
       }
@@ -75,6 +76,11 @@ async function handler(request: Request) {
         session.metadata.user_id,
         session.metadata.featured_event_id,
         tickets,
+      );
+      emailOrganizerUponPurchase(
+        session.metadata.user_id,
+        session.metadata.organizer_id,
+        session.metadata.featured_event_id,
       );
       return new Response(JSON.stringify({ status: "success" }), {
         status: 200,

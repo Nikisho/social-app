@@ -44,7 +44,7 @@ Email: ${user.email}
     await client.send({
       from: `LINKZY <support@linkzyapp.com>`,
       to: user.email,
-      subject,
+      subject: subject.replace(/[\u0080-\uFFFF]/g, ""), // removes non-ascii (optional),
       content: body,
     });
 
@@ -81,7 +81,7 @@ Email: ${user.email}
     await client.send({
       from: `${user.name} <support@linkzyapp.com>`,
       to: recipient.users.email,
-      subject,
+      subject: subject.replace(/[\u0080-\uFFFF]/g, ""),
       content: body,
     });
 

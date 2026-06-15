@@ -238,7 +238,7 @@ const FeaturedEventsSubmitScreen = () => {
                 end_time: extractTimeFromDateSubmit(eventData?.end_datetime),
                 end_date: eventData?.end_datetime,
                 organizer_id: organizer_id,
-                max_tickets: eventData?.quantity,
+                // max_tickets: eventData?.quantity,
                 // chat_room_id: chatRoomData?.chat_room_id,
                 test: __DEV__ ? true : false,
                 hide_participants: eventData?.hide_participants,

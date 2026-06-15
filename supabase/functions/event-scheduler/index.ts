@@ -134,8 +134,8 @@ Deno.serve(async (req: Request) => {
             end_time: series.featured_events.end_time,
             end_date: nextEventDate, //Need to change to end_date + 7
             is_free: series.featured_events.is_free,
-            max_tickets: series.featured_events.max_tickets,
-            chat_room_id: series.featured_events.chat_room_id,
+            // max_tickets: series.featured_events.max_tickets,
+            // chat_room_id: series.featured_events.chat_room_id,
             series_id: series.series_id,
             test: __DEV__ ? true : false,
           })

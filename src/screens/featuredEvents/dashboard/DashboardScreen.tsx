@@ -61,6 +61,7 @@ const DashboardScreen = () => {
             .select(`*, ticket_types(*)`)
             .order('date', { ascending: false })
             .eq('organizer_id', organizer_id)
+            .or(`cancelled.eq.false,cancelled.is.null`)
 
         if (data) {
             setEvents(data);
