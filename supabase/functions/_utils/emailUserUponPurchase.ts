@@ -53,6 +53,9 @@ export const emailUserUponPurchase = async (
     const edge_function_base_url =
         "https://wffeinvprpdyobervinr.supabase.co/functions/v1/ticket-purchase-email-prod";
 
+
+    console.log('EmailUserUponPurchase: Now calling ticket-purchase-email-prod');
+
     const response = await fetch(edge_function_base_url, {
         method: "POST",
         headers: {
@@ -86,5 +89,5 @@ export const emailUserUponPurchase = async (
     if (update_confirmation_email_sent_error) {
         console.error(update_confirmation_email_sent_error.message);
     }
-    console.log('Email sent successfully')
+    console.log('EmailUserUponPurchase: Email sent successfully')
 };

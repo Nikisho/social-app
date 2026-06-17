@@ -10,9 +10,10 @@ import platformAlert from '../../../../utils/functions/platformAlert';
 
 interface EditTicketTypeModalProps {
     modalVisible: boolean
-    setModalVisible: () => void
+    setModalVisible: (bool:boolean) => void
     ticket: any
-    setTicket: () => void
+    setTicket: (ticket: any) => void
+    fetchTicketTypes: () => void;
 }
 
 const EditTicketTypeModal = ({
@@ -21,7 +22,7 @@ const EditTicketTypeModal = ({
     ticket,
     setTicket,
     fetchTicketTypes
-}: any) => {
+}: EditTicketTypeModalProps) => {
     const [openSalesStart, setOpenSalesStart] = useState<boolean>(false);
     const [openSalesEnd, setOpenSalesEnd] = useState<boolean>(false);
     const handleSaveTicket = async () => {

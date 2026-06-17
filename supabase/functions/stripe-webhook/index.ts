@@ -72,7 +72,7 @@ async function handler(request: Request) {
         if (error) throw error;
       }
 
-      emailUserUponPurchase(
+      await emailUserUponPurchase(
         session.metadata.user_id,
         session.metadata.featured_event_id,
         tickets,

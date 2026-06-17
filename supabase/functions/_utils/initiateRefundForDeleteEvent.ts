@@ -50,6 +50,15 @@ export async function initiateRefundForDeleteEvent(featured_event_id: number) {
                         console.log(
                             `Refund successful for Payment Intent ${paymentIntentId}`,
                         );
+
+                     const { error } = await supabaseAdmin
+                        .from('ticket_transactions')
+                        .update({
+                            status: 'refunded'
+                        })
+                        .eq('stripe_payment_id',paymentIntentId )
+                        if (error) console.error('Error updating the payment status');
+
                     } else {
                         console.error(
                             `Refund failed for Payment Intent ${paymentIntentId}: ${refund.status}`,
