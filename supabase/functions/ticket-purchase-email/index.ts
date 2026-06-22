@@ -3,6 +3,7 @@
 import { supabaseAdmin } from "../_utils/supabase.ts";
 // import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
+import { Resend } from "npm:resend";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -19,6 +20,7 @@ Deno.serve(async (req) => {
     const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
     const password = Deno.env.get("ZOHO_PASSWORD")!;
     const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
+    const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
 
     const {
       email,
@@ -150,7 +152,7 @@ ${ticketsHtml}
       },
     });
 
-    await client.send({
+    await resend.emails.send({
       from: fromEmail,
       to: email,
       subject,
@@ -158,7 +160,7 @@ ${ticketsHtml}
       attachments,
     });
 
-    await client.close();
+    // await client.close();
 
     return new Response(
       JSON.stringify({ message: `Email sent to ${email}` }),

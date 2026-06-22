@@ -2,7 +2,8 @@
 // // deno-lint-ignore-file
 import { supabaseAdmin } from "../_utils/supabase.ts";
 // import { serveListener } from "https://deno.land/std@0.116.0/http/server.ts";
-import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
+// import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
+import { Resend } from "npm:resend";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,9 +17,10 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
-    const password = Deno.env.get("ZOHO_PASSWORD")!;
+    // const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
+    // const password = Deno.env.get("ZOHO_PASSWORD")!;
     const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
+    const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
 
     const {
       email,
@@ -63,7 +65,7 @@ Deno.serve(async (req) => {
 
     const ticketsHtml = tickets
       .map(
-        (t: any, index: number) =>`<div style="padding:15px; border:1px solid #eee; border-radius:10px;">
+        (t: {ticket_id: number}, index: number) =>`<div style="padding:15px; border:1px solid #eee; border-radius:10px;">
   <p style="margin:0 0 10px 0; font-weight:bold;">
     ${isFrench ? `Billet ${index + 1}` : `Ticket ${index + 1}`}
   </p>
@@ -127,7 +129,7 @@ ${ticketsHtml}
       `.trim();
 
     // --- Attachments (QR codes) ---
-    const attachments = tickets.map((t: any, index: number) => ({
+    const attachments = tickets.map((t: {qr_code_link: string}, index: number) => ({
       filename: `ticket-${index + 1}.png`,
       content: t.qr_code_link.replace(/^data:image\/png;base64,/, ""),
       mimeType: "image/png",
@@ -138,19 +140,19 @@ ${ticketsHtml}
       },
     }));
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: "smtp.zoho.eu",
-        port: 465,
-        tls: true,
-        auth: {
-          username: zohoEmail,
-          password,
-        },
-      },
-    });
+    // const client = new SMTPClient({
+    //   connection: {
+    //     hostname: "smtp.zoho.eu",
+    //     port: 465,
+    //     tls: true,
+    //     auth: {
+    //       username: zohoEmail,
+    //       password,
+    //     },
+    //   },
+    // });
 
-    await client.send({
+    await resend.emails.send({
       from: fromEmail,
       to: email,
       subject,
@@ -158,7 +160,7 @@ ${ticketsHtml}
       attachments,
     });
 
-    await client.close();
+    // await client.close();
 
     return new Response(
       JSON.stringify({ message: `Email sent to ${email}` }),
