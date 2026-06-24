@@ -103,6 +103,7 @@ export interface EventDataProps {
     user_id: number
     users: { name: string; photo: string }
   }
+  email_on_ticket_purchase: boolean
 }
 
 

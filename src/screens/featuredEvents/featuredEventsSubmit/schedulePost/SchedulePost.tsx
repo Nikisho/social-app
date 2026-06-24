@@ -9,24 +9,33 @@ const SchedulePost = ({
     setSchedulePostDateTime,
     schedulePostDateTime,
     publishNow,
-    setPublishNow
+    setPublishNow,
+    alertOnPurchase,
+    setAlertOnPurchase
 }: {
     setSchedulePostDateTime: (schedule: Date | null) => void;
     schedulePostDateTime: Date | null;
     publishNow: boolean;
     setPublishNow: (publishNow: boolean) => void;
+    alertOnPurchase: boolean;
+    setAlertOnPurchase: (alertOnPurchase: boolean) => void;
 }) => {
     const [open, setOpen] = React.useState<boolean>(false);
+  
     return (
         <View className='mx-4 mb-4'>
             <View className="mb-5">
                 <Text className="text-2xl font-semibold">
-                    Schedule post
+                    Schedule post and alerts
                 </Text>
 
                 <Text className="text-gray-500 mt-1">
                     Publish your event automatically at a later date and time.
                 </Text>
+                <Text className="text-gray-500 mt-1">
+                    Set up an alert whenever a ticket is purchased.
+                </Text>
+
             </View>
 
             <View
@@ -85,6 +94,22 @@ const SchedulePost = ({
                     </View>
                 </View>
             </TouchableOpacity>
+
+
+            <View
+                className={`p-4 my-2 rounded-xl ${alertOnPurchase === null ? "bg-gray-100" : "bg-white"
+                    }`}
+            >
+                <Text className="font-semibold text-base">Turn on alerts</Text>
+                <Text className="text-gray-500 text-sm my-2 mb-4">
+                    When activated, you will receive an email whevener a ticket is purchased.
+                </Text>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    onValueChange={() => setAlertOnPurchase(!alertOnPurchase)}
+                    value={alertOnPurchase!}
+                />
+            </View>
             <DatePicker
                 modal
                 open={open}

@@ -69,7 +69,7 @@ const FeaturedEventsSubmitScreen = () => {
     const [publishNow, setPublishNow] = useState<boolean>(true);
     const navigation = useNavigation<RootStackNavigationProp>();
     const isKeyboardVisible = useKeyboardListener();
-
+    const [alertOnPurchase, setAlertOnPurchase] = useState<boolean>(false);
     console.log('The keyboard is up :', isKeyboardVisible)
     const uploadEventMediaToStorageBucket = async (file: string, unique_file_identifier: string, organizer_id: number) => {
         const arrayBuffer = decode(file);
@@ -242,6 +242,7 @@ const FeaturedEventsSubmitScreen = () => {
                 // chat_room_id: chatRoomData?.chat_room_id,
                 test: __DEV__ ? true : false,
                 hide_participants: eventData?.hide_participants,
+                email_on_ticket_purchase: alertOnPurchase ?? false,
                 publish_at: publishNow ? null : schedulePostDateTime
             })
             .select('featured_event_id')
@@ -293,6 +294,8 @@ const FeaturedEventsSubmitScreen = () => {
                 schedulePostDateTime={schedulePostDateTime} 
                 publishNow={publishNow}
                 setPublishNow={setPublishNow}
+                alertOnPurchase={alertOnPurchase}
+                setAlertOnPurchase={setAlertOnPurchase}
             />
 
         ]);

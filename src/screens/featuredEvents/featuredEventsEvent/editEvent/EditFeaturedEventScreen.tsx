@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Switch } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { EditFeaturedEventScreenRouteProps, EventDataProps, RootStackNavigationProp } from '../../../../utils/types/types'
@@ -27,6 +27,7 @@ interface InitialStateProps {
   end_time: string;
   time: string;
   location: string;
+  email_on_ticket_purchase: boolean;
 }
 const EditFeaturedEventScreen = () => {
   const route = useRoute<EditFeaturedEventScreenRouteProps>()
@@ -46,7 +47,8 @@ const EditFeaturedEventScreen = () => {
     end_date: new Date(),
     end_time: '',
     time: '',
-    location: ''
+    location: '',
+    email_on_ticket_purchase: false
   })
   const [loading, setLoading] = useState(false)
   const fetchEventData = async () => {
@@ -95,7 +97,8 @@ const EditFeaturedEventScreen = () => {
       end_date: event.end_date,
       end_time: event.end_time,
       time: event.time,
-      location: event.location
+      location: event.location,
+      email_on_ticket_purchase: event.email_on_ticket_purchase
     });
 
     setRepeatEvent(repeatFlag);
@@ -124,6 +127,7 @@ const EditFeaturedEventScreen = () => {
     if (eventData.time !== initial.time) return true
     if (eventData.location !== initial.location) return true
     if (typeof eventData.image_url === 'object') return true
+    if (eventData.email_on_ticket_purchase !== initial.email_on_ticket_purchase) return true
     return false
   }, [eventData, initial, repeatEvent])
 
@@ -200,7 +204,7 @@ const EditFeaturedEventScreen = () => {
     const eventEndDate = new Date(`${eventData?.end_date}T${eventData?.end_time}`);
     return eventDate < eventEndDate;
   }
-  
+
   const handleSubmit = async () => {
     if (!hasChanges) {
       return platformAlert('Nothing to save, you haven’t made any changes.')
@@ -244,7 +248,8 @@ const EditFeaturedEventScreen = () => {
           end_date: eventData?.end_date,
           end_time: eventData?.end_time,
           time: eventData?.time,
-          location: eventData?.location
+          location: eventData?.location,
+          email_on_ticket_purchase: eventData?.email_on_ticket_purchase
         })
         .eq('featured_event_id', featured_event_id)
 
@@ -263,33 +268,33 @@ const EditFeaturedEventScreen = () => {
     }
   }
 
-const handleDeleteEvent = async () => {
-  setLoading(true);
+  const handleDeleteEvent = async () => {
+    setLoading(true);
 
-  try {
-    const { error } = await supabase.functions.invoke(
-      "handle-delete-event",
-      {
-        method: "POST",
-        body: JSON.stringify({ featured_event_id }),
+    try {
+      const { error } = await supabase.functions.invoke(
+        "handle-delete-event",
+        {
+          method: "POST",
+          body: JSON.stringify({ featured_event_id }),
+        }
+      );
+
+      if (error) {
+        console.error("Error invoking delete function:", error.message);
+        platformAlert("Failed to delete event. Please try again.");
+        return;
       }
-    );
 
-    if (error) {
-      console.error("Error invoking delete function:", error.message);
-      platformAlert("Failed to delete event. Please try again.");
-      return;
+      platformAlert("Event deleted successfully");
+      navigation.navigate("featuredEvents", {});
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      platformAlert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    platformAlert("Event deleted successfully");
-    navigation.navigate("featuredEvents", {});
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    platformAlert("Something went wrong. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   if (loading) {
@@ -313,6 +318,20 @@ const handleDeleteEvent = async () => {
           repeatEvent={repeatEvent}
           setRepeatEvent={setRepeatEvent}
         />
+        <View
+          className={`p-4 my-2 rounded-xl ${eventData?.email_on_ticket_purchase! === null ? "bg-gray-100" : "bg-white"
+            }`}
+        >
+          <Text className="font-semibold text-base">Turn on alerts</Text>
+          <Text className="text-gray-500 text-sm my-2 mb-4">
+            When activated, you will receive an email whevener a ticket is purchased.
+          </Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            onValueChange={() => setEventData((prev) => prev! && { ...prev, email_on_ticket_purchase: !eventData?.email_on_ticket_purchase })}
+            value={eventData?.email_on_ticket_purchase!}
+          />
+        </View>
         {eventData && (
           <>
             {/* <View className={`${keyboardStatus==='Keyboard Shown' ? 'hidden' : '' }`}> */}
@@ -320,30 +339,6 @@ const handleDeleteEvent = async () => {
             {/* </View> */}
 
             <View
-                style={{
-                borderWidth: 1,
-                borderColor: '#ccc',
-                borderRadius: 8,
-                padding: 10,
-                marginVertical: 10
-              }}
-            >
-
-            <Text className='font-semibold mt-2 px-3'>Title</Text>
-
-            <TextInput
-
-              multiline
-              value={eventData.title}
-              placeholder="Enter your event's title"
-              onChangeText={(value) =>
-                setEventData((prev) => prev! && { ...prev, title: value })
-              }
-              className="  h-15 p-5"
-            />
-            </View>
-
-            <View 
               style={{
                 borderWidth: 1,
                 borderColor: '#ccc',
@@ -353,18 +348,42 @@ const handleDeleteEvent = async () => {
               }}
             >
 
-            <Text className='font-semibold mt-2 px-3'>Description</Text>
-            
-            <TextInput
+              <Text className='font-semibold mt-2 px-3'>Title</Text>
 
-              multiline
-              value={eventData.description}
-              placeholder="Enter your event's description"
-              onChangeText={(value) =>
-                setEventData((prev) => prev! && { ...prev, description: value })
-              }
-              className=" h-32 p-5"
-            />
+              <TextInput
+
+                multiline
+                value={eventData.title}
+                placeholder="Enter your event's title"
+                onChangeText={(value) =>
+                  setEventData((prev) => prev! && { ...prev, title: value })
+                }
+                className="  h-15 p-5"
+              />
+            </View>
+
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 8,
+                padding: 10,
+                marginVertical: 10
+              }}
+            >
+
+              <Text className='font-semibold mt-2 px-3'>Description</Text>
+
+              <TextInput
+
+                multiline
+                value={eventData.description}
+                placeholder="Enter your event's description"
+                onChangeText={(value) =>
+                  setEventData((prev) => prev! && { ...prev, description: value })
+                }
+                className=" h-32 p-5"
+              />
             </View>
             <EditAddressInput
               address={eventData?.location}
