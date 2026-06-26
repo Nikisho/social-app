@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, ScrollView } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import SecondaryHeader from '../../components/SecondaryHeader'
 import { EditFeaturedEventScreenRouteProps, RootStackNavigationProp } from '../../utils/types/types'
@@ -11,6 +11,8 @@ import { selectCurrentUser } from '../../context/navSlice'
 import platformAlert from '../../utils/functions/platformAlert'
 import ConfirmEmailModal from './ConfirmEmailModal'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import EmailAttachments from './EmailAttachments'
+import { decode } from 'base64-arraybuffer'
 
 const EmailAttendeesScreen = () => {
     const route = useRoute<EditFeaturedEventScreenRouteProps>();
@@ -19,6 +21,7 @@ const EmailAttendeesScreen = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigation = useNavigation<RootStackNavigationProp>();
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+    const [attachments, setAttachments] = useState<any[]>([]);
     const [email, setEmail] = useState({
         subject: '',
         body: ''
@@ -35,6 +38,15 @@ const EmailAttendeesScreen = () => {
                     body: ''
                 });
             }
+
+            const attachmentDraft = await AsyncStorage.getItem(`email_attachments_${featured_event_id}`);
+            if (attachmentDraft) {
+                setAttachments(JSON.parse(attachmentDraft));
+            } else {
+                setAttachments([]);
+            }
+
+
         } catch (error) {
             console.error('Error fetching email draft:', error);
         }
@@ -44,13 +56,72 @@ const EmailAttendeesScreen = () => {
     }, [featured_event_id]);
 
     const isDisabled = email.subject === '' || email.body === '';
+
+    const uploadAttachments = async (
+        files: { base64: string, fileName: string }[]
+    ) => {
+
+        const uploadedUrls: string[] = [];
+        for (const file of files) {
+
+            const arrayBuffer = decode(file.base64);
+
+            const fileName =
+                `${currentUser.id}/${file.fileName}.jpg`;
+
+            const {
+                data,
+                error,
+            } = await supabase
+                .storage
+                .from("email_attachments")
+                .upload(fileName, arrayBuffer, {
+                    contentType: 'image/png',
+                    upsert: true,
+                });
+
+            if (error) {
+                console.error(
+                    error.message
+                );
+                continue;
+            }
+
+            const {
+                data: publicUrl,
+            } = supabase
+                .storage
+                .from(
+                    "email_attachments"
+                )
+                .getPublicUrl(
+                    data.path
+                );
+
+            uploadedUrls.push(
+                publicUrl.publicUrl
+            );
+        }
+        console.log(uploadedUrls)
+        return uploadedUrls;
+    };
+
     const handleSubmit = async () => {
         setLoading(true);
         setConfirmModalVisible(false);
+
+        let uploadedAttachments: string[] = [];
+
         if (isDisabled) {
             platformAlert('Please add subject and body to the email.');
             return;
         }
+
+        if (attachments.length !== 0) {
+            uploadedAttachments = await uploadAttachments(attachments);
+            setLoading(false)
+        }
+
         try {
             //
             const { data, error } = await supabase.functions.invoke(
@@ -59,13 +130,15 @@ const EmailAttendeesScreen = () => {
                     featured_event_id: featured_event_id,
                     email: {
                         subject: email.subject.replace(/=\?utf-8\?Q\?.*\?=/i, "").trim(),
-                        body: email.body.replace(/=\?utf-8\?Q\?.*\?=/i, "").trim()
+                        body: email.body.replace(/=\?utf-8\?Q\?.*\?=/i, "").trim(),
                     },
                     user: {
                         name: currentUser.name,
                         email: currentUser.email,
                         photo: currentUser.photo
-                    }
+                    },
+                    attachments: uploadedAttachments
+
                 },
             });
             if (error) console.error(error.message);
@@ -78,11 +151,28 @@ const EmailAttendeesScreen = () => {
         } catch (error) {
             console.error('Error sending email to participants :', error)
         } finally {
+
+
             setLoading(false);
+            await AsyncStorage.removeItem(
+                `email_draft_${featured_event_id}`
+            );
+
+            await AsyncStorage.removeItem(
+                `email_attachments_${featured_event_id}`
+            );
         }
     };
 
     const handleSaveDraft = () => {
+
+        if (attachments?.length !== 0) {
+            AsyncStorage.setItem(
+                `email_attachments_${featured_event_id}`,
+                JSON.stringify(attachments)
+            );
+        }
+
         AsyncStorage.setItem(`email_draft_${featured_event_id}`, JSON.stringify(email))
             .then(() => {
                 platformAlert('Draft saved successfully!');
@@ -91,7 +181,8 @@ const EmailAttendeesScreen = () => {
             .catch((error) => {
                 console.error('Error saving draft:', error);
                 platformAlert('Failed to save draft. Please try again.');
-            }); 
+            });
+
 
     };
 
@@ -99,7 +190,10 @@ const EmailAttendeesScreen = () => {
         return <LoadingScreen displayText='Sending your email' />
     }
     return (
-        <View className="flex-1 bg-white px-4">
+        <ScrollView
+            contentContainerStyle={{ paddingBottom: 400 }}
+
+            className="flex-1 bg-white px-4">
             <SecondaryHeader displayText="Email attendees" />
 
             <View className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-5">
@@ -122,6 +216,10 @@ const EmailAttendeesScreen = () => {
                     <TextInput
                         value={email.subject}
                         placeholder="e.g. Venue update for tonight"
+                        returnKeyType='done'
+                        onSubmitEditing={() => {
+                            Keyboard.dismiss();
+                        }}
                         onChangeText={(value) =>
                             setEmail((prev) => prev && {
                                 ...prev,
@@ -142,6 +240,10 @@ const EmailAttendeesScreen = () => {
                         multiline
                         textAlignVertical="top"
                         placeholder="Write your message..."
+                        returnKeyType='done'
+                        onSubmitEditing={() => {
+                            Keyboard.dismiss();
+                        }}
                         onChangeText={(value) =>
                             setEmail((prev) => prev && {
                                 ...prev,
@@ -151,7 +253,10 @@ const EmailAttendeesScreen = () => {
                         className="border border-gray-200 rounded-2xl p-4 flex-1 min-h-[250px]"
                     />
                 </View>
-
+                <EmailAttachments
+                    attachments={attachments}
+                    setAttachments={setAttachments}
+                />
                 <TouchableOpacity
                     style={styles.shadow}
                     disabled={isDisabled}
@@ -170,10 +275,10 @@ const EmailAttendeesScreen = () => {
                 visible={confirmModalVisible}
                 setConfirmModalVisible={() => setConfirmModalVisible(false)}
                 email={email}
-                handleSubmit={handleSubmit} 
+                handleSubmit={handleSubmit}
                 handleSaveDraft={handleSaveDraft}
             />
-        </View>
+        </ScrollView>
     )
 }
 

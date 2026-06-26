@@ -8,8 +8,9 @@ import { supabaseAdmin } from "../_utils/supabase.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 
 Deno.serve(async (req) => {
-  const { email, featured_event_id, user } = await req.json();
+  const { email, featured_event_id, user, attachments } = await req.json();
 
+  console.log("Attachments here: ", attachments);
   const { data: attendees, error: attendeeError } = await supabaseAdmin
     .from(`featured_event_bookings`)
     .select(`*, users(email)`)
@@ -17,7 +18,57 @@ Deno.serve(async (req) => {
 
   const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
   const password = Deno.env.get("ZOHO_PASSWORD")!;
-  const fromEmail = Deno.env.get("ZOHO_FROM_EMAIL")!;
+
+  const body = `
+<div style="
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  color: #111;
+  max-width: 600px;
+  margin: 0 auto;
+">
+  <div style="
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+  ">
+<div style="white-space: pre-wrap; font-size: 15px;">
+${email.body}
+    </div>
+    ${attachments?.length ? `<hr style="margin:24px 0; border: none; border-top: 1px solid #eee;" />
+        <div>
+            ${attachments
+          .map(
+            (url: string) => `<div style="display:inline-block; margin:6px;">
+  <img
+    src="${url}"
+    style="
+      width:120px;
+      height:120px;
+      object-fit:cover;
+      border-radius:10px;
+      display:block;
+    "
+  />
+</div>`,
+          )
+          .join("")
+      }
+      </div>`:`<div></div>`
+  }
+    <hr style="margin:24px 0; border: none; border-top: 1px solid #eee;" />
+    <div style="font-size:13px; color:#555;">
+      <strong>Questions about the event?</strong><br/>
+      Message the organiser:<br/>
+      <a href="mailto:${user.email}" style="color:#000;">
+        ${user.email}
+      </a>
+    </div>
+
+  </div>
+
+</div>
+`;
 
   const showOrganiserEmail = async () => {
     const client = new SMTPClient({
@@ -29,28 +80,18 @@ Deno.serve(async (req) => {
       },
     });
 
-    const subject = `Email sent to attendees — Message from ${user.name}: ${email.subject}`;
-
-    const body = `
-${email.body}
-
-Questions about the event?
-Message the organiser:
-Email: ${user.email}
-`.split("\n")
-      .map((line) => line.replace(/\s+$/g, ""))
-      .join("\n");
+    const subject =
+      `Email sent to attendees — Message from ${user.name}: ${email.subject}`;
 
     await client.send({
       from: `LINKZY <support@linkzyapp.com>`,
       to: user.email,
       subject: subject.replace(/[\u0080-\uFFFF]/g, ""), // removes non-ascii (optional),
-      content: body,
+      html: body
     });
 
     await client.close();
   };
-
 
   const handleEmail = async (recipient: { users: { email: string } }) => {
     if (recipient.users.email.includes("linkzy")) {
@@ -68,21 +109,11 @@ Email: ${user.email}
 
     const subject = `Message from ${user.name}: ${email.subject}`;
 
-    const body = `
-${email.body}
-
-Questions about the event?
-Message the organiser:
-Email: ${user.email}
-`.split("\n")
-      .map((line) => line.replace(/\s+$/g, ""))
-      .join("\n");
-
     await client.send({
       from: `${user.name} <support@linkzyapp.com>`,
       to: recipient.users.email,
       subject: subject.replace(/[\u0080-\uFFFF]/g, ""),
-      content: body,
+      html: body,
     });
 
     await client.close();
