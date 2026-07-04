@@ -7,6 +7,7 @@ import { supabaseAdmin } from "../_utils/supabase.ts";
 import { generateTicket } from "../_utils/generateTicket.ts";
 import { bookFeaturedEvent } from "../_utils/bookFeaturedEvent.ts";
 import { emailOrganizerUponPurchase } from "../_utils/emailOrganizerUponPurchase.ts";
+import { handleRedeemPromoCode } from "../_utils/handleRedeemPromoCode.ts";
 // @ts-ignore
 const server = Deno.listen({ port: 8080 });
 async function handler(request: Request) {
@@ -82,6 +83,9 @@ async function handler(request: Request) {
         session.metadata.organizer_id,
         session.metadata.featured_event_id,
       );
+
+      await handleRedeemPromoCode(session.metadata.promo_code_id);
+      
       return new Response(JSON.stringify({ status: "success" }), {
         status: 200,
       });

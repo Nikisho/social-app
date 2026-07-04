@@ -21,6 +21,7 @@ import TicketTypesList from './newTickets/TicketTypesList';
 import { useKeyboardListener } from '../../../hooks/useKeyboardListener';
 import styles from '../../../utils/styles/shadow';
 import SchedulePost from './schedulePost/SchedulePost';
+import NewPromoCodes from './promocode/NewPromoCodes';
 
 interface EventDataProps {
     title: string;
@@ -61,6 +62,7 @@ const FeaturedEventsSubmitScreen = () => {
         hide_participants: false
     });
     const [tickets, setTickets] = useState<TicketProps[]>([]);
+    const [promoCodes, setPromoCodes] = useState<any[]>([]);
     const [media, setMedia] = useState<ImagePickerAsset | null>(null);
     const currentUser = useSelector(selectCurrentUser);
     const [loading, setLoading] = useState(false);
@@ -208,23 +210,20 @@ const FeaturedEventsSubmitScreen = () => {
             await uploadEventMediaToStorageBucket(media.base64!, unique_file_identifier, organizer_id);
         }
 
-        // const { data: chatRoomData, error: chatRoomError } = await supabase
-        //     .from('chat_rooms')
-        //     .insert({
-        //         type: 'group'
-        //     })
-        //     .select('chat_room_id')
-        //     .single();
+        const handleSubmitPromoCodes = async (featured_event_id: number, organizer_id: number) => {
+            const promoCodeInserts = promoCodes.map((p) => ({
+                organizer_id: organizer_id,
+                featured_event_id: featured_event_id,
+                code: p.code,
+                discount_type: 'percentage',
+                discount_value: p.discount_value,
+                quantity: p.quantity,
+                active: p.active
+            }));
 
-        // if (chatRoomError) throw chatRoomError.message
-
-        // const { error: participantError } = await supabase
-        //     .from('participants')
-        //     .insert({
-        //         chat_room_id: chatRoomData.chat_room_id,
-        //         user_id: currentUser.id
-        //     })
-        // if (participantError) throw participantError.message;
+            const { error } = await supabase.from('promo_codes').insert(promoCodeInserts);
+            if (error) console.error(error.message);
+        }
 
         const { error, data } = await supabase
             .from('featured_events')
@@ -251,6 +250,11 @@ const FeaturedEventsSubmitScreen = () => {
             createInterests(data.featured_event_id);
 
             handleSubmitTickets(data.featured_event_id, organizer_id);
+
+            if (promoCodes.length > 0) {
+                handleSubmitPromoCodes(data.featured_event_id, organizer_id);
+            }
+
             if (repeatEvent) {
                 handleScheduleEvent(data.featured_event_id);
             }
@@ -288,6 +292,10 @@ const FeaturedEventsSubmitScreen = () => {
             <TicketTypesList
                 tickets={tickets}
                 setTickets={setTickets}
+            />,
+            <NewPromoCodes 
+                promoCodes={promoCodes}
+                setPromoCodes={setPromoCodes}
             />,
             <SchedulePost
                 setSchedulePostDateTime={setSchedulePostDateTime}
