@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { uuidv4 } from "../../../../utils/functions/uuidv4";
+import platformAlert from "../../../../utils/functions/platformAlert";
 
 interface NewPromoCodeModalProps {
     modalVisible: boolean;
@@ -32,8 +33,23 @@ const NewPromoCodeModal: React.FC<NewPromoCodeModalProps> = ({
     const [discount, setDiscount] = useState("");
     const [quantity, setQuantity] = useState("");
     const handleSubmit = () => {
-        if (!code.trim() || !discount) return;
 
+        if (!code.trim() || !discount || !quantity) return;
+
+        if (Number(discount) <= 0 || Number(discount) > 100) {
+            platformAlert("Discount must be between 1 and 100");
+            return;
+        }
+        if (code.trim().length < 3 || code.trim().length > 10) {
+            platformAlert("Promo code must be between 3 and 10 characters");
+            return;
+        }
+
+        if (quantity && Number(quantity) <= 0 || !Number.isInteger(Number(quantity))) {
+            platformAlert("Quantity must be a positive integer");
+            return;
+        }
+        
         setPromoCodes((prev: any[]) => {
             // EDIT MODE
             if (editingPromoCode) {
@@ -131,6 +147,7 @@ const NewPromoCodeModal: React.FC<NewPromoCodeModalProps> = ({
                             }
                             placeholder="e.g. EARLY10"
                             returnKeyType="done"
+                            maxLength={10}
                             autoCapitalize="characters"
                             className="border border-gray-200 rounded-2xl p-4"
                         />
@@ -182,22 +199,18 @@ const NewPromoCodeModal: React.FC<NewPromoCodeModalProps> = ({
                     </View>
                     <TouchableOpacity
                         onPress={handleSubmit}
-                        disabled={!code || !discount }
+                        disabled={!code || !discount || !quantity}
                         className={`
                             mt-8
                             rounded-2xl
                             py-4
-                            ${!code || !discount
-                                ? "bg-gray-300"
-                                : "bg-black"
-                            }
+                            bg-black
                         `}
                     >
                         <Text className="text-white text-center font-semibold text-base">
                             {editingPromoCode ? "Save changes" : "Create promo code"}
                         </Text>
                     </TouchableOpacity>
-
                 </View>
             </View>
         </Modal>
