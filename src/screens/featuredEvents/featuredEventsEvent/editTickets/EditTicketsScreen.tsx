@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SecondaryHeader from '../../../../components/SecondaryHeader'
 import { useRoute } from '@react-navigation/native'
@@ -6,6 +6,8 @@ import { EditTicketsScreenRouteProp } from '../../../../utils/types/types'
 import { supabase } from '../../../../../supabase'
 import TicketTypeCard from './TicketTypeCard'
 import EditTicketTypeModal from './EditTicketTypeModal'
+import { AntDesign } from '@expo/vector-icons'
+import NewTicketTypeModal from './NewTicketTypeModal'
 
 type TicketType = {
     ticket_type_id: number;
@@ -25,7 +27,9 @@ const EditTicketsScreen = () => {
     const { featured_event_id } = route.params;
     const [ticketTypes, setTicketTypes] = useState<TicketType[]>();
     const [selectedTicketType, setSelectedTicketType] = useState<TicketType>();
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [EditTicketTypeModalVisible, setEditTicketTypeModalVisible] = useState<boolean>(false);
+    const [NewTicketTypeModalVisible, setNewTicketTypeModalVisible] = useState<boolean>(false);
+
     const fetchTicketTypes = async () => {
         const { data, error } = await supabase
             .from('ticket_types')
@@ -42,7 +46,7 @@ const EditTicketsScreen = () => {
 
     const onEdit = (ticket: any) => {
         setSelectedTicketType(ticket)
-        setModalVisible(true);
+        setEditTicketTypeModalVisible(true);
     };
 
     useEffect(() => {
@@ -53,25 +57,48 @@ const EditTicketsScreen = () => {
         <>
             <View>
                 <SecondaryHeader displayText="Edit ticket types" />
-                {ticketTypes?.map((ticket) => (
-                    <TicketTypeCard
-                        key={ticket.ticket_type_id}
-                        ticket={ticket}
-                        onEdit={onEdit}
-                    />
-                ))}
+
+                <TouchableOpacity
+                    onPress={() => setNewTicketTypeModalVisible(true)}
+                    className='bg-gray-100 p-7 my-2 flex flex-row items-center'>
+                    <AntDesign name="plus" size={20} color="black" />
+                    <Text className='mx-10 font-bold text-center'>
+                        Tap to add tickets
+                    </Text>
+
+                </TouchableOpacity> 
+
+                <FlatList
+                    contentContainerStyle={{ paddingBottom: 400 }}
+                    data={ticketTypes}
+                    renderItem={({ item }) => (
+                        <TicketTypeCard
+                            ticket={item}
+                            onEdit={onEdit}
+                            fetchTicketTypes={fetchTicketTypes}
+                        />
+                    )}
+                    keyExtractor={(item: TicketType) => item.ticket_type_id.toString()}
+                />
             </View>
 
             {
                 selectedTicketType &&
                 <EditTicketTypeModal
-                    modalVisible={modalVisible}
-                    setModalVisible={setModalVisible}
+                    modalVisible={EditTicketTypeModalVisible}
+                    setModalVisible={setEditTicketTypeModalVisible}
                     ticket={selectedTicketType}
                     setTicket={setSelectedTicketType}
                     fetchTicketTypes={fetchTicketTypes}
                 />
             }
+
+            <NewTicketTypeModal
+                modalVisible={NewTicketTypeModalVisible}
+                setModalVisible={setNewTicketTypeModalVisible}
+                fetchTicketTypes={fetchTicketTypes}
+                featured_event_id={featured_event_id}
+            />
         </>
 
     )
