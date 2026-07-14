@@ -1,17 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { EventDataProps } from '../types/EventDataProps';
 
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    end_datetime: Date;
-    quantity: string | null;
-    hide_participants?: boolean;
-
-}
 interface HideParticipantsProps {
     hide_participants: boolean;
     setEventData: React.Dispatch<React.SetStateAction<EventDataProps>>;

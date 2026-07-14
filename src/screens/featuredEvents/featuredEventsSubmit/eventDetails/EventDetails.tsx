@@ -5,16 +5,8 @@ import MediaPicker from './MediaPicker'
 import * as ImagePicker from 'expo-image-picker';
 import DescriptionInput from './DescriptionInput';
 import InterestsInput from './InterestsInput';
+import { EventDataProps } from '../types/EventDataProps';
 
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    quantity: string | null;
-    end_datetime: Date;
-}
 
 interface EventDetailsProps {
     setMedia: (media: ImagePicker.ImagePickerAsset) => void;
@@ -24,7 +16,7 @@ interface EventDetailsProps {
     userInterests?: {
         interestCode: number
         interestGroupCode: number
-    }[]
+    }[],
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({

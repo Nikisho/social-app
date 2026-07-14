@@ -6,17 +6,9 @@ import extractTimeFromDateSubmit from '../../../../utils/functions/extractTimeFr
 import AntDesign from '@expo/vector-icons/AntDesign';
 import formatDateShortWeekday from '../../../../utils/functions/formatDateShortWeekday';
 import platformAlert from '../../../../utils/functions/platformAlert';
+import { EventDataProps } from '../types/EventDataProps';
 
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    end_datetime: Date;
-    quantity: string | null;
-    hide_participants?: boolean;
-}
+
 
 interface DateTimeInputProps {
     date: Date;
@@ -33,12 +25,10 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
     setEventData,
     setRepeatEvent
 }) => {
-    console.log(repeatEvent)
     const infoMessage = "If selected, this event will auto repost weekly";
     const [openEndDateTime, setOpenEndDateTime] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    console.log('Date is:' ,formatDateShortWeekday(end_datetime))
     return (
         <View className='border mb-3 px-5  space-y-4'>
 

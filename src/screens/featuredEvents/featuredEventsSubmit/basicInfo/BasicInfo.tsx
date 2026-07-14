@@ -4,26 +4,14 @@ import TitleInput from './TitleInput'
 import AddressInput from './AddressInput';
 import DateTimeInput from './DateTimeInput';
 import HideParticipants from './HideParticipants';
+import { EventDataProps } from '../types/EventDataProps';
 
-
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    end_datetime: Date;
-    quantity: string | null;
-    hide_participants?: boolean;
-
-}
 
 interface BasicInfoProps {
     setEventData: React.Dispatch<React.SetStateAction<EventDataProps>>;
     eventData: EventDataProps
     repeatEvent: boolean,
     setRepeatEvent: (repeatEvent: boolean) => void;
-
 };
 
 const BasicInfo: React.FC<BasicInfoProps> = ({
@@ -33,7 +21,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     setRepeatEvent
 }) => {
     const deviceHeight = Dimensions.get('window').height;
-    console.log('Location is: ', eventData?.location)
     return (
         <View
             className={` flex mx-4 ${deviceHeight < 650 && 'h-2/3'}`} >

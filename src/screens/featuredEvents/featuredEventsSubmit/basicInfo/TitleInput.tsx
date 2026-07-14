@@ -1,17 +1,6 @@
 import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React from 'react'
-
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    end_datetime: Date;
-    quantity: string | null;
-    hide_participants?: boolean;
-
-}
+import { EventDataProps } from '../types/EventDataProps';
 
 interface TitleInputProps {
     setEventData: React.Dispatch<React.SetStateAction<EventDataProps>>;

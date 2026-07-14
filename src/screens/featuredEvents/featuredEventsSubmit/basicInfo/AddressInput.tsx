@@ -1,19 +1,8 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
 import GooglePlacesTextInput from 'react-native-google-places-textinput';
-import styles from '../../../../utils/styles/shadow';
 import colours from '../../../../utils/styles/colours';
-
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    end_datetime: Date;
-    quantity: string | null;
-    hide_participants?: boolean;
-}
+import { EventDataProps } from '../types/EventDataProps';
 
 interface AddressInputProps {
     address: string;

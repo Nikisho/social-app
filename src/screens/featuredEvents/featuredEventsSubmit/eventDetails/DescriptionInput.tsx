@@ -1,16 +1,7 @@
 import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native'
 import React from 'react'
 import DoneKeyboardCloseButton from '../../../../components/DoneKeyboardCloseButton';
-
-interface EventDataProps {
-    title: string;
-    description: string;
-    price: string;
-    location: string;
-    date: Date;
-    quantity: string | null;
-    end_datetime: Date;
-}
+import { EventDataProps } from '../types/EventDataProps';
 
 interface DescriptionInputProps {
     setEventData: React.Dispatch<React.SetStateAction<EventDataProps>>;

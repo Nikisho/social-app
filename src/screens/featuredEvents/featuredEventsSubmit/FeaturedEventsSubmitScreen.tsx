@@ -22,6 +22,7 @@ import { useKeyboardListener } from '../../../hooks/useKeyboardListener';
 import styles from '../../../utils/styles/shadow';
 import SchedulePost from './schedulePost/SchedulePost';
 import NewPromoCodes from './promocode/NewPromoCodes';
+import RefundPolicy from './refundPolicy/RefundPolicy';
 
 interface EventDataProps {
     title: string;
@@ -35,7 +36,8 @@ interface EventDataProps {
     userInterests?: {
         interestCode: number
         interestGroupCode: number
-    }[]
+    }[],
+    refund_policy_type_id: number | null;
 };
 
 type TicketProps = {
@@ -59,7 +61,8 @@ const FeaturedEventsSubmitScreen = () => {
         date: new Date((new Date()).setHours(12, 0, 0, 0)),
         end_datetime: new Date((new Date()).setHours(17, 0, 0, 0)),
         userInterests: [],
-        hide_participants: false
+        hide_participants: false,
+        refund_policy_type_id: 1
     });
     const [tickets, setTickets] = useState<TicketProps[]>([]);
     const [promoCodes, setPromoCodes] = useState<any[]>([]);
@@ -70,9 +73,7 @@ const FeaturedEventsSubmitScreen = () => {
     const [schedulePostDateTime, setSchedulePostDateTime] = useState<Date | null>(new Date());
     const [publishNow, setPublishNow] = useState<boolean>(true);
     const navigation = useNavigation<RootStackNavigationProp>();
-    const isKeyboardVisible = useKeyboardListener();
     const [alertOnPurchase, setAlertOnPurchase] = useState<boolean>(false);
-    console.log('The keyboard is up :', isKeyboardVisible)
     const uploadEventMediaToStorageBucket = async (file: string, unique_file_identifier: string, organizer_id: number) => {
         const arrayBuffer = decode(file);
         try {
@@ -237,12 +238,11 @@ const FeaturedEventsSubmitScreen = () => {
                 end_time: extractTimeFromDateSubmit(eventData?.end_datetime),
                 end_date: eventData?.end_datetime,
                 organizer_id: organizer_id,
-                // max_tickets: eventData?.quantity,
-                // chat_room_id: chatRoomData?.chat_room_id,
                 test: __DEV__ ? true : false,
                 hide_participants: eventData?.hide_participants,
                 email_on_ticket_purchase: alertOnPurchase ?? false,
-                publish_at: publishNow ? null : schedulePostDateTime
+                publish_at: publishNow ? null : schedulePostDateTime,
+                refund_policy_type_id: eventData?.refund_policy_type_id ?? 1
             })
             .select('featured_event_id')
             .single()
@@ -293,13 +293,17 @@ const FeaturedEventsSubmitScreen = () => {
                 tickets={tickets}
                 setTickets={setTickets}
             />,
-            <NewPromoCodes 
+            <NewPromoCodes
                 promoCodes={promoCodes}
                 setPromoCodes={setPromoCodes}
             />,
+            <RefundPolicy
+                setEventData={setEventData}
+                eventData={eventData}
+            />,
             <SchedulePost
                 setSchedulePostDateTime={setSchedulePostDateTime}
-                schedulePostDateTime={schedulePostDateTime} 
+                schedulePostDateTime={schedulePostDateTime}
                 publishNow={publishNow}
                 setPublishNow={setPublishNow}
                 alertOnPurchase={alertOnPurchase}
@@ -334,7 +338,6 @@ const FeaturedEventsSubmitScreen = () => {
                                 </Text>
                             </TouchableOpacity> :
                             <View>
-
                             </View>
                     }
 
