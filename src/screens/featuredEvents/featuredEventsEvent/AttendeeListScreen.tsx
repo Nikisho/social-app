@@ -82,6 +82,8 @@ const AttendeeListScreen = () => {
                 )
             `)
             .eq('featured_event_id', featured_event_id)
+            .eq('is_cancelled', false)
+
 
         if (data) {
 

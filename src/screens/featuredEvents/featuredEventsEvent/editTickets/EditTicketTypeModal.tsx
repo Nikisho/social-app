@@ -54,7 +54,7 @@ const EditTicketTypeModal = ({
         const { error } = await supabase
             .from('ticket_types')
             .update({
-                name: ticket.title,
+                name: ticket.name,
                 description: ticket.description,
                 is_free: ticket.price === '0' || ticket.is_free ? true : false,
                 price: ticket.price,

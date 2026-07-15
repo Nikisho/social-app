@@ -21,9 +21,9 @@ const GuestListBanner = ({
                 style={Platform.OS === 'ios' ? styles.shadow : { borderWidth: 1 }}
                 className="bg-white mt-4 rounded-2xl p-4 flex-row items-center justify-between">
                 <View>
-                    <Text className="text-black/70 text-base font-semibold">Guest list</Text>
+                    <Text className="text-black/70 text-base font-semibold">Manage guests</Text>
                     <Text className="text-black text-lg font-bold">
-                        Check-in your attendees
+                        Manage guests & initiate refunds
                     </Text>
                 </View>
             </TouchableOpacity>

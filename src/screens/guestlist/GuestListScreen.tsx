@@ -6,6 +6,9 @@ import { EditFeaturedEventScreenRouteProps } from '../../utils/types/types';
 import { supabase } from '../../../supabase';
 import { getColorFromName } from '../../utils/functions/getColorFromName';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import styles from '../../utils/styles/shadow';
+import RefundModal from './RefundModal';
+import LoadingScreen from '../loading/LoadingScreen';
 
 interface GuestProps {
   user_id: number;
@@ -27,6 +30,8 @@ const GuestListScreen = () => {
   const { featured_event_id } = route.params;
   const [guests, setGuests] = useState<GuestProps[]>([]);
   const [search, setSearch] = useState("");
+  const [refundModalVisible, setRefundModalVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchGuests = async () => {
     try {
@@ -177,7 +182,7 @@ const GuestListScreen = () => {
           <View className="flex flex-row items-start mb-2">
             <Entypo name="ticket" size={18} color="#6B7280" />
             <View className="ml-2 flex-1">
-              {item.tickets.map((ticket:{type: string, quantity: number}, index:number) => (
+              {item.tickets.map((ticket: { type: string, quantity: number }, index: number) => (
                 <Text key={index} className="text-sm text-gray-800">
                   • {ticket.type} <Text className="text-gray-500">x{ticket.quantity}</Text>
                 </Text>
@@ -197,12 +202,29 @@ const GuestListScreen = () => {
               {item.ticket_count}
             </Text>
           </View>
-
+        </View>
+        <View className="items-start">
+          <TouchableOpacity
+            style={styles.shadow} 
+            className="rounded-full bg-white px-5 py-2"
+            onPress={() => setRefundModalVisible(!refundModalVisible)}
+            >
+            <Text className="text- font-bold">
+              Refund
+            </Text>
+          </TouchableOpacity>
+          <RefundModal 
+            modalVisible={refundModalVisible}
+            setModalVisible={setRefundModalVisible}
+            setLoading={setLoading}
+            featured_event_id={featured_event_id}
+            user_id={item.user_id}
+          />
         </View>
       </View>
     );
   };
-  const filteredGuests = guests.filter((item:{username?: string, email?: string}) => {
+  const filteredGuests = guests.filter((item: { username?: string, email?: string }) => {
     const query = search.toLowerCase();
 
     return (
@@ -210,6 +232,12 @@ const GuestListScreen = () => {
       item.email?.toLowerCase().includes(query)
     );
   });
+
+    if (loading) {
+        return <View className='absolute h-full w-full'>
+            <LoadingScreen displayText='Issuing refund...' />
+        </View>
+    }
   return (
     <View className='px-3 space-y-5 h-[85%]'>
       <SecondaryHeader displayText='Guest list' />

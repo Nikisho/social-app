@@ -91,10 +91,7 @@ export default function TicketTypeCard({
             </Text>
 
             <View
-              className={`mt-2 px-3 py-1 rounded-full ${ticket.is_active
-                ? "bg-green-100"
-                : "bg-zinc-100"
-                }`}
+              className={`mt-2 px-3 py-1 rounded-full }`}
             >
               {/* <Text
               className={`text-xs font-medium ${

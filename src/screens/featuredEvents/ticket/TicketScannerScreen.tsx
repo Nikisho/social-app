@@ -37,12 +37,17 @@ const TicketScannerScreen = () => {
 
             const { data: ticketData, error } = await supabase
                 .from('tickets')
-                .select('uuid, checked_in, featured_event_id, ticket_id')
+                .select('uuid, checked_in, featured_event_id, ticket_id, cancelled')
                 .eq('uuid', ticketUuid)
                 .single();
 
             if (error || !ticketData) {
                 platformAlert("❌ Ticket not found.");
+                return;
+            }
+
+            if (ticketData.cancelled) {
+                platformAlert("❌ Ticket has been cancelled.");
                 return;
             }
 
@@ -52,7 +57,7 @@ const TicketScannerScreen = () => {
             }
 
             if (ticketData.checked_in) {
-                Alert.alert('⚠️ Already checked in, ticket ID: ' + ticketData.ticket_id);
+                platformAlert('⚠️ Already checked in, ticket ID: ' + ticketData.ticket_id);
                 return;
             }
 
@@ -61,7 +66,7 @@ const TicketScannerScreen = () => {
                 .update({ checked_in: true })
                 .eq('uuid', ticketUuid);
 
-            Alert.alert("✅ Ticket valid. ID " + ticketData.ticket_id);
+            platformAlert("✅ Ticket valid. ID " + ticketData.ticket_id);
 
         } catch (err) {
             console.error("Scan error:", err);
