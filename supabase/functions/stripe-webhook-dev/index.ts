@@ -76,6 +76,7 @@ async function handler(request: Request) {
       await emailUserUponPurchase(
         session.metadata.user_id,
         session.metadata.featured_event_id,
+        session.metadata.organizer_id,
         tickets,
       );
       emailOrganizerUponPurchase(

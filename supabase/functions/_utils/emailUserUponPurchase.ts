@@ -4,19 +4,31 @@ import formatDateShortWeekday from "./formatDateShortWeekday.ts";
 export const emailUserUponPurchase = async (
     user_id: number,
     featured_event_id: number,
-    tickets: {ticket_id:number, qr_code_link:string}[]
+    organizer_id: number,
+    tickets: { ticket_id: number; qr_code_link: string }[],
 ) => {
-
     const { data: user, error: user_error } = await supabaseAdmin
         .from("users")
         .select("name, email, id")
         .eq("id", user_id)
         .single();
-    
-    if (user_error) {   
-        console.error("Error fetching user details: ", user_error);
-    };
 
+    if (user_error) {
+        console.error("Error fetching user details: ", user_error);
+    }
+    const { data: organizer, error: organizerError } = await supabaseAdmin
+        .from("organizers")
+        .select(`organizer_id, users(email)`)
+        .eq("organizer_id", organizer_id)
+        .single();
+
+    if (organizerError || !organizer) {
+        console.error(
+            "Error fetching organiser email: ",
+            organizerError?.message,
+        );
+        // return null;
+    }
     const { data: event, error: event_error } = await supabaseAdmin
         .from("featured_events")
         .select("title, location, date, time, featured_event_id")
@@ -53,8 +65,9 @@ export const emailUserUponPurchase = async (
     const edge_function_base_url =
         "https://wffeinvprpdyobervinr.supabase.co/functions/v1/ticket-purchase-email-prod";
 
-
-    console.log('EmailUserUponPurchase: Now calling ticket-purchase-email-prod');
+    console.log(
+        "EmailUserUponPurchase: Now calling ticket-purchase-email-prod",
+    );
 
     const response = await fetch(edge_function_base_url, {
         method: "POST",
@@ -67,6 +80,7 @@ export const emailUserUponPurchase = async (
         body: JSON.stringify({
             name: user.name,
             email: user.email,
+            organizer_email: organizer.users.email,
             title: event.title,
             location: event.location,
             date: event.date && event.time &&
@@ -89,5 +103,5 @@ export const emailUserUponPurchase = async (
     if (update_confirmation_email_sent_error) {
         console.error(update_confirmation_email_sent_error.message);
     }
-    console.log('EmailUserUponPurchase: Email sent successfully')
+    console.log("EmailUserUponPurchase: Email sent successfully");
 };

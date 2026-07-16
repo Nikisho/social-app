@@ -26,6 +26,7 @@ Deno.serve(async (req) => {
       email,
       name,
       title,
+      organizer_email,
       location,
       date,
       tickets,
@@ -57,22 +58,25 @@ Deno.serve(async (req) => {
             upsert: true,
           });
 
-        const { data } = supabaseAdmin.storage.from("tickets").getPublicUrl(path);
+        const { data } = supabaseAdmin.storage.from("tickets").getPublicUrl(
+          path,
+        );
         return data.publicUrl;
       }),
     );
 
-
     const ticketsHtml = tickets
       .map(
-        (t: any, index: number) =>`<div style="padding:15px; border:1px solid #eee; border-radius:10px;">
+        (t: any, index: number) =>
+          `<div style="padding:15px; border:1px solid #eee; border-radius:10px;">
   <p style="margin:0 0 10px 0; font-weight:bold;">
     ${isFrench ? `Billet ${index + 1}` : `Ticket ${index + 1}`}
   </p>
   <img src="${ticketUrls[index]}" width="200" height="200" />
   <p style="font-size:12px; color:#666;">
     ID: ${t.ticket_id}
-  </p></div>`,).join("");
+  </p></div>`,
+      ).join("");
     // --- Full HTML ---
     const html = isFrench
       ? `
@@ -121,6 +125,30 @@ Deno.serve(async (req) => {
 
 <h3 style="margin-top:20px;">Your tickets</h3>
 ${ticketsHtml}
+<div
+  style="
+    margin-top:30px;
+    padding:18px;
+    background:#f8f8f8;
+    border:1px solid #e5e5e5;
+    border-radius:12px;
+  "
+>
+  <p style="margin:0 0 10px;font-size:16px;font-weight:600;color:#111;">
+    Need help?
+  </p>
+
+  <p style="margin:0;font-size:14px;line-height:1.6;color:#555;">
+    If you have any questions about the event or would like to enquire about a
+    refund, please contact the organiser directly at
+    <a
+      href="mailto:${organizer_email}"
+      style="color:#2563eb;text-decoration:none;font-weight:600;"
+    >
+      ${organizer_email}
+    </a>.
+  </p>
+</div>
 <p>Show your QR code at the entrance.</p>
 <p style="margin-top:30px;">— The Linkzy Team</p>
       </div>
