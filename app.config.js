@@ -8,12 +8,13 @@ export default {
     scheme: 'com.linkzy',
     plugins: [
       "expo-asset",
+      "expo-font",
       [
         'expo-build-properties',
         {
           android: {
-            compileSdkVersion: 35,
-            targetSdkVersion: 35,
+            compileSdkVersion: 36,
+            targetSdkVersion: 36,
             buildToolsVersion: '35.0.0',
           }
         },
