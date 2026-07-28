@@ -1,15 +1,15 @@
-import { View, Text, Platform, TouchableOpacity, Modal, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Modal, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from '../../../../utils/styles/shadow'
 import { supabase } from '../../../../../supabase';
 import { FlatList } from 'react-native-gesture-handler';
-import colours from '../../../../utils/styles/colours';
 import { getColorFromName } from '../../../../utils/functions/getColorFromName';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../../utils/types/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../../context/navSlice';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import ManageEventBannerComponent from '../../../../components/ManageEventBannerComponent';
 
 interface RsvpProps {
     id: number;
@@ -214,17 +214,12 @@ const ManageRSVPsModal = ({
 
     return (
         <>
-            <TouchableOpacity
+
+            <ManageEventBannerComponent
                 onPress={() => setModalVisible(!modalVisible)}
-                style={Platform.OS === 'ios' ? styles.shadow : { borderWidth: 1 }}
-                className="bg-white mt-4 rounded-2xl p-4 flex-row items-center justify-between">
-                <View>
-                    <Text className="text-black/70 text-base font-semibold">See who's joining</Text>
-                    <Text className="text-black text-lg font-bold">
-                        RSVPs
-                    </Text>
-                </View>
-            </TouchableOpacity>
+                title={"See who's joining"}
+                description="RSVP's"
+            />
 
             <Modal
                 animationType="slide"

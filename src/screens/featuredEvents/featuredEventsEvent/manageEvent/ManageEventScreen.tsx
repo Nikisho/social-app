@@ -1,7 +1,7 @@
-import { View, Text, ScrollView, Platform, KeyboardAvoidingView } from 'react-native'
+import {ScrollView, Platform, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { ManageEventScreenRouteProp, RootStackNavigationProp } from '../../../../utils/types/types'
+import {useRoute } from '@react-navigation/native'
+import { ManageEventScreenRouteProp } from '../../../../utils/types/types'
 import EmailParticipants from './EmailParticipants'
 import GuestListBanner from './GuestListBanner'
 import ManageRSVPsModal from './ManageRSVPsModal'
@@ -12,11 +12,14 @@ import EditEventBanner from './EditEventBanner'
 import AnalyticsBanner from './AnalyticsBanner'
 import EditTicketsBanner from './EditTicketsBanner'
 import PromoCodeModal from './PromoCodeModal'
+import DuplicateEventModal from './DuplicateEventModal'
+import LoadingScreen from '../../../loading/LoadingScreen'
 
 const ManageEventScreen = () => {
     const route = useRoute<ManageEventScreenRouteProp>()
     const { featured_event_id } = route.params
     const [eventData, setEventData] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const fetchEventData = async () => {
         const { data: event, error } = await supabase
@@ -43,16 +46,20 @@ const ManageEventScreen = () => {
     useEffect(() => {
         fetchEventData();
     }, []);
+
+    if (loading) return <LoadingScreen displayText='Duplicating your event' />
+    
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             className=''
-            style={{ flex: 1 }}
+            style={{ flex: 1}}
         >
             <ScrollView
                 className="p-2"
-                contentContainerStyle={{ paddingBottom: 100 }}
+                contentContainerStyle={{ paddingBottom: 200 }}
                 keyboardShouldPersistTaps="handled"
+
             >
                 <SecondaryHeader displayText="Manage event" />
                 <TicketStatsBanner
@@ -70,6 +77,11 @@ const ManageEventScreen = () => {
                 />
                 <EditEventBanner
                     featured_event_id={featured_event_id}
+                />
+                <DuplicateEventModal
+                    featured_event_id={featured_event_id}
+                    loading={loading}
+                    setLoading={setLoading}
                 />
                 <EditTicketsBanner
                     featured_event_id={featured_event_id}

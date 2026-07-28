@@ -64,7 +64,7 @@ PODS:
     - ExpoModulesCore
   - ExpoFileSystem (18.1.11):
     - ExpoModulesCore
-  - ExpoFont (55.0.4):
+  - ExpoFont (13.3.2):
     - ExpoModulesCore
   - ExpoImagePicker (16.1.4):
     - ExpoModulesCore
@@ -2726,7 +2726,7 @@ SPEC CHECKSUMS:
   ExpoCamera: fc1ab0e1c665b543a307c577df107e37cc2edc8e
   ExpoDevice: 7a961caede6638aa0d37d0d3aa884ab957a2e3d3
   ExpoFileSystem: 9681caebda23fa1b38a12a9c68b2bade7072ce20
-  ExpoFont: 4d2a6dedce012c4793532cb38d561d3da95eaafd
+  ExpoFont: 091a47eeaa1b30b0b760aa1d0a2e7814e8bf6fe6
   ExpoImagePicker: d2fff488a0738343a3cc21e98544ee9feafaa0e6
   ExpoLinking: 343a89ea864a851831fd4495e8aea01cf0f6a36f
   ExpoModulesCore: 16f74d8df26d7e4b6bf7eb3d0effaf0f15df7b80

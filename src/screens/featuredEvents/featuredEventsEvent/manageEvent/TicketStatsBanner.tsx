@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Platform, Modal, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import styles from '../../../../utils/styles/shadow';
-import { supabase } from '../../../../../supabase';
 import { FlatList } from 'react-native-gesture-handler';
+import ManageEventBannerComponent from '../../../../components/ManageEventBannerComponent';
 
 type TicketTypeProps = {
   name: string;
@@ -67,20 +67,13 @@ const TicketStatsBanner: React.FC<TicketStatsBannerProps> = ({ ticket_types }) =
   }
   return (
     <>
-      <TouchableOpacity
-        onPress={() => setModalVisible(!modalVisible)}
-        style={Platform.OS === 'ios' ? styles.shadow : { borderWidth: 1 }}
-        className="bg-white mt-4 rounded-2xl p-4 flex-row items-center justify-between">
-        <View>
-          <Text className="text-black/70 text-base font-semibold">Tickets & Sales</Text>
-          <Text className="text-black text-lg font-bold">
-            {/* {sold} / {max} */}
-            See more
-          </Text>
-        </View>
+      
+      <ManageEventBannerComponent
+          onPress={() => setModalVisible(!modalVisible)}
+          title='Tickets & Sales'
+          description='See more'
+        />
 
-
-      </TouchableOpacity>
       <Modal
         animationType="slide"
         transparent={true}

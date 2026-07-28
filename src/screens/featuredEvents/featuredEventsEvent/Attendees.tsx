@@ -105,7 +105,7 @@ const Attendees: React.FC<AttendeesProps> = ({
 
     useEffect(() => {
         fetchAttendees();
-    }, [])
+    }, [featured_event_id])
 
 
     const renderItem = ({ item }: { item: AttendeeProps }) => {

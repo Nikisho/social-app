@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, Platform, Modal, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from '../../../../utils/styles/shadow'
 import { supabase } from '../../../../../supabase';
 import { Ionicons } from '@expo/vector-icons';
+import ManageEventBannerComponent from '../../../../components/ManageEventBannerComponent';
 
 
 type PromoCode = {
@@ -29,7 +30,6 @@ const PromoCodeModal = ({ featured_event_id }: { featured_event_id: number }) =>
             }
             if (data) {
                 setPromoCodes(data);
-                console.log('Fetched promo codes:', data);
             }
         } catch (error) {
             console.error('Error fetching promo codes:', error);
@@ -96,17 +96,11 @@ const PromoCodeModal = ({ featured_event_id }: { featured_event_id: number }) =>
 
     return (
         <>
-            <TouchableOpacity
+            <ManageEventBannerComponent
                 onPress={() => setModalVisible(!modalVisible)}
-                style={Platform.OS === 'ios' ? styles.shadow : { borderWidth: 1 }}
-                className="bg-white mt-4 rounded-2xl p-4 flex-row items-center justify-between">
-                <View>
-                    <Text className="text-black/70 text-base font-semibold">Promo codes</Text>
-                    <Text className="text-black text-lg font-bold">
-                        Manage your promo codes
-                    </Text>
-                </View>
-            </TouchableOpacity>
+                title='Promo codes'
+                description='Manage your promo codes'
+            />
             <Modal
                 animationType="slide"
                 transparent
