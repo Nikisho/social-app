@@ -55,10 +55,16 @@ serve(async (req: Request) => {
 
     console.log('🎉stripe account ID :', organizer.stripe_account_id);
     const priceInPence = Math.round(subtotal* 100); 
-    const baseFee = Math.round(priceInPence * 0.030);
-    const discountPct = organizer.platform_fee_discount_pct ?? 0;
-    const platformFeeInPence = Math.round(baseFee * (1 - discountPct / 100));
+    const percentageFee = Math.round(priceInPence * 0.03);
+    const fixedFee = quantity * 20;
 
+    const baseFee = percentageFee + fixedFee;
+
+    const discountPct = organizer.platform_fee_discount_pct ?? 0;
+
+    const platformFeeInPence = Math.round(
+      baseFee * (1 - discountPct / 100),
+    );
     // const platformFee = //No platform fee for now Math.round(amount * 0.03);
 
     const paymentIntentParams: PaymentIntentParamsProps = {

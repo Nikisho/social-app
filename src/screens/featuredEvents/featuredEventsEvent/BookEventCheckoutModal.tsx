@@ -70,6 +70,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
         );
         if (!data || error) {
             Alert.alert(`Error: ${error?.message ?? "no data"}`);
+            console.log('Payment failed: ', JSON.stringify(error, null, 2));
             setLoading(false);
             return {};
         }
@@ -92,7 +93,7 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
             await initializePaymentSheet(amount);
             const { error } = await presentPaymentSheet();
             if (error) {
-                console.error(error.message);
+                console.error(error);
                 return; // skip booking if payment error
             }
 
@@ -186,7 +187,8 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
             },
         });
         if (error) {
-            console.error(error.message);
+            console.log('Payment failed :', JSON.stringify(error, null, 2));
+
             platformAlert(error.message)
         }
     };
@@ -314,6 +316,16 @@ const BookEventCheckoutModal: React.FC<BookEventCheckoutModalProps> = ({
                             </TouchableOpacity>
                             {!is_free &&
                                 <PlatformPayButton
+                                    setOrderTracking={(
+                                        completion: (
+                                            orderIdentifier: string,
+                                            orderTypeIdentifier: string,
+                                            authenticationToken: string,
+                                            webServiceUrl: string
+                                        ) => void
+                                    ) => {
+                                        completion("", "", "", "");
+                                    }}
                                     disabled={loading}
                                     type={PlatformPay.ButtonType.Pay}
                                     onPress={() => handlePlatformPay(subtotal)}

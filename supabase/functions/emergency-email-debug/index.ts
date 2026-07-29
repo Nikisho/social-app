@@ -21,7 +21,7 @@ const corsHeaders = {
 
 Deno.serve(async (req) => {
     try {
-        const { featured_event_id, user_id } = await req.json();
+        const { featured_event_id, user_id, organizer_id } = await req.json();
 
         const { data: tickets } = await supabaseAdmin
             .from("tickets")
@@ -43,6 +43,7 @@ Deno.serve(async (req) => {
         await emailUserUponPurchase(
             user_id,
             featured_event_id,
+            organizer_id,
             ticketsWithQrBase64,
         );
 

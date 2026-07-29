@@ -6,7 +6,7 @@ export const getPricePlusPlatformFee = (
 
     const numericPrice = Number(price);
 
-    const baseFee = numericPrice * 0.03;
+    const baseFee = numericPrice * 0.03 + 0.20;
 
     const platformFee =
         baseFee * (1 - platformFeeDiscountPct / 100);
