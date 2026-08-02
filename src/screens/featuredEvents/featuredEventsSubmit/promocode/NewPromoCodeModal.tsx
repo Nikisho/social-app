@@ -70,7 +70,7 @@ const NewPromoCodeModal: React.FC<NewPromoCodeModalProps> = ({
                 ...prev,
                 {
                     uuid: uuidv4(9),
-                    code: code.trim().toUpperCase(),
+                    code: code.trim().toUpperCase().replace(/[^A-Z0-9]/gi, ""),
                     discount_value: Number(discount),
                     quantity: quantity ? Number(quantity) : null,
                     active: true,

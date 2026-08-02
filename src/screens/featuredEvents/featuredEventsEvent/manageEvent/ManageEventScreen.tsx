@@ -11,9 +11,9 @@ import { supabase } from '../../../../../supabase'
 import EditEventBanner from './EditEventBanner'
 import AnalyticsBanner from './AnalyticsBanner'
 import EditTicketsBanner from './EditTicketsBanner'
-import PromoCodeModal from './PromoCodeModal'
 import DuplicateEventModal from './DuplicateEventModal'
 import LoadingScreen from '../../../loading/LoadingScreen'
+import EditPromoCodesBanner from './EditPromoCodesBanner'
 
 const ManageEventScreen = () => {
     const route = useRoute<ManageEventScreenRouteProp>()
@@ -86,7 +86,10 @@ const ManageEventScreen = () => {
                 <EditTicketsBanner
                     featured_event_id={featured_event_id}
                 />
-                <PromoCodeModal 
+                {/* <PromoCodeModal 
+                    featured_event_id={featured_event_id}
+                /> */}
+                <EditPromoCodesBanner
                     featured_event_id={featured_event_id}
                 />
                 <AnalyticsBanner

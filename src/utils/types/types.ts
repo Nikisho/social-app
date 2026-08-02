@@ -46,6 +46,7 @@ export type RootStackParamList = {
   followers: {user_id: number};
   emailattendees: {featured_event_id: number};
   guestlist: {featured_event_id: number};
+  editpromocodes: {featured_event_id: number};
 };
 
 // Define the navigation prop types
@@ -69,6 +70,7 @@ export type TicketScannerScreenRouteProp = RouteProp<RootStackParamList, 'ticket
 export type EventAnalyticsScreenRouteProp = RouteProp<RootStackParamList, 'eventanalytics'>;
 export type ManageEventScreenRouteProp = RouteProp<RootStackParamList, 'manageevent'>;
 export type EditTicketsScreenRouteProp = RouteProp<RootStackParamList, 'edittickets'>;
+export type EditPromoCodesScreenRouteProp = RouteProp<RootStackParamList, 'editpromocodes'>;
 export type Base64<imageType extends string> = `data:image/${imageType};base64${string}`;
 
 export interface EventDataProps {
