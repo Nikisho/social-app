@@ -14,6 +14,7 @@ import EditTicketsBanner from './EditTicketsBanner'
 import DuplicateEventModal from './DuplicateEventModal'
 import LoadingScreen from '../../../loading/LoadingScreen'
 import EditPromoCodesBanner from './EditPromoCodesBanner'
+import ManageTicketBucketsBanner from './ManageTicketBucketsBanner'
 
 const ManageEventScreen = () => {
     const route = useRoute<ManageEventScreenRouteProp>()
@@ -86,9 +87,9 @@ const ManageEventScreen = () => {
                 <EditTicketsBanner
                     featured_event_id={featured_event_id}
                 />
-                {/* <PromoCodeModal 
+                <ManageTicketBucketsBanner
                     featured_event_id={featured_event_id}
-                /> */}
+                />
                 <EditPromoCodesBanner
                     featured_event_id={featured_event_id}
                 />

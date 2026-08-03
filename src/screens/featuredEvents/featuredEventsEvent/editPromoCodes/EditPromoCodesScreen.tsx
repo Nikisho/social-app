@@ -22,8 +22,6 @@ const EditPromoCodesScreen = () => {
 
     const route = useRoute<EditPromoCodesScreenRouteProp>();
     const { featured_event_id } = route.params;
-    const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
-    const [EditPromoCodeModalVisible, setEditPromoCodeModalVisible] = useState<boolean>(false);
     const [NewPromoCodeModalVisible, setNewPromoCodeModalVisible] = useState<boolean>(false);
     const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
 
