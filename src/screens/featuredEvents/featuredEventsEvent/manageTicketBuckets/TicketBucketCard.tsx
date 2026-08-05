@@ -61,7 +61,7 @@ const TicketBucketCard: React.FC<Props> = ({
         >
             <View className="flex-row justify-between items-center">
 
-                <View className="flex-1">
+                <View>
 
                     <Text className="text-lg font-semibold">
                         {item.name}
@@ -74,16 +74,6 @@ const TicketBucketCard: React.FC<Props> = ({
                 </View>
 
                 <View className="flex-row items-start justify-between">
-
-                    <View className="flex-1">
-                        <Text className="text-lg font-semibold">
-                            {item.name}
-                        </Text>
-
-                        <Text className="text-gray-500 mt-1">
-                            Capacity: {item.quantity} tickets
-                        </Text>
-                    </View>
 
                     <TouchableOpacity
                         onPress={() => handleDelete(item)}
