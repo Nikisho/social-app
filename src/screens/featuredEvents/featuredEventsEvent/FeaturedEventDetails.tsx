@@ -75,10 +75,19 @@ const FeaturedEventDetails: React.FC<EventDataProps> = ({
                     w-full h-80 oversize-hidden mt-3 rounded-xl'
             >
                 <TouchableOpacity
-                    onPress={() => handleShareEventLink()}
+                    onPress={handleShareEventLink}
                     style={styles.shadowButtonStyle}
-                    className='bg-black p-3 m-5 rounded-full justify-center flex'>
-                    <Ionicons name="share-social-outline" size={25} color="white" />
+                    className="bg-black px-5 py-3 m-5 rounded-full flex-row items-center justify-center"
+                >
+                    <Ionicons
+                        name="share-social-outline"
+                        size={22}
+                        color="white"
+                    />
+
+                    <Text className="text-white font-semibold ml-2">
+                        Share event
+                    </Text>
                 </TouchableOpacity>
             </FastImage>
             <View className="m-2 p-4 bg-white rounded-2xl shadow-sm">

@@ -1,4 +1,4 @@
-import { Text, Alert, ToastAndroid, Platform, View } from 'react-native'
+import { Text, Alert, ToastAndroid, Platform, View, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { supabase } from '../../../supabase';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import SecondaryHeader from '../../components/SecondaryHeader';
 import { useTranslation } from 'react-i18next';
 import getAge from '../../utils/functions/getAge';
 import CompletionTracker from './CompletionTracker';
+import UpdateUserNameModal from './UpdateUserNameModal';
 
 interface UserDataProps {
 	name: string;
@@ -53,6 +54,7 @@ const ProfileScreen = () => {
 	const [profilePictureModalVisible, setProfilePictureModalVisible] = useState(false);
 	const [originalBio, setOriginalBio] = useState('');
 	const [userInterests, setUserInterests] = useState<Interests[]>();
+	const [userNameModalVisible, setUserNameModalVisible] = useState(false);
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const genderColour = userData.sex === 0 ? 'bg-green-400' : (userData.sex === 1 ? 'bg-sky-600' : 'bg-red-300')
@@ -94,6 +96,31 @@ const ProfileScreen = () => {
 		}
 	}
 
+	const updateUserName = async (newName: string) => {
+		if (!isCurrentUserProfile) {
+			return;
+		}
+		if (!newName || newName === '') {
+			return;
+		}
+		const { error } = await supabase
+			.from('users')
+			.update({
+				name: newName
+			})
+			.eq('id', currentUser.id);
+		if (error) { console.error(error.message); }
+		setUserNameModalVisible(!userNameModalVisible);
+		setUserData((prev) => prev && {
+			...prev,
+			name: newName,
+		})
+		dispatch(setCurrentUser({
+			...currentUser,
+			name: newName
+		}))
+		Platform.OS === 'android' ? ToastAndroid.show('Name changed successfully', ToastAndroid.SHORT) : Alert.alert('Name changed successfully')
+	}
 
 	const updateUserDescription = async () => {
 		if (!userData?.bio || userData.bio === '') {
@@ -213,9 +240,14 @@ const ProfileScreen = () => {
 				userData && userInterests && (
 					<>
 						<View className='flex flex-row items-center'>
-							<SecondaryHeader
-								displayText={userData.name}
-							/>
+							<TouchableOpacity
+								disabled={!isCurrentUserProfile}
+								onPress={() => setUserNameModalVisible(!userNameModalVisible)}
+							>
+								<SecondaryHeader
+									displayText={userData.name}
+								/>
+							</TouchableOpacity>
 							{
 								userData?.date_of_birth && (
 									<View
@@ -276,6 +308,11 @@ const ProfileScreen = () => {
 
 							}
 							user_id={user_id}
+						/>
+						<UpdateUserNameModal
+							modalVisible={userNameModalVisible}
+							setModalVisible={setUserNameModalVisible}
+							updateUserName={updateUserName}
 						/>
 						<UpdateBioModal
 							setModalVisible={setModalVisible}

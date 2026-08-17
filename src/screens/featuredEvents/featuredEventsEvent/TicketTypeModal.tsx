@@ -122,9 +122,29 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({
                         </View>
                         <FlatList
                             contentContainerStyle={{
-                                paddingBottom: 100
+                                paddingBottom: 100,
                             }}
-                            data={ticket_types}
+                            data={
+                                ticket_types?.sort((a, b) => {
+                                    const now = new Date();
+
+                                    const priority = (ticket: any) => {
+                                        const soldOut =
+                                            ticket.quantity <= ticket.tickets_sold;
+                                        const hasSalesEnded =
+                                            new Date(ticket.sales_end).getTime() <= now.getTime();
+                                        const salesNotStarted =
+                                            new Date(ticket.sales_start).getTime() > now.getTime();
+
+                                        if (!soldOut && !hasSalesEnded && !salesNotStarted) return 0; // Available
+                                        if (salesNotStarted) return 1; // Coming soon
+                                        if (hasSalesEnded) return 2; // Sales ended
+                                        return 3; // Sold out
+                                    };
+
+                                    return priority(a) - priority(b);
+                                })
+                            }
                             renderItem={renderItem}
                             keyExtractor={(item) => item.ticket_type_id.toString()}
                         />

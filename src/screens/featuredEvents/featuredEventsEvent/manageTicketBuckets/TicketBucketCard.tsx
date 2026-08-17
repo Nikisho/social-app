@@ -59,36 +59,32 @@ const TicketBucketCard: React.FC<Props> = ({
             activeOpacity={0.8}
             className="bg-white border border-gray-200 rounded-2xl p-4 mb-3"
         >
-            <View className="flex-row justify-between items-center">
 
-                <View>
+            <View className="flex-row items-start justify-between">
 
+                <View className="flex-1">
                     <Text className="text-lg font-semibold">
                         {item.name}
                     </Text>
 
                     <Text className="text-gray-500 mt-1">
-                        {item.quantity} tickets allocated
+                        Capacity: {item.quantity} tickets
                     </Text>
-
                 </View>
 
-                <View className="flex-row items-start justify-between">
-
-                    <TouchableOpacity
-                        onPress={() => handleDelete(item)}
-                        className="bg-red-50 p-2 rounded-full"
-                    >
-                        <Ionicons
-                            name="trash-outline"
-                            size={18}
-                            color="#dc2626"
-                        />
-                    </TouchableOpacity>
-
-                </View>
+                <TouchableOpacity
+                    onPress={() => handleDelete(item)}
+                    className="bg-red-50 p-2 rounded-full"
+                >
+                    <Ionicons
+                        name="trash-outline"
+                        size={18}
+                        color="#dc2626"
+                    />
+                </TouchableOpacity>
 
             </View>
+
             <View className="">
                 <Text className="text-sm text-gray-400 mt-4 mb-2">
                     Ticket types

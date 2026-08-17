@@ -22,16 +22,29 @@ export const bookFeaturedEvent = async (
         if (error) {
             console.error(error.message);
         } else {
-            const { error } = await supabaseAdmin
-                .from('ticket_types')
-                .update({
-                    tickets_sold: Number(tickets_sold) + quantity
-                })
-                // .eq('featured_event_id', featured_event_id)
-                .eq('ticket_type_id', ticket_type_id)
 
-            if (error)
-                console.error(error.message);
+            //First refetch ticket types to get the latest tickets sold count
+            const { data: ticketTypeData, error: ticketTypeError } = await supabaseAdmin
+                .from('ticket_types')
+                .select('tickets_sold')
+                .eq('ticket_type_id', ticket_type_id)
+                .single();
+
+            if (ticketTypeError) {
+                console.error(ticketTypeError.message);
+            } else {
+                const freshTicketsSold = ticketTypeData?.tickets_sold || 0;
+                console.log(`Fresh tickets sold for ticket_type_id ${ticket_type_id}: ${freshTicketsSold}`);
+                const { error } = await supabaseAdmin
+                    .from('ticket_types')
+                    .update({
+                        tickets_sold: freshTicketsSold + quantity
+                    })
+                    .eq('ticket_type_id', ticket_type_id)
+    
+                if (error) console.error(error.message);
+            }
+
         }
 
 

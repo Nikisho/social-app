@@ -18,7 +18,16 @@ Deno.serve(async (req) => {
 
   const zohoEmail = Deno.env.get("ZOHO_LOGIN_EMAIL")!;
   const password = Deno.env.get("ZOHO_PASSWORD")!;
-
+  function encodeEmailHtml(text:string) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/ {2,}/g, match => "&nbsp;".repeat(match.length))
+    .replace(/\n/g, "<br>");
+}
+const cleanedBody = encodeEmailHtml(email.body);
   const body = `
 <div style="
   font-family: Arial, sans-serif;
@@ -33,7 +42,7 @@ Deno.serve(async (req) => {
     border-radius: 12px;
   ">
 <div style="white-space: pre-wrap; font-size: 15px;">
-${email.body}
+${cleanedBody}
     </div>
     ${attachments?.length ? `<hr style="margin:24px 0; border: none; border-top: 1px solid #eee;" />
         <div>

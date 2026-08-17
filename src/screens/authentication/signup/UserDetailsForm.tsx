@@ -23,7 +23,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
 }) => {
 
     function formatDateOfBirth(datePickerObject: Date) {
-        const options:any = { day: '2-digit', month: 'long', year: 'numeric' };
+        const options: any = { day: '2-digit', month: 'long', year: 'numeric' };
         return new Date(datePickerObject).toLocaleDateString('en-GB', options);
     }
 
@@ -48,7 +48,14 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     className={` px-5 text-center flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-2'}`}
                     value={name}
                     maxLength={35}
-                    onChangeText={(value) => updateFields({ name: value.replace(/[^.a-z0-9_]/gi, '') })}
+                    onChangeText={(value) =>
+                        updateFields({
+                            name: value
+                                .replace(/[’‘]/g, "'")     
+                                .replace(/[^a-zA-ZÀ-ÿ0-9' -]/g, '')
+                                .replace(/^\s+/, '')
+                        })
+                    }
                 />
             </View>
             <View className='w-5/6 space-y-3'>
@@ -57,7 +64,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                 </Text>
                 <TouchableOpacity onPress={() => setOpen(true)}
                     className={` px-5 text-center flex items-center rounded-full border bg-gray-200 ${Platform.OS === 'ios' ? 'py-4' : 'py-3'}`}
-                    >
+                >
                     <Text className='text-center  '>
                         {formatDateOfBirth(dateOfBirth!)}
                     </Text>
@@ -69,7 +76,7 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                     date={dateOfBirth!}
                     onConfirm={(date: Date) => {
                         setOpen(false)
-                        updateFields({ dateOfBirth: date})
+                        updateFields({ dateOfBirth: date })
                     }}
                     buttonColor='black'
                     theme='light'
@@ -84,26 +91,26 @@ const UserDetailsForm: React.FC<UserDetailsFormProps> = ({
                 </Text>
                 <View className='flex flex-row w-5/6 self-center justify-between items-center'>
                     <View className='flex items-center space-y-2'>
-                        <TouchableOpacity 
-                            onPress={() => updateFields({ sex: 1})}
-                            className={`${sex === 1? 'bg-cyan-200' : 'bg-white'} flex items-center p-5 px-7 rounded-xl`} style={styles.shadow} >
-                        <Foundation name="male-symbol" size={34} color="black" />
+                        <TouchableOpacity
+                            onPress={() => updateFields({ sex: 1 })}
+                            className={`${sex === 1 ? 'bg-cyan-200' : 'bg-white'} flex items-center p-5 px-7 rounded-xl`} style={styles.shadow} >
+                            <Foundation name="male-symbol" size={34} color="black" />
                         </TouchableOpacity>
                         <Text className='text-lg font-bold'>Male</Text>
                     </View>
                     <View className='flex items-center space-y-2'>
-                    <TouchableOpacity className={`${sex === 2? 'bg-cyan-200' : 'bg-white'} flex items-center p-5 px-7 rounded-xl`} style={styles.shadow} 
-                            onPress={() => updateFields({ sex: 2})}
+                        <TouchableOpacity className={`${sex === 2 ? 'bg-cyan-200' : 'bg-white'} flex items-center p-5 px-7 rounded-xl`} style={styles.shadow}
+                            onPress={() => updateFields({ sex: 2 })}
                         >
-                        <Foundation name="female-symbol" size={34} color="black" />
+                            <Foundation name="female-symbol" size={34} color="black" />
                         </TouchableOpacity>
                         <Text className='text-lg font-bold'>Female</Text>
                     </View>
                     <View className='flex items-center space-y-2'>
-                        <TouchableOpacity className={`${sex === 0? 'bg-cyan-200' : 'bg-white'} flex items-center p-5 px-7 rounded-xl`} style={styles.shadow} 
-                            onPress={() => updateFields({ sex: 0})}
+                        <TouchableOpacity className={`${sex === 0 ? 'bg-cyan-200' : 'bg-white'} flex items-center p-5 px-7 rounded-xl`} style={styles.shadow}
+                            onPress={() => updateFields({ sex: 0 })}
                         >
-                        <FontAwesome name="genderless" size={32} color="black" />
+                            <FontAwesome name="genderless" size={32} color="black" />
                         </TouchableOpacity>
                         <Text className='text-lg font-bold'>Skip</Text>
                     </View>
