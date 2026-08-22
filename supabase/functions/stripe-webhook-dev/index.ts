@@ -38,8 +38,6 @@ async function handler(request: Request) {
       const booking_id = await bookFeaturedEvent(
         session.metadata.user_id,
         session.metadata.featured_event_id,
-        session.metadata.tickets_sold,
-        session.metadata.chat_room_id,
         session.metadata.ticket_type_id,
         quantity,
       );

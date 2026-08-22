@@ -3,8 +3,6 @@ import { supabaseAdmin } from "./supabase.ts";
 export const bookFeaturedEvent = async (
     user_id: number,
     featured_event_id: number,
-    tickets_sold: number,
-    chat_room_id:number,
     ticket_type_id: number,
     quantity: number
 ) => {
@@ -47,16 +45,6 @@ export const bookFeaturedEvent = async (
 
         }
 
-
-        const { error: participantsError } = await supabaseAdmin
-            .from('participants')
-            .insert({
-                user_id: user_id,
-                chat_room_id: chat_room_id
-            })
-        if (participantsError) {
-            console.error(participantsError.message);
-        }
         return booking?.id;
     } catch (error) {
         throw error
