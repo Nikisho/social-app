@@ -10,6 +10,13 @@ export default {
       "expo-asset",
       "expo-font",
       [
+        "expo-file-system",
+        {
+          "supportsOpeningDocumentsInPlace": true,
+          "enableFileSharing": true
+        }
+      ],
+      [
         'expo-build-properties',
         {
           android: {
@@ -50,7 +57,7 @@ export default {
     ],
     name: "Linkzy",
     slug: "social-app",
-    version: "1.3.33",
+    version: "1.3.34",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
@@ -64,7 +71,7 @@ export default {
       bundleIdentifier: 'com.linkzy',
       usesAppleSignIn: true,
       googleServicesFile: "./GoogleService-Info.plist",
-      buildNumber: '1.2.38',
+      buildNumber: '1.2.39',
       deploymentTarget: "12.0"
     },
     android: {
@@ -72,7 +79,7 @@ export default {
       // ndkVersion: "26.1.10909125",
       package: "com.linkzy",
       useNextNotificationsApi: true,
-      versionCode: 62,
+      versionCode: 63,
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"

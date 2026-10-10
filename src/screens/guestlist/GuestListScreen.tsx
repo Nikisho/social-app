@@ -9,6 +9,8 @@ import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import styles from '../../utils/styles/shadow';
 import RefundModal from './RefundModal';
 import LoadingScreen from '../loading/LoadingScreen';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from "expo-sharing";
 
 interface GuestProps {
   user_id: number;
@@ -79,6 +81,65 @@ const GuestListScreen = () => {
     }
   };
 
+const handleDownloadGuestList = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("event_bookings_view")
+      .select("email, username")
+      .eq("featured_event_id", featured_event_id);
+
+    if (error) {
+      console.error("Error fetching guest list:", error.message);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.log("No guests found for this event.");
+      return;
+    }
+
+    // Escape values correctly for CSV
+    const escapeCsv = (value: unknown) => {
+      const text = String(value ?? "");
+      return `"${text.replace(/"/g, '""')}"`;
+    };
+
+    // Create CSV content
+    const csvContent = [
+      ["name", "email"],
+      ...data.map((row) => [row.username, row.email]),
+    ]
+      .map((row) => row.map(escapeCsv).join(","))
+      .join("\r\n");
+
+    // Add BOM for better Excel compatibility
+    const csvWithBom = "\uFEFF" + csvContent;
+
+    // Create the CSV file in the app's cache directory
+    const fileUri =
+      FileSystem.cacheDirectory + "guest_list.csv";
+
+    await FileSystem.writeAsStringAsync(fileUri, csvWithBom, {
+      encoding: FileSystem.EncodingType.UTF8,
+    });
+
+    // Open the native sharing / save interface
+    const canShare = await Sharing.isAvailableAsync();
+
+    if (!canShare) {
+      console.error("Sharing is not available on this device.");
+      return;
+    }
+
+    await Sharing.shareAsync(fileUri, {
+      mimeType: "text/csv",
+      UTI: "public.comma-separated-values-text",
+      dialogTitle: "Export guest list",
+    });
+  } catch (error) {
+    console.error("Error exporting guest list:", error);
+  }
+};
   const handleCheckIn = async (guest: GuestProps) => {
     // Implement check-in logic here, e.g., update the guest's check-in status in the database
     console.log("Checking in guest: ", guest);
@@ -107,8 +168,6 @@ const GuestListScreen = () => {
   useEffect(() => {
     fetchGuests();
   }, [featured_event_id,]);
-
-  console.log(guests);
 
   const RenderItem = ({ item }: { item: GuestProps }) => {
     const isFullyCheckedIn = item.checked_in_count === item.ticket_count;
@@ -155,8 +214,7 @@ const GuestListScreen = () => {
             onPress={() => handleCheckIn(item)}
             disabled={isFullyCheckedIn}
             className={`px-4 py-2 rounded-full ${isFullyCheckedIn ? 'bg-green-100' : 'bg-black'
-              }`}
-          >
+              }`}>
             <Text className={`text-sm font-semibold ${isFullyCheckedIn ? 'text-green-700' : 'text-white'
               }`}>
               {isFullyCheckedIn
@@ -205,15 +263,15 @@ const GuestListScreen = () => {
         </View>
         <View className="items-start">
           <TouchableOpacity
-            style={styles.shadow} 
+            style={styles.shadow}
             className="rounded-full bg-white px-5 py-2"
             onPress={() => setRefundModalVisible(!refundModalVisible)}
-            >
+          >
             <Text className="text- font-bold">
               Refund
             </Text>
           </TouchableOpacity>
-          <RefundModal 
+          <RefundModal
             modalVisible={refundModalVisible}
             setModalVisible={setRefundModalVisible}
             setLoading={setLoading}
@@ -233,13 +291,13 @@ const GuestListScreen = () => {
     );
   });
 
-    if (loading) {
-        return <View className='absolute h-full w-full'>
-            <LoadingScreen displayText='Issuing refund...' />
-        </View>
-    }
+  if (loading) {
+    return <View className='absolute h-full w-full'>
+      <LoadingScreen displayText='Issuing refund...' />
+    </View>
+  }
   return (
-    <View className='px-3 space-y-5 h-[85%]'>
+    <View className='px-3 space-y-2 h-[85%]'>
       <SecondaryHeader displayText='Guest list' />
       <View className="px-4 py-2">
         <View className="flex-row items-center bg-gray-100 rounded-xl px-3 py-2">
@@ -259,6 +317,14 @@ const GuestListScreen = () => {
             </TouchableOpacity>
           )}
         </View>
+        <TouchableOpacity
+          onPress={handleDownloadGuestList}
+          style={styles.shadow}
+          className="bg-white mt-3 rounded-2xl py-2">
+          <Text className="text-black text-center font-semibold text-lg">
+            Export guest list
+          </Text>
+        </TouchableOpacity>
       </View>
       {guests?.length !== 0 ? (
         <FlatList

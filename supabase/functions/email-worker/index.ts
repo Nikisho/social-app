@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "../_utils/supabase.ts";
+import { Resend } from "npm:resend";
 // This function is designed to be run as a worker, processing email jobs in batches of 10.
-// I built this function because the original email-attendees function failed to send 
+// I built this function because the original email-attendees function failed to send
 // emails for a large number of attendees, likely due to timeouts or other limitations.
 Deno.serve(async (req) => {
   try {
@@ -40,37 +41,43 @@ Deno.serve(async (req) => {
         console.log(
           `Sending ${job.email_job_id} to ${job.recipient_email}`,
         );
-        const response = await fetch(
-          "https://api.zeptomail.eu/v1.1/email",
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: Deno.env.get("ZEPTOMAIL_API_KEY")!,
-            },
-            body: JSON.stringify({
-              from: {
-                address: "support@linkzyapp.com",
-                name: "Linkzy",
-              },
-              to: [
-                {
-                  email_address: {
-                    address: job.recipient_email,
-                    name: "Linkzy",
-                  },
-                },
-              ],
-              subject: job.subject?.replace(/[\u0080-\uFFFF]/g, "") || "",
-              htmlbody: job.body,
-            }),
-          },
-        );
+        const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
+        const { error:ResendError } = await resend.emails.send({
+          from: "Linkzy <support@linkzyapp.com>",
+          to: job.recipient_email,
+          subject: job.subject?.replace(/[\u0080-\uFFFF]/g, "") || "",
+          html: job.body,
+        });
+        // const response = await fetch(
+        //   "https://api.zeptomail.eu/v1.1/email",
+        //   {
+        //     method: "POST",
+        //     headers: {
+        //       Accept: "application/json",
+        //       "Content-Type": "application/json",
+        //       Authorization: Deno.env.get("ZEPTOMAIL_API_KEY")!,
+        //     },
+        //     body: JSON.stringify({
+        //       from: {
+        //         address: "support@linkzyapp.com",
+        //         name: "Linkzy",
+        //       },
+        //       to: [
+        //         {
+        //           email_address: {
+        //             address: job.recipient_email,
+        //             name: "Linkzy",
+        //           },
+        //         },
+        //       ],
+        //       subject: job.subject?.replace(/[\u0080-\uFFFF]/g, "") || "",
+        //       htmlbody: job.body,
+        //     }),
+        //   },
+        // );
 
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(`ZeptoMail error ${response.status}: ${error}`);
+        if (ResendError) {
+          throw new Error(`Resend error: ${ResendError.message}`);
         }
 
         const { error } = await supabaseAdmin
