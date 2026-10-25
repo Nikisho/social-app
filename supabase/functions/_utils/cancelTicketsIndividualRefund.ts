@@ -1,3 +1,4 @@
+import { notifyWaitListOnTicketCancel } from "./notifyWaitListOnTicketCancel.ts";
 import { supabaseAdmin } from "./supabase.ts";
 
 export async function cancelTicketsIndividualRefund(
@@ -28,39 +29,41 @@ export async function cancelTicketsIndividualRefund(
         // Count cancelled tickets per ticket type
         const ticketTypeCounts: Record<number, number> = {};
 
-        cancelledTickets.forEach((ticket:{ticket_type_id:number}) => {
+        cancelledTickets.forEach((ticket: { ticket_type_id: number }) => {
             ticketTypeCounts[ticket.ticket_type_id] =
                 (ticketTypeCounts[ticket.ticket_type_id] || 0) + 1;
         });
 
-
         // Re-increment availability
         for (const [ticketTypeId, count] of Object.entries(ticketTypeCounts)) {
-
-            const { data: ticketType, error: fetchError } =
-                await supabaseAdmin
-                    .from("ticket_types")
-                    .select("tickets_sold")
-                    .eq("ticket_type_id", Number(ticketTypeId))
-                    .single();
+            const { data: ticketType, error: fetchError } = await supabaseAdmin
+                .from("ticket_types")
+                .select("tickets_sold, quantity")
+                .eq("ticket_type_id", Number(ticketTypeId))
+                .single();
 
             if (fetchError) {
                 throw fetchError;
             }
+            const wasSoldOut = ticketType.quantity <= ticketType.tickets_sold;
 
-            const { error: updateError } =
-                await supabaseAdmin
-                    .from("ticket_types")
-                    .update({
-                        tickets_sold: Math.max(
-                            0,
-                            ticketType.tickets_sold - count
-                        ),
-                    })
-                    .eq("ticket_type_id", Number(ticketTypeId));
+            const { error: updateError } = await supabaseAdmin
+                .from("ticket_types")
+                .update({
+                    tickets_sold: Math.max(
+                        0,
+                        ticketType.tickets_sold - count,
+                    ),
+                })
+                .eq("ticket_type_id", Number(ticketTypeId));
 
             if (updateError) {
                 throw updateError;
+            }
+            // Only start waitlist notifications if inventory was released
+            // from a sold-out ticket type.
+            if (wasSoldOut) {
+                await notifyWaitListOnTicketCancel(Number(ticketTypeId));
             }
         }
 
@@ -68,7 +71,6 @@ export async function cancelTicketsIndividualRefund(
             success: true,
             refundedTickets: cancelledTickets.length,
         };
-
     } catch (err) {
         console.error("Error cancelling tickets:", err);
         throw err;

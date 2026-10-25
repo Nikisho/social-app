@@ -66,6 +66,7 @@ async function handler(request: Request) {
             user_id: session.metadata.user_id,
             featured_event_booking_id: booking_id,
             organizer_id: session.metadata.organizer_id,
+            promo_code_id: session.metadata.promo_code_id
           });
 
         if (error) throw error;
