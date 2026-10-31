@@ -4,7 +4,6 @@ import validateEmail from '../../../utils/functions/validateEmail';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { supabase } from '../../../../supabase';
 import * as Linking from 'expo-linking';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../../utils/types/types';
 import { handleUrl } from '../../../utils/functions/handleUrl';
@@ -25,7 +24,14 @@ const SendResetLinkScreen = () => {
             return;
         }
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: 'com.linkzy://resetpassword',
+            //Old redirect to app for password reset, but this was causing issues with deep linking on iOS
+            // redirectTo: 'com.linkzy://resetpassword',
+
+            //Added new redirect to website for password reset to avoid issues with deep linking on iOS
+            redirectTo: 'https://linkzyapp.com/resetpassword',
+
+            //TESTMODE: localhost
+            // redirectTo: 'http://localhost:3000/resetpasswordtest',
         });
         if (error) console.error(error.message);
         platformAlert("We've sent you a link to reset your password.")
@@ -45,9 +51,6 @@ const SendResetLinkScreen = () => {
         <>
             <SecondaryHeader displayText='Reset your password' />
             <View className='flex h-1/2 justify-center px-5'>
-                {/* <TouchableOpacity className="py-5 " onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back-circle-outline" size={30} color="black" />
-            </TouchableOpacity> */}
                 <View className='w-full flex items-center space-y-5'>
                     <FontAwesome name="lock" size={44} color="black" />
                     <Text className='text-2xl font-semibold'>

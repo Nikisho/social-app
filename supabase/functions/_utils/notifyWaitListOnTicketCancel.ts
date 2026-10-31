@@ -103,8 +103,6 @@ export const notifyWaitListOnTicketCancel = async (
                 day: "numeric",
                 month: "long",
                 year: "numeric",
-                hour: "numeric",
-                minute: "2-digit",
                 timeZone: "Europe/London",
             })
             : null;
