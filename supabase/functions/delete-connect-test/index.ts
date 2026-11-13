@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { stripe } from "../_utils/stripe.ts";
+import { stripe } from "../_utils/stripe_dev.ts";
 
 Deno.serve(async (_req) => {
   try {
@@ -12,10 +12,7 @@ Deno.serve(async (_req) => {
     //   console.log(`Deleted account: ${account.id} (${account.email})`);
     // }
 
-    await stripe.accounts.del('acct_1RxWfnBKewzjxu8f');
-    await stripe.accounts.del('acct_1S6u2iBdiOssU6kY');
-    await stripe.accounts.del('acct_1RuTGaAzkBxV28kR');
-
+    await stripe.accounts.del('acct_1Ub2xPB83u2tN2vj');
 
     return new Response("All test accounts deleted ✅", { status: 200 });
   } catch (error) {

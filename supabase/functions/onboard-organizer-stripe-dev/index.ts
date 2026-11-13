@@ -32,6 +32,14 @@ Deno.serve(async (req) => {
           card_payments: { requested: true },
           transfers: { requested: true },
         },
+        settings: {
+          payouts: {
+            schedule: {
+              interval: "weekly",
+              weekly_anchor: "wednesday",
+            },
+          },
+        }
       });
       accountId = account.id;
       await saveOrganizerAccount(user.id, accountId);
