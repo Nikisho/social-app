@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import NewTicketsModal from './NewTicketModal';
 import formatDateShortWeekday from '../../../../utils/functions/formatDateShortWeekday';
+import AmendTicketTypeModal from './AmendTicketTypeModal';
 
 
 interface TicketsProps {
@@ -25,9 +26,24 @@ const TicketTypesList: React.FC<TicketTypesListProps> = ({
     setTickets
 }) => {
     const [newTicketModalVisible, setNewTicketModalVisible] = useState<boolean>(false);
-
+    const [amendTicketModalVisible, setAmendTicketModalVisible] = useState<boolean>(false);
+    const [selectedTicket, setSelectedTicket] = useState<TicketsProps | null>(null);
+    const maxTickets = 5;
     const handleRemove = (item: TicketsProps) => {
         const newArray = tickets.filter((t) => t.id !== item.id);
+        setTickets(newArray);
+    };
+
+    const handleEdit = (item: TicketsProps) => {
+        // Implementation for editing ticket
+        console.log('Edit ticket:', item.id);
+        console.log(selectedTicket)
+        setSelectedTicket(item);
+        setAmendTicketModalVisible(true);
+    };
+
+    const onSave = (updatedTicket: TicketsProps) => {
+        const newArray = tickets.map((t) => (t.id === updatedTicket.id ? updatedTicket : t));
         setTickets(newArray);
     };
 
@@ -77,15 +93,24 @@ const TicketTypesList: React.FC<TicketTypesListProps> = ({
                         Sales end  on <Text className='font-semibold'>{formatDateShortWeekday(item.sales_end)}</Text>
                     </Text>
                 </View>
-                <TouchableOpacity
-                    onPress={() => handleRemove(item)}
-                    className='border p-1 w-20 my-2 bg-black'>
-                    <Text className='text-center text-white font-semibold' > Remove</Text>
-                </TouchableOpacity>
+
+                <View className='flex flex-row justify-between'>
+                    <TouchableOpacity
+                        onPress={() => handleRemove(item)}
+                        className='p-4'>
+                        {/* <Text className='text-center text-white font-semibold' > Remove</Text>? */}
+                        <AntDesign name="delete" size={20} color="red" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => handleEdit(item)}
+                        className='p-4'>
+                        <AntDesign name="edit" size={25} color="black" />
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
-
+    console.log(tickets)
     return (
         <View className='mx-4 mb-4'>
             <View className={`mb-5`} >
@@ -94,7 +119,7 @@ const TicketTypesList: React.FC<TicketTypesListProps> = ({
                 </Text>
             </View>
             <FlatList
-                ListHeaderComponent={(tickets?.length <= 3) ?
+                ListHeaderComponent={(tickets?.length <= maxTickets) ?
                     <TouchableOpacity
                         onPress={() => setNewTicketModalVisible(true)}
                         className='bg-gray-100 p-7 mt-2 flex flex-row items-center'>
@@ -116,6 +141,15 @@ const TicketTypesList: React.FC<TicketTypesListProps> = ({
                 setModalVisible={setNewTicketModalVisible}
                 setTickets={setTickets}
             />
+            {
+                selectedTicket &&
+                <AmendTicketTypeModal
+                    modalVisible={amendTicketModalVisible}
+                    setModalVisible={setAmendTicketModalVisible}
+                    item={selectedTicket!}
+                    onSave={onSave}
+                />
+            }
         </View>
     )
 }

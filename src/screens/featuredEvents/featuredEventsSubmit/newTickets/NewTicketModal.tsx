@@ -72,16 +72,6 @@ const NewTicketsModal: React.FC<TicketProps> = ({
             sales_end: new Date((new Date()).setHours(12, 0, 0, 0)),
         });
     };
-
-    const calculateRevenue = (price: string) => {
-        const platformFeeRate = 0;
-        const priceNum = Number(price);
-        const stripeFee = priceNum * 0.015 + 0.2;
-        const platformFee = priceNum * platformFeeRate;
-        const revenue = priceNum - stripeFee - platformFee;
-
-        return revenue.toFixed(2);
-    };
     const inputAccessoryViewID = 'uniqueID';
 
     return (
